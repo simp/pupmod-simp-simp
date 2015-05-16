@@ -1,0 +1,28 @@
+<%
+  t_allowroot = nil
+  if @l_client_nets then
+    t_allowroot = scope.function_munge_httpd_networks(Array(@l_client_nets)).map{ |x|
+      x = "    Allow from #{x}"
+    }.join("\n")
+  end
+-%>
+<%
+  t_dirs = ['/yum']
+
+  t_dirs.each do |t_dir|
+-%>
+Alias <%= t_dir %> /var/www<%= t_dir %>
+
+<Location <%= t_dir %>>
+    Options +Indexes
+
+    Order allow,deny
+    Allow from 127.0.0.1
+    Allow from ::1
+<% if t_allowroot then -%>
+<%= t_allowroot %>
+<% end -%>
+    Allow from <%= @domain %>
+</Location>
+
+<% end -%>

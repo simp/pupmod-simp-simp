@@ -1,0 +1,123 @@
+---
+# Globals
+client_nets :
+  - 1.2.3.4/24
+  - 5.6.7.8/16
+dns::search :
+  - 'bar.baz'
+dns::servers :
+  - 1.2.3.4
+ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
+ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
+ldap::bind_pw : 's00per sekr3t!'
+ldap::bind_hash : '{SSHA}foobarbaz!!!!'
+ldap::sync_dn : "cn=sync,ou=Hosts,%{hiera('ldap::base_dn')}"
+ldap::sync_pw : 's00per sekr3t!'
+ldap::sync_hash : '{SSHA}foobarbaz!!!!'
+ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
+ldap::root_hash : '{SSHA}foobarbaz!!!!'
+ldap::uri :
+  - 'ldap://server1.bar.baz'
+  - 'ldap://server2.bar.baz'
+ldap::master : 'ldap://server1.bar.baz'
+log_server : 'syslog.bar.baz'
+ntpd::servers : {}
+pam::wheel_group : 'administrators'
+puppet::ca : 'puppet.bar.baz'
+puppet::ca_port : '8141'
+puppet::server : 'puppet.bar.baz'
+rsync::server : 'rsync.bar.baz'
+rsync::timeout : '1'
+ssg::profile : 'stig'
+selinux::enable : 'permissive'
+use_auditd : true
+use_iptables : true
+use_ldap : true
+
+# Management of Specific Classes
+common::runlevel::default : '3'
+common::resolv::nameservers :
+  - 1.2.3.100
+  - 5.6.7.100
+sssd::domains :
+  - 'LDAP'
+
+simp::yum::servers :
+  - 'yum.bar.baz'
+
+nfs::server : 'nfs.bar.baz'
+nfs::server::client_ips :
+  - 1.2.3.4/32
+  - 5.6.7.8/24
+
+simp::rsyslog::stock::log_server::forward::forward_host : 'foo.bar.baz'
+
+# Stuff for snmpd tests
+simp::snmpd::server::monitorUser_auth_phrase : 'passwords'
+simp::snmpd::server::monitorUser_priv_phrase : 'are'
+simp::snmpd::server::adminUser_auth_phrase : 'super'
+simp::snmpd::server::adminUser_priv_phrase : 'fun'
+
+# Classes to Include
+#
+# Remember: You need to copy everything that you want out of here if you want
+# to override things at a lower level!
+classes:
+  # You'll want this 99% of the time. However, you cannot use gfs2 with acpid!
+  - 'acpid'
+  - 'aide'
+  - 'auditd'
+  # Virus scanning.
+  - 'clamav'
+  # Ensuring reasonably sane defaults for both at and common.
+  - 'common::at'
+  - 'common::cron'
+  - 'common::chkrootkit'
+  - 'common::etc_default::nss'
+  - 'common::etc_default::useradd'
+  - 'common::host_conf'
+  - 'common::incron'
+  - 'common::issue'
+  - 'common::libuser_conf'
+  - 'common::login_defs'
+  - 'common::localusers'
+  - 'common::modprobe_blacklist'
+  - 'common::nsswitch'
+  - 'common::prelink'
+  - 'common::profile_settings'
+  - 'common::resolv'
+  - 'common::secure_mountpoints'
+  - 'common::sysconfig::init'
+  - 'common::sysctl'
+  - 'common::timezone'
+  - 'ntpd'
+  - 'openldap::pam'
+  # Set up the access.conf basics, allow root locally and deny
+  # everyone else from everywhere by default.
+  - 'pam::access'
+  # Enable 'wheel' access controls.
+  - 'pam::wheel'
+  # Set up the puppet server or client as appropriate for your system.
+  - 'pupmod'
+  # We certainly want logging
+  - 'simp::rsyslog::stock'
+  - 'selinux'
+  # Set up the administrators group
+  - 'simp::admin'
+  # A collection of applications that may be useful on most servers but are not
+  # actually required for base functionality.
+  - 'simp::base_apps'
+  # A group of services that you probably want running but are
+  # technically optional.
+  - 'simp::base_services'
+  # This sets up an update schedule.
+  # You should set variables under the common::yum_schedule namespace to
+  # disable updates from specific repositories.
+#  - 'simp::yum'
+  # Set up the SSH server and client.
+  - 'ssh'
+  - 'sudosh'
+  # We want to ensure that only the services we define in Puppet are
+  # goig to be enabled and run.
+  - 'svckill'
+  - 'upstart'

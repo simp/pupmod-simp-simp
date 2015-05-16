@@ -1,0 +1,13 @@
+---
+classes :
+  # For serving out the SIMP Puppet Basics
+  - 'pupmod::master'
+  - 'rsync::server'
+  # We need a DNS server
+  - 'named'
+  # For a kickstart server
+  - 'simp::kickstart_server'
+  # For a yum server
+  - 'simp::yum_server'
+  # Central account management
+  - 'simp::ldap_server'

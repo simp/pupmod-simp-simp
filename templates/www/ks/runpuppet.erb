@@ -1,0 +1,204 @@
+#!/bin/sh
+#
+# runpuppet:    Runs puppet agent in 'test' mode to bootstrap the system
+#       configuration.
+#
+# chkconfig: 35 99 99
+#
+# description:  A script to bootstrap the initial puppet configuration.
+#
+
+function ensure_running {
+  ca_port="$(puppet config print ca_port)"
+  running="false"
+  timeout=0
+  while [ $timeout -lt 300 ] && [ "$running" == "false" ]; do
+    if [[ "$(/usr/bin/curl -sS --cert /var/lib/puppet/ssl/certs/<%= @fqdn %>.pem --key /var/lib/puppet/ssl/private_keys/<%= @fqdn %>.pem -k -H 'Accept: s' https://<%= @fqdn %>:$ca_port/production/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
+      running="true"
+    fi
+    timeout=$[$timeout+1]
+    sleep 1
+  done
+
+  if [ "$running" == "false" ]; then
+    echo "Error: Puppetserver could not start. Please check logs."
+    exit 1
+  fi
+
+}
+
+unset LC_MESSAGES
+[ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+[ -z "${CONSOLETYPE:-}" ] && CONSOLETYPE="`/sbin/consoletype`"
+export LANG
+
+# Source function library
+
+. /etc/init.d/functions
+[ -f /etc/sysconfig/runpuppet ] && . /etc/sysconfig/runpuppet
+
+[ -z "$HOME" ] && export HOME=/
+
+if [ "$LOCKED" == 'true' ]; then
+  echo "Script Locked, set 'LOCKED' to 'false' in /etc/sysconfig/runpuppet to run again."
+  exit 1
+fi
+
+# Change me to meet the needs of your domain!
+puppet_server="<%= @puppet_server %>";
+
+logfile="/root/puppet.bootstrap.log";
+delim="--------------------------------------------------------------------------------";
+server=1;
+<%
+  t_puppet_cmd_line = "/usr/bin/puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
+
+  if not @runpuppet_wait_for_cert.empty? then
+    t_puppet_cmd_line += " --waitforcert #{@runpuppet_wait_for_cert}"
+  end
+
+  if @runpuppet_print_stats then
+    t_puppet_cmd_line += " --evaltrace --summarize"
+  end
+-%>
+puppet="<%= t_puppet_cmd_line %> --verbose";
+quiet_puppet="<%= t_puppet_cmd_line %>";
+puppetca="/usr/bin/puppet ca";
+puppetmaster="/usr/bin/puppet master";
+
+if [ -f '/bin/puppetserver' ]; then
+    server=0;
+fi
+
+case "$1" in
+  status)
+    # This script isn't a service, it just executes once.
+    exit 1;
+    ;;
+
+  start)
+    ps -C httpd >& /dev/null;
+    restarthttpd=$?;
+
+    # Do some pre-cleanup if we're a server
+    if [ $server -eq 0 ]; then
+        for file in `$puppetca --list --all`; do
+            [ X"$file" = X"+" ] && continue
+            $puppetca --clean $file >& /dev/null;
+        done
+
+        /bin/rm -rf /var/lib/puppet/ssl;
+        service puppetserver restart;
+        ensure_running;
+
+        if [ $restarthttpd -eq 0 ]; then
+          service httpd restart;
+        fi
+    fi
+
+    read -r -d '' puppet_conf <<'EOM'
+[main]
+    vardir = /var/lib/puppet
+    classfile = $vardir/classes.txt
+    localconfig = $vardir/localconfig
+    logdir = /var/log/puppet
+    report = false
+    rundir = /var/run/puppet
+    server = <%= @puppet_server %>
+    ssldir = $vardir/ssl
+    trusted_node_data = true
+    stringify_facts = false
+    digest_algorithm = sha256
+EOM
+
+    echo "$puppet_conf" > /etc/puppet/puppet.conf;
+    echo "ca_server = <%= @puppet_ca %>" >> /etc/puppet/puppet.conf;
+    echo "ca_port = <%= @puppet_ca_port %>" >> /etc/puppet/puppet.conf;
+
+<%
+   l_ntp_servers = @ntp_servers
+   if not l_ntp_servers.empty? then
+     if l_ntp_servers.kind_of?(Hash) then
+       l_ntp_servers = l_ntp_servers.keys.sort
+     end
+-%>
+    echo "Setting the system time against <%= l_ntp_servers.join(' ') %>";
+    /usr/sbin/ntpdate -b <%= l_ntp_servers.join(' ') %>;
+<% end -%>
+
+    echo "Running Puppet Bootstrap (This may take some time)";
+    touch /root/.fullrun;
+    rm -f $logfile
+
+    echo -n 'Just the Certs';
+    $quiet_puppet --tags just_the_certs;
+
+    echo -n 'firstrun,concat...'
+    echo "=== $puppet --tags firstrun,concat ===" >> $logfile;
+    $puppet --tags firstrun,concat >> $logfile 2>&1;
+    success ; echo
+
+    if [ $server -eq 0 ]; then
+      service puppetserver restart;
+      ensure_running;
+
+      if [ $restarthttpd -eq 0 ]; then
+        service httpd restart;
+      fi
+    fi
+
+    echo -n 'stunnel,pki,concat...'
+    echo $delim >> $logfile;
+    echo "=== $puppet --tags stunnel,pki,concat ===" >> $logfile
+    yum clean all >> $logfile 2>&1;
+    $puppet --tags stunnel,pki,concat >> $logfile 2>&1;
+    success ; echo
+
+    echo -n "rsync,apache,concat,iptables..."
+    echo $delim >> $logfile;
+    echo "=== $puppet --tags rsync,apache,concat,iptables ===" >> $logfile 2>&1;
+    $puppet --tags rsync,apache,concat,iptables >> $logfile 2>&1;
+    success ; echo
+
+    echo -n "pass 1 of 2..."
+    echo $delim >> $logfile;
+    echo "=== 1 of 2 ===" >> $logfile;
+    $puppet >> $logfile 2>&1;
+    success ; echo
+    if [ $server -eq 0 ]; then
+        wait;
+        service puppetserver restart;
+        ensure_running;
+
+        if [ $restarthttpd -eq 0 ]; then
+          service httpd restart;
+        fi
+    fi
+
+    echo -n "pass 2 of 2..."
+    echo $delim >> $logfile;
+    echo "=== 2 of 2 ===" >> $logfile;
+    yum clean all >> $logfile 2>&1;
+    $puppet >> $logfile 2>&1;
+    success ; echo
+
+    echo -n "cleanup..."
+    chkconfig puppet on;
+    chkconfig --del runpuppet;
+    cat <<HERE > /etc/sysconfig/runpuppet
+#
+# Set LOCKED to anything besides 'true' to be able to run the
+# runpuppet init script again.
+#
+LOCKED='true'
+HERE
+    success ; echo
+
+    reboot;
+    # This is here to keep this script from interfering with upstart
+    # parallelism.
+    sleep 999999999;
+    ;;
+esac
+
+exit $RETVAL
