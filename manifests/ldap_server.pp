@@ -68,15 +68,15 @@ class simp::ldap_server (
 
   if !empty($bind_dn) {
     openldap::server::add_limits { 'Host_Bind_DN_Unlimited_Query':
-      who     => $bind_dn,
-      limits  => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
+      who    => $bind_dn,
+      limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
   }
 
   if !empty($sync_dn) {
     openldap::server::add_limits { 'LDAP_Sync_DN_Unlimited_Query':
-      who     => $sync_dn,
-      limits  => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
+      who    => $sync_dn,
+      limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
   }
 }

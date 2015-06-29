@@ -20,7 +20,7 @@ class simp::krb5::client (
   include 'krb5'
 
   krb5::conf::realm { $kdc_realm:
-    admin_server  => $kdc,
-    kdc           => $kdc
+    admin_server => $kdc,
+    kdc          => $kdc
   }
 }

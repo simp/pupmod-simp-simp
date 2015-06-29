@@ -163,9 +163,9 @@ class simp (
     $l_pserver_alias = split($puppet_server,'.')
 
     host { $puppet_server:
-      ensure        => 'present',
-      host_aliases  => $l_pserver_alias[0],
-      ip            => $puppet_server_ip
+      ensure       => 'present',
+      host_aliases => $l_pserver_alias[0],
+      ip           => $puppet_server_ip
     }
 
     validate_net_list($puppet_server_ip)
