@@ -87,8 +87,8 @@ class simp::admin (
     host_list => 'ALL',
     runas     => 'ALL',
     cmnd      => $force_sudosh ? {
-      true      => '/usr/bin/sudosh',
-      default   => 'ALL'
+      true    => '/usr/bin/sudosh',
+      default => 'ALL'
     },
     passwd    => !$passwordless_admin_sudo
   }

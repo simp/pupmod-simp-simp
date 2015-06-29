@@ -16,7 +16,7 @@ class simp::krb5::kdc {
   # for most cases. If you need something different, please use this file as a
   # reference.
   krb5_acl { "${::domain}_admin":
-    principal       => "*/admin@${::domain}",
-    operation_mask  => '*'
+    principal      => "*/admin@${::domain}",
+    operation_mask => '*'
   }
 }

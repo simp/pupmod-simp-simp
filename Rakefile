@@ -18,6 +18,8 @@ begin
   PuppetLint.configuration.send("disable_80chars")
   PuppetLint.configuration.send("disable_variables_not_enclosed")
   PuppetLint.configuration.send("disable_class_parameter_defaults")
+  PuppetLint.configuration.send("disable_selector_inside_resource")
+  PuppetLint.configuration.send('disable_inherits_across_namespaces')
 rescue LoadError
   puts "== WARNING: Gem puppet-lint not found, lint tests cannot be run! =="
 end
