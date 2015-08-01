@@ -20,7 +20,8 @@ ldap::uri :
   - 'ldap://server1.bar.baz'
   - 'ldap://server2.bar.baz'
 ldap::master : 'ldap://server1.bar.baz'
-log_server : 'syslog.bar.baz'
+log_servers :
+  - 'syslog.bar.baz'
 ntpd::servers : {}
 pam::wheel_group : 'administrators'
 puppet::ca : 'puppet.bar.baz'
@@ -50,7 +51,8 @@ nfs::server::client_ips :
   - 1.2.3.4/32
   - 5.6.7.8/24
 
-simp::rsyslog::stock::log_server::forward::forward_host : 'foo.bar.baz'
+simp::rsyslog::stock::log_server::forward::forward_hosts :
+  - 'foo.bar.baz'
 
 # Stuff for snmpd tests
 simp::snmpd::server::monitorUser_auth_phrase : 'passwords'
