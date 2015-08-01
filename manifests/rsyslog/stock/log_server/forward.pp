@@ -30,17 +30,15 @@ class simp::rsyslog::stock::log_server::forward (
   $forward_port = '6514',
   $log_transport = 'tcp'
 ) {
-  include 'rsyslog'
-
-  rsyslog::add_conf { 'remote':
-    content => $log_transport ? {
-      'tcp'   => "*.* \t\t @@${forward_host}:${forward_port}",
-      'relp'  => "*.* \t\t :omrelp:${forward_host}:${forward_port}",
-      default => "*.* \t\t @${forward_host}:${forward_port}"
-    }
-  }
-
   validate_net_list($forward_host)
   validate_integer($forward_port)
   validate_array_member($log_transport,['tcp','udp','relp'])
+
+  include '::rsyslog'
+
+  rsyslog::rule::remote { 'all_forward':
+    rule      => '*.*',
+    dest      => $forward_host,
+    dest_type => $log_transport
+  }
 }
