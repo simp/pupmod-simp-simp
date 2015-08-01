@@ -25,18 +25,18 @@ class simp::rsyslog::stock (
   $is_server = false,
   $security_relevant_logs = "if \$programname == 'sudosh' or \$programname == 'yum' or \$syslogfacility-text == 'cron' or \$syslogfacility-text == 'authpriv' or \$syslogfacility-text == 'local5' or \$syslogfacility-text == 'local6' or \$syslogfacility-text == 'local7' or \$syslogpriority-text == 'emerg' or ( \$syslogfacility-text == 'kern' and \$msg startswith 'IPT:' ) then"
 ){
-  include 'rsyslog'
-  include 'logrotate'
-  include 'rsyslog::global'
+  include '::rsyslog'
+  include '::logrotate'
+  include '::rsyslog::config'
+
+  validate_string($security_relevant_logs)
 
   # This is just in case someone includes rsyslog::stock::log_server directly.
-  if $is_server or defined(Class['rsyslog::stock::log_server']) {
-    include 'rsyslog::stock::log_server'
+  #if (array_include(hiera_array('log_servers'), $::fqdn)) or defined(Class['rsyslog::stock::log_server']) {
+  if $is_server or defined(Class['simp::rsyslog::stock::log_server']) {
+    include '::simp::rsyslog::stock::log_server'
   }
   else {
-    include 'rsyslog::stock::log_local'
+    include '::simp::rsyslog::stock::log_shipper'
   }
-
-  validate_bool($is_server)
-  validate_string($security_relevant_logs)
 }

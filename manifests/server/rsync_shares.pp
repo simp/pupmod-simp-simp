@@ -31,7 +31,7 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server::rsync_shares (
-  $rsync_base  = hiera('rsync::base', versioncmp(simp_version(),'5') ? { '-1' => '/srv/rsync', default => "/srv/rsync/${::operatingsystem}/${::lsbmajdistrelease}"}),
+  $rsync_base  = hiera('rsync::base', versioncmp(simp_version(),'5') ? { '-1' => "/srv/rsync", default => "/srv/rsync/${::operatingsystem}/${::lsbmajdistrelease}"}),
   $use_stunnel = hiera('rsync::server::use_stunnel',true),
   $hosts_allow = hiera('client_nets','127.0.0.1')
 ){

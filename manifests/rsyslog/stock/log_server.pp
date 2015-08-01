@@ -62,12 +62,35 @@ class simp::rsyslog::stock::log_server (
   $client_nets = hiera('client_nets'),
   $rotate_period = 'weekly',
   $rotate = '12',
-  $size = '',
-  $use_iptables = hiera('use_iptables',true),
+  $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs,
   $server_conf = '',
-  $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs
+  $size = '',
+  $use_default_sudosh_rules = true,
+  $use_default_httpd_rules = true,
+  $use_default_dhcpd = true,
+  $use_default_puppet_agent_rules = true,
+  $use_default_puppet_master_rules = true,
+  $use_default_audit_rules = true,
+  $use_default_slapd_rules = true,
+  $use_default_kern_rules = true,
+  $use_default_security_relevant_logs = true,
+  $use_default_message_rules = true,
+  $use_default_mail_rules = true,
+  $use_default_cron_rules = true,
+  $use_default_emerg_rules = true,
+  $use_default_spool_rules = true,
+  $use_default_boot_rules = true,
+  $use_iptables = hiera('use_iptables',true)
 ) {
-  include 'rsyslog::stock'
+  include '::simp::rsyslog::stock'
+  include '::rsyslog'
+  include '::rsyslog::server'
+
+  validate_array_member($rotate_period,['daily','weekly','monthly','yearly'])
+  validate_bool($use_iptables)
+  validate_string($server_conf)
+  validate_integer($rotate)
+  validate_net_list($client_nets)
 
   # Now, since this is a log server, we'll probably want to run logrotate once
   # per hour to make sure we don't eat up all of our disk space.
@@ -90,27 +113,6 @@ class simp::rsyslog::stock::log_server (
     ensure => 'absent'
   }
 
-  if $use_iptables {
-    if $::rsyslog::global::tls_tcpserver {
-      iptables::add_tcp_stateful_listen { 'syslog_tls_tcp':
-        client_nets => $client_nets,
-        dports      => $::rsyslog::global::tls_tcpServerRun
-      }
-    }
-    if $::rsyslog::global::tcpserver {
-      iptables::add_tcp_stateful_listen { 'syslog_tcp':
-        client_nets => $client_nets,
-        dports      => $::rsyslog::global::tcpServerRun
-      }
-    }
-    if $::rsyslog::global::udpserver {
-      iptables::add_udp_listen { 'syslog_udp':
-        client_nets => $client_nets,
-        dports      => $::rsyslog::global::udpServerRun
-      }
-    }
-  }
-
   # Don't forget the logrotate rule!
   logrotate::add { 'remote_hosts':
     log_files     => [ '/var/log/hosts/*/*.log' ],
@@ -122,75 +124,136 @@ class simp::rsyslog::stock::log_server (
   }
 
   if empty($server_conf) {
-    rsyslog::add_rule { '0_default':
-      rule => "
-if \$programname == 'sudosh' then \t\t ?sudoshTemplate
-&~
+    $file_base = '/var/log/hosts/%HOSTNAME%'
+    rsyslog::template::string { 'sudosh_template':            string => "${file_base}/sudosh.log"}
+    rsyslog::template::string { 'httpd_template':             string => "${file_base}/httpd.log"}
+    rsyslog::template::string { 'dhcpd_template':             string => "${file_base}/dhcpd.log"}
+    rsyslog::template::string { 'puppet_agent_err_template':  string => "${file_base}/puppet-agent-err.log"}
+    rsyslog::template::string { 'puppet_agent_template':      string => "${file_base}/puppet-agent.log"}
+    rsyslog::template::string { 'puppet_master_err_template': string => "${file_base}/puppet-master-err.log"}
+    rsyslog::template::string { 'puppet_master_template':     string => "${file_base}/puppet-master.log"}
+    rsyslog::template::string { 'audit_template':             string => "${file_base}/audit.log"}
+    rsyslog::template::string { 'slapd_audit_template':       string => "${file_base}/slapd_audit.log"}
+    rsyslog::template::string { 'iptables_template':          string => "${file_base}/iptables.log"}
+    rsyslog::template::string { 'secure_template':            string => "${file_base}/secure.log"}
+    rsyslog::template::string { 'messages_template':          string => "${file_base}/messages.log"}
+    rsyslog::template::string { 'maillog_template':           string => "${file_base}/maillog.log"}
+    rsyslog::template::string { 'cron_template':              string => "${file_base}/cron.log"}
+    rsyslog::template::string { 'spooler_template':           string => "${file_base}/spooler.log"}
+    rsyslog::template::string { 'boot_template':              string => "${file_base}/boot.log"}
 
-if \$programname == 'httpd' then \t\t ?httpdTemplate
-&~
-
-if \$programname == 'dhcpd' then \t\t ?dhcpTemplate
-
-if \$programname == 'puppet-agent' and \$syslogseverity-text == 'err' then \t\t ?puppetAgentErrTemplate
-if \$programname == 'puppet-agent' then \t\t ?puppetAgentTemplate
-&~
-
-if \$programname == 'puppet-master' and \$syslogseverity-text == 'err' then \t\t ?puppetMasterErrTemplate
-if \$programname == 'puppet-master' then \t\t ?puppetMasterTemplate
-& ~
-
-if \$programname == 'audispd' then \t\t ?auditTemplate
-& ~
-
-if \$syslogtag == 'tag_audit_log:' then \t\t ?auditTemplate
-& ~
-
-if \$programname == 'slapd_audit' then \t\t ?slapdAuditTemplate
-& ~
-
-if \$syslogfacility-text == 'kern' and \$msg startswith 'IPT:' then \t\t ?iptablesTemplate
-& ~
-
-${security_relevant_logs} \t\t ?secureTemplate
-& ~
-
-*.info;mail.none;authpriv.none;cron.none;local6.none;local5.none \t\t ?messageTemplate
-mail.* \t\t ?maillogTemplate
-cron.* \t\t ?cronTemplate
-*.emerg \t\t ?emergTemplate
-uucp,news.crit \t\t ?spoolerTemplate
-local7.* \t\t ?bootTemplate
-" # --> END RULE
+    if $use_default_sudosh_rules {
+      rsyslog::rule::local { '0_default_sudosh':
+        rule         => 'if ($programname == \'sudosh\') then',
+        dyna_file    => 'sudosh_template',
+        include_stop => true
+      }
+    }
+    if $use_default_httpd_rules {
+      rsyslog::rule::local { '0_default_httpd':
+        rule         => 'if ($programname == \'httpd\') then',
+        dyna_file    => 'httpd_template',
+        include_stop => true
+      }
+    }
+    if $use_default_dhcpd_rules {
+      rsyslog::rule::local { '0_default_dhcpd':
+        rule      => 'if ($programname == \'dhcpd\') then',
+        dyna_file => 'dhcpd_template'
+      }
+    }
+    if $use_default_puppet_agent_rules {
+      rsyslog::rule::local { '0_default_puppet_agent_error':
+        rule         => 'if ($programname == \'puppet-agent\' and $syslogseverity-text == \'err\') then',
+        dyna_file    => 'puppet_agent_err_template',
+        include_stop => true
+      }
+      rsyslog::rule::local { '0_default_puppet_agent':
+        rule         => 'if ($programname == \'puppet-agent\') then',
+        dyna_file    => 'puppet_agent_template',
+        include_stop => true
+      }
+    }
+    if $use_default_puppet_master_rules {
+      rsyslog::rule::local { '0_default_puppet_master_error':
+        rule         => 'if ($programname == \'puppet-master\' and $syslogseverity-text == \'err\') then',
+        dyna_file    => 'puppet_master_err_template',
+        include_stop => true
+      }
+      rsyslog::rule::local { '0_default_puppet_master':
+        rule         => 'if ($programname == \'puppet-master\') then',
+        dyna_file    => 'puppet_master_template',
+        include_stop => true
+      }
+    }
+    if $use_default_audit_rules {
+      rsyslog::rule::local { '0_default_audit':
+        rule         => 'if ($programname == \'audispd\' or $syslogtag == \'tag_audit_log:\') then',
+        dyna_file    => 'audit_template',
+        include_stop => true
+      }
+    }
+    if $use_default_slapd_rules {
+      rsyslog::rule::local { '0_default_slapd_audit':
+        rule         => 'if ($programname == \'slapd_audit\') then',
+        dyna_file    => 'slapd_audit_template',
+        include_stop => true
+      }
+    }
+    if $use_default_kern_rules {
+      rsyslog::rule::local { '0_default_kern':
+        rule         => 'if ($syslogfacility-text == \'kern\' and $msg startswith \'IPT:\') then',
+        dyna_file    => 'iptables_template',
+        include_stop => true
+      }
+    }
+    if $use_default_security_relevant_logs {
+      rsyslog::rule::local { '0_default_security_relevant_logs':
+        rule         => "${security_relevant_logs}",
+        dyna_file    => 'secure_template',
+        include_stop => true
+      }
+    }
+    if $use_default_message_rules {
+      rsyslog::rule::local { '0_default_message':
+        rule      => '*.info;mail.none;authpriv.none;cron.none;local6.none;local5.none',
+        dyna_file => 'messages_template'
+      }
+    }
+    if $use_default_mail_rules {
+      rsyslog::rule::local { '0_default_mail':
+        rule      => 'mail.*',
+        dyna_file => 'maillog_template'
+      }
+    }
+    if $use_default_cron_rules {
+      rsyslog::rule::local { '0_default_cron':
+        rule      => 'cron.*',
+        dyna_file => 'cron_template'
+      }
+    }
+    if $use_default_emerg_rules {
+      rsyslog::rule::console { '0_default_emerg':
+        rule  => '*.emerg',
+        users => '*'
+      }
+    }
+    if $use_default_spool_rules {
+      rsyslog::rule::local { '0_default_spool':
+        rule      => 'uucp,news.crit',
+        dyna_file => 'spooler_template'
+      }
+    }
+    if $use_default_boot_rules {
+      rsyslog::rule::local { '0_default_boot':
+        rule      => 'local7.*',
+        dyna_file => 'boot_template'
+      }
     }
   }
   else {
-    rsyslog::add_rule { '0_default': rule => $server_conf }
+    rsyslog::rule::local { '0_default':
+      rule => $server_conf,
+    }
   }
-
-  $template_base = '/var/log/hosts/%HOSTNAME%'
-
-  rsyslog::add_template { 'auditTemplate':            content => "$template_base/audit.log" }
-  rsyslog::add_template { 'bootTemplate':             content => "$template_base/boot.log" }
-  rsyslog::add_template { 'cronTemplate':             content => "$template_base/cron.log" }
-  rsyslog::add_template { 'dhcpTemplate':             content => "$template_base/dhcpd.log" }
-  rsyslog::add_template { 'emergTemplate':            content => "$template_base/*" }
-  rsyslog::add_template { 'httpdTemplate':            content => "$template_base/httpd.log" }
-  rsyslog::add_template { 'iptablesTemplate':         content => "$template_base/iptables.log" }
-  rsyslog::add_template { 'maillogTemplate':          content => "$template_base/maillog.log" }
-  rsyslog::add_template { 'messageTemplate':          content => "$template_base/messages.log" }
-  rsyslog::add_template { 'puppetAgentErrTemplate':   content => "$template_base/puppet-agent-err.log" }
-  rsyslog::add_template { 'puppetAgentTemplate':      content => "$template_base/puppet-agent.log" }
-  rsyslog::add_template { 'puppetMasterErrTemplate':  content => "$template_base/puppet-master-err.log" }
-  rsyslog::add_template { 'puppetMasterTemplate':     content => "$template_base/puppet-master.log" }
-  rsyslog::add_template { 'secureTemplate':           content => "$template_base/secure.log" }
-  rsyslog::add_template { 'slapdAuditTemplate':       content => "$template_base/slapd_audit.log" }
-  rsyslog::add_template { 'spoolerTemplate':          content => "$template_base/spooler.log" }
-  rsyslog::add_template { 'sudoshTemplate':           content => "$template_base/sudosh.log" }
-
-  validate_array_member($rotate_period,['daily','weekly','monthly','yearly'])
-  validate_bool($use_iptables)
-  validate_string($server_conf)
-  validate_integer($rotate)
-  validate_net_list($client_nets)
 }
