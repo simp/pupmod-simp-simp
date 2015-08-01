@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'simp::rsyslog::stock::log_local' do
+describe 'simp::rsyslog::stock::log_shipper' do
   let(:facts) {{
     :interfaces => 'eth0, lo',
     :operatingsystem => 'RedHat',
@@ -18,5 +18,5 @@ describe 'simp::rsyslog::stock::log_local' do
   }}
 
   it { should compile.with_all_deps }
-  it { should create_class('simp::rsyslog::stock::log_local') }
+  it { should create_class('simp::rsyslog::stock::log_shipper') }
 end

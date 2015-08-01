@@ -31,8 +31,7 @@ class simp::rsyslog::stock (
   validate_string($security_relevant_logs)
 
   # This is just in case someone includes rsyslog::stock::log_server directly.
-  #if (array_include(hiera_array('log_servers'), $::fqdn)) or defined(Class['rsyslog::stock::log_server']) {
-  if $is_server or defined(Class['rsyslog::stock::log_server']) {
+  if $is_server or defined(Class['simp::rsyslog::stock::log_server']) {
     include '::simp::rsyslog::stock::log_server'
   }
   else {
