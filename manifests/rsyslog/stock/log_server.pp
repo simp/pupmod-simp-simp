@@ -235,7 +235,7 @@ class simp::rsyslog::stock::log_server (
     if $use_default_emerg_rules {
       rsyslog::rule::console { '0_default_emerg':
         rule  => '*.emerg',
-        users => '*'
+        users => ['*']
       }
     }
     if $use_default_spool_rules {

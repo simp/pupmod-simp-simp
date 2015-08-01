@@ -26,7 +26,7 @@
 # Default: false
 #   Whether or not this node is an Rsyslog server.
 #   If true, will set up rsyslog::stock::log_server, otherwise will use
-#   rsyslog::stock::log_local.
+#   rsyslog::stock::log_shipper.
 #
 #   It is highly recommended that you use Logstash as your syslog server if at
 #   all possible.
