@@ -9,16 +9,16 @@
 #
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
-class simp::rsyslog::stock::log_local (
+class simp::rsyslog::stock::log_shipper (
   $log_servers = hiera('log_servers',[]),
   $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs
 ){
-  include 'simp::rsyslog::stock'
+  include '::simp::rsyslog::stock'
 
   if !empty($log_servers) {
     # Remote rules come before everything else so that we don't lose anything.
-    rsyslog::add_conf { 'remote':
-      content   => $security_relevant_logs,
+    rsyslog::rule::remote { 'simp_stock_remote':
+      rule      => $security_relevant_logs,
       dest      => $log_servers,
       dest_type => 'tcp'
     }
