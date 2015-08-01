@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -26,7 +26,7 @@ Requires: pupmod-postfix >= 4.1.0-0
 Requires: pupmod-pupmod >= 6.0.0-3
 Requires: pupmod-puppetlabs-inifile >= 1.0.0-0
 Requires: pupmod-rsync >= 4.1.0-1
-Requires: pupmod-rsyslog >= 4.1.0-10
+Requires: pupmod-rsyslog >= 5.0.0-0
 Requires: pupmod-selinux >= 1.0.0-1
 Requires: pupmod-ssh >= 4.1.0-2
 Requires: pupmod-stunnel >= 4.2.0-0
@@ -86,6 +86,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Fri Jul 31 2015 Kendall Moore <kendall8688@gmail.com> - 1.1.0-1
+- Added support for the updated rsyslog module.
+
 * Thu Apr 02 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
 - Added PuppetDB support
 
