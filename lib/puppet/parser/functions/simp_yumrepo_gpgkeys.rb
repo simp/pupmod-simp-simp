@@ -20,27 +20,41 @@ module Puppet::Parser::Functions
 
     # Common GPG Keys
     gpg_keys = %w(
-      RPM-GPG-KEY-aegisco
-      RPM-GPG-KEY-Jenkins-CI
       RPM-GPG-KEY-puppetlabs
-      RPM-GPG-KEY-redhat-release
-      RPM-GPG-KEY-SIMP-Release
+      RPM-GPG-KEY-SIMP
+      RPM-GPG-KEY-EPEL
     )
 
-    case "#{Facter.value('operatingsystem')}#{Facter.value('lsbmajdistrelease')}"
-      when /(RedHat|CentOS)6/
+    case "#{Facter.value('lsbmajdistrelease')}"
+      when /6/
         gpg_keys += %w(
-          RPM-GPG-KEY-CentOS-6
-          RPM-GPG-KEY-CentOS-Security-6
           RPM-GPG-KEY-EPEL-6
-          RPM-GPG-KEY-fedora-16-primary
-          RPM-GPG-KEY-fedora-16-secondary
         )
-      when /(RedHat|CentOS)7/
+        case "#{Facter.value('operatingsystem')}"
+          when /CentOS/
+            gpg_keys += %w(
+              RPM-GPG-KEY-CentOS-6
+              RPM-GPG-KEY-CentOS-Security-6
+            )
+          when /RedHat/
+            gpg_keys += %w(
+              RPM-GPG-KEY-redhat-release
+            )
+        end
+      when /7/
         gpg_keys += %w(
-          RPM-GPG-KEY-CentOS-7
           RPM-GPG-KEY-EPEL-7
         )
+        case "#{Facter.value('operatingsystem')}"
+          when /CentOS/
+            gpg_keys += %w(
+              RPM-GPG-KEY-CentOS-7
+            )
+          when /RedHat/
+            gpg_keys += %w(
+              RPM-GPG-KEY-redhat-release
+            )
+        end
       else
         Puppet.warning("#{Facter.value('operatingsystem')} #{Facter.value('lsbmajdistrelease')}  support not yet complete")
     end
