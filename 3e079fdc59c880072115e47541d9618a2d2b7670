@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_34377300",
+        "filename": "lib/puppet/parser/functions/simp_yumrepo_gpgkeys.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-08-14T02:44:20Z",
+      "side": 1,
+      "message": "Please reverse this. Too many things match this and it needs to go from most specific to least specific.",
+      "revId": "3e079fdc59c880072115e47541d9618a2d2b7670",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
