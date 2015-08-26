@@ -22,4 +22,5 @@ describe 'simp::nfs::home_client' do
   it { should contain_class('nfs') }
   it { should contain_class('nfs::client') }
   it { should contain_class('autofs') }
+  it { should contain_selboolean('use_nfs_home_dirs') }
 end
