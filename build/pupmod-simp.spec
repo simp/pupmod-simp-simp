@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 1
+Release: 2
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -86,6 +86,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed Aug 26 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-2
+- Selbool use_nfs_home_dirs set to 1 if remote nfs server used for
+  home directories.
+
 * Fri Jul 31 2015 Kendall Moore <kmoore@keywcorp.com> - 1.1.0-1
 - Added support for the updated rsyslog module.
 
