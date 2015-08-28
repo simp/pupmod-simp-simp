@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad9bd40_9608072f",
+        "filename": "manifests/nfs/home_client.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-08-28T17:45:57Z",
+      "side": 1,
+      "message": "At first glance, the \"if\" phrasing of this comment seems to imply a conditional based on remote home directories (which will always be the case if this class is included).  This is particularly awkward as the comment is directly above an \"if\" statement checking for something else.\n\nThe comment might be better phrased as something like \"Enable NFS home directories when SELinux,\" but to me the code speaks for itself.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 55
+      },
+      "revId": "d85b7e80492a83136f8d480369ec38e6adb8bee7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
