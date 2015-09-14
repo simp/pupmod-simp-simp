@@ -160,6 +160,13 @@ EOM
     $puppet --tags rsync,apache,concat,iptables >> $logfile 2>&1;
     success ; echo
 
+    if [[ `facter selinux` && -n $(facter selinux_current_mode) && "`facter selinux_current_mode`" != "disabled" ]]; then
+      echo -n "running fixfiles"
+      echo $delim >> $logfile;
+      echo "=== fixfiles ===" >> $logfile;
+      fixfiles -f relabel >> $logfile 2>&1;
+    fi
+
     echo -n "pass 1 of 2..."
     echo $delim >> $logfile;
     echo "=== 1 of 2 ===" >> $logfile;

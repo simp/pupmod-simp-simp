@@ -86,7 +86,8 @@ fi
 # Post uninstall stuff
 
 %changelog
-* Wed Aug 26 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-2
+* Thu Sep 10 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-2
+- In runpuppet, run fixfiles before the final passes if selinux is enabled.
 - Selbool use_nfs_home_dirs set to 1 if remote nfs server used for
   home directories.
 
