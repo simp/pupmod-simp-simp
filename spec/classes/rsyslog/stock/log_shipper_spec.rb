@@ -17,6 +17,11 @@ describe 'simp::rsyslog::stock::log_shipper' do
     }
   }}
 
+  let(:params) {{
+    :log_servers => ['1.2.3.4','5.6.7.8'],
+    :failover_log_servers => ['1.1.1.1']
+  }}
+
   it { should compile.with_all_deps }
   it { should create_class('simp::rsyslog::stock::log_shipper') }
 end

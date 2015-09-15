@@ -14,11 +14,15 @@
 #
 # [*forward_hosts*]
 #   Type: Array
-#   The hosts to which to forward the logs.
+#     The hosts to which to forward the logs.
+#     Be sure to append the port to the host if you wish to send to an
+#     alternate port.
 #
-# [*forward_port*]
-#   Type: Port
-#   The port to which to forward the logs.
+# [*failover_forward_hosts*]
+#   Type: Array
+#   Default: []
+#     If present, the listed systems will be used as failover servers for the
+#     forwarded records.
 #
 # [*log_transport*]
 #   Type: One of ['tcp','udp','relp']
@@ -30,12 +34,10 @@
 #
 class simp::rsyslog::stock::log_server::forward (
   $forward_hosts,
-  $forward_port = '6514',
+  $failover_forward_hosts = [],
   $log_transport = 'tcp'
 ) {
-  validate_array($forward_hosts)
   validate_net_list($forward_hosts)
-  validate_integer($forward_port)
   validate_array_member($log_transport,['tcp','udp','relp'])
 
   include '::rsyslog'
