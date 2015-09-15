@@ -11,16 +11,18 @@
 #
 class simp::rsyslog::stock::log_shipper (
   $log_servers = hiera('log_servers',[]),
+  $failover_log_servers = hiera('failover_log_servers',[]),
   $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs
 ){
-  include '::simp::rsyslog::stock'
+  #include '::simp::rsyslog::stock'
 
   if !empty($log_servers) {
     # Remote rules come before everything else so that we don't lose anything.
     rsyslog::rule::remote { 'simp_stock_remote':
-      rule      => $security_relevant_logs,
-      dest      => $log_servers,
-      dest_type => 'tcp'
+      rule                 => $security_relevant_logs,
+      dest                 => $log_servers,
+      failover_log_servers => $failover_log_servers,
+      dest_type            => 'tcp'
     }
   }
 }
