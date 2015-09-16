@@ -25,6 +25,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_12189180",
+        "filename": "manifests/rsyslog/stock/log_server/forward.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-16T21:28:22Z",
+      "side": 1,
+      "message": "No, this is just for a forward from a server and should not loop back into the existing infrastructure.",
+      "parentUuid": "1ae5cdf2_b2eefd89",
+      "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_d2f38971",
         "filename": "manifests/rsyslog/stock/log_server/forward.pp",
         "patchSetId": 1
@@ -48,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_320cad42",
+        "filename": "manifests/rsyslog/stock/log_server/forward.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-16T21:28:22Z",
+      "side": 1,
+      "message": "No, this is just for a forward from a server and should not loop back into the existing infrastructure.",
+      "parentUuid": "1ae5cdf2_d2f38971",
+      "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_92e2e19d",
         "filename": "manifests/rsyslog/stock/log_server/forward.pp",
         "patchSetId": 1
@@ -59,6 +95,24 @@
       "writtenOn": "2015-09-16T19:43:42Z",
       "side": 1,
       "message": "No validation for $failover_forward_hosts",
+      "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_52093930",
+        "filename": "manifests/rsyslog/stock/log_server/forward.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-16T21:28:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_92e2e19d",
       "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
@@ -82,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "1ae5cdf2_0d0f9431",
+        "filename": "manifests/rsyslog/stock/log_shipper.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-16T21:28:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_12eed188",
+      "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ae5cdf2_72fc753f",
         "filename": "manifests/rsyslog/stock/log_shipper.pp",
         "patchSetId": 1
@@ -93,6 +165,24 @@
       "writtenOn": "2015-09-16T19:43:42Z",
       "side": 1,
       "message": "Use `assert_private()` to prevent stand-alone usage",
+      "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ae5cdf2_ed09882d",
+        "filename": "manifests/rsyslog/stock/log_shipper.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-09-16T21:28:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae5cdf2_72fc753f",
       "revId": "eb6d9d69d8702b56296ffa0aeacb234f69693242",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
