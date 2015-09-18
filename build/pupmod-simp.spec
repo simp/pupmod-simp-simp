@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 2
+Release: 3
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -86,6 +86,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Fri Sep 18 2015 Kendall Moore <kmoore@keywcorp.com> - 1.1.0-3
+- Set the keylength to 2048 in puppet.conf during the execution of runpuppet
+  if FIPS is enabled.
+
 * Thu Sep 10 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-2
 - In runpuppet, run fixfiles before the final passes if selinux is enabled.
 - Selbool use_nfs_home_dirs set to 1 if remote nfs server used for

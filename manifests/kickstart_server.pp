@@ -113,6 +113,9 @@ class simp::kickstart_server (
     content => template("${module_name}/www/ks/runpuppet.erb")
   }
 
+  $_fips_enabled_on_system = defined('$::fips_enabled') ? { true => $::fips_enabled, default => false }
+  $_fips_enabled_in_hiera = hiera('use_fips')
+
   validate_bool($manage_dhcp)
   validate_bool($manage_tftpboot)
   if !is_array($ntp_servers) { validate_hash($ntp_servers) }

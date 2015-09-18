@@ -96,6 +96,13 @@ case "$1" in
         fi
     fi
 
+<% 
+  if @_fips_enabled_on_system || @_fips_enabled_in_hiera
+    t_keylength = '2048'
+  else
+    t_keylength = '4096'
+  end
+-%>
     read -r -d '' puppet_conf <<'EOM'
 [main]
     vardir = /var/lib/puppet
@@ -109,6 +116,7 @@ case "$1" in
     trusted_node_data = true
     stringify_facts = false
     digest_algorithm = sha256
+    keylength = <%= _keylength %>
 EOM
 
     echo "$puppet_conf" > /etc/puppet/puppet.conf;
