@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae5cdf2_66c49b5f",
+        "filename": "templates/www/ks/runpuppet.erb",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-09-23T12:48:34Z",
+      "side": 1,
+      "message": ":|",
+      "range": {
+        "startLine": 99,
+        "startChar": 2,
+        "endLine": 99,
+        "endChar": 3
+      },
+      "revId": "40cca2347622d387e83d622fa4187e6f3620f060",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
