@@ -98,9 +98,9 @@ case "$1" in
 
 <% 
   if @_fips_enabled_on_system || @_fips_enabled_in_hiera
-    t_keylength = '2048'
+    _keylength = '2048'
   else
-    t_keylength = '4096'
+    _keylength = '4096'
   end
 -%>
     read -r -d '' puppet_conf <<'EOM'
