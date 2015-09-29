@@ -86,6 +86,8 @@ class simp::kickstart_server (
   if $manage_tftpboot { include 'tftpboot' }
 
   $l_client_nets = nets2cidr($client_nets)
+  $_fips_enabled_on_system = defined('$::fips_enabled') ? { true => $::fips_enabled, default => false }
+  $_fips_enabled_in_hiera = hiera('use_fips')
 
   apache::add_site { 'ks':
     content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
@@ -112,9 +114,6 @@ class simp::kickstart_server (
     mode    => '0640',
     content => template("${module_name}/www/ks/runpuppet.erb")
   }
-
-  $_fips_enabled_on_system = defined('$::fips_enabled') ? { true => $::fips_enabled, default => false }
-  $_fips_enabled_in_hiera = hiera('use_fips')
 
   validate_bool($manage_dhcp)
   validate_bool($manage_tftpboot)
