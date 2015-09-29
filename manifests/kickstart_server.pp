@@ -67,6 +67,11 @@
 #   If set to '' or 0, the client will immediately timeout if a signed
 #   certificate is not presented.
 #
+# [*use_fips*]
+# Type: Boolean
+# Default: defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('use_fips', false) }
+#   If true, set puppet keylength to 2048, else 4096.
+#
 # == Authors
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -80,7 +85,8 @@ class simp::kickstart_server (
   $puppet_ca = hiera('puppet::ca',"puppet.${::domain}"),
   $puppet_ca_port = hiera('puppet::ca_port','8141'),
   $runpuppet_print_stats = true,
-  $runpuppet_wait_for_cert = '10'
+  $runpuppet_wait_for_cert = '10',
+  $use_fips = defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('use_fips', false) }
 ){
   if $manage_dhcp { include 'dhcp::dhcpd' }
   if $manage_tftpboot { include 'tftpboot' }
@@ -113,9 +119,7 @@ class simp::kickstart_server (
     content => template("${module_name}/www/ks/runpuppet.erb")
   }
 
-  $_fips_enabled_on_system = defined('$::fips_enabled') ? { true => $::fips_enabled, default => false }
-  $_fips_enabled_in_hiera = hiera('use_fips')
-
+  validate_bool($use_fips)
   validate_bool($manage_dhcp)
   validate_bool($manage_tftpboot)
   if !is_array($ntp_servers) { validate_hash($ntp_servers) }
