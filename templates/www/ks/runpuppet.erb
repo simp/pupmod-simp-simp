@@ -97,7 +97,7 @@ case "$1" in
     fi
 
 <%
-  if @_fips_enabled_on_system || @_fips_enabled_in_hiera
+  if @use_fips then
     _keylength = '2048'
   else
     _keylength = '4096'
