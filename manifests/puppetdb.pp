@@ -46,6 +46,10 @@ class simp::puppetdb (
   $ssl_key                  = $puppetdb::params::ssl_key,
   $ssl_cert                 = $puppetdb::params::ssl_cert,
   $ssl_ca_cert              = $puppetdb::params::ssl_ca_cert,
+  $ssl_protocols            = $puppetdb::params::ssl_protocols,
+  $manage_dbserver          = $puppetdb::params::manage_dbserver,
+  $manage_package_repo      = false,
+  $postgres_version         = $puppetdb::params::postgres_version,
   $database                 = $puppetdb::params::database,
   $database_host            = $puppetdb::params::database_host,
   $database_port            = $puppetdb::params::database_port,
@@ -53,6 +57,9 @@ class simp::puppetdb (
   $database_password        = passgen('simp_puppetdb'),
   $database_name            = $puppetdb::params::database_name,
   $database_ssl             = $puppetdb::params::database_ssl,
+  $database_listen_address  = $puppetdb::params::postgres_listen_addresses,
+  $database_validate        = $puppetdb::params::database_validate,
+  $database_embedded_path   = $puppetdb::params::database_embedded_path,
   $node_ttl                 = $puppetdb::params::node_ttl,
   $node_purge_ttl           = $puppetdb::params::node_purge_ttl,
   $report_ttl               = $puppetdb::params::report_ttl,
@@ -62,7 +69,6 @@ class simp::puppetdb (
   $conn_keep_alive          = $puppetdb::params::conn_keep_alive,
   $conn_lifetime            = $puppetdb::params::conn_lifetime,
   $puppetdb_package         = $puppetdb::params::puppetdb_package,
-  $puppetdb_version         = 'latest',
   $puppetdb_service         = $puppetdb::params::puppetdb_service,
   $puppetdb_service_status  = $puppetdb::params::puppetdb_service_status,
   $puppetdb_user            = $puppetdb::params::puppetdb_user,
@@ -74,6 +80,7 @@ class simp::puppetdb (
   $read_database_password   = passgen('simp_read_puppetdb'),
   $read_database_name       = 'simp_puppetdb',
   $read_database_ssl        = true,
+  $read_database_validate   = $puppetdb::params::read_database_validate,
   $read_log_slow_statements = $puppetdb::params::read_log_slow_statements,
   $read_conn_max_age        = $puppetdb::params::read_conn_max_age,
   $read_conn_keep_alive     = $puppetdb::params::read_conn_keep_alive,
@@ -86,6 +93,9 @@ class simp::puppetdb (
                                 '-Djava.net.preferIPv4Stack=true'
                               ],
   $max_threads              = $puppetdb::params::max_threads,
+  $command_threads                   = $puppetdb::params::command_threads,
+  $store_usage                       = $puppetdb::params::store_usage,
+  $temp_usage                        = $puppetdb::params::temp_usage
 ) inherits puppetdb::params {
 
   validate_net_list($client_nets)
@@ -109,6 +119,10 @@ class simp::puppetdb (
     ssl_key                  => $ssl_key,
     ssl_cert                 => $ssl_cert,
     ssl_ca_cert              => $ssl_ca_cert,
+    ssl_protocols            => $ssl_protocols,
+    manage_dbserver          => $manage_dbserver,
+    manage_package_repo      => $manage_package_repo,
+    postgres_version         => $postgres_version,
     database                 => $database,
     database_host            => $database_host,
     database_port            => $database_port,
@@ -116,6 +130,9 @@ class simp::puppetdb (
     database_password        => $database_password,
     database_name            => $database_name,
     database_ssl             => $database_ssl,
+    database_listen_address  => $database_listen_address,
+    database_validate        => $database_validate,
+    database_embedded_path   => $database_embedded_path,
     node_ttl                 => $node_ttl,
     node_purge_ttl           => $node_purge_ttl,
     report_ttl               => $report_ttl,
@@ -125,7 +142,6 @@ class simp::puppetdb (
     conn_keep_alive          => $conn_keep_alive,
     conn_lifetime            => $conn_lifetime,
     puppetdb_package         => $puppetdb_package,
-    puppetdb_version         => $puppetdb_version,
     puppetdb_service         => $puppetdb_service,
     puppetdb_service_status  => $puppetdb_service_status,
     puppetdb_user            => $puppetdb_user,
@@ -137,6 +153,7 @@ class simp::puppetdb (
     read_database_password   => $read_database_password,
     read_database_name       => $read_database_name,
     read_database_ssl        => $read_database_ssl,
+    read_database_validate   => $read_database_validate,
     read_log_slow_statements => $read_log_slow_statements,
     read_conn_max_age        => $read_conn_max_age,
     read_conn_keep_alive     => $read_conn_keep_alive,
@@ -145,6 +162,9 @@ class simp::puppetdb (
     manage_firewall          => $manage_firewall,
     java_args                => $java_args,
     max_threads              => $max_threads,
+    command_threads          => $command_threads,
+    store_usage              => $store_usage,
+    temp_usage               => $temp_usage
   }
 
   iptables::add_tcp_stateful_listen { 'puppetdb':
