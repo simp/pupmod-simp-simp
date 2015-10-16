@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 3
+Release: 4
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -86,6 +86,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Fri Oct 16 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-4
+- Modified stock puppetdb class defaults to conform with upgraded
+  puppetdb module.
+
 * Fri Sep 18 2015 Kendall Moore <kmoore@keywcorp.com> - 1.1.0-3
 - Set the keylength to 2048 in puppet.conf during the execution of runpuppet
   if FIPS is enabled.
