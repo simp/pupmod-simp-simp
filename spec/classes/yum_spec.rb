@@ -31,7 +31,7 @@ describe 'simp::yum' do
   it { should compile.with_all_deps }
   it { should create_yumrepo('simp').with({
       :gpgkey => /http:\/\/yum1.bar.baz\/yum\/SIMP*/,
-      :baseurl => /http:\/\/yum1.bar.baz\/yum\/SIMP\/x86_64\/*/,
+      :baseurl => /http:\/\/yum1.bar.baz\/yum\/SIMP\/*/,
     })
   }
 end
