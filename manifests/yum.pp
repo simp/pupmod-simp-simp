@@ -1,7 +1,7 @@
 # == Class: simp::yum
 #
-# This class sets up the /etc/yum directory, and ensures that yum-skip-broken
-# is installed.
+# This class sets up the /etc/yum directory, and ensures that
+# yum-skip-broken is installed.
 #
 # == Parameters
 #
@@ -13,8 +13,8 @@
 # [*enable_simp_repos*]
 # Type: Boolean
 # Default: true
-#   If true, enable the default SIMP repositories. You should probably leave
-#   this as is unless you really know what you are doing.
+#   If true, enable the default SIMP repositories. You should probably
+#   leave this as is unless you really know what you are doing.
 #
 # [*enable_auto_updates*]
 # Type: Boolean
@@ -23,34 +23,34 @@
 #
 # [*os_update_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
-#   This is a specially crafted string that handles the case where you want to
-#   pass in multiple yum servers.
+# Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/Updates"
+#   This is a specially crafted string that handles the case where you
+#   want to pass in multiple yum servers.
 #
 #   The string YUM_SERVER (all caps) will be replaced with the various
 #   $servers entries appropriately.
 #
-#   This is not ideal but there is no way to know exactly how you wish to
-#   structure your repositories if you deviate from the base.
+#   This is not ideal but there is no way to know exactly how you wish
+#   to structure your repositories if you deviate from the base.
 #
 # [*simp_update_url*]
 # Type: String
 # Default: "http://YUM_SERVER/yum/SIMP"
-#   This is a specially crafted string that handles the case where you want to
-#   pass in multiple yum servers.
+#   This is a specially crafted string that handles the case where you
+#   want to pass in multiple yum servers.
 #
 #   The string YUM_SERVER (all caps) will be replaced with the various
 #   $servers entries appropriately.
 #
-#   This is not ideal but there is no way to know exactly how you wish to
-#   structure your repositories if you deviate from the base.
+#   This is not ideal but there is no way to know exactly how you wish
+#   to structure your repositories if you deviate from the base.
 #
 class simp::yum (
   $servers,
   $enable_simp_repos = true,
   $enable_auto_updates = true,
-  $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
-  $simp_update_url = 'http://YUM_SERVER/yum/SIMP'
+  $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/Updates",
+  $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
 
 ){
   validate_array($servers)
@@ -77,16 +77,16 @@ class simp::yum (
   }
 
   if $enable_simp_repos {
-    $l_simp_repo_enable = 1
+    $_simp_repo_enable = 1
   }
   else {
-    $l_simp_repo_enable = 0
+    $_simp_repo_enable = 0
   }
 
   yumrepo { 'os_updates':
     baseurl         => simp_yumrepo_mangle($os_update_url,$servers),
-    descr           => "All ${::operatingsystem} ${::operatingsystemmajrelease} ${::hardwaremodel} base packages and updates",
-    enabled         => $l_simp_repo_enable,
+    descr           => "All ${::operatingsystem} ${::lsbmajdistrelease} ${::hardwaremodel} base packages and updates",
+    enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
     gpgkey          => $::operatingsystem ? {
@@ -99,9 +99,9 @@ class simp::yum (
   }
 
   yumrepo { 'simp':
-    baseurl         => simp_yumrepo_mangle("${simp_update_url}/${$::hardwaremodel}",$servers),
-    descr           => "SIMP Packages (${::hardwaremodel})",
-    enabled         => $l_simp_repo_enable,
+    baseurl         => simp_yumrepo_mangle($simp_update_url,$servers),
+    descr           => 'SIMP Packages',
+    enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
     gpgkey          => simp_yumrepo_gpgkeys($simp_update_url,$servers),
