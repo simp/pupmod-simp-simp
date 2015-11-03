@@ -94,8 +94,8 @@ class simp::yum (
   }
 
   yumrepo { 'simp':
-    baseurl         => simp_yumrepo_mangle("${simp_update_url}/${$::hardwaremodel}",$servers),
-    descr           => "SIMP Packages (${::hardwaremodel})",
+    baseurl         => simp_yumrepo_mangle("${simp_update_url}",$servers),
+    descr           => "SIMP Packages",
     enabled         => $l_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
