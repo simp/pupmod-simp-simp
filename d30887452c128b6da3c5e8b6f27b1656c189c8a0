@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab29df4_331e6864",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:49:32Z",
+      "side": 1,
+      "message": "After this parenthesis, add a space and commit summary (line max: 50 chars)",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_53191c78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:49:32Z",
+      "side": 1,
+      "message": "Insert a line of whitespace between the commit summary and message.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 1
+      },
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_932ad47c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:49:32Z",
+      "side": 1,
+      "message": "Commit message lines must be no greater than 72 characters (`qp` in vim should line-wrap this for you)",
+      "range": {
+        "startLine": 8,
+        "startChar": 72,
+        "endLine": 8,
+        "endChar": 136
+      },
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab29df4_b32198a1",
+        "filename": "manifests/yum.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-04T16:49:32Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 97,
+        "startChar": 44,
+        "endLine": 97,
+        "endChar": 62
+      },
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
