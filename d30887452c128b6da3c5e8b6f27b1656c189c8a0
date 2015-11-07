@@ -94,6 +94,23 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_4b944537",
+        "filename": "manifests/yum.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-07T02:15:57Z",
+      "side": 1,
+      "message": "If you do this, the variable \u0027simp_update_url\u0027 should be appended with an ${::hardwaremodel} variable by default since that is the default from the disc. Otherwise, this will break the ISO build.\n\nHowever, if we want to, we can set this in Hiera after running \u0027simp config\u0027. But that will need to go on the backlog.",
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_8b873d0f",
         "filename": "spec/classes/yum_spec.rb",
         "patchSetId": 1
