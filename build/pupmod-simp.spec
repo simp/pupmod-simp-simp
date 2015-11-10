@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 4
+Release: 5
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -11,7 +11,8 @@ Requires: pupmod-auditd >= 4.1.0-3
 Requires: pupmod-augeasproviders_puppet
 Requires: pupmod-clamav >= 4.1.0-2
 Requires: pupmod-common >= 4.2.0-0
-Requires: pupmod-concat >= 4.0.0-0
+Requires: pupmod-simplib >= 1.0.0-0
+Requires: pupmod-simpcat >= 4.0.0-0
 Requires: pupmod-dhcp >= 4.1.0-0
 Requires: pupmod-functions >= 2.1.0-0
 Requires: pupmod-iptables >= 4.1.0-3
@@ -86,6 +87,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 1.1.0-5
+- migration to simplib and simpcat (lib/ only)
+
 * Fri Oct 16 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-4
 - Modified stock puppetdb class defaults to conform with upgraded
   puppetdb module.
