@@ -48,9 +48,12 @@
 #
 # [*use_sssd*]
 # Type: Boolean
-# Default: false
-#   Whether or not to use SSSD in the installation. Defaults to false
-#   due to issues with sssd and OpenLDAP with account expiration.
+# Default: false if EL<7, true otherwise
+#   Whether or not to use SSSD in the installation.
+#   There are issues where SSSD will allow a login, even if the user's password
+#   has expire, if the user has a valid SSH key. However, in EL7+, there are
+#   issues with nscd and nslcd which can lock users our of the system when
+#   using LDAP.
 #
 # [*use_ssh_global_known_hosts*]
 # Type: Boolean
@@ -103,17 +106,27 @@
 #
 class simp (
   $is_mail_server = true,
-  $rsync_stunnel = hiera('rsync::stunnel',hiera('puppet::server')),
-  $use_ldap = hiera('use_ldap',true),
-  $use_nscd = hiera('use_nscd',true),
-  $use_sssd = hiera('use_sssd',false),
+  $rsync_stunnel = hiera('rsync::stunnel',hiera('puppet::server'),$::servername),
+  $use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
+  $use_nscd = $::simp::params::use_nscd,
+  $use_sssd = $::simp::params::use_sssd,
   $use_ssh_global_known_hosts = false,
   $use_stock_sssd = true,
   $enable_filebucketing = true,
   $filebucket_server = '',
-  $puppet_server = hiera('puppet::server'),
+  $puppet_server = hiera('puppet::server',$::servername),
   $puppet_server_ip = ''
-) {
+) inherits ::simp::params {
+
+  validate_bool($is_mail_server)
+  validate_net_list($rsync_stunnel)
+  validate_bool($use_ldap)
+  validate_bool($use_nscd)
+  validate_bool($use_sssd)
+  validate_bool($use_stock_sssd)
+  validate_bool($enable_filebucketing)
+  if !empty($filebucket_server) { validate_net_list($filebucket_server) }
+  validate_net_list($puppet_server)
 
   if !$enable_filebucketing {
     File { backup => false }
@@ -198,14 +211,4 @@ class simp (
       accept  => '127.0.0.1:873'
     }
   }
-
-  validate_bool($is_mail_server)
-  validate_net_list($rsync_stunnel)
-  validate_bool($use_ldap)
-  validate_bool($use_nscd)
-  validate_bool($use_sssd)
-  validate_bool($use_stock_sssd)
-  validate_bool($enable_filebucketing)
-  if !empty($filebucket_server) { validate_net_list($filebucket_server) }
-  validate_net_list($puppet_server)
 }

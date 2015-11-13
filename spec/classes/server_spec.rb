@@ -4,9 +4,9 @@ describe 'simp::server' do
   base_facts = {
     :processorcount => 2,
     :operatingsystem => 'CentOS',
-    :lsbmajdistrelease => '6',
     :operatingsystemmajrelease => '6',
-    :lsbdistrelease => '6.5',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.5',
     :ipaddress => '10.10.10.10',
     :fqdn => 'foo.bar.baz',
     :hostname => 'foo',

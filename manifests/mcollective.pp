@@ -76,7 +76,7 @@
 #
 class simp::mcollective (
   $server_config = 'UNDEF',
-  $client_nets = hiera('client_nets'),
+  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
   $iptables_port = '61614',
   $truststore_certificate = '/etc/pki/cacerts/cacerts.pem',
   $truststore_target = '/etc/activemq/truststore.jks',
@@ -85,14 +85,14 @@ class simp::mcollective (
   $keystore_key = "/etc/pki/private/${::fqdn}.pem",
   $keystore_target = '/etc/activemq/keystore.jks',
   $keystore_password,
-  $middleware_ssl = hiera(mcollective::middleware_ssl, true),
-  $middleware_user = hiera(mcollective::middleware_user, 'mcollective'),
-  $middleware_password = hiera(mcollective::middleware_password),
-  $middleware_admin_user = hiera(mcollective::middleware_admin_user, 'admin'),
-  $middleware_admin_password = hiera(mcollective::middleware_admin_password),
-  $activemq_memoryUsage = hiera(mcollective::activemq_memoryUsage, '20 mb'),
-  $activemq_storeUsage = hiera(mcollective::activemq_storeUsage, '1 gb'),
-  $activemq_tempUsage = hiera(mcollective::activemq_tempUsage, '100 mb'),
+  $middleware_ssl = defined('$::mcollective::middleware_ssl') ? { true => $::mcollective::middleware_ssl, default => hiera('mcollective::middleware_ssl',true) },
+  $middleware_user = defined('$::mcollective::middleware_user') ? { true => $::mcollective::middleware_user, default => hiera('mcollective::middleware_user','mcollective') },
+  $middleware_password = defined('$::mcollective::middleware_password') ? { true => $::mcollective::middleware_password, default => hiera('mcollective::middleware_password') },
+  $middleware_admin_user = defined('$::mcollective::middleware_admin_user') ? { true => $::mcollective::middleware_admin_user, default => hiera('mcollective::middleware_admin_user','admin') },
+  $middleware_admin_password = defined('$::mcollective::middleware_admin_password') ? { true => $::mcollective::middleware_admin_password, default => hiera('mcollective::middleware_admin_password') },
+  $activemq_memoryUsage = defined('$::mcollective::activemq_memoryUsage') ? { true => $::mcollective::activemq_memoryUsage, default => hiera('mcollective::activemq_memoryUsage','20 mb') },
+  $activemq_storeUsage = defined('$::mcollective::activemq_storeUsage') ? { true => $::mcollective::activemq_storeUsage, default => hiera('mcollective::activemq_storeUsage','1 gb') },
+  $activemq_tempUsage = defined('$::mcollective::activemq_tempUsage') ? { true => $::mcollective::activemq_tempUsage, default => hiera('mcollective::activemq_tempUsage','100 mb') },
   $installplugins = true
 ) {
   include '::java'

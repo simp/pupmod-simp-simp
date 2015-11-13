@@ -28,7 +28,7 @@ class simp::base_services {
 
   case $::operatingsystem {
     'RedHat','CentOS': {
-      if $::lsbmajdistrelease > '6' {
+      if $::operatingsystemmajrelease > '6' {
         service { 'quotaon': enable => true }
 
         service { 'mcstransd':

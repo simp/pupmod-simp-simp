@@ -24,7 +24,7 @@
 # * Kendall Moore <mailto:kmoore@keywcorp.com>
 #
 class simp::nfs::home_client (
-  $nfs_server = hiera('nfs::server'),
+  $nfs_server = defined('$::nfs::server') ? { true => $::nfs_server, default => hiera('nfs::server') },
   $port = '2049',
   $sec = 'sys',
   $use_autofs = true

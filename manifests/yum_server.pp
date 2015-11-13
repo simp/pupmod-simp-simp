@@ -20,7 +20,7 @@
 #
 class simp::yum_server (
   $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  $client_nets = hiera('client_nets')
+  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') }
 ){
   $l_client_nets = nets2cidr($client_nets)
 

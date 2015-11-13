@@ -25,7 +25,7 @@ module Puppet::Parser::Functions
       RPM-GPG-KEY-EPEL
     )
 
-    case "#{Facter.value('operatingsystem')}#{Facter.value('lsbmajdistrelease')}"
+    case "#{Facter.value('operatingsystem')}#{Facter.value('operatingsystemmajrelease')}"
       when /(RedHat|CentOS)6/
         gpg_keys += %w(
           RPM-GPG-KEY-EPEL-6
@@ -56,7 +56,7 @@ module Puppet::Parser::Functions
             )
         end
       else
-        Puppet.warning("#{Facter.value('operatingsystem')} #{Facter.value('lsbmajdistrelease')}  support not yet complete")
+        Puppet.warning("#{Facter.value('operatingsystem')} #{Facter.value('operatingsystemmajrelease')}  support not yet complete")
     end
 
     toret = []
