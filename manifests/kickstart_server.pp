@@ -77,13 +77,13 @@
 #
 class simp::kickstart_server (
   $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  $client_nets = hiera('client_nets'),
+  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
   $manage_dhcp = true,
   $manage_tftpboot = true,
-  $ntp_servers = hiera('ntpd::servers',[]),
-  $puppet_server = hiera('puppet::server',"puppet.${::domain}"),
-  $puppet_ca = hiera('puppet::ca',"puppet.${::domain}"),
-  $puppet_ca_port = hiera('puppet::ca_port','8141'),
+  $ntp_servers = defined('$::ntpd::servers') ? { true => $::ntpd::servers, default => hiera('ntpd::servers',[]) },
+  $puppet_server = hiera('puppet::server',$::servername),
+  $puppet_ca = hiera('puppet::ca',$::servername),
+  $puppet_ca_port = hiera('puppet::ca_port',$::settings::ca_port),
   $runpuppet_print_stats = true,
   $runpuppet_wait_for_cert = '10',
   $use_fips = defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('use_fips', false) }
@@ -97,6 +97,17 @@ class simp::kickstart_server (
     content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
   }
 
+  validate_bool($use_fips)
+  validate_bool($manage_dhcp)
+  validate_bool($manage_tftpboot)
+  if !is_array($ntp_servers) { validate_hash($ntp_servers) }
+  else { validate_array($ntp_servers) }
+  validate_net_list($puppet_server)
+  validate_net_list($puppet_ca)
+  validate_port($puppet_ca_port)
+  validate_bool($runpuppet_print_stats)
+
+  unless empty($runpuppet_wait_for_cert) { validate_integer($runpuppet_wait_for_cert) }
   file { "${data_dir}/ks":
     ensure => 'directory',
     owner  => 'root',
@@ -118,15 +129,4 @@ class simp::kickstart_server (
     mode    => '0640',
     content => template("${module_name}/www/ks/runpuppet.erb")
   }
-
-  validate_bool($use_fips)
-  validate_bool($manage_dhcp)
-  validate_bool($manage_tftpboot)
-  if !is_array($ntp_servers) { validate_hash($ntp_servers) }
-  else { validate_array($ntp_servers) }
-  validate_net_list($puppet_server)
-  validate_net_list($puppet_ca)
-  validate_port($puppet_ca_port)
-  validate_bool($runpuppet_print_stats)
-  if !empty($runpuppet_wait_for_cert) { validate_integer($runpuppet_wait_for_cert) }
 }

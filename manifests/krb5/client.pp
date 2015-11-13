@@ -13,7 +13,7 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::krb5::client (
-  $kdc = hiera('puppet::server'),
+  $kdc = hiera('puppet::server',$::servername),
   $kdc_realm = $::domain
 ) {
 

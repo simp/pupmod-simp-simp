@@ -19,7 +19,7 @@ class simp::snmpd::server (
   $monitorUser_priv_phrase,
   $adminUser_auth_phrase,
   $adminUser_priv_phrase,
-  $allow_from = hiera('client_nets')
+  $allow_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') }
 ) {
   include 'snmpd'
 

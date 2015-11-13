@@ -8,7 +8,7 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::sssd::client (
-  $use_ldap = hiera('use_ldap',false)
+  $use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) }
 ){
   include 'sssd'
 

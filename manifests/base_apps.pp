@@ -59,7 +59,7 @@ class simp::base_apps (
 
   case $::operatingsystem {
     'RedHat','CentOS': {
-      if $::lsbmajdistrelease > '6' {
+      if $::operatingsystemmajrelease > '6' {
         package { 'hunspell':       ensure => $ensure }
       }
       else {

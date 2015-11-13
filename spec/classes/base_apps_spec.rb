@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'simp::base_apps' do
   base_facts = {
     :operatingsystem => 'CentOS',
-    :lsbmajdistrelease => '6',
-    :lsbdistrelease => '6.5',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.5',
     :ipaddress => '10.10.10.10',
     :fqdn => 'foo.bar.baz',
     :hostname => 'foo',

@@ -4,8 +4,8 @@ describe 'simp::yum' do
   base_facts = {
     :hardwaremodel => 'x86_64',
     :operatingsystem => 'CentOS',
-    :lsbmajdistrelease => '6',
-    :lsbdistrelease => '6.5',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.5',
     :ipaddress => '10.10.10.10',
     :fqdn => 'foo.bar.baz',
     :hostname => 'foo',
