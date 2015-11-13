@@ -51,10 +51,18 @@ class simp::admin (
   $auditor_group = 'security',
   $passwordless_auditor_sudo = true,
   $admins_allowed_from = ['ALL'],
-  $auditors_allowed_from = hiera('client_nets',['ALL']),
+  $auditors_allowed_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets',['ALL']) },
   $force_sudosh = true
 ){
   include 'common::sudoers'
+
+  validate_string($admin_group)
+  validate_bool($passwordless_admin_sudo)
+  validate_string($auditor_group)
+  validate_bool($passwordless_auditor_sudo)
+  validate_array($admins_allowed_from)
+  validate_array($auditors_allowed_from)
+  validate_bool($force_sudosh)
 
   # Make sure that the administrators group can access your system remotely.
   # Without some entry like this, you will not be able to access the system
@@ -128,12 +136,4 @@ class simp::admin (
     cmnd      => 'AUDIT',
     passwd    => !$passwordless_auditor_sudo
   }
-
-  validate_string($admin_group)
-  validate_bool($passwordless_admin_sudo)
-  validate_string($auditor_group)
-  validate_bool($passwordless_auditor_sudo)
-  validate_array($admins_allowed_from)
-  validate_array($auditors_allowed_from)
-  validate_bool($force_sudosh)
 }

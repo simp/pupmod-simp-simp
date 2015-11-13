@@ -29,12 +29,12 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::puppetdb (
-  $client_nets              = hiera('client_nets',['127.0.0.1']),
+  $client_nets              = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets',['127.0.0.1']) },
   $listen_address           = '127.0.0.1',
   $listen_port              = '8138',
   $open_listen_port         = false,
   $ssl_listen_address       = '0.0.0.0',
-  $ssl_listen_port          = hiera('puppetdb::master::config::puppetdb_port','8139'),
+  $ssl_listen_port          = '8139',
   $disable_ssl              = false,
   $open_ssl_listen_port     = $puppetdb::params::open_ssl_listen_port,
   $ssl_dir                  = $puppetdb::params::ssl_dir,
@@ -93,9 +93,9 @@ class simp::puppetdb (
                                 '-Djava.net.preferIPv4Stack=true'
                               ],
   $max_threads              = $puppetdb::params::max_threads,
-  $command_threads                   = $puppetdb::params::command_threads,
-  $store_usage                       = $puppetdb::params::store_usage,
-  $temp_usage                        = $puppetdb::params::temp_usage
+  $command_threads          = $puppetdb::params::command_threads,
+  $store_usage              = $puppetdb::params::store_usage,
+  $temp_usage               = $puppetdb::params::temp_usage
 ) inherits puppetdb::params {
 
   validate_net_list($client_nets)

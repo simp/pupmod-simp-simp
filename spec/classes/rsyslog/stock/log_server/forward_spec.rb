@@ -4,8 +4,8 @@ describe 'simp::rsyslog::stock::log_server::forward' do
 
   let(:facts){{
     :operatingsystem => 'RedHat',
-    :lsbmajdistrelease => '6',
-    :lsbdistrelease => '6.6',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.6',
     :interfaces => 'eth0',
     :passenger_version => '4',
     :selinux_current_mode => 'enforcing',

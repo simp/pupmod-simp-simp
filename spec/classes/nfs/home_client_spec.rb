@@ -4,8 +4,8 @@ describe 'simp::nfs::home_client' do
   let(:facts) {{
     :interfaces => 'eth0, lo',
     :operatingsystem => 'RedHat',
-    :lsbdistrelease => '6.6',
-    :lsbmajdistrelease => '6',
+    :operatingsystemrelease => '6.6',
+    :operatingsystemmajrelease => '6',
     :passenger_version => '4',
     :selinux_current_mode => 'enforcing',
     :grub_version => '0.9',
