@@ -4,8 +4,8 @@ describe 'simp::ldap_server' do
   base_facts = {
     :processorcount => 6,
     :operatingsystem => 'CentOS',
-    :lsbmajdistrelease => '6',
-    :lsbdistrelease => '6.5',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.5',
     :operatingsystemmajrelease => '6',
     :ipaddress => '10.10.10.10',
     :fqdn => 'foo.bar.baz',

@@ -49,7 +49,7 @@
 #
 class simp::nfs::export_home (
   $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' },
-  $client_nets = hiera('client_nets'),
+  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
   $sec = 'none:sys',
   $create_home_dirs = false
 ) {

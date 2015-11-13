@@ -23,7 +23,7 @@
 #
 # [*os_update_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/Updates"
+# Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
 #   This is a specially crafted string that handles the case where you want to
 #   pass in multiple yum servers.
 #
@@ -49,10 +49,15 @@ class simp::yum (
   $servers,
   $enable_simp_repos = true,
   $enable_auto_updates = true,
-  $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/Updates",
+  $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
   $simp_update_url = 'http://YUM_SERVER/yum/SIMP'
 
 ){
+  validate_array($servers)
+  validate_net_list($servers)
+  validate_bool($enable_simp_repos)
+  validate_bool($enable_auto_updates)
+
   if $enable_auto_updates {
     include 'common::yum_schedule'
   }
@@ -80,13 +85,13 @@ class simp::yum (
 
   yumrepo { 'os_updates':
     baseurl         => simp_yumrepo_mangle($os_update_url,$servers),
-    descr           => "All ${::operatingsystem} ${::lsbmajdistrelease} ${::hardwaremodel} base packages and updates",
+    descr           => "All ${::operatingsystem} ${::operatingsystemmajrelease} ${::hardwaremodel} base packages and updates",
     enabled         => $l_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
     gpgkey          => $::operatingsystem ? {
-      'RedHat' => "http://${servers[0]}/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
-      default  => "http://${servers[0]}/yum/${::operatingsystem}/${::lsbmajdistrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::lsbmajdistrelease}",
+      'RedHat' => "http://${servers[0]}/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
+      default  => "http://${servers[0]}/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}",
     },
     keepalive       => 0,
     metadata_expire => '3600',
@@ -104,9 +109,4 @@ class simp::yum (
     metadata_expire => '3600',
     tag             => 'firstrun'
   }
-
-  validate_array($servers)
-  validate_net_list($servers)
-  validate_bool($enable_simp_repos)
-  validate_bool($enable_auto_updates)
 }
