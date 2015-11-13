@@ -50,8 +50,8 @@
 class simp::ldap_server (
   $is_slave = false,
   $rid = '111',
-  $bind_dn = hiera('ldap::bind_dn',''),
-  $sync_dn = hiera('ldap::sync_dn',''),
+  $bind_dn = defined('$::bind_dn') ? { true => $::bind_dn, default => hiera('bind_dn','') },
+  $sync_dn = defined('$::sync_dn') ? { true => $::sync_dn, default => hiera('sync_dn','') },
   $enable_lastbind = false
 ){
 

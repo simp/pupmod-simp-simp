@@ -22,7 +22,6 @@ ldap::uri :
 ldap::master : 'ldap://server1.bar.baz'
 log_servers :
   - 'syslog.bar.baz'
-ntpd::servers : {}
 pam::wheel_group : 'administrators'
 puppet::ca : 'puppet.bar.baz'
 puppet::ca_port : '8141'

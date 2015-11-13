@@ -59,7 +59,7 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_server (
-  $client_nets = hiera('client_nets'),
+  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
   $rotate_period = 'weekly',
   $rotate = '12',
   $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs,
@@ -80,7 +80,7 @@ class simp::rsyslog::stock::log_server (
   $use_default_emerg_rules = true,
   $use_default_spool_rules = true,
   $use_default_boot_rules = true,
-  $use_iptables = hiera('use_iptables',true)
+  $use_iptables = defined('$::use_iptables') ? { true  => $::use_iptables, default =>  hiera('use_iptables') }
 ) {
   include '::simp::rsyslog::stock'
   include '::rsyslog'

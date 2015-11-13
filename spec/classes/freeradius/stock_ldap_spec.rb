@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'simp::freeradius::stock_ldap' do
   base_facts = {
-    :lsbmajdistrelease => '6',
-    :lsbdistrelease => '6.6',
+    :operatingsystemmajrelease => '6',
+    :operatingsystemrelease => '6.6',
     :operatingsystem => 'RedHat',
     :hardwaremodel => 'x86_64',
     :passenger_version => '4',
