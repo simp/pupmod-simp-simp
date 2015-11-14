@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_20baaade",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-14T02:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab29df4_932ad47c",
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab29df4_b32198a1",
         "filename": "manifests/yum.pp",
         "patchSetId": 1
@@ -111,6 +129,24 @@
     },
     {
       "key": {
+        "uuid": "7ac7a964_e0bfd2ce",
+        "filename": "manifests/yum.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-14T02:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_4b944537",
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ac7a964_8b873d0f",
         "filename": "spec/classes/yum_spec.rb",
         "patchSetId": 1
@@ -122,6 +158,24 @@
       "writtenOn": "2015-11-07T02:12:31Z",
       "side": 1,
       "message": "This is not a correct regex\n\nThe trailing \u0027*\u0027 is matching zero or more slashes \u0027/\u0027.\n\nIf you want to match zero or one slash, use \u0027?\u0027, if you want to match any data after that use \u0027.*\u0027 and if you want to just not care, just remove the \u0027*\u0027.",
+      "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_00b5aeed",
+        "filename": "spec/classes/yum_spec.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-14T02:13:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ac7a964_8b873d0f",
       "revId": "d30887452c128b6da3c5e8b6f27b1656c189c8a0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
