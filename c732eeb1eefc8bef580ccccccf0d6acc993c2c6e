@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_c0a1f6aa",
+        "filename": "manifests/yum.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-14T02:22:13Z",
+      "side": 1,
+      "message": "Did this revert to an lsb fact from ::operatingsystemmajrelease intentionally?",
+      "range": {
+        "startLine": 52,
+        "startChar": 65,
+        "endLine": 52,
+        "endChar": 84
+      },
+      "revId": "c732eeb1eefc8bef580ccccccf0d6acc993c2c6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_a0c5da5c",
+        "filename": "manifests/yum.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-14T02:22:13Z",
+      "side": 1,
+      "message": "y u lsb? lolz",
+      "range": {
+        "startLine": 88,
+        "startChar": 51,
+        "endLine": 88,
+        "endChar": 70
+      },
+      "revId": "c732eeb1eefc8bef580ccccccf0d6acc993c2c6e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
