@@ -95,7 +95,7 @@
 # [*use_nscd*]
 #   See above
 #
-# [*common::timezone*]
+# [*simplib::timezone*]
 # Type: String
 # Default: GMT
 #   Set your system timezone.
