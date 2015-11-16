@@ -142,30 +142,26 @@ class simp (
   if $is_mail_server {
     $l_mta = hiera('mta','')
     if !empty($l_mta) {
-      include 'postfix::server'
+      include '::postfix::server'
     }
     else {
-      include 'postfix'
+      include '::postfix'
     }
   }
 
   if $use_ldap {
-    include 'openldap::pam'
-    include 'openldap::client'
+    include '::openldap::pam'
+    include '::openldap::client'
   }
 
   if $use_sssd {
-    include 'sssd'
+    if $use_stock_sssd {
+      include '::simp::sssd::client'
+    }
   }
   else {
-    if $use_nscd { include 'nscd' }
-  }
-
-  if $use_sssd and $use_stock_sssd {
-    include 'simp::sssd::client'
-  }
-  else {
-    if  $use_nscd {
+    if $use_nscd {
+      include 'nscd'
       include 'nscd::passwd'
       include 'nscd::group'
       include 'nscd::services'
