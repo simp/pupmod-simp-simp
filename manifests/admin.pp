@@ -54,7 +54,7 @@ class simp::admin (
   $auditors_allowed_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets',['ALL']) },
   $force_sudosh = true
 ){
-  include 'common::sudoers'
+  include 'simplib::sudoers'
 
   validate_string($admin_group)
   validate_bool($passwordless_admin_sudo)

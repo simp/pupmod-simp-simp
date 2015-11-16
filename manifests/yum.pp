@@ -59,7 +59,7 @@ class simp::yum (
   validate_bool($enable_auto_updates)
 
   if $enable_auto_updates {
-    include 'common::yum_schedule'
+    include 'simplib::yum_schedule'
   }
   else {
     cron { 'yum_update': ensure => 'absent' }
