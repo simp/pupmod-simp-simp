@@ -35,7 +35,7 @@
 #
 # [*simp_update_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/SIMP"
+# Default: "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
 #   This is a specially crafted string that handles the case where you
 #   want to pass in multiple yum servers.
 #
@@ -45,12 +45,21 @@
 #   This is not ideal but there is no way to know exactly how you wish
 #   to structure your repositories if you deviate from the base.
 #
+# [*simp_gpg_url*]
+# Type: String
+# Default: "http://YUM_SERVER/yum/SIMP"
+#   This is a specially crafted string that handles GPG url creation.
+#
+#   The string YUM_SERVER (all caps) will be replaced with the various
+#   $servers entries appropriately.
+#
 class simp::yum (
   $servers,
   $enable_simp_repos = true,
   $enable_auto_updates = true,
   $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
-  $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
+  $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
+  $simp_gpg_url = "http://YUM_SERVER/yum/SIMP"
 
 ){
   validate_array($servers)
@@ -104,7 +113,7 @@ class simp::yum (
     enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => simp_yumrepo_gpgkeys($simp_update_url,$servers),
+    gpgkey          => simp_yumrepo_gpgkeys($simp_gpg_url,$servers),
     keepalive       => 0,
     metadata_expire => '3600',
     tag             => 'firstrun'
