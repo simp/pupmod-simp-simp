@@ -59,7 +59,7 @@ class simp::yum (
   $enable_auto_updates = true,
   $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
   $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
-  $simp_gpg_url = "http://YUM_SERVER/yum/SIMP"
+  $simp_gpg_url = 'http://YUM_SERVER/yum/SIMP'
 
 ){
   validate_array($servers)
