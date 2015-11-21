@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::freeradius::stock' do
   base_facts = {
+    :osfamily => 'RedHat',
     :operatingsystemmajrelease => '6',
     :operatingsystemrelease => '6.6',
     :operatingsystem => 'RedHat',

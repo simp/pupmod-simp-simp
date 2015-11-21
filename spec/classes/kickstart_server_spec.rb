@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::kickstart_server' do
   base_facts = {
+    :osfamily => 'RedHat',
     :domain => 'bar.baz',
     :operatingsystem => 'CentOS',
     :operatingsystemmajrelease => '6',

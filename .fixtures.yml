@@ -37,6 +37,7 @@ fixtures:
     ssh: "git://github.com/simp/pupmod-simp-ssh"
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
     stunnel: "git://github.com/simp/pupmod-simp-stunnel"
+    sssd: "git://github.com/simp/pupmod-simp-sssd"
     sudo: "git://github.com/simp/pupmod-simp-sudo"
     sudosh: "git://github.com/simp/pupmod-simp-sudosh"
     svckill: "git://github.com/simp/pupmod-simp-svckill"

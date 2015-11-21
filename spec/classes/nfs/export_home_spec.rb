@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::nfs::export_home' do
   let(:facts) {{
+    :osfamily => 'RedHat',
     :interfaces => 'eth0, lo',
     :operatingsystem => 'RedHat',
     :operatingsystemmajrelease => '6',
