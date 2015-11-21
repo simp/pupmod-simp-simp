@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::nfs::home_client' do
   let(:facts) {{
+    :osfamily => 'RedHat',
     :interfaces => 'eth0, lo',
     :operatingsystem => 'RedHat',
     :operatingsystemrelease => '6.6',

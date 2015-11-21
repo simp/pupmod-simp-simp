@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'simp::ganglia::stock' do
   base_facts = {
     "RHEL 6" => {
+      :osfamily => 'RedHat',
       :fqdn => 'spec.test',
       :grub_version => '0.97',
       :hardwaremodel => 'x86_64',
@@ -23,6 +24,7 @@ describe 'simp::ganglia::stock' do
     },
 
     "RHEL 7" => {
+      :osfamily => 'RedHat',
       :fqdn => 'spec.test',
       :grub_version => '2.02~beta2',
       :hardwaremodel => 'x86_64',

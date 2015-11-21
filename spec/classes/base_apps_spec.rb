@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::base_apps' do
   base_facts = {
+    :osfamily => 'RedHat',
     :operatingsystem => 'CentOS',
     :operatingsystemmajrelease => '6',
     :operatingsystemrelease => '6.5',

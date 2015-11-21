@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'simp::snmpd::server' do
 
   let(:facts) {{
+    :osfamily => 'RedHat',
     :operatingsystem => 'RedHat',
     :operatingsystemmajrelease => '6',
     :operatingsystemrelease => '6.6',
