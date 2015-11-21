@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::ldap_server' do
   base_facts = {
+    :osfamily => 'RedHat',
     :processorcount => 6,
     :operatingsystem => 'CentOS',
     :operatingsystemmajrelease => '6',

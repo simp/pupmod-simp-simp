@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::server' do
   base_facts = {
+    :osfamily => 'RedHat',
     :processorcount => 2,
     :operatingsystem => 'CentOS',
     :operatingsystemmajrelease => '6',

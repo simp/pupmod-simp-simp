@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::rsyslog::stock' do
   let(:facts) {{
+    :osfamily => 'RedHat',
     :interfaces => 'eth0, lo',
     :hardwaremodel => 'x86_64',
     :operatingsystem => 'RedHat',

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::yum' do
   base_facts = {
+    :osfamily => 'RedHat',
     :hardwaremodel             => 'x86_64',
     :operatingsystem           => 'CentOS',
     :operatingsystemmajrelease => '6',
