@@ -38,6 +38,7 @@ fixtures:
     ssh: "#{source_dir}/../ssh"
     stdlib: "#{source_dir}/../stdlib"
     stunnel: "#{source_dir}/../stunnel"
+    sssd: "#{source_dir}/../sssd"
     sudo: "#{source_dir}/../sudo"
     sudosh: "#{source_dir}/../sudosh"
     svckill: "#{source_dir}/../svckill"

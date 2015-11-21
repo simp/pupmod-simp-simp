@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'simp::yum_server' do
   base_facts = {
+    :osfamily => 'RedHat',
     :hardwaremodel => 'x86_64',
     :selinux_enforced => true,
     :operatingsystem => 'RedHat',

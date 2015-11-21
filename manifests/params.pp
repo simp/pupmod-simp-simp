@@ -31,6 +31,6 @@ class simp::params {
     }
   }
   else {
-    fail("${::operatingsystem} not yet supported by ${::module_name}")
+    fail("${::operatingsystem} not yet supported by ${module_name}")
   }
 }
