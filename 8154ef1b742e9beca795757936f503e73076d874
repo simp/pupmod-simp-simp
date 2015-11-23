@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_44d51842",
+        "filename": "manifests/sssd/client.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-23T20:18:44Z",
+      "side": 1,
+      "message": "ws",
+      "revId": "8154ef1b742e9beca795757936f503e73076d874",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
