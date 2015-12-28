@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 5
+Release: 7
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -41,9 +41,9 @@ Requires: puppetlabs-stdlib >= 4.1.0-1.SIMP
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Buildarch: noarch
 Requires: simp-bootstrap >= 4.2.0
-Obsoletes: pupmod-simp-test
+Obsoletes: pupmod-simp-test >= 0.0.1
 
-Prefix: /etc/puppet/environments/simp/modules
+Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
 %description
 This puppet module provides a set of default classes that will be
@@ -85,6 +85,13 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Dec 28 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-7
+- Updated minor logic in simp::yum for flexibility.
+
+* Thu Dec 24 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-6
+- Add management for the paths that the simp helper commands expect. This is
+  particularly relevant when not installing via RPM
+
 * Thu Nov 12 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-5
 - Now use the 'operatingsystem*' facts instead of the 'lsb*' facts
 - Updated to require 'simplib' and 'simpcat' instead of 'common', 'functions', and 'concat'
