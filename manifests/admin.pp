@@ -90,14 +90,16 @@ class simp::admin (
     content => [ $auditor_group ]
   }
 
+  $_force_sudosh = $force_sudosh ? {
+    true    => '/usr/bin/sudosh',
+    default => 'ALL'
+  }
+
   sudo::user_specification { 'admin_global':
     user_list => "%${admin_group}",
     host_list => 'ALL',
     runas     => 'ALL',
-    cmnd      => $force_sudosh ? {
-      true    => '/usr/bin/sudosh',
-      default => 'ALL'
-    },
+    cmnd      => $_force_sudosh,
     passwd    => !$passwordless_admin_sudo
   }
 

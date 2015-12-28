@@ -199,14 +199,14 @@ class simp (
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => 0644
+    mode   => '0644'
   }
 
   file { '/var/lib/puppet/simp':
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => 0644
+    mode   => '0644'
   }
 
   if $use_ssh_global_known_hosts {

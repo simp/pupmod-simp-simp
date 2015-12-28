@@ -24,14 +24,23 @@
 # [*os_update_url*]
 # Type: String
 # Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
-#   This is a specially crafted string that handles the case where you
-#   want to pass in multiple yum servers.
+#   This is a specially crafted string that handles the case where you want to
+#   pass in multiple yum servers.
 #
-#   The string YUM_SERVER (all caps) will be replaced with the various
-#   $servers entries appropriately.
+#   The string YUM_SERVER (all caps) will be replaced with the various $servers
+#   entries appropriately.
 #
-#   This is not ideal but there is no way to know exactly how you wish
-#   to structure your repositories if you deviate from the base.
+#   This is not ideal but there is no way to know exactly how you wish to
+#   structure your repositories if you deviate from the base.
+#
+# [*os_gpg_url*]
+# Type: String
+#   Default: ''
+#     If set, this is a specially crafted string that handles GPG url creation.
+#
+#     The string YUM_SERVER (all caps) will be replaced with the various
+#     $servers entries appropriately.
+#
 #
 # [*simp_update_url*]
 # Type: String
@@ -56,10 +65,12 @@
 class simp::yum (
   $servers,
   $enable_simp_repos = true,
+  $enable_os_repos = true,
   $enable_auto_updates = true,
   $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
+  $os_gpg_url = '',
   $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
-  $simp_gpg_url = 'http://YUM_SERVER/yum/SIMP'
+  $simp_gpg_url = ''
 
 ){
   validate_array($servers)
@@ -85,35 +96,47 @@ class simp::yum (
       recurse => true
   }
 
-  if $enable_simp_repos {
-    $_simp_repo_enable = 1
+  $_simp_repo_enable = $enable_simp_repos ? { true => 1, default => 0 }
+  $_os_repo_enable = $enable_os_repos ? { true => 1, default => 0 }
+
+  if empty($os_gpg_url) {
+    $_temp_os_gpg_url = $::operatingsystem ? {
+      'RedHat' => "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
+      default  => "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}"
+    }
+
+    $_os_gpg_url = simp_yumrepo_mangle($_temp_os_gpg_url, $servers)
   }
   else {
-    $_simp_repo_enable = 0
+    $_os_gpg_url = simp_yumrepo_mangle($os_gpg_url, $servers)
+  }
+
+  if empty($simp_gpg_url) {
+    $_simp_gpg_url = simp_yumrepo_gpgkeys('http://YUM_SERVER/yum/SIMP', $servers)
+  }
+  else {
+    $_simp_gpg_url = simp_yumrepo_mangle($simp_gpg_url, $servers)
   }
 
   yumrepo { 'os_updates':
-    baseurl         => simp_yumrepo_mangle($os_update_url,$servers),
+    baseurl         => simp_yumrepo_mangle($os_update_url, $servers),
     descr           => "All ${::operatingsystem} ${::operatingsystemmajrelease} ${::hardwaremodel} base packages and updates",
-    enabled         => $_simp_repo_enable,
+    enabled         => $_os_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => $::operatingsystem ? {
-      'RedHat' => "http://${servers[0]}/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
-      default  => "http://${servers[0]}/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}",
-    },
+    gpgkey          => $_os_gpg_url,
     keepalive       => 0,
     metadata_expire => '3600',
     tag             => 'firstrun'
   }
 
   yumrepo { 'simp':
-    baseurl         => simp_yumrepo_mangle($simp_update_url,$servers),
+    baseurl         => simp_yumrepo_mangle($simp_update_url, $servers),
     descr           => 'SIMP Packages',
     enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => simp_yumrepo_gpgkeys($simp_gpg_url,$servers),
+    gpgkey          => $_simp_gpg_url,
     keepalive       => 0,
     metadata_expire => '3600',
     tag             => 'firstrun'

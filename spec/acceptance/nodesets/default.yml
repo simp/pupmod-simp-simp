@@ -1,0 +1,48 @@
+HOSTS:
+  server5:
+    roles:
+      - server
+      - default
+      - master
+      - simp_server
+    platform:   el-7-x86_64
+    box:        puppetlabs/centos-7.0-64-nocm
+    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    hypervisor: vagrant
+    vagrant_memsize: 2048
+    simp_update_url : https://dl.bintray.com/simp/5.1.X
+
+  client5:
+    roles:
+      - client
+      - agent
+    platform:   el-7-x86_64
+    box:        puppetlabs/centos-7.0-64-nocm
+    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    hypervisor: vagrant
+    simp_update_url : https://dl.bintray.com/simp/5.1.X
+
+  server4:
+    roles:
+      - simp_server
+    platform:   el-6-x86_64
+    box:        puppetlabs/centos-6.6-64-nocm
+    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
+    hypervisor: vagrant
+    vagrant_memsize: 2048
+    simp_update_url : https://dl.bintray.com/simp/4.2.X
+
+  client4:
+    roles:
+      - client
+      - agent
+    platform:   el-6-x86_64
+    box:        puppetlabs/centos-6.6-64-nocm
+    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
+    hypervisor: vagrant
+    simp_update_url : https://dl.bintray.com/simp/4.2.X
+CONFIG:
+  log_level: verbose
+  type:      foss
+  vagrant_memsize: 256
+  # vb_gui: true

@@ -96,7 +96,7 @@ class simp::puppetdb (
   $command_threads          = $puppetdb::params::command_threads,
   $store_usage              = $puppetdb::params::store_usage,
   $temp_usage               = $puppetdb::params::temp_usage
-) inherits puppetdb::params {
+) inherits ::puppetdb::params {
 
   validate_net_list($client_nets)
 

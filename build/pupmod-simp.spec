@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 6
+Release: 7
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -85,6 +85,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Dec 28 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-7
+- Updated minor logic in simp::yum for flexibility.
+
 * Thu Dec 24 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-6
 - Add management for the paths that the simp helper commands expect. This is
   particularly relevant when not installing via RPM
