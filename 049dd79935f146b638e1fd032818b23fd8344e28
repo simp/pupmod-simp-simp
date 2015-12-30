@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a930d6b_51e7b4e4",
+        "filename": "manifests/init.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-12-30T16:07:24Z",
+      "side": 1,
+      "message": "Already declared in simplib init.pp:376",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 32
+      },
+      "revId": "049dd79935f146b638e1fd032818b23fd8344e28",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_71ecb0c8",
+        "filename": "manifests/init.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-12-30T16:07:24Z",
+      "side": 1,
+      "message": "needs quotes",
+      "range": {
+        "startLine": 202,
+        "startChar": 14,
+        "endLine": 202,
+        "endChar": 18
+      },
+      "revId": "049dd79935f146b638e1fd032818b23fd8344e28",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a930d6b_d1dac416",
+        "filename": "manifests/init.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-12-30T16:07:24Z",
+      "side": 1,
+      "message": "quotes",
+      "range": {
+        "startLine": 209,
+        "startChar": 14,
+        "endLine": 209,
+        "endChar": 18
+      },
+      "revId": "049dd79935f146b638e1fd032818b23fd8344e28",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
