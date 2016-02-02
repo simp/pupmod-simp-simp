@@ -97,7 +97,6 @@ class simp::mcollective (
 ) {
   include '::java'
   include '::mcollective'
-  include '::activemq'
 
   if $server_config != 'UNDEF' {
     $l_server_config = $server_config
@@ -106,14 +105,8 @@ class simp::mcollective (
     $l_server_config = template('simp/activemq.xml.erb')
   }
 
-  file { '/etc/activemq/activemq.xml':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'activemq',
-    mode    => '0640',
-    content => $l_server_config,
-    notify  => Class['activemq::service'],
-    require => Class['activemq::packages']
+  class { 'activemq':
+    server_config => $l_server_config,
   }
 
   iptables::add_tcp_stateful_listen { 'allow_activemq_nossl':
