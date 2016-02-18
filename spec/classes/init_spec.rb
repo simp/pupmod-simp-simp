@@ -30,11 +30,11 @@ describe 'simp' do
     mod_site_pp("hiera_include('classes')")
   end
 
-  it { should compile.with_all_deps }
+  it { is_expected.to compile.with_all_deps }
 
   context 'with_puppet_server' do
     let(:params) {{ :puppet_server_ip => '1.2.3.4' }}
 
-    it { should create_host('puppet.bar.baz').with_ip('1.2.3.4') }
+    it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
   end
 end

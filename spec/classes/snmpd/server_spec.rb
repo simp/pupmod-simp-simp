@@ -20,8 +20,8 @@ describe 'simp::snmpd::server' do
     }
   }}
 
-  it { should create_class('simp::snmpd::server') }
-  it { should compile.with_all_deps }
-  it { should contain_class('snmpd') }
-  it { should contain_class('snmpd::authtrapenable') }
+  it { is_expected.to create_class('simp::snmpd::server') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_class('snmpd') }
+  it { is_expected.to contain_class('snmpd::authtrapenable') }
 end

@@ -19,6 +19,6 @@ describe 'simp::rsyslog::stock' do
     }
   }}
 
-  it { should compile.with_all_deps }
-  it { should create_class('rsyslog') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_class('rsyslog') }
 end

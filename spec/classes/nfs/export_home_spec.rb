@@ -20,12 +20,12 @@ describe 'simp::nfs::export_home' do
 
   let(:params){{ :data_dir => '/var' }}
 
-  it { should create_class('simp::nfs::export_home') }
-  it { should compile.with_all_deps }
-  it { should contain_class('nfs') }
-  it { should contain_class('nfs::idmapd') }
-  it { should contain_class('nfs::server') }
-  it { should create_file('/var/nfs/exports').with_ensure('directory') }
-  it { should create_file('/var/nfs/exports/home').with_ensure('directory') }
-  it { should create_file('/var/nfs/home').with_ensure('directory') }
+  it { is_expected.to create_class('simp::nfs::export_home') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_class('nfs') }
+  it { is_expected.to contain_class('nfs::idmapd') }
+  it { is_expected.to contain_class('nfs::server') }
+  it { is_expected.to create_file('/var/nfs/exports').with_ensure('directory') }
+  it { is_expected.to create_file('/var/nfs/exports/home').with_ensure('directory') }
+  it { is_expected.to create_file('/var/nfs/home').with_ensure('directory') }
 end

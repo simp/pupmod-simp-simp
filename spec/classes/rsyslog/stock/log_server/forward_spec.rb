@@ -19,9 +19,9 @@ describe 'simp::rsyslog::stock::log_server::forward' do
     }
   }}
 
-  it { should create_class('simp::rsyslog::stock::log_server::forward') }
+  it { is_expected.to create_class('simp::rsyslog::stock::log_server::forward') }
 
   context 'base' do
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
   end
 end
