@@ -24,7 +24,7 @@ describe 'simp::admin' do
 
   let(:facts){base_facts}
 
-  it { should compile.with_all_deps }
-  it { should create_sudo__alias__user('admins') }
-  it { should create_sudo__alias__user('auditors') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_sudo__alias__user('admins') }
+  it { is_expected.to create_sudo__alias__user('auditors') }
 end

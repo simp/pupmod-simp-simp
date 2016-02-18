@@ -18,10 +18,10 @@ describe 'simp::nfs::home_client' do
     }
   }}
 
-  it { should create_class('simp::nfs::home_client') }
-  it { should compile.with_all_deps }
-  it { should contain_class('nfs') }
-  it { should contain_class('nfs::client') }
-  it { should contain_class('autofs') }
-  it { should contain_selboolean('use_nfs_home_dirs') }
+  it { is_expected.to create_class('simp::nfs::home_client') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_class('nfs') }
+  it { is_expected.to contain_class('nfs::client') }
+  it { is_expected.to contain_class('autofs') }
+  it { is_expected.to contain_selboolean('use_nfs_home_dirs') }
 end
