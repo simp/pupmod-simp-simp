@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 7
+Release: 8
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -85,6 +85,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Feb 16 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-8
+- Updated mcollective stock class and added appropriate spec and unit
+  testing for full functionality test coverage.
+
 * Mon Dec 28 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-7
 - Updated minor logic in simp::yum for flexibility.
 
