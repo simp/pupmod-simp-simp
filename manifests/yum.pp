@@ -78,6 +78,8 @@ class simp::yum (
   validate_bool($enable_simp_repos)
   validate_bool($enable_auto_updates)
 
+  compliance_map()
+
   if $enable_auto_updates {
     include 'simplib::yum_schedule'
   }

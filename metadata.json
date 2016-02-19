@@ -84,6 +84,10 @@
     {
       "name": "simp-simplib",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "onyxpoint/compliance_markup",
+      "version_requirement": ">= 1.0.0"
     }
   ],
   "operatingsystem_support": [

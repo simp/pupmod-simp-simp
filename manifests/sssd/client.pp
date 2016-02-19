@@ -54,6 +54,8 @@ class simp::sssd::client (
   $enumerate_users = false,
   $min_id          = '501'
 ){
+  compliance_map()
+
   if $use_ldap {
     # We include these here because, without a domain, SSSD should not be
     # running and will, in fact, complain if you attempt to run without a

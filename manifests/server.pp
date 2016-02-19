@@ -42,6 +42,8 @@ class simp::server (
   validate_bool($enable_puppetdb)
   validate_bool($enable_rsync_shares)
 
+  compliance_map()
+
   if $enable_puppetdb {
     include 'puppetdb::master::config'
   }

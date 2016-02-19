@@ -47,5 +47,6 @@ fixtures:
     tftpboot: "git://github.com/simp/pupmod-simp-tftpboot"
     upstart: "git://github.com/simp/pupmod-simp-upstart"
     xinetd: "git://github.com/simp/pupmod-simp-xinetd"
+    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     simp: "#{source_dir}"

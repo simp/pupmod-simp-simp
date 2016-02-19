@@ -128,6 +128,8 @@ class simp (
   if !empty($filebucket_server) { validate_net_list($filebucket_server) }
   validate_net_list($puppet_server)
 
+  compliance_map()
+
   if !$enable_filebucketing {
     File { backup => false }
   }

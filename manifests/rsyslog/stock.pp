@@ -30,6 +30,8 @@ class simp::rsyslog::stock (
 
   validate_string($security_relevant_logs)
 
+  compliance_map()
+
   # This is just in case someone includes rsyslog::stock::log_server directly.
   if $is_server or defined(Class['simp::rsyslog::stock::log_server']) {
     include '::simp::rsyslog::stock::log_server'
