@@ -30,9 +30,9 @@ describe 'simp::server' do
 
   let(:facts){base_facts}
 
-  it { should compile.with_all_deps }
-  it { should create_class('acpid') }
-  it { should create_class('pupmod::master') }
-  it { should create_class('simp::server') }
-  it { should create_rsync__server__section('default') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_class('acpid') }
+  it { is_expected.to create_class('pupmod::master') }
+  it { is_expected.to create_class('simp::server') }
+  it { is_expected.to create_rsync__server__section('default') }
 end

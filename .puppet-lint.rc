@@ -1,7 +1,4 @@
 --log-format="%{path}:%{line}:%{check}:%{KIND}:%{message}"
 --relative
---no-variables_not_enclosed-check
 --no-class_inherits_from_params_class-check
 --no-80chars-check
-# We know that we're doing this here for puppetdb
---no-inherits_across_namespaces-check

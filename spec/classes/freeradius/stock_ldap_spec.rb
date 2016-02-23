@@ -21,7 +21,7 @@ describe 'simp::freeradius::stock_ldap' do
 
   let(:facts) {base_facts}
 
-  it { should create_class('simp::freeradius::stock_ldap') }
-  it { should compile.with_all_deps }
-  it { should create_file('/etc/raddb/modules/ldap') }
+  it { is_expected.to create_class('simp::freeradius::stock_ldap') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_file('/etc/raddb/modules/ldap') }
 end

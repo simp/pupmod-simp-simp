@@ -29,8 +29,8 @@ describe 'simp::yum' do
     :servers => ['yum1.bar.baz','yum2.bar.baz']
   }}
 
-  it { should compile.with_all_deps }
-  it { should create_yumrepo('simp').with({
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_yumrepo('simp').with({
       :gpgkey => %r(^https?://yum1.bar.baz/yum/SIMP),
       :baseurl => %r(^https?://yum1.bar.baz/yum/SIMP)
     })

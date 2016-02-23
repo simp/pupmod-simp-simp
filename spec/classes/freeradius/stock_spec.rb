@@ -22,20 +22,20 @@ describe 'simp::freeradius::stock' do
 
   let(:facts) {base_facts}
 
-  it { should compile.with_all_deps }
+  it { is_expected.to compile.with_all_deps }
 
-  it { should contain_class('freeradius::users') }
-  it { should contain_class('freeradius::conf::client') }
-  it { should contain_class('freeradius::conf') }
+  it { is_expected.to contain_class('freeradius::users') }
+  it { is_expected.to contain_class('freeradius::conf::client') }
+  it { is_expected.to contain_class('freeradius::conf') }
 
   # Check to ensure the client is added
-  it { should create_file('/etc/raddb/conf/clients/default.conf').with_content(/ipaddr = 127.0.0.1/) }
+  it { is_expected.to create_file('/etc/raddb/conf/clients/default.conf').with_content(/ipaddr = 127.0.0.1/) }
 
   # Check to ensure that the default_auth listen is added
-  it { should create_file('/etc/raddb/conf/listen.inc/default_auth').with_content(/type = auth/) }
+  it { is_expected.to create_file('/etc/raddb/conf/listen.inc/default_auth').with_content(/type = auth/) }
 
   # Check to ensure default users are added (default_ppp, default_cslip, default_slip)
-  it { should create_file('/etc/raddb/users.inc/100.default_ppp').with_content(/Framed-Protocol = PPP/) }
-  it { should create_file('/etc/raddb/users.inc/100.default_cslip').with_content(/Hint == "CSLIP"/) }
-  it { should create_file('/etc/raddb/users.inc/100.default_slip').with_content(/Hint == "SLIP"/) }
+  it { is_expected.to create_file('/etc/raddb/users.inc/100.default_ppp').with_content(/Framed-Protocol = PPP/) }
+  it { is_expected.to create_file('/etc/raddb/users.inc/100.default_cslip').with_content(/Hint == "CSLIP"/) }
+  it { is_expected.to create_file('/etc/raddb/users.inc/100.default_slip').with_content(/Hint == "SLIP"/) }
 end

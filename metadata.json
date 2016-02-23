@@ -1,0 +1,109 @@
+{
+  "name":    "simp-simp",
+  "version": "1.1.0",
+  "author":  "simp",
+  "summary": "default profiles for core SIMP installations",
+  "license": "Apache-2.0",
+  "source":  "https://github.com/simp/pupmod-simp-simp",
+  "project_page": "https://github.com/simp/pupmod-simp-simp",
+  "issues_url":   "https://simp-project.atlassian.net",
+  "tags": [ "simp", "profiles"],
+  "dependencies": [
+    {
+      "name": "simp-aide",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-apache",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-auditd",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "herculesteam-augeasproviders_puppet",
+      "version_requirement": ">= 2.0.2"
+    },
+    {
+      "name": "simp-clamav",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-dhcp",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-iptables",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-logrotate",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-named",
+      "version_requirement": ">= 4.2.0"
+    },
+    {
+      "name": "simp-ncsd",
+      "version_requirement": ">= 5.0.0"
+    },
+    {
+      "name": "simp-ntpd",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-openldap",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-pam",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-pki",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-postfix",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-pupmod",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "simp-rsync",
+      "version_requirement": ">= 4.0.0"
+    },
+    {
+      "name": "simp-simpcat",
+      "version_requirement": ">= 4.0.0"
+    },
+    {
+      "name": "simp-simplib",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "onyxpoint/compliance_markup",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}

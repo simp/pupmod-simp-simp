@@ -26,19 +26,19 @@ describe 'simp::ldap_server' do
 
   let(:facts){base_facts}
 
-  it { should compile.with_all_deps }
+  it { is_expected.to compile.with_all_deps }
 
   context 'is_slave' do
     let(:params){{ :is_slave => true }}
 
-    it { should compile.with_all_deps }
-    it { should create_openldap__server__syncrepl('111') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_openldap__server__syncrepl('111') }
   end
 
   context 'use_lastbind' do
     let(:params){{ :enable_lastbind => true }}
 
-    it { should compile.with_all_deps }
-    it { should create_class('openldap::slapo::lastbind') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to create_class('openldap::slapo::lastbind') }
   end
 end

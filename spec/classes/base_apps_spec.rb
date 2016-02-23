@@ -24,6 +24,6 @@ describe 'simp::base_apps' do
 
   let(:facts){base_facts}
 
-  it { should create_class('simp::base_apps').with_ensure('latest') }
-  it { should compile.with_all_deps }
+  it { is_expected.to create_class('simp::base_apps').with_ensure('latest') }
+  it { is_expected.to compile.with_all_deps }
 end

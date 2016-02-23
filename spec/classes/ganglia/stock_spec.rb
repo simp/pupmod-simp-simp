@@ -46,9 +46,9 @@ describe 'simp::ganglia::stock' do
 
 
   shared_examples_for "a fact set ganglia" do
-    it { should create_class('simp::ganglia::monitor') }
-    it { should create_class('simp::ganglia::meta') }
-    it { should create_class('simp::ganglia::web') }
+    it { is_expected.to create_class('simp::ganglia::monitor') }
+    it { is_expected.to create_class('simp::ganglia::meta') }
+    it { is_expected.to create_class('simp::ganglia::web') }
   end
 
   describe "RHEL 6" do

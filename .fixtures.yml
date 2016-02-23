@@ -22,6 +22,7 @@ fixtures:
     autofs: "git://github.com/simp/pupmod-simp-autofs"
     clamav: "git://github.com/simp/pupmod-simp-clamav"
     datacat: "git://github.com/simp/puppet-datacat"
+    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
     dhcp: "git://github.com/simp/pupmod-simp-dhcp"
     freeradius: "git://github.com/simp/pupmod-simp-freeradius"
     ganglia: "git://github.com/simp/pupmod-simp-ganglia"
@@ -59,5 +60,6 @@ fixtures:
     tftpboot: "git://github.com/simp/pupmod-simp-tftpboot"
     upstart: "git://github.com/simp/pupmod-simp-upstart"
     xinetd: "git://github.com/simp/pupmod-simp-xinetd"
+    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     simp: "#{source_dir}"

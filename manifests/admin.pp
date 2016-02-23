@@ -64,6 +64,8 @@ class simp::admin (
   validate_array($auditors_allowed_from)
   validate_bool($force_sudosh)
 
+  compliance_map()
+
   # Make sure that the administrators group can access your system remotely.
   # Without some entry like this, you will not be able to access the system
   # remotely at all and will only be able to access the local system as root.

@@ -41,6 +41,8 @@ class simp::rsyslog::stock::log_server::forward (
   if !empty($failover_forward_hosts) { validate_net_list($failover_forward_hosts) }
   validate_array_member($log_transport,['tcp','udp','relp'])
 
+  compliance_map()
+
   include '::rsyslog'
 
   rsyslog::rule::remote { 'all_forward':
