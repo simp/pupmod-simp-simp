@@ -85,6 +85,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Feb 23 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-8
+- Updated mcollective stock class and added appropriate spec and unit
+  testing for full functionality test coverage.
+
 * Fri Feb 19 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.1.0-8
 - Added compliance function support
 
