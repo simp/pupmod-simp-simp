@@ -5,6 +5,7 @@ HOSTS:
       - default
       - master
       - simp_server
+      - el7
     platform:   el-7-x86_64
     box:        puppetlabs/centos-7.0-64-nocm
     box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
@@ -16,6 +17,7 @@ HOSTS:
     roles:
       - client
       - agent
+      - el7
     platform:   el-7-x86_64
     box:        puppetlabs/centos-7.0-64-nocm
     box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
