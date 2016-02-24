@@ -43,7 +43,7 @@ group :system_tests do
   gem 'beaker-rspec'
 
   # 1.0.5 introduces FIPS-first acc tests
-  gem 'simp-beaker-helpers', '>= 1.0.5'
+  gem 'simp-beaker-helpers', '>= 1.0.11'
 
   # dependency hacks:
   # NOTE: Workaround because net-ssh 2.10 is busting beaker
