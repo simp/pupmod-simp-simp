@@ -42,12 +42,12 @@ client_nets:
   - 'ALL'
 mcollective::client : true
 use_iptables: true
-activemq::mq_admin_password : 'foobarbaz'
-activemq::mq_cluster_password : 'foobarbaz'
-simp::mcollective::keystore_password : 'foobarbaz'
-simp::mcollective::truststore_password : 'foobarbaz'
-mcollective::middleware_admin_password : 'foobarbaz'
-mcollective::middleware_password : 'foobarbaz'
+activemq::mq_admin_password : 'foobarbaz_admin'
+activemq::mq_cluster_password : 'foobarbaz_cluster'
+simp::mcollective::keystore_password : 'foobarbaz_keystore'
+simp::mcollective::truststore_password : 'foobarbaz_truststore'
+mcollective::middleware_admin_password : 'foobarbaz_mware_admin'
+mcollective::middleware_password : 'foobarbaz_mware_pass'
 simp::mcollective::keystore_certificate : '/etc/pki/simp-testing/pki/public/%{::fqdn}.pub'
 simp::mcollective::keystore_key : '/etc/pki/simp-testing/pki/private/%{::fqdn}.pem'
 simp::mcollective::truststore_certificate : '/etc/pki/simp-testing/pki/cacerts/cacerts.pem'
@@ -130,7 +130,7 @@ loglevel = warn
 main_collective = mcollective
 plugin.activemq.base64 = yes
 plugin.activemq.pool.1.host = #{server_fqdn}
-plugin.activemq.pool.1.password = foobarbaz
+plugin.activemq.pool.1.password = foobarbaz_mware_pass
 plugin.activemq.pool.1.port = 61614
 plugin.activemq.pool.1.ssl = 1
 plugin.activemq.pool.1.ssl.ca = /etc/pki/simp-testing/pki/cacerts/cacerts.pem
