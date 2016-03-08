@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.1.0
-Release: 8
+Release: 9
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -85,6 +85,11 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Tue Mar 08 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-9
+- Updated a bad default for nfs_server in the home_client class, which
+  otherwise had the potential to render a nil server value, and
+  break automounting.
+
 * Wed Feb 24 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-8
 - Updated the mcollective stock class and added appropriate spec and unit
   testing for full functionality test coverage.
