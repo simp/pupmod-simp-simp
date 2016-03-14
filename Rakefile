@@ -3,6 +3,7 @@ require 'puppet/version'
 require 'puppet/vendor/semantic/lib/semantic' unless Puppet.version.to_f < 3.6
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'puppet-lint/tasks/puppet-lint'
+require 'parallel_tests/cli'
 
 # These gems aren't always present, for instance
 # on Travis with --without development
@@ -63,6 +64,25 @@ desc "Run syntax, lint, and spec tests."
 task :test => [
   :syntax,
   :lint,
-  :spec,
+  :spec_parallel,
   :metadata,
 ]
+
+desc <<-EOM
+Run parallel spec tests.
+
+This will NOT run acceptance tests.
+EOM
+task :spec_parallel do
+  test_targets = ['spec/classes', 'spec/defines', 'spec/unit', 'spec/functions']
+
+  if ENV['SIMP_PARALLEL_TARGETS']
+    test_targets += ENV['SIMP_PARALLEL_TARGETS'].split
+  end
+
+  test_targets.delete_if{|dir| !File.directory?(dir)}
+
+  Rake::Task[:spec_prep].invoke
+  ParallelTests::CLI.new.run('--type test -t rspec'.split + test_targets)
+  Rake::Task[:spec_clean].invoke
+end

@@ -6,30 +6,64 @@ fixtures:
     aide: "git://github.com/simp/pupmod-simp-aide"
     apache: "git://github.com/simp/pupmod-simp-apache"
     auditd: "git://github.com/simp/pupmod-simp-auditd"
-    augeasproviders:             "git://github.com/simp/augeasproviders"
-    augeasproviders_base:        "git://github.com/simp/augeasproviders_base"
-    augeasproviders_core:        "git://github.com/simp/augeasproviders_core"
-    augeasproviders_grub:        "git://github.com/simp/augeasproviders_grub"
-    augeasproviders_puppet:      "git://github.com/simp/augeasproviders_puppet"
-    augeasproviders_apache:      "git://github.com/simp/augeasproviders_apache"
-    augeasproviders_mounttab:    "git://github.com/simp/augeasproviders_mounttab"
-    augeasproviders_nagios:      "git://github.com/simp/augeasproviders_nagios"
-    augeasproviders_pam:         "git://github.com/simp/augeasproviders_pam"
-    augeasproviders_postgresql:  "git://github.com/simp/augeasproviders_postgresql"
-    augeasproviders_shellvar:    "git://github.com/simp/augeasproviders_shellvar"
-    augeasproviders_ssh:         "git://github.com/simp/augeasproviders_ssh"
-    augeasproviders_sysctl:      "git://github.com/simp/augeasproviders_sysctl"
+    augeasproviders:
+      repo: "git://github.com/simp/augeasproviders"
+      branch: "simp-master"
+    augeasproviders_base:
+      repo: "git://github.com/simp/augeasproviders_base"
+      branch: "simp-master"
+    augeasproviders_core:
+      repo: "git://github.com/simp/augeasproviders_core"
+      branch: "simp-master"
+    augeasproviders_grub:
+      repo: "git://github.com/simp/augeasproviders_grub"
+      branch: "simp-master"
+    augeasproviders_puppet:
+      repo: "git://github.com/simp/augeasproviders_puppet"
+      branch: "simp-master"
+    augeasproviders_apache:
+      repo: "git://github.com/simp/augeasproviders_apache"
+      branch: "simp-master"
+    augeasproviders_mounttab:
+      repo: "git://github.com/simp/augeasproviders_mounttab"
+      branch: "simp-master"
+    augeasproviders_nagios:
+      repo: "git://github.com/simp/augeasproviders_nagios"
+      branch: "simp-master"
+    augeasproviders_pam:
+      repo: "git://github.com/simp/augeasproviders_pam"
+      branch: "simp-master"
+    augeasproviders_postgresql:
+      repo: "git://github.com/simp/augeasproviders_postgresql"
+      branch: "simp-master"
+    augeasproviders_shellvar:
+      repo: "git://github.com/simp/augeasproviders_shellvar"
+      branch: "simp-master"
+    augeasproviders_ssh:
+      repo: "git://github.com/simp/augeasproviders_ssh"
+      branch: "simp-master"
+    augeasproviders_sysctl:
+      repo: "git://github.com/simp/augeasproviders_sysctl"
+      branch: "simp-master"
     autofs: "git://github.com/simp/pupmod-simp-autofs"
     clamav: "git://github.com/simp/pupmod-simp-clamav"
-    datacat: "git://github.com/simp/puppet-datacat"
+    datacat:
+      repo: "git://github.com/simp/puppet-datacat"
+      branch: "simp-master"
     compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
     dhcp: "git://github.com/simp/pupmod-simp-dhcp"
     freeradius: "git://github.com/simp/pupmod-simp-freeradius"
     ganglia: "git://github.com/simp/pupmod-simp-ganglia"
-    inifile: "git://github.com/simp/puppetlabs-inifile"
+    inifile:
+      repo: "git://github.com/simp/puppetlabs-inifile"
+      branch: "simp-master"
     iptables: "git://github.com/simp/pupmod-simp-iptables"
-    java: "git://github.com/simp/puppetlabs-java"
-    java_ks: "git://github.com/simp/puppetlabs-java_ks"
+    java:
+      repo: "git://github.com/simp/puppetlabs-java"
+      branch: "simp-master"
+    java_ks:
+      repo: "git://github.com/simp/puppetlabs-java_ks"
+      branch: "simp-master"
     logrotate: "git://github.com/simp/pupmod-simp-logrotate"
     mcollective: "git://github.com/simp/pupmod-simp-mcollective"
     named: "git://github.com/simp/pupmod-simp-named"
@@ -41,6 +75,9 @@ fixtures:
     pam: "git://github.com/simp/pupmod-simp-pam"
     pki: "git://github.com/simp/pupmod-simp-pki"
     postfix: "git://github.com/simp/pupmod-simp-postfix"
+    puppetdb:
+      repo: "git://github.com/simp/puppetlabs-puppetdb"
+      branch: "simp-master"
     pupmod: "git://github.com/simp/pupmod-simp-pupmod"
     rsync: "git://github.com/simp/pupmod-simp-rsync"
     rsyslog: "git://github.com/simp/pupmod-simp-rsyslog"
@@ -49,7 +86,9 @@ fixtures:
     simplib: "git://github.com/simp/pupmod-simp-simplib"
     snmpd: "git://github.com/simp/pupmod-simp-snmpd"
     ssh: "git://github.com/simp/pupmod-simp-ssh"
-    stdlib: "git://github.com/simp/puppetlabs-stdlib"
+    stdlib:
+      repo: "git://github.com/simp/puppetlabs-stdlib"
+      branch: "simp-master"
     stunnel: "git://github.com/simp/pupmod-simp-stunnel"
     sssd: "git://github.com/simp/pupmod-simp-sssd"
     sudo: "git://github.com/simp/pupmod-simp-sudo"

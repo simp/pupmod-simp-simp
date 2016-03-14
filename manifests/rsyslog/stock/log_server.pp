@@ -82,9 +82,10 @@ class simp::rsyslog::stock::log_server (
   $use_default_boot_rules = true,
   $use_iptables = defined('$::use_iptables') ? { true  => $::use_iptables, default =>  hiera('use_iptables') }
 ) {
-  include '::simp::rsyslog::stock'
   include '::rsyslog'
   include '::rsyslog::server'
+
+  assert_private()
 
   validate_array_member($rotate_period,['daily','weekly','monthly','yearly'])
   validate_bool($use_iptables)
