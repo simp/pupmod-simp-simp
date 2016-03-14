@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
-Version: 1.1.0
-Release: 9
+Version: 1.2.0
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -40,7 +40,6 @@ Requires: pupmod-xinetd >= 2.1.0-0
 Requires: puppetlabs-stdlib >= 4.1.0-1.SIMP
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Buildarch: noarch
-Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-simp-test >= 0.0.1
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
@@ -85,6 +84,11 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Mar 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.0-0
+- Moved to Semantic Versioning 2.0
+- Ensure that SSSD is used for systems EL6.7+
+- Removed RPM dependency on simp-bootstrap as it is not technically required.
+
 * Tue Mar 08 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-9
 - Updated a bad default for nfs_server in the home_client class, which
   otherwise had the potential to render a nil server value, and
