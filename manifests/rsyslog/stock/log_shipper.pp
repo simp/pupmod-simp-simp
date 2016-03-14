@@ -13,7 +13,7 @@ class simp::rsyslog::stock::log_shipper (
   $log_servers = defined('$::log_servers') ? { true => $::log_servers, default => hiera('log_servers',[]) },
   $failover_log_servers = defined('$::failover_log_servers') ? { true => $::failover_log_servers, default => hiera('failover_log_servers',[]) },
   $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs
-){
+) {
   assert_private()
 
   if !empty($log_servers) {

@@ -18,6 +18,6 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::freeradius::stock_ldap {
-  include 'freeradius::stock'
-  include 'freeradius::modules::ldap'
+  include '::simp::freeradius::stock'
+  include '::freeradius::modules::ldap'
 }
