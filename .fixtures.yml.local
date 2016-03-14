@@ -29,6 +29,7 @@ fixtures:
     pam: "#{source_dir}/../pam"
     pki: "#{source_dir}/../pki"
     postfix: "#{source_dir}/../postfix"
+    puppetdb: "#{source_dir}/../puppetdb"
     pupmod: "#{source_dir}/../pupmod"
     rsync: "#{source_dir}/../rsync"
     rsyslog: "#{source_dir}/../rsyslog"

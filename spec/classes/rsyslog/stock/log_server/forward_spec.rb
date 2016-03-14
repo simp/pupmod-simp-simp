@@ -1,27 +1,31 @@
 require 'spec_helper'
 
 describe 'simp::rsyslog::stock::log_server::forward' do
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os}" do
+        let(:facts) do
+          if ['RedHat','CentOS'].include?(facts[:operatingsystem]) && facts[:operatingsystemmajrelease].to_s < '7'
+            facts[:apache_version] = '2.2'
+            facts[:grub_version] = '0.9'
+            facts[:init_systems] = ['rc','sysv','upstart']
+          else
+            facts[:apache_version] = '2.4'
+            facts[:grub_version] = '2.0~beta'
+            facts[:init_systems] = ['rc','sysv','systemd']
+          end
 
-  let(:facts){{
-    :osfamily => 'RedHat',
-    :operatingsystem => 'RedHat',
-    :operatingsystemmajrelease => '6',
-    :operatingsystemrelease => '6.6',
-    :interfaces => 'eth0',
-    :passenger_version => '4',
-    :selinux_current_mode => 'enforcing',
-    :grub_version => '0.9',
-    :uid_min => '500',
-    :apache_version => '2.2',
-    :init_systems => ['rc','sysv','upstart'],
-    :trusted => {
-      :certname => 'foo.bar.baz'
-    }
-  }}
+          facts[:selinux_current_mode] = 'enforcing'
 
-  it { is_expected.to create_class('simp::rsyslog::stock::log_server::forward') }
+          facts
+        end
 
-  context 'base' do
-    it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_class('simp::rsyslog::stock::log_server::forward') }
+
+        context 'base' do
+          it { is_expected.to compile.with_all_deps }
+        end
+      end
+    end
   end
 end
