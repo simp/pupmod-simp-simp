@@ -15,6 +15,7 @@ group :test do
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "simp-rspec-puppet-facts"
+  gem 'parallel_tests'
 
   # dependency hacks:
   gem "fog-google", '~> 0.0.9' # 0.1 dropped support for ruby 1.9
@@ -43,7 +44,7 @@ group :system_tests do
   gem 'beaker-rspec'
 
   # 1.0.5 introduces FIPS-first acc tests
-  gem 'simp-beaker-helpers', '>= 1.0.11'
+  gem 'simp-beaker-helpers', '>= 1.0.5'
 
   # dependency hacks:
   # NOTE: Workaround because net-ssh 2.10 is busting beaker

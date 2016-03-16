@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
-Version: 1.1.0
-Release: 9
+Version: 1.2.0
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -9,8 +9,11 @@ Requires: pupmod-aide >= 4.1.0-2
 Requires: pupmod-apache >= 4.1.0-4
 Requires: pupmod-auditd >= 4.1.0-3
 Requires: pupmod-augeasproviders_puppet
+Requires: pupmod-autofs >= 4.1.1-0
 Requires: pupmod-clamav >= 4.1.0-2
 Requires: pupmod-dhcp >= 4.1.0-0
+Requires: pupmod-freeradius >= 5.0.0-0
+Requires: pupmod-ganglia >= 5.0.0-0
 Requires: pupmod-iptables >= 4.1.0-3
 Requires: pupmod-logrotate >= 4.1.0-0
 Requires: pupmod-named >= 4.2.0-0
@@ -26,7 +29,7 @@ Requires: pupmod-rsync >= 4.1.0-1
 Requires: pupmod-rsyslog >= 5.0.0-0
 Requires: pupmod-selinux >= 1.0.0-1
 Requires: pupmod-simpcat
-Requires: pupmod-simplib
+Requires: pupmod-simplib >= 1.1.0-0
 Requires: pupmod-ssh >= 4.1.0-2
 Requires: pupmod-stunnel >= 4.2.0-0
 Requires: pupmod-sudo >= 4.1.0-0
@@ -40,7 +43,6 @@ Requires: pupmod-xinetd >= 2.1.0-0
 Requires: puppetlabs-stdlib >= 4.1.0-1.SIMP
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Buildarch: noarch
-Requires: simp-bootstrap >= 4.2.0
 Obsoletes: pupmod-simp-test >= 0.0.1
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
@@ -85,6 +87,12 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Mon Mar 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.0-0
+- Moved to Semantic Versioning 2.0
+- Ensure that SSSD is used for systems EL6.7+
+- Removed RPM dependency on simp-bootstrap as it is not technically required.
+- Test against Puppet 4.3.2
+
 * Tue Mar 08 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-9
 - Updated a bad default for nfs_server in the home_client class, which
   otherwise had the potential to render a nil server value, and

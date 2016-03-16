@@ -1,63 +1,29 @@
 require 'spec_helper'
 
 describe 'simp::ganglia::stock' do
-  base_facts = {
-    "RHEL 6" => {
-      :osfamily => 'RedHat',
-      :fqdn => 'spec.test',
-      :grub_version => '0.97',
-      :hardwaremodel => 'x86_64',
-      :interfaces => 'lo',
-      :ipaddress_lo => '127.0.0.1',
-      :operatingsystemmajrelease => '6',
-      :operatingsystemrelease => '6.6',
-      :operatingsystem => 'RedHat',
-      :processorcount => 4,
-      :uid_min => '500',
-      :apache_version => '2.2',
-      :init_systems => ['rc','sysv','upstart'],
-      :selinux_current_mode => 'enforcing',
-      :trusted => {
-        :certname => 'foo.bar.baz'
-      },
+  context 'supported operating systems' do
+    on_supported_os.each do |os, facts|
+      context "on #{os}" do
+        let(:facts) do
+          if ['RedHat','CentOS'].include?(facts[:operatingsystem]) && facts[:operatingsystemmajrelease].to_s < '7'
+            facts[:apache_version] = '2.2'
+            facts[:grub_version] = '0.9'
+            facts[:init_systems] = ['rc','sysv','upstart']
+          else
+            facts[:apache_version] = '2.4'
+            facts[:grub_version] = '2.0~beta'
+            facts[:init_systems] = ['rc','sysv','systemd']
+          end
 
-    },
+          facts[:selinux_current_mode] = 'enforcing'
 
-    "RHEL 7" => {
-      :osfamily => 'RedHat',
-      :fqdn => 'spec.test',
-      :grub_version => '2.02~beta2',
-      :hardwaremodel => 'x86_64',
-      :interfaces => 'lo',
-      :ipaddress_lo => '127.0.0.1',
-      :operatingsystemmajrelease => '7',
-      :operatingsystemrelease => '7.1',
-      :operatingsystem => 'RedHat',
-      :processorcount => 4,
-      :uid_min => '1000',
-      :apache_version => '2.2',
-      :init_systems => ['rc','sysv','upstart'],
-      :selinux_current_mode => 'enforcing',
-      :trusted => {
-        :certname => 'foo.bar.baz'
-      },
-    }
-  }
+          facts
+        end
 
-
-  shared_examples_for "a fact set ganglia" do
-    it { is_expected.to create_class('simp::ganglia::monitor') }
-    it { is_expected.to create_class('simp::ganglia::meta') }
-    it { is_expected.to create_class('simp::ganglia::web') }
-  end
-
-  describe "RHEL 6" do
-    it_behaves_like "a fact set ganglia"
-    let(:facts) {base_facts['RHEL 6']}
-  end
-
-  describe "RHEL 7" do
-    it_behaves_like "a fact set ganglia"
-    let(:facts) {base_facts['RHEL 7']}
+        it { is_expected.to create_class('simp::ganglia::monitor') }
+        it { is_expected.to create_class('simp::ganglia::meta') }
+        it { is_expected.to create_class('simp::ganglia::web') }
+      end
+    end
   end
 end
