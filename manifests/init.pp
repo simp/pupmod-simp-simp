@@ -31,15 +31,6 @@
 #   It is highly recommended that you use Logstash as your syslog server if at
 #   all possible.
 #
-# [*security_profile*]
-# Type: String
-# Default: stig
-# Allowed Values: stig | none
-#   The security profile to be applied to the system. Right now there
-#   are only two options but it is expected that different values will
-#   be used in the future for different SCAP Security Guide (SSG)
-#   profiles.
-#
 # [*use_nscd*]
 # Type: Boolean
 # Default: true
@@ -106,7 +97,7 @@
 #
 class simp (
   $is_mail_server = true,
-  $rsync_stunnel = hiera('rsync::stunnel',hiera('puppet::server'),$::servername),
+  $rsync_stunnel = hiera('rsync::stunnel',hiera('puppet::server',''),''),
   $use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
   $use_nscd = $::simp::params::use_nscd,
   $use_sssd = $::simp::params::use_sssd,
@@ -114,19 +105,33 @@ class simp (
   $use_stock_sssd = true,
   $enable_filebucketing = true,
   $filebucket_server = '',
-  $puppet_server = hiera('puppet::server',$::servername),
+  $puppet_server = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
   $puppet_server_ip = ''
 ) inherits ::simp::params {
 
+  if empty($rsync_stunnel) {
+    if defined('$::servername') {
+      $_rsync_stunnel = $::servername
+    }
+    else {
+      $_rsync_stunnel = ''
+    }
+  }
+  else {
+    $_rsync_stunnel = $rsync_stunnel
+  }
+
+
   validate_bool($is_mail_server)
-  validate_net_list($rsync_stunnel)
+  if !empty($_rsync_stunnel) { validate_net_list($_rsync_stunnel) }
   validate_bool($use_ldap)
   validate_bool($use_nscd)
   validate_bool($use_sssd)
   validate_bool($use_stock_sssd)
   validate_bool($enable_filebucketing)
   if !empty($filebucket_server) { validate_net_list($filebucket_server) }
-  validate_net_list($puppet_server)
+  if !empty($puppet_server) { validate_net_list($puppet_server) }
+  if !empty($puppet_server_ip) { validate_net_list($puppet_server_ip) }
 
   compliance_map()
 
@@ -170,7 +175,9 @@ class simp (
     }
   }
 
-  if !empty($puppet_server_ip) {
+  if !empty($puppet_server_ip) and !empty($puppet_server) {
+    validate_net_list($puppet_server_ip)
+
     $l_pserver_alias = split($puppet_server,'.')
 
     host { $puppet_server:
@@ -178,8 +185,6 @@ class simp (
       host_aliases => $l_pserver_alias[0],
       ip           => $puppet_server_ip
     }
-
-    validate_net_list($puppet_server_ip)
   }
 
   file { '/etc/simp':
@@ -202,10 +207,10 @@ class simp (
     sshkey_prune { '/etc/ssh/ssh_known_hosts': }
   }
 
-  if !host_is_me($rsync_stunnel) {
+  if !empty($_rsync_stunnel) and !host_is_me($_rsync_stunnel) {
     # Add an stunnel client entry for rsync.
     stunnel::add { 'rsync':
-      connect => ["${rsync_stunnel}:8730"],
+      connect => ["${_rsync_stunnel}:8730"],
       accept  => '127.0.0.1:873'
     }
   }
