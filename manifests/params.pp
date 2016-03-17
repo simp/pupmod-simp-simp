@@ -11,7 +11,7 @@
 #   issues which significantly weaken your security posture.
 class simp::params {
   if $::operatingsystem in ['RedHat','CentOS'] {
-    if (versioncmp($::operatingsystemmajrelease,'6.7') < 0) {
+    if (versioncmp($::operatingsystemrelease,'6.7') < 0) {
       $_use_sssd = false
       $_use_nscd = true
     }

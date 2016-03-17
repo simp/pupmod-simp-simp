@@ -19,6 +19,8 @@ fixtures:
     ganglia: "#{source_dir}/../ganglia"
     inifile: "#{source_dir}/../inifile"
     iptables: "#{source_dir}/../iptables"
+    java: "#{source_dir}/../java"
+    java_ks: "#{source_dir}/../java_ks"
     logrotate: "#{source_dir}/../logrotate"
     named: "#{source_dir}/../named"
     nfs: "#{source_dir}/../nfs"
