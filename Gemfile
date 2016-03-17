@@ -7,8 +7,10 @@ gem_sources   = ENV.key?('SIMP_GEM_SERVERS') ? ENV['SIMP_GEM_SERVERS'].split(/[,
 
 gem_sources.each { |gem_source| source gem_source }
 
-group :test do
+group :development do
   gem 'puppet', puppetversion
+  gem 'beaker-rspec'
+  gem 'vagrant-wrapper'
 
   # simp-rake-helpers does not suport puppet 2.7.X
   if "#{ENV['PUPPET_VERSION']}".scan(/\d+/).first != '2' &&
