@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_e3dc8148",
+        "filename": "spec/acceptance/nfs_spec.rb",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-03-24T20:41:13Z",
+      "side": 1,
+      "message": "HOWAITO-SUPAASU!",
+      "range": {
+        "startLine": 18,
+        "startChar": 45,
+        "endLine": 18,
+        "endChar": 46
+      },
+      "revId": "1c54f6d5bfc22e2b8468031482c559364b8b6f6c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
