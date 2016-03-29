@@ -1,4 +1,4 @@
-# == Class: freeradius::stock::ldap
+# == Class: simp::freeradius::stock_ldap
 #
 # Provide a default configuration of FreeRadius that matches the one from Red
 # Hat that includes the ability to work properly with the default SIMP LDAP
