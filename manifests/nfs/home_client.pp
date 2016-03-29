@@ -1,4 +1,4 @@
-# == Class: nfs::stock::home_client
+# == Class: simp::nfs::home_client
 #
 # Set up an NFS4 client to point to the server that you defined with
 # nfs::stock::export_home.
