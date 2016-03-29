@@ -1,4 +1,4 @@
-# == Class: freeradius::stock::default
+# == Class: simp::freeradius::stock
 #
 # Provide a default configuration of FreeRadius that matches the one from Red
 # Hat.
