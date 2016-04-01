@@ -1,4 +1,4 @@
-# == Class: nfs::stock::export_home
+# == Class: simp::nfs::export_home
 #
 # Define to configure an NFS server to share centralized home directories in
 # the NFSv4 way.
