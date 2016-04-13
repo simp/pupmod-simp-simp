@@ -1,7 +1,7 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
 Version: 1.2.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -87,6 +87,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.0-1
+- Svckill now ignores quotaon and messagebus in RHEL/CentOS 7
+
 * Mon Mar 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.0-0
 - Moved to Semantic Versioning 2.0
 - Ensure that SSSD is used for systems EL6.7+
