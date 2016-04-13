@@ -29,7 +29,14 @@ class simp::base_services {
   case $::operatingsystem {
     'RedHat','CentOS': {
       if $::operatingsystemmajrelease > '6' {
-        service { 'quotaon': enable => true }
+        # For now, these will be commentd out and ignored by svckill
+        # Puppet cannot enable these services because there is no
+        # init.d script or systemd script to do so.
+
+        #        service { 'quotaon': enable => true }
+        #        service { 'messagebus': enable  => true }
+        svckill::ignore { 'quotaon': }
+        svckill::ignore { 'messagebus': }
 
         service { 'mcstransd':
           enable     => true,
@@ -38,7 +45,6 @@ class simp::base_services {
           require    => Package['mcstrans']
         }
 
-        service { 'messagebus': enable  => true }
       }
       else {
         package { 'hal':      ensure => 'latest' }
