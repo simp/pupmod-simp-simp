@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b8c1d8e6",
+        "filename": "build/pupmod-simp.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-04-15T09:45:47Z",
+      "side": 1,
+      "message": "This should be 1.2.1 as we\u0027ve moved to semantic versioning",
+      "revId": "9b87a3a4f2ca77024c2706d19c683fab607b6238",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
