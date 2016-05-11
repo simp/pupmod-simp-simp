@@ -90,6 +90,10 @@ fi
 * Sat May 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.2-0
 - Spec test fixes
 
+* Wed May 11 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.2-0
+- Added a hook to control SSLVerifyClient in ks.conf.  Defaults
+  to 'optional'.
+
 * Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.1-0
 - Svckill now ignores quotaon and messagebus in RHEL/CentOS 7
 
