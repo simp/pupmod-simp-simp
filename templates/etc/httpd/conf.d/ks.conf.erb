@@ -16,4 +16,7 @@ Alias /ks /var/www/ks
 <%= t_allowroot %>
 <% end -%>
     Allow from <%= @domain %>
+    <IfModule mod_ssl>
+      SSLVerifyClient <%= @sslverifyclient %>
+    </IfModule>
 </Location>
