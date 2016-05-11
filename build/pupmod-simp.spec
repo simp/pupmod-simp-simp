@@ -1,6 +1,6 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
-Version: 1.2.1
+Version: 1.2.2
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -87,6 +87,10 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Wed May 11 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.2-0
+- Added a hook to control SSLVerifyClient in ks.conf.  Defaults
+  to 'optional'.
+
 * Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.1-0
 - Svckill now ignores quotaon and messagebus in RHEL/CentOS 7
 
