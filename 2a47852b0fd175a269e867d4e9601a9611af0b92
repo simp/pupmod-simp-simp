@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e9df380b",
+        "filename": "manifests/kickstart_server.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-05-11T20:22:13Z",
+      "side": 1,
+      "message": "This should be \u0027none\u0027 instead of \u0027optional\u0027. It\u0027s less surprising over time and \u0027optional\u0027 doesn\u0027t really give you any extra trust.",
+      "revId": "2a47852b0fd175a269e867d4e9601a9611af0b92",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a9e5b0dc",
+        "filename": "templates/etc/httpd/conf.d/ks.conf.erb",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-05-11T20:22:13Z",
+      "side": 1,
+      "message": "This should only take effect if mod_ssl is loaded.\n\nhttp://blog.infusiontechsolutions.com/how-to-check-if-an-apache-module-has-been-loaded/",
+      "revId": "2a47852b0fd175a269e867d4e9601a9611af0b92",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
