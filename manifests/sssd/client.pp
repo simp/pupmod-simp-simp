@@ -48,6 +48,7 @@
 #
 class simp::sssd::client (
   $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
+  $use_ipa        = defined('$::use_ipa') ? { true => $::use_ipa, default => hiera('use_ipa',true) },
   $use_autofs      = true,
   $use_sudo        = true,
   $use_ssh         = true,
@@ -86,6 +87,38 @@ class simp::sssd::client (
     sssd::provider::ldap { 'LDAP':
       ldap_default_authtok_type => 'password',
       ldap_user_gecos           => 'dn'
+    }
+  }
+  if $use_ipa {
+    include '::sssd'
+
+    include '::sssd::service::nss'
+    include '::sssd::service::pam'
+
+    if $use_autofs { include '::sssd::service::autofs' }
+    if $use_sudo { include '::sssd::service::sudo' }
+    if $use_ssh { include '::sssd::service::ssh' }
+
+    sssd::domain { $ipa::ipa_dns_domain_name:
+      description       => 'IPA Users Domain',
+      id_provider       => 'ipa',
+      auth_provider     => 'ipa',
+      chpass_provider   => 'ipa',
+      access_provider   => 'ipa',
+      sudo_provider     => 'ipa',
+      autofs_provider   => 'ipa',
+      # This needs to change in SIMP 6!
+      min_id            => $min_id,
+      enumerate         => $enumerate_users,
+      cache_credentials => true,
+    }
+
+    sssd::provider::ipa { $ipa::ipa_dns_domain_name:
+      ipa_server => $ipa::ipa_servername,
+      ipa_domain => $ipa::ipa_dns_domain_name,
+      ipa_hostname => $fqdn,
+      ipa_ldap_tls_cacert => '/etc/ipa/ca.crt',
+      ipa_krb5_store_password_if_offline => true,
     }
   }
 }
