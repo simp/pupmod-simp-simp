@@ -16,6 +16,9 @@ describe 'simp::kickstart_server' do
           end
 
           facts[:selinux_current_mode] = 'enforcing'
+          # This is to replace the Puppet server provided $::servername variable.
+          # In the future, this should move to using the $server_facts hash.
+          facts[:servername] = 'my.happy.server'
 
           facts
         end

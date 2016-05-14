@@ -1,6 +1,6 @@
 Summary: SIMP Puppet Module
 Name: pupmod-simp
-Version: 1.2.1
+Version: 1.2.2
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -12,7 +12,7 @@ Requires: pupmod-augeasproviders_puppet
 Requires: pupmod-autofs >= 4.1.1-0
 Requires: pupmod-clamav >= 4.1.0-2
 Requires: pupmod-dhcp >= 4.1.0-0
-Requires: pupmod-freeradius >= 5.0.0-0
+Requires: pupmod-freeradius >= 5.0.1-0
 Requires: pupmod-ganglia >= 5.0.0-0
 Requires: pupmod-iptables >= 4.1.0-3
 Requires: pupmod-logrotate >= 4.1.0-0
@@ -87,6 +87,9 @@ fi
 # Post uninstall stuff
 
 %changelog
+* Sat May 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.2-0
+- Spec test fixes
+
 * Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.1-0
 - Svckill now ignores quotaon and messagebus in RHEL/CentOS 7
 
