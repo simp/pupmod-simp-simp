@@ -2,4 +2,3 @@
 --relative
 --no-class_inherits_from_params_class-check
 --no-80chars-check
---no-inherits_across_namespaces-check
