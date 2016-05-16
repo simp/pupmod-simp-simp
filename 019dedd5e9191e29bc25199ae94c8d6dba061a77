@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_139a776e",
+        "filename": "templates/etc/httpd/conf.d/ks.conf.erb",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-05-16T19:27:45Z",
+      "side": 1,
+      "message": "This should be mod_ssl.c not ssl_module",
+      "revId": "019dedd5e9191e29bc25199ae94c8d6dba061a77",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
