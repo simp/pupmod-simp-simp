@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_2aa707be",
+        "filename": "manifests/ipa_server.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-06-01T16:18:24Z",
+      "side": 1,
+      "message": "Note to reviewers: this module can be found at: https://github.com/CodePhase/pupmod-simp-ipa/tree/SIMP-987",
+      "revId": "ec7221d97d021669d970a4ae093ed79db7ee79a9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
