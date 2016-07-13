@@ -22,10 +22,17 @@ describe 'simp::yum' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_yumrepo('simp').with({
-            :gpgkey => %r(^https?://yum.bar.baz/yum/SIMP),
-            :baseurl => %r(^https?://yum.bar.baz/yum/SIMP)
+            :gpgkey => %r(^https://yum.bar.baz/yum/SIMP),
+            :baseurl => %r(^https://yum.bar.baz/yum/SIMP)
           })
         }
+        if facts[:operatingsystemmajrelease].to_s == '6' and facts[:operatingsystem] == 'CentOS'
+          it { is_expected.to create_yumrepo('os_updates').with({
+              :gpgkey => %r(^https://yum.bar.baz/yum/CentOS/6/x86_64/RPM-GPG-KEY-CentOS-6),
+              :baseurl => %r(^https://yum.bar.baz/yum/CentOS/6/x86_64/Updates)
+            })
+          }
+        end
       end
     end
   end
