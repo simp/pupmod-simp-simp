@@ -23,7 +23,7 @@
 #
 # [*os_update_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
+# Default: "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
 #   This is a specially crafted string that handles the case where you want to
 #   pass in multiple yum servers.
 #
@@ -44,7 +44,7 @@
 #
 # [*simp_update_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
+# Default: "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
 #   This is a specially crafted string that handles the case where you
 #   want to pass in multiple yum servers.
 #
@@ -56,7 +56,7 @@
 #
 # [*simp_gpg_url*]
 # Type: String
-# Default: "http://YUM_SERVER/yum/SIMP"
+# Default: "https://YUM_SERVER/yum/SIMP"
 #   This is a specially crafted string that handles GPG url creation.
 #
 #   The string YUM_SERVER (all caps) will be replaced with the various
@@ -67,9 +67,9 @@ class simp::yum (
   $enable_simp_repos = true,
   $enable_os_repos = true,
   $enable_auto_updates = true,
-  $os_update_url = "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
+  $os_update_url = "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
   $os_gpg_url = '',
-  $simp_update_url = "http://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
+  $simp_update_url = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
   $simp_gpg_url = ''
 
 ){
@@ -103,8 +103,8 @@ class simp::yum (
 
   if empty($os_gpg_url) {
     $_temp_os_gpg_url = $::operatingsystem ? {
-      'RedHat' => "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
-      default  => "http://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}"
+      'RedHat' => "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
+      default  => "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}"
     }
 
     $_os_gpg_url = simp_yumrepo_mangle($_temp_os_gpg_url, $servers)
@@ -114,7 +114,7 @@ class simp::yum (
   }
 
   if empty($simp_gpg_url) {
-    $_simp_gpg_url = simp_yumrepo_gpgkeys('http://YUM_SERVER/yum/SIMP', $servers)
+    $_simp_gpg_url = simp_yumrepo_gpgkeys('https://YUM_SERVER/yum/SIMP', $servers)
   }
   else {
     $_simp_gpg_url = simp_yumrepo_mangle($simp_gpg_url, $servers)
@@ -127,6 +127,7 @@ class simp::yum (
     enablegroups    => 0,
     gpgcheck        => 1,
     gpgkey          => $_os_gpg_url,
+    sslverify       => false,
     keepalive       => 0,
     metadata_expire => '3600',
     tag             => 'firstrun'
@@ -139,6 +140,7 @@ class simp::yum (
     enablegroups    => 0,
     gpgcheck        => 1,
     gpgkey          => $_simp_gpg_url,
+    sslverify       => false,
     keepalive       => 0,
     metadata_expire => '3600',
     tag             => 'firstrun'
