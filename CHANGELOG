@@ -1,3 +1,6 @@
+* Wed Jul 13 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.3-0
+- Yum repos now default to https with sslverify=false
+
 * Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.3-0
 - Migration to semantic versioning and fix of the build system
 
