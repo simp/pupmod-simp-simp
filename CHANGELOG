@@ -1,4 +1,8 @@
-* Wed Jul 13 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.3-0
+* Wed Jul 20 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.5-0
+- Migrated create_home_dirs from nfs.
+- Modified create_home_dirs to use ruby-net-ldap.
+
+* Wed Jul 13 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.4-0
 - Yum repos now default to https with sslverify=false
 
 * Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.3-0

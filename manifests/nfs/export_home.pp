@@ -53,16 +53,17 @@ class simp::nfs::export_home (
   $sec = 'none:sys',
   $create_home_dirs = false
 ) {
+  validate_net_list($client_nets)
+  validate_bool($create_home_dirs)
+
   include 'nfs'
   include 'nfs::idmapd'
-
   # NOTE: You must set nfs::server::client_ips in hiera for this to function properly.
   include 'nfs::server'
 
   if $create_home_dirs {
-    include 'nfs::server::create_home_dirs'
+    include 'simp::nfs::create_home_dirs'
   }
-
 
   if ! $::nfs::use_stunnel {
     nfs::server::export { 'nfs4_root':
@@ -108,7 +109,8 @@ class simp::nfs::export_home (
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => '0755'
+    mode   => '0755',
+    before => $create_home_dirs ? { true => Class['simp::nfs::create_home_dirs'], default => undef }
   }
 
   mount { "${data_dir}/nfs/exports/home":
@@ -122,9 +124,6 @@ class simp::nfs::export_home (
       File["${data_dir}/nfs/home"]
     ]
   }
-
-  validate_net_list($client_nets)
-  validate_bool($create_home_dirs)
 
   compliance_map()
 }
