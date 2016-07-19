@@ -36,7 +36,7 @@
 #   The networks that are allowed to mount this space.
 #
 # [*sec*]
-#   An Arrya of sec modes for the export.
+#   An Array of sec modes for the export.
 #
 # [*create_home_dirs*]
 #   Whether or not to automatically create user home directories
@@ -53,7 +53,6 @@ class simp::nfs::export_home (
   $sec = ['sys'],
   $create_home_dirs = false
 ) {
-
   validate_net_list($client_nets)
   validate_bool($create_home_dirs)
 
@@ -66,7 +65,7 @@ class simp::nfs::export_home (
   include '::nfs::server'
 
   if $create_home_dirs {
-    include '::nfs::server::create_home_dirs'
+    include '::simp::nfs::create_home_dirs'
   }
 
   if ! $::nfs::use_stunnel {
@@ -113,7 +112,8 @@ class simp::nfs::export_home (
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => '0755'
+    mode   => '0755',
+    before => $create_home_dirs ? { true => Class['simp::nfs::create_home_dirs'], default => undef }
   }
 
   mount { "${data_dir}/nfs/exports/home":

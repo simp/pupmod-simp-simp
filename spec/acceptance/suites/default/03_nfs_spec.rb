@@ -29,19 +29,6 @@ describe 'simp nfs stock classes' do
           next
         end
 
-        # Set up simp and epel repos
-        simp_repo = os_release == '6' ? '4.2.X' : '5.1.X'
-        on(node, "wget https://bintray.com/simp/#{simp_repo}/rpm -O /etc/yum.repos.d/bintray-simp-#{simp_repo}.repo")
-        epel_manifest = <<-EOM
-          exec { 'Install EPEL':
-            command   => '/usr/bin/curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-#{os_release}.noarch.rpm && yum -y localinstall epel-release-latest-#{os_release}.noarch.rpm && /bin/sed -i "/mirrorlist/d" /etc/yum.repos.d/epel.repo && /bin/sed -i "s/#baseurl/baseurl/" /etc/yum.repos.d/epel.repo',
-            cwd       => '/tmp',
-            creates   => '/etc/yum.repos.d/epel.repo'
-          }
-        EOM
-
-        apply_manifest_on(node, epel_manifest, :catch_failures => true)
-
         # Construct common hieradata
         domains = fact_on(node, 'domain').split('.')
         domains.map! { |d|
@@ -142,14 +129,6 @@ simp::nfs::export_home::create_home_dirs: true
           manifest << <<-EOM
             include 'simp::nfs::export_home'
             include 'simp::ldap_server'
-
-            file { '/etc/openldap/pki':
-              source => '/etc/pki/simp-testing/pki',
-              recurse => true,
-              group => 'ldap',
-              mode => 'g+r',
-              notify => Class['openldap::server::service']
-            }
           EOM
         end
 

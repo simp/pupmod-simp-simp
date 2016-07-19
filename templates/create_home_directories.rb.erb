@@ -1,0 +1,178 @@
+#!/usr/bin/ruby
+<%
+  SCOPE_MAPPING = {
+    'one' => 'Net::LDAP::SearchScope_SingleLevel',
+    'sub' => 'Net::LDAP::SearchScope_WholeSubtree',
+    'default' => 'Net::LDAP::SearchScope_BaseObject'
+  }
+
+  SCOPE_MAPPING[@ldap_scope] ? t_scope = SCOPE_MAPPING[@ldap_scope] : t_scope = SCOPE_MAPPING
+-%>
+require 'rubygems'
+require 'fileutils'
+require 'net/ldap'
+require 'timeout'
+require 'socket'
+require 'syslog'
+
+File.umask(0122)
+
+ldap_params = Hash.new
+
+servers = (["<%= Array(@uri).map { |x| x = x.split("://").last }.join(',') %>"])
+server = nil
+userou = 'ou=People,<%= @base_dn %>'
+export_dir = '<%= @export_dir %>'
+skel_dir = '<%= @skel_dir %>'
+dn = '<%= @bind_dn.gsub(/'/, "\\\\'") %>'
+pw = '<%= @bind_pw.gsub(/'/, "\\\\'") %>'
+tls = '<%= @tls %>'
+quiet = <%= @quiet %>
+syslog_facility = Syslog::<%= @syslog_facility %>
+syslog_priority = Syslog::<%= @syslog_priority %>
+tmout = 5
+
+begin
+  Syslog.open('home_directories', Syslog::LOG_PID, syslog_facility)
+rescue
+  $stderr.puts("Error: Could not open connection to syslog, writing to stdout!")
+  quiet = false
+end
+
+# If called from the console, we probably want to see everything.
+if $stdin.isatty then
+  quiet = false
+end
+
+# Return value
+$retval = 0
+
+# Did we get an argument? If so, it's probably from incrond!
+
+cmdline = Hash.new
+ARGV.each_index do |i|
+  if ARGV[i+1] == '=' then
+    cmdline[ARGV[i]] = ARGV[i+2]
+  elsif ARGV[i] =~ /(.*)=(.*)/ then
+    cmdline[$1] = $2
+  else
+    cmdline[ARGV[i]] = nil
+  end
+end
+
+# Search through the servers and find one that works, die otherwise.
+# Create a connection to LDAP and bind it
+conn = nil
+servers.each do |svr|
+  begin
+    Timeout::timeout(tmout) do
+      begin
+        s = TCPSocket.new(svr,<%= @port %>)
+        s.close
+      rescue Errno::ECONNREFUSED, Effno::EHOSTUNREACH
+        raise Exception
+      end
+
+      # Attempt to bind with svr
+      # See https://github.com/ruby-ldap/ruby-net-ldap/ for configuration options.
+      # NOTE: Binding with the host will automatically cease once the code block
+      # is executed; only open() will create a persistent connection which requires
+      # closing.
+      conn_opts = {:host => svr, :port => <%= @port %>, :auth => {:method => :simple, :username => dn, :password => pw}}
+      if tls == 'ssl' then
+        conn_opts[:encryption] = :simple_tls
+      elsif tls ==  'start_tls'
+        conn_opts[:encryption] = :start_tls
+      end
+      conn = Net::LDAP.new(conn_opts)
+      conn.bind
+
+    end
+  rescue Exception => e
+    msg = [
+      "Warning: Got exception '#{e}' of type '#{e.class}' while",
+      "trying to connect to #{svr}"
+    ]
+    if e.class == Net::LDAP::ResultStrings and e.to_s == 'Invalid Credentials' then
+      msg << "  * This may be because the keys on this system are not trusted by #{svr}."
+    end
+    if not quiet then
+      $stderr.puts(msg.join("\n"))
+    end
+
+    Syslog.err(msg.join("\n"))
+
+    conn = nil
+    next
+  end
+
+  server = svr
+  break
+end
+
+begin
+  # Use a successfully bound connection (above) to grab all uid/gid pairs
+  # and save to a results hash.
+  results = Hash.new
+  uid = nil
+  gid = nil
+  conn and conn.search(
+    :base => userou,
+    :filter => '(objectClass=*)',
+    :scope => <%= t_scope %>,
+    :return_result => true,
+    :attributes => ['uid', 'gidNumber']
+  ) do |entry|
+    entry.each do |attr, value|
+      attr = attr.to_s.strip
+      uid = value if attr == 'uid'
+      gid = value if attr == 'gidnumber'
+    end
+    if not (uid.nil? or gid.nil?) then
+      results[uid] = gid
+    end
+  end
+
+  # Do some preliminary safety checks.
+  if not File.directory?(export_dir) then
+    raise Exception("Export directory not found: #{export_dir}")
+  end
+  if export_dir.eql?('/') then
+    raise Exception('Refusing to modify "/"')
+  end
+
+  # Variables to record what we've added and deleted.
+  current_dirs = (Dir.glob("#{export_dir}/*").map{|x| x = File.basename(x)} - ['ARCHIVED'])
+  new_dirs = (results.keys.flatten - current_dirs.flatten)
+  to_be_archived = (current_dirs.flatten - results.keys.flatten)
+
+  # Iterate through the new_dirs and create
+  # and copy skel
+  new_dirs.each do |dir|
+    puts "Creating: #{dir}" if not quiet
+    Syslog.log(syslog_priority, "Creating: #{dir}")
+    FileUtils.mkdir "#{export_dir}/#{dir}", :mode => 0700
+    FileUtils.cp_r "#{skel_dir}/.", "#{export_dir}/#{dir}", :preserve => true
+    FileUtils.chown_R "#{dir}", results[dir], "#{export_dir}/#{dir}"
+  end
+
+# We only want to blow things away if the connection actually succeded.
+  if !conn.nil? then
+    # Check to make sure archive directory exists
+    if not File.directory?("#{export_dir}/ARCHIVED") then
+      FileUtils.mkdir "#{export_dir}/ARCHIVED", :mode => 0750
+    end
+    # Actually move the directory
+    to_be_archived.each do |dir|
+      puts "Archiving: #{dir}" if not quiet
+      Syslog.log(syslog_priority, "Archiving: #{dir}")
+      FileUtils.mv "#{export_dir}/#{dir}", "#{export_dir}/ARCHIVED/#{dir}_#{Time.now.strftime('%Y_%m_%d_%H%M%S')}"
+    end
+  end
+rescue Exception => err
+  $stderr.puts("Error: #{err.message}")
+  Syslog.err("Error: #{err.message}")
+  exit 1
+end
+
+exit $retval

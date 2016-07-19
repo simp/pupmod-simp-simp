@@ -44,7 +44,7 @@ class simp::nfs::home_client (
   else {
     $_target = $nfs_server
 
-    if $::selinux_current_mode and $::selinux_current_mode != 'disabled' {
+    if defined('$::selinux_current_mode') and getvar('::selinux_current_mode') != 'disabled' {
       selboolean { 'use_nfs_home_dirs':
         persistent => true,
         value      => 'on'
