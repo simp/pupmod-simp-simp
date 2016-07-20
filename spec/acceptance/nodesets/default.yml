@@ -50,5 +50,5 @@ HOSTS:
 CONFIG:
   log_level: verbose
   type:      foss
-  vagrant_memsize: 256
+  vagrant_memsize: 2048
   # vb_gui: true
