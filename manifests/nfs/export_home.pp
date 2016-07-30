@@ -36,7 +36,7 @@
 #   The networks that are allowed to mount this space.
 #
 # [*sec*]
-#   The sec mode for the export.
+#   An Arrya of sec modes for the export.
 #
 # [*create_home_dirs*]
 #   Whether or not to automatically create user home directories
@@ -50,19 +50,24 @@
 class simp::nfs::export_home (
   $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' },
   $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
-  $sec = 'none:sys',
+  $sec = ['sys'],
   $create_home_dirs = false
 ) {
-  include 'nfs'
-  include 'nfs::idmapd'
+
+  validate_net_list($client_nets)
+  validate_bool($create_home_dirs)
+
+  compliance_map()
+
+  include '::nfs'
+  include '::nfs::idmapd'
 
   # NOTE: You must set nfs::server::client_ips in hiera for this to function properly.
-  include 'nfs::server'
+  include '::nfs::server'
 
   if $create_home_dirs {
-    include 'nfs::server::create_home_dirs'
+    include '::nfs::server::create_home_dirs'
   }
-
 
   if ! $::nfs::use_stunnel {
     nfs::server::export { 'nfs4_root':
@@ -122,9 +127,4 @@ class simp::nfs::export_home (
       File["${data_dir}/nfs/home"]
     ]
   }
-
-  validate_net_list($client_nets)
-  validate_bool($create_home_dirs)
-
-  compliance_map()
 }

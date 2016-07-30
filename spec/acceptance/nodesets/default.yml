@@ -6,47 +6,80 @@ HOSTS:
       - master
       - simp_server
       - nfs_server
+      - mco_server
       - el7
     platform:   el-7-x86_64
-    box:        puppetlabs/centos-7.0-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    box:        centos/7
+    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
     hypervisor: vagrant
     vagrant_memsize: 2048
-    simp_update_url : https://dl.bintray.com/simp/5.1.X
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+      simp:
+        baseurl: https://dl.bintray.com/simp/5.1.X
+        gpgcheck: 0
 
   client5:
     roles:
       - client
       - agent
       - el7
+      - mco_client
     platform:   el-7-x86_64
-    box:        puppetlabs/centos-7.0-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
+    box:        centos/7
+    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
     hypervisor: vagrant
-    simp_update_url : https://dl.bintray.com/simp/5.1.X
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+      simp:
+        baseurl: https://dl.bintray.com/simp/5.1.X
+        gpgcheck: 0
 
   server4:
     roles:
       - simp_server
       - nfs_server
       - el6
+      - mco_server
     platform:   el-6-x86_64
-    box:        puppetlabs/centos-6.6-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
+    box:        centos/6
+    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
     hypervisor: vagrant
     vagrant_memsize: 2048
-    simp_update_url : https://dl.bintray.com/simp/4.2.X
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+      simp:
+        baseurl: https://dl.bintray.com/simp/4.2.X
+        gpgcheck: 0
 
   client4:
     roles:
       - client
       - agent
       - el6
+      - mco_client
     platform:   el-6-x86_64
-    box:        puppetlabs/centos-6.6-64-nocm
-    box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
+    box:        centos/6
+    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
     hypervisor: vagrant
-    simp_update_url : https://dl.bintray.com/simp/4.2.X
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+      simp:
+        baseurl: https://dl.bintray.com/simp/4.2.X
+        gpgcheck: 0
+
 CONFIG:
   log_level: verbose
   type:      foss

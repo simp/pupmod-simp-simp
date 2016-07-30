@@ -56,8 +56,8 @@
           -->
           <simpleAuthenticationPlugin>
             <users>
-              <authenticationUser username="<%= scope["::simp::mcollective::middleware_user"] %>" password="<%= scope["::simp::mcollective::middleware_password"] %>" groups="mcollective,everyone"/>
-              <authenticationUser username="<%= scope['::simp::mcollective::middleware_admin_user'] %>" password="<%= scope['::simp::mcollective::middleware_admin_password'] %>" groups="mcollective,admins,everyone"/>
+              <authenticationUser username="<%= @activemq_user %>" password="<%= @activemq_password %>" groups="mcollective,everyone"/>
+              <authenticationUser username="<%= @activemq_admin_user %>" password="<%= @activemq_admin_password %>" groups="mcollective,admins,everyone"/>
             </users>
           </simpleAuthenticationPlugin>
 
@@ -92,11 +92,11 @@
         </plugins>
 
 
-        <% if scope['::simp::mcollective::middleware_ssl'] %>
+        <% if @activemq_ssl %>
         <sslContext>
           <sslContext
-            keyStore="keystore.jks" keyStorePassword="<%= scope['::simp::mcollective::keystore_password'] %>"
-            trustStore="truststore.jks" trustStorePassword="<%= scope['::simp::mcollective::truststore_password'] %>"
+            keyStore="keystore.jks" keyStorePassword="<%= @keystore_password %>"
+            trustStore="truststore.jks" trustStorePassword="<%= @truststore_password %>"
           />
         </sslContext>
         <% end %>
@@ -109,13 +109,13 @@
         <systemUsage>
             <systemUsage>
                 <memoryUsage>
-                    <memoryUsage limit="<%= scope["::simp::mcollective::activemq_memoryUsage"] %>"/>
+                    <memoryUsage limit="<%= @activemq_memoryUsage %>"/>
                 </memoryUsage>
                 <storeUsage>
-                    <storeUsage limit="<%= scope["::simp::mcollective::activemq_storeUsage"] %>" name="foo"/>
+                    <storeUsage limit="<%= @activemq_storeUsage %>" name="foo"/>
                 </storeUsage>
                 <tempUsage>
-                    <tempUsage limit="<%= scope["::simp::mcollective::activemq_tempUsage"] %>"/>
+                    <tempUsage limit="<%= @activemq_tempUsage %>"/>
                 </tempUsage>
             </systemUsage>
         </systemUsage>
@@ -129,10 +129,19 @@
           http://docs.puppetlabs.com/mcollective/deploy/middleware/activemq.html#transport-connectors
         -->
         <transportConnectors>
-        <% if scope['::simp::mcollective::middleware_ssl'] %>
-          <transportConnector name="stomp+nio+ssl" uri="stomp+nio+ssl://0.0.0.0:61614?needClientAuth=true&amp;transport.enabledProtocols=TLSv1,TLSv1.1,TLSv1.2" />
+        <% if @activemq_ssl %>
+          <transportConnector name="stomp+nio+ssl" uri="stomp+nio+ssl://0.0.0.0:<%= @_activemq_port %>?needClientAuth=true&amp;transport.enabledProtocols=TLSv1,TLSv1.1,TLSv1.2" />
         <% end %>
         </transportConnectors>
     </broker>
 
+    <% if @activemq_console %>
+    <!--
+      Enable web consoles, REST and Ajax APIs and demos.
+      It also includes Camel (with its web console); see ${ACTIVEMQ_HOME}/conf/camel.xml for more info.
+
+      See ${ACTIVEMQ_HOME}/conf/jetty.xml for more details.
+    -->
+    <import resource="jetty.xml"/>
+    <% end %>
 </beans>

@@ -72,23 +72,24 @@ sssd::domains:
 use_ldap: true
 pam::wheel_group : 'administrators'
 
-# Need to tell our modules where our certs live!
-# This is a good test of the case where users don't want to use our PKI module.
 pki_dir : '/etc/pki/simp-testing/pki'
+pki::private_key_source : "file://%{hiera('pki_dir')}/private/%{::fqdn}.pem"
+pki::public_key_source : "file://%{hiera('pki_dir')}/public/%{::fqdn}.pub"
+pki::cacerts_sources :
+  - "file://%{hiera('pki_dir')}/cacerts"
 
-openldap::client::tls_cacertdir : "%{hiera('pki_dir')}/cacerts"
-openldap::client::tls_cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
-openldap::client::tls_key: "%{hiera('pki_dir')}/private/%{fqdn}.pem"
+#openldap::client::tls_cacertdir : "%{hiera('pki_dir')}/cacerts"
+#openldap::client::tls_cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
+#openldap::client::tls_key: "%{hiera('pki_dir')}/private/%{fqdn}.pem"
 
-openldap::pam::tls_cacertdir : "/etc/nslcd.d/pki/cacerts"
-openldap::pam::tls_cert : "/etc/nslcd.d/pki/public/%{fqdn}.pub"
-openldap::pam::tls_key: "/etc/nslcd.d/pki/private/%{fqdn}.pem"
+#openldap::pam::tls_cacertdir : "/etc/nslcd.d/pki/cacerts"
+#openldap::pam::tls_cert : "/etc/nslcd.d/pki/public/%{fqdn}.pub"
+#openldap::pam::tls_key: "/etc/nslcd.d/pki/private/%{fqdn}.pem"
 
-stunnel::ca_source : "%{hiera('pki_dir')}/cacerts"
-stunnel::cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
-stunnel::key : "%{hiera('pki_dir')}/private/%{fqdn}.pem"
+#stunnel::ca_source : "%{hiera('pki_dir')}/cacerts"
+#stunnel::cert : "%{hiera('pki_dir')}/public/%{fqdn}.pub"
+#stunnel::key : "%{hiera('pki_dir')}/private/%{fqdn}.pem"
 
-use_simp_pki : false
 use_iptables : true
 
 ssh::server::conf::permitrootlogin : true
