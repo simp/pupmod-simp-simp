@@ -1,3 +1,6 @@
+* Tue Aug 02 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.6-0
+- Update to the new naming convention
+
 * Wed Jul 20 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.5-0
 - Migrated create_home_dirs from nfs.
 - Modified create_home_dirs to use ruby-net-ldap.
