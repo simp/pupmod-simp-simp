@@ -1,3 +1,6 @@
+* Tue Aug 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.7-0
+- Fixed an invalid data type in simp::nfs::export_home.
+
 * Tue Aug 02 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.6-0
 - Update to the new naming convention
 

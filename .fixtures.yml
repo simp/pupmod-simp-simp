@@ -73,7 +73,7 @@ fixtures:
       repo: "https://github.com/simp/pupmod-simp-mcollective"
       branch: "simp-master"
     named: "https://github.com/simp/pupmod-simp-named"
-    #nfs: "https://github.com/simp/pupmod-simp-nfs"
+    nfs: "https://github.com/simp/pupmod-simp-nfs"
     nscd: "https://github.com/simp/pupmod-simp-nscd"
     ntpd: "https://github.com/simp/pupmod-simp-ntpd"
     oddjob: "https://github.com/simp/pupmod-simp-oddjob"
@@ -107,4 +107,3 @@ fixtures:
     xinetd: "https://github.com/simp/pupmod-simp-xinetd"
   symlinks:
     simp: "#{source_dir}"
-    nfs: "#{source_dir}/../nfs"

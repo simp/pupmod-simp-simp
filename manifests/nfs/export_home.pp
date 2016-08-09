@@ -86,7 +86,7 @@ class simp::nfs::export_home (
   }
   else {
     nfs::server::export { 'nfs4_root':
-      client      => '127.0.0.1',
+      client      => ['127.0.0.1'],
       export_path => "${data_dir}/nfs/exports",
       sec         => $sec,
       fsid        => '0',
@@ -95,7 +95,7 @@ class simp::nfs::export_home (
     }
 
     nfs::server::export { 'home_dirs':
-      client      => '127.0.0.1',
+      client      => ['127.0.0.1'],
       export_path => "${data_dir}/nfs/exports/home",
       rw          => true,
       sec         => $sec,
