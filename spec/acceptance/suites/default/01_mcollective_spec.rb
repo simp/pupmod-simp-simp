@@ -218,11 +218,11 @@ EOF"
       # be able to query the status of mcollective on the client.  The server should still
       # return status.
       on servers.first, "echo 'policy default deny' > /etc/mcollective/policies/service.policy"
-      result = on servers.first, "runuser -l mco_user -c 'mco service status mcollective'", :acceptable_exit_codes => [2]
-      expect(result.stdout).to match(/#{node}.*You are not authorized to call this agent or action/)
+      result = on clients.first, "runuser -l mco_user -c 'mco service status mcollective -I #{fact_on(servers.first,'fqdn')}'", :acceptable_exit_codes => [2]
+      expect(result.stdout).to match(/You are not authorized to call this agent or action/)
 
-      result = on servers.last, "runuser -l mco_user -c 'mco service status mcollective'", :acceptable_exit_codes => [0]
-      expect(result.stdout).to match(/#{server}.*running/)
+      result = on clients.first, "runuser -l mco_user -c 'mco service status mcollective -I #{fact_on(servers.last, 'fqdn')}'", :acceptable_exit_codes => [0]
+      expect(result.stdout).to match(/#{servers.last}.*running/)
     end
   end
 end
