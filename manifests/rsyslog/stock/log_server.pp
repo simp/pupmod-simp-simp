@@ -18,6 +18,15 @@
 # rsyslog::global::udpserver: true
 # rsyslog::global::udpServerAddress: '0.0.0.0'
 #
+# == NOTE:
+# Loose standard for default rule naming:
+#   0_default = specific rules to be caught early (matching on programname etc.)
+#   1_default = specific rules that have corresponding a "0_default" entry
+#                 (catch programname and "err" severity in 0_default while 1_default
+#                 is "catch all" for that programname and any other severity)
+#   7_default = "catch all" for security relevant logs that weren't caught by previous rules
+#   9_default = anything else gets sent to messages
+#
 # == Parameters
 #
 # [*client_nets*]
@@ -129,6 +138,7 @@ class simp::rsyslog::stock::log_server (
   if empty($server_conf) {
     $file_base = '/var/log/hosts/%HOSTNAME%'
     rsyslog::template::string { 'sudosh_template':            string => "${file_base}/sudosh.log"}
+    rsyslog::template::string { 'httpd_err_template':         string => "${file_base}/httpd-err.log"}
     rsyslog::template::string { 'httpd_template':             string => "${file_base}/httpd.log"}
     rsyslog::template::string { 'dhcpd_template':             string => "${file_base}/dhcpd.log"}
     rsyslog::template::string { 'puppet_agent_err_template':  string => "${file_base}/puppet-agent-err.log"}
@@ -153,7 +163,12 @@ class simp::rsyslog::stock::log_server (
       }
     }
     if $use_default_httpd_rules {
-      rsyslog::rule::local { '0_default_httpd':
+      rsyslog::rule::local { '0_default_httpd_error':
+        rule            => 'if ($programname == \'httpd\' and $syslogseverity-text == \'err\') then',
+        dyna_file       => 'httpd_err_template',
+        stop_processing => true
+      }
+      rsyslog::rule::local { '1_default_httpd':
         rule            => 'if ($programname == \'httpd\') then',
         dyna_file       => 'httpd_template',
         stop_processing => true
@@ -162,7 +177,8 @@ class simp::rsyslog::stock::log_server (
     if $use_default_dhcpd_rules {
       rsyslog::rule::local { '0_default_dhcpd':
         rule      => 'if ($programname == \'dhcpd\') then',
-        dyna_file => 'dhcpd_template'
+        dyna_file => 'dhcpd_template',
+        stop_processing => true
       }
     }
     if $use_default_puppet_agent_rules {
@@ -171,7 +187,7 @@ class simp::rsyslog::stock::log_server (
         dyna_file       => 'puppet_agent_err_template',
         stop_processing => true
       }
-      rsyslog::rule::local { '0_default_puppet_agent':
+      rsyslog::rule::local { '1_default_puppet_agent':
         rule            => 'if ($programname == \'puppet-agent\') then',
         dyna_file       => 'puppet_agent_template',
         stop_processing => true
@@ -183,7 +199,7 @@ class simp::rsyslog::stock::log_server (
         dyna_file       => 'puppet_master_err_template',
         stop_processing => true
       }
-      rsyslog::rule::local { '0_default_puppet_master':
+      rsyslog::rule::local { '1_default_puppet_master':
         rule            => 'if ($programname == \'puppet-master\') then',
         dyna_file       => 'puppet_master_template',
         stop_processing => true
@@ -211,28 +227,31 @@ class simp::rsyslog::stock::log_server (
       }
     }
     if $use_default_security_relevant_logs {
-      rsyslog::rule::local { '0_default_security_relevant_logs':
+      rsyslog::rule::local { '7_default_security_relevant_logs':
         rule            => $security_relevant_logs,
         dyna_file       => 'secure_template',
         stop_processing => true
       }
     }
     if $use_default_message_rules {
-      rsyslog::rule::local { '0_default_message':
+      rsyslog::rule::local { '9_default_message':
         rule      => '*.info;mail.none;authpriv.none;cron.none;local6.none;local5.none',
-        dyna_file => 'messages_template'
+        dyna_file => 'messages_template',
+        stop_processing => true
       }
     }
     if $use_default_mail_rules {
       rsyslog::rule::local { '0_default_mail':
         rule      => 'mail.*',
-        dyna_file => 'maillog_template'
+        dyna_file => 'maillog_template',
+        stop_processing => true
       }
     }
     if $use_default_cron_rules {
       rsyslog::rule::local { '0_default_cron':
         rule      => 'cron.*',
-        dyna_file => 'cron_template'
+        dyna_file => 'cron_template',
+        stop_processing => true
       }
     }
     if $use_default_emerg_rules {
@@ -244,13 +263,15 @@ class simp::rsyslog::stock::log_server (
     if $use_default_spool_rules {
       rsyslog::rule::local { '0_default_spool':
         rule      => 'uucp,news.crit',
-        dyna_file => 'spooler_template'
+        dyna_file => 'spooler_template',
+        stop_processing => true
       }
     }
     if $use_default_boot_rules {
       rsyslog::rule::local { '0_default_boot':
         rule      => 'local7.*',
-        dyna_file => 'boot_template'
+        dyna_file => 'boot_template',
+        stop_processing => true
       }
     }
   }
