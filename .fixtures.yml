@@ -89,7 +89,7 @@ fixtures:
     selinux: "https://github.com/simp/pupmod-simp-selinux"
     simpcat: "https://github.com/simp/pupmod-simp-concat"
     simplib: "https://github.com/simp/pupmod-simp-simplib"
-    simp_apache: "https://github.com/simp/pupmod-simp-simp_apache"
+    simp_apache: "https://github.com/simp/pupmod-simp-apache"
     snmpd: "https://github.com/simp/pupmod-simp-snmpd"
     ssh: "https://github.com/simp/pupmod-simp-ssh"
     stdlib:
