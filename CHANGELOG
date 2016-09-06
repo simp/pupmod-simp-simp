@@ -1,3 +1,7 @@
+* Tue Nov 15 2016 Nicholas Hughes - 2.0.1-0
+- Introduced rsyslog rule orders so messages hit 'stop' rules before they
+  reach 'catch-alls'.  By doing so, log duplication is prevented.
+
 * Tue Oct 25 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
 - Added logic to ensure simp::puppetdb manages the puppetserver service via
   pupmod::master::base, NOT puppetdb::master::config.
