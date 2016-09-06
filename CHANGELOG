@@ -1,5 +1,11 @@
+* Thu Nov 22 2016 Nicholas Hughes Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+- Introduced rsyslog rule orders so messages hit 'stop' rules before they
+  reach 'catch-alls'.  By doing so, log duplication is prevented.
+- Modified the spooler log local rule to ensure both uucp and news
+  facilities are logged in spooler.log.
+
 * Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
-- Remove comliance map and General housekeeping
+- Remove compliance map and General housekeeping
 
 * Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
 - Updated iptables dependency version
