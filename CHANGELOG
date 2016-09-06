@@ -1,3 +1,7 @@
+* Tue Nov 01 2016 Nicholas Hughes - 2.0.0-0
+- Introduced rsyslog rule orders so messages hit 'stop' rules before they
+  reach 'catch-alls'.  By doing so, log duplication is prevented.
+
 * Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Updated to support Puppet 4 with the latest Puppet Server and PuppetDB
 - Foundation for SIMP 6

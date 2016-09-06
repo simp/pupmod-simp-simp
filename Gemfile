@@ -5,7 +5,7 @@
 # ------------------------------------------------------------------------------
 # NOTE: SIMP Puppet rake tasks support ruby 2.0 and ruby 2.1
 # ------------------------------------------------------------------------------
-puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : '~>3'
+puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : '~>4'
 gem_sources   = ENV.key?('SIMP_GEM_SERVERS') ? ENV['SIMP_GEM_SERVERS'].split(/[, ]+/) : ['https://rubygems.org']
 
 gem_sources.each { |gem_source| source gem_source }
@@ -18,15 +18,11 @@ group :test do
   gem "hiera-puppet-helper"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
-  gem "simp-rspec-puppet-facts", "~> 1.3"
-
-
-  # simp-rake-helpers does not suport puppet 2.7.X
-  if "#{ENV['PUPPET_VERSION']}".scan(/\d+/).first != '2' &&
-      # simp-rake-helpers and ruby 1.8.7 bomb Travis tests
-      # TODO: fix upstream deps (parallel in simp-rake-helpers)
-      RUBY_VERSION.sub(/\.\d+$/,'') != '1.8'
-    gem 'simp-rake-helpers'
+  gem "simp-rspec-puppet-facts", "~> 1.4"
+  if ENV['SIMP_RAKE_HELPERS_VERSION']
+    gem 'simp-rake-helpers', ENV['SIMP_RAKE_HELPERS_VERSION']
+  else
+    gem 'simp-rake-helpers', '~> 3.0'
   end
 end
 
