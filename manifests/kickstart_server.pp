@@ -112,7 +112,7 @@ class simp::kickstart_server (
 
   $l_client_nets = nets2cidr($client_nets)
 
-  apache::add_site { 'ks':
+  simp_apache::add_site { 'ks':
     content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
   }
 
