@@ -1,3 +1,8 @@
+* Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Updated to support Puppet 4 with the latest Puppet Server and PuppetDB
+- Foundation for SIMP 6
+- Will *not* work with any Puppet < 4
+
 * Mon Oct 10 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.10-0
 - Ensured netlabel_tools is installed.
 
