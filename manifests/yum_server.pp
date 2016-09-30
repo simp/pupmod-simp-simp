@@ -24,7 +24,7 @@ class simp::yum_server (
 ){
   $l_client_nets = nets2cidr($client_nets)
 
-  apache::add_site { 'yum':
+  simp_apache::add_site { 'yum':
     content => template('simp/etc/httpd/conf.d/yum.conf.erb')
   }
 
