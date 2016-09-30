@@ -47,7 +47,7 @@ end
 group :system_tests do
   #gem 'beaker'
   # Need this for SELinux workarounds until the PR gets accepted
-  gem 'beaker', :git => 'https://github.com/trevor-vaughan/beaker', :ref => 'BKR-896'
+  gem 'beaker'
   gem 'beaker-rspec'
   gem 'simp-beaker-helpers', '>= 1.0.5'
 end

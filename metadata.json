@@ -1,13 +1,16 @@
 {
-  "name":    "simp-simp",
-  "version": "1.2.7",
-  "author":  "simp",
+  "name": "simp-simp",
+  "version": "1.2.8",
+  "author": "simp",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
-  "source":  "https://github.com/simp/pupmod-simp-simp",
+  "source": "https://github.com/simp/pupmod-simp-simp",
   "project_page": "https://github.com/simp/pupmod-simp-simp",
-  "issues_url":   "https://simp/project.atlassian.net",
-  "tags": [ "simp", "profiles"],
+  "issues_url": "https://simp/project.atlassian.net",
+  "tags": [
+    "simp",
+    "profiles"
+  ],
   "dependencies": [
     {
       "name": "simp/aide",

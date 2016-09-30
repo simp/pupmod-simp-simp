@@ -1,3 +1,6 @@
+* Thu Sep 29 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.2.8-0
+- Fixed beaker reference in Gemfile.
+
 * Tue Aug 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.7-0
 - Fixed an invalid data type in simp::nfs::export_home.
 
