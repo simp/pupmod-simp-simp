@@ -1,8 +1,11 @@
+Requires: puppet >= 4.6.0
 Requires: pupmod-herculesteam-augeasproviders_puppet
-Requires: pupmod-puppetlabs-inifile >= 1.0.0-0
+Requires: pupmod-puppetlabs-inifile >= 1.6.0-0
+Requires: pupmod-puppetlabs-puppetdb >= 5.1.2-0
+Requires: pupmod-puppetlabs-postgres >= 4.8.0
 Requires: pupmod-puppetlabs-stdlib >= 4.1.0-1.SIMP
 Requires: pupmod-simp-aide >= 4.1.0-2
-Requires: pupmod-simp-apache >= 4.1.0-4
+Requires: pupmod-simp-simp_apache >= 5.0.0-0
 Requires: pupmod-simp-auditd >= 4.1.0-3
 Requires: pupmod-simp-autofs >= 4.1.1-0
 Requires: pupmod-simp-clamav >= 4.1.0-2
@@ -19,12 +22,12 @@ Requires: pupmod-simp-openldap >= 4.1.4-0
 Requires: pupmod-simp-pam >= 4.1.0-3
 Requires: pupmod-simp-pki >= 4.1.0-0
 Requires: pupmod-simp-postfix >= 4.1.0-0
-Requires: pupmod-simp-pupmod >= 6.0.0-3
+Requires: pupmod-simp-pupmod >= 7.0.0-0
 Requires: pupmod-simp-rsync >= 4.1.0-1
 Requires: pupmod-simp-rsyslog >= 5.0.0-0
 Requires: pupmod-simp-selinux >= 1.0.0-1
-Requires: pupmod-simp-simpcat
-Requires: pupmod-simp-simplib >= 1.1.0-0
+Requires: pupmod-simp-simpcat >= 6.0.0
+Requires: pupmod-simp-simplib >= 2.0.0-0
 Requires: pupmod-simp-ssh >= 4.1.0-2
 Requires: pupmod-simp-stunnel >= 4.2.0-0
 Requires: pupmod-simp-sudo >= 4.1.0-0
