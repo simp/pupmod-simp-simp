@@ -10,17 +10,6 @@
 # Default: true
 #   If true, ensure that the 'simp' user can login to the system.
 #
-# [*enable_puppetdb*]
-# Type: Boolean
-# Default: false
-#   If true, set this master to point at a PuppetDB server.
-#
-#   NOTE: You must set the appropriate parameters for puppetdb::master::config
-#   in either Hiera or your ENC for this to work as you would expect.
-#
-#   If your server is also your PuppetDB host, it might *just work*, but don't
-#   count on it.
-#
 # [*enable_rsync_shares*]
 # Type: Boolean
 # Default: true
@@ -33,20 +22,13 @@
 #
 class simp::server (
   $allow_simp_user = true,
-  $enable_puppetdb = false,
   $enable_rsync_shares = true,
 ){
-  include '::pupmod::master'
 
   validate_bool($allow_simp_user)
-  validate_bool($enable_puppetdb)
   validate_bool($enable_rsync_shares)
 
   compliance_map()
-
-  if $enable_puppetdb {
-    include 'puppetdb::master::config'
-  }
 
   if $allow_simp_user {
     pam::access::manage { 'allow_simp':

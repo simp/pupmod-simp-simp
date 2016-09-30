@@ -4,7 +4,6 @@ fixtures:
     acpid: "https://github.com/simp/pupmod-simp-acpid"
     activemq: "https://github.com/simp/pupmod-simp-activemq"
     aide: "https://github.com/simp/pupmod-simp-aide"
-    apache: "https://github.com/simp/pupmod-simp-apache"
     auditd: "https://github.com/simp/pupmod-simp-auditd"
     augeasproviders:
       repo: "https://github.com/simp/augeasproviders"
@@ -50,7 +49,7 @@ fixtures:
     datacat:
       repo: "https://github.com/simp/puppet-datacat"
       branch: "simp-master"
-    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
+    compliance: "https://github.com/simp/pupmod-simp-compliance_markup"
     dhcp: "https://github.com/simp/pupmod-simp-dhcp"
     freeradius: "https://github.com/simp/pupmod-simp-freeradius"
     ganglia: "https://github.com/simp/pupmod-simp-ganglia"
@@ -90,6 +89,7 @@ fixtures:
     selinux: "https://github.com/simp/pupmod-simp-selinux"
     simpcat: "https://github.com/simp/pupmod-simp-concat"
     simplib: "https://github.com/simp/pupmod-simp-simplib"
+    simp_apache: "https://github.com/simp/pupmod-simp-simp_apache"
     snmpd: "https://github.com/simp/pupmod-simp-snmpd"
     ssh: "https://github.com/simp/pupmod-simp-ssh"
     stdlib:
