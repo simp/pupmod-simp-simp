@@ -8,12 +8,15 @@
 # description:  A script to bootstrap the initial puppet configuration.
 #
 
+export PATH="$PATH:/opt/puppetlabs/bin"
+ssldir="$(puppet config print ssldir)"
+
 function ensure_running {
   ca_port="$(puppet config print ca_port)"
   running="false"
   timeout=0
   while [ $timeout -lt 300 ] && [ "$running" == "false" ]; do
-    if [[ "$(/usr/bin/curl -sS --cert /var/lib/puppet/ssl/certs/<%= @fqdn %>.pem --key /var/lib/puppet/ssl/private_keys/<%= @fqdn %>.pem -k -H 'Accept: s' https://<%= @fqdn %>:$ca_port/production/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
+    if [[ "$(/usr/bin/curl -sS --cert $ssldir/ssl/certs/<%= @fqdn %>.pem --key $ssldir/puppet/ssl/private_keys/<%= @fqdn %>.pem -k -H 'Accept: s' https://<%= @ca_server %>:$ca_port/puppet-ca/v1/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
       running="true"
     fi
     timeout=$[$timeout+1]
@@ -51,7 +54,7 @@ logfile="/root/puppet.bootstrap.log";
 delim="--------------------------------------------------------------------------------";
 server=1;
 <%
-  t_puppet_cmd_line = "/usr/bin/puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
+  t_puppet_cmd_line = "puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
 
   if not @runpuppet_wait_for_cert.empty? then
     t_puppet_cmd_line += " --waitforcert #{@runpuppet_wait_for_cert}"
@@ -63,10 +66,9 @@ server=1;
 -%>
 puppet="<%= t_puppet_cmd_line %> --verbose";
 quiet_puppet="<%= t_puppet_cmd_line %>";
-puppetca="/usr/bin/puppet ca";
-puppetmaster="/usr/bin/puppet master";
+puppetca="puppet ca";
 
-if [ -f '/bin/puppetserver' ]; then
+if [ -x "$(command -v puppetserver)" ]; then
     server=0;
 fi
 
@@ -77,6 +79,9 @@ case "$1" in
     ;;
 
   start)
+    export PATH="$PATH:/opt/puppetlabs/bin"
+    ssldir="$(puppet config print ssldir)"
+
     ps -C httpd >& /dev/null;
     restarthttpd=$?;
 
@@ -87,7 +92,7 @@ case "$1" in
             $puppetca --clean $file >& /dev/null;
         done
 
-        /bin/rm -rf /var/lib/puppet/ssl;
+        /bin/rm -rf $ssldir;
         service puppetserver restart;
         ensure_running;
 
@@ -105,23 +110,23 @@ case "$1" in
 -%>
     read -r -d '' puppet_conf <<'EOM'
 [main]
-    vardir = /var/lib/puppet
+    vardir = /opt/puppetlabs/puppet/cache
     classfile = $vardir/classes.txt
     localconfig = $vardir/localconfig
-    logdir = /var/log/puppet
+    logdir = /var/log/puppetlabs/puppet
     report = false
-    rundir = /var/run/puppet
+    rundir = /var/run/puppetlabs
     server = <%= @puppet_server %>
-    ssldir = $vardir/ssl
+    ssldir = /etc/puppetlabs/puppet/ssl
     trusted_node_data = true
     stringify_facts = false
     digest_algorithm = sha256
     keylength = <%= _keylength %>
 EOM
 
-    echo "$puppet_conf" > /etc/puppet/puppet.conf;
-    echo "ca_server = <%= @puppet_ca %>" >> /etc/puppet/puppet.conf;
-    echo "ca_port = <%= @puppet_ca_port %>" >> /etc/puppet/puppet.conf;
+    echo "$puppet_conf" > /etc/puppetlabs/puppet/puppet.conf;
+    echo "ca_server = <%= @puppet_ca %>" >> /etc/puppetlabs/puppet/puppet.conf;
+    echo "ca_port = <%= @puppet_ca_port %>" >> /etc/puppetlabs/puppet/puppet.conf;
 
 <%
    l_ntp_servers = @ntp_servers
