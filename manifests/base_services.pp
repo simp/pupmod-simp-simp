@@ -19,11 +19,15 @@ class simp::base_services {
   }
 
   # These services need to be enabled and made sure to be running.
+  package { 'netlabel_tools':
+    ensure => 'latest',
+    before => Service['netlabel']
+  }
   service { 'netlabel':
-      ensure     => 'running',
-      enable     => true,
-      hasrestart => true,
-      hasstatus  => true
+    ensure     => 'running',
+    enable     => true,
+    hasrestart => true,
+    hasstatus  => true
   }
 
   case $::operatingsystem {
