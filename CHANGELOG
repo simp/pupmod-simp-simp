@@ -1,3 +1,6 @@
+* Fri Oct 21 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+- Fixed PuppetDB, which was removed
+
 * Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Updated to support Puppet 4 with the latest Puppet Server and PuppetDB
 - Foundation for SIMP 6
