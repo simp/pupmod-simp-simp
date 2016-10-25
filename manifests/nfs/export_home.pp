@@ -103,6 +103,7 @@ class simp::nfs::export_home (
     }
   }
 
+  $_create_home_dirs = $create_home_dirs ? { true => Class['simp::nfs::create_home_dirs'], default => undef }
   file {
     [ "${data_dir}/nfs",
       "${data_dir}/nfs/exports",
@@ -113,7 +114,7 @@ class simp::nfs::export_home (
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-    before => $create_home_dirs ? { true => Class['simp::nfs::create_home_dirs'], default => undef }
+    before => $_create_home_dirs
   }
 
   mount { "${data_dir}/nfs/exports/home":

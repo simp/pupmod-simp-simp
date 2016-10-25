@@ -46,6 +46,7 @@ fixtures:
       branch: "simp-master"
     autofs: "https://github.com/simp/pupmod-simp-autofs"
     clamav: "https://github.com/simp/pupmod-simp-clamav"
+    concat: "https://github.com/simp/puppetlabs-concat"
     datacat:
       repo: "https://github.com/simp/puppet-datacat"
       branch: "simp-master"
@@ -80,16 +81,18 @@ fixtures:
     pam: "https://github.com/simp/pupmod-simp-pam"
     pki: "https://github.com/simp/pupmod-simp-pki"
     postfix: "https://github.com/simp/pupmod-simp-postfix"
+    postgresql: "https://github.com/simp/puppetlabs-postgresql"
     puppetdb:
       repo: "https://github.com/simp/puppetlabs-puppetdb"
       branch: "simp-master"
+    file_concat: "https://github.com/simp/puppet-lib-file_concat"
     pupmod: "https://github.com/simp/pupmod-simp-pupmod"
     rsync: "https://github.com/simp/pupmod-simp-rsync"
     rsyslog: "https://github.com/simp/pupmod-simp-rsyslog"
     selinux: "https://github.com/simp/pupmod-simp-selinux"
     simpcat: "https://github.com/simp/pupmod-simp-concat"
     simplib: "https://github.com/simp/pupmod-simp-simplib"
-    simp_apache: "https://github.com/simp/pupmod-simp-simp_apache"
+    simp_apache: "https://github.com/simp/pupmod-simp-apache"
     snmpd: "https://github.com/simp/pupmod-simp-snmpd"
     ssh: "https://github.com/simp/pupmod-simp-ssh"
     stdlib:

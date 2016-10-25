@@ -1,33 +1,19 @@
 # ------------------------------------------------------------------------------
-# Environment variables:
-#   SIMP_GEM_SERVERS | a space/comma delimited list of rubygem servers
-#   PUPPET_VERSION   | specifies the version of the puppet gem to load
+# NOTE: SIMP 6.x Puppet rake tasks support ruby 2.1.9
 # ------------------------------------------------------------------------------
-# NOTE: SIMP Puppet rake tasks support ruby 2.0 and ruby 2.1
-# ------------------------------------------------------------------------------
-puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : '~>3'
-gem_sources   = ENV.key?('SIMP_GEM_SERVERS') ? ENV['SIMP_GEM_SERVERS'].split(/[, ]+/) : ['https://rubygems.org']
-
+gem_sources   = ENV.fetch('SIMP_GEM_SERVERS', 'https://rubygems.org').split(/[, ]+/)
 gem_sources.each { |gem_source| source gem_source }
 
 group :test do
   gem "rake"
-  gem 'puppet', puppetversion
-  gem "rspec", '< 3.2.0'
+  gem 'puppet', ENV.fetch('PUPPET_VERSION', '~> 4')
+  gem "rspec"
   gem "rspec-puppet"
   gem "hiera-puppet-helper"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
-  gem "simp-rspec-puppet-facts", "~> 1.3"
-
-
-  # simp-rake-helpers does not suport puppet 2.7.X
-  if "#{ENV['PUPPET_VERSION']}".scan(/\d+/).first != '2' &&
-      # simp-rake-helpers and ruby 1.8.7 bomb Travis tests
-      # TODO: fix upstream deps (parallel in simp-rake-helpers)
-      RUBY_VERSION.sub(/\.\d+$/,'') != '1.8'
-    gem 'simp-rake-helpers'
-  end
+  gem "simp-rspec-puppet-facts", ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 1.4')
+  gem 'simp-rake-helpers',       ENV.fetch('SIMP_RAKE_HELPERS_VERSION', '~> 3.0')
 end
 
 group :development do
@@ -49,5 +35,5 @@ group :system_tests do
   # Need this for SELinux workarounds until the PR gets accepted
   gem 'beaker'
   gem 'beaker-rspec'
-  gem 'simp-beaker-helpers', '>= 1.0.5'
+  gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', '>= 1.0.5')
 end
