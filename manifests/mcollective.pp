@@ -93,9 +93,9 @@ class simp::mcollective (
   $activemq_admin_password = passgen('simp_mco_activemq_admin'),
   $activemq_port = '',
   $activemq_console = false,
-  $activemq_memoryUsage = '20 mb',
-  $activemq_storeUsage = '1 gb',
-  $activemq_tempUsage = '100 mb',
+  $activemq_memory_usage = '20 mb',
+  $activemq_store_usage = '1 gb',
+  $activemq_temp_usage = '100 mb',
   $activemq_brokers = [ $::fqdn ],
   $installplugins = true
 ) {
@@ -117,9 +117,9 @@ class simp::mcollective (
   validate_string($activemq_admin_user)
   validate_string($activemq_admin_password)
   if !empty($activemq_port) { validate_port($activemq_port) }
-  validate_re($activemq_memoryUsage, '^([0-9]+\s)[kmgt][b]$')
-  validate_re($activemq_storeUsage, '^([0-9]+\s)[kmgt][b]$')
-  validate_re($activemq_tempUsage, '^([0-9]+\s)[kmgt][b]$')
+  validate_re($activemq_memory_usage, '^([0-9]+\s)[kmgt][b]$')
+  validate_re($activemq_store_usage, '^([0-9]+\s)[kmgt][b]$')
+  validate_re($activemq_temp_usage, '^([0-9]+\s)[kmgt][b]$')
   validate_array($activemq_brokers)
   validate_bool($installplugins)
 
