@@ -46,6 +46,7 @@ class simp::puppetdb (
   String  $read_database_name     = 'simp_puppetdb',
   Boolean $read_database_ssl      = true,
   Boolean $manage_firewall        = true,
+  Boolean $manage_puppetserver    = true,
   String  $java_max_memory        = '40%',
   String  $java_start_memory      = '',
   String  $java_tmpdir            = '/opt/puppetlabs/puppet/cache/pdb_tmp',
@@ -58,6 +59,7 @@ class simp::puppetdb (
   validate_port($listen_port)
   validate_port($ssl_listen_port)
   validate_absolute_path($java_tmpdir)
+  validate_bool($manage_puppetserver)
 
   $_simp_manage_firewall = ($manage_firewall and $use_iptables)
 
@@ -113,6 +115,15 @@ class simp::puppetdb (
   }
 
   class { 'puppetdb': * => $_my_defaults }
+
+  include 'puppetdb::master::config'
+
+  if $manage_puppetserver {
+    # We will need to restart the puppet master service if certain config
+    # files are changed, so here we make sure it's in the catalog.     
+    include 'pupmod::master::base'
+    Class['puppetdb::master::puppetdb_conf'] ~> Class['::pupmod::master::base']
+  }
 
   # We need to do this to make PuppetDB use the system puppet certificates
   if $use_puppet_ssl_certs {
