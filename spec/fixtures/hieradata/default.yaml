@@ -54,10 +54,10 @@ simp::rsyslog::stock::log_server::forward::forward_hosts :
   - 'foo.bar.baz'
 
 # Stuff for snmpd tests
-simp::snmpd::server::monitorUser_auth_phrase : 'passwords'
-simp::snmpd::server::monitorUser_priv_phrase : 'are'
-simp::snmpd::server::adminUser_auth_phrase : 'super'
-simp::snmpd::server::adminUser_priv_phrase : 'fun'
+simp::snmpd::server::monitor_user_auth_phrase : 'passwords'
+simp::snmpd::server::monitor_user_priv_phrase : 'are'
+simp::snmpd::server::admin_user_auth_phrase :   'super'
+simp::snmpd::server::admin_user_priv_phrase :   'fun'
 
 # Classes to Include
 #

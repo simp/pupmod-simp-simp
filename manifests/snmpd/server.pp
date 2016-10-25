@@ -5,8 +5,8 @@
 # This sets up a fairly robust SNMP server.
 #
 # You can test this out with:
-# snmpwalk -v 3 -l authPriv -a SHA -A <monitorUser_auth_phrase> -x AES \
-#          -u monitorUser -X <monitorUser_priv_phrase> <hostname>
+# snmpwalk -v 3 -l authPriv -a SHA -A <monitor_user_auth_phrase> -x AES \
+#          -u monitorUser -X <monitor_user_priv_phrase> <hostname>
 #
 # == Parameters
 #
@@ -15,10 +15,10 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::snmpd::server (
-  $monitorUser_auth_phrase,
-  $monitorUser_priv_phrase,
-  $adminUser_auth_phrase,
-  $adminUser_priv_phrase,
+  $monitor_user_auth_phrase,
+  $monitor_user_priv_phrase,
+  $admin_user_auth_phrase,
+  $admin_user_priv_phrase,
   $allow_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') }
 ) {
   include 'snmpd'
@@ -82,13 +82,13 @@ class simp::snmpd::server (
   include 'snmpd::authtrapenable'
 
   snmpd::createuser { 'monitorUser':
-    auth_phrase => $monitorUser_auth_phrase,
-    priv_phrase => $monitorUser_priv_phrase
+    auth_phrase => $monitor_user_auth_phrase,
+    priv_phrase => $monitor_user_priv_phrase
   }
 
   snmpd::createuser { 'adminUser':
-    auth_phrase => $adminUser_auth_phrase,
-    priv_phrase => $adminUser_priv_phrase
+    auth_phrase => $admin_user_auth_phrase,
+    priv_phrase => $admin_user_priv_phrase
   }
 
   validate_net_list($allow_from)

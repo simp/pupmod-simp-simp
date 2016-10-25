@@ -22,22 +22,6 @@ describe 'simp::server' do
 
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('pupmod::master') }
-          it { is_expected.to_not create_class('puppetdb::master::config') }
-          it { is_expected.to create_class('simp::server') }
-          it { is_expected.to create_class('simp::server::rsync_shares') }
-          it { is_expected.to create_pam__access__manage('allow_simp') }
-          it { is_expected.to create_sudo__user_specification('default_simp') }
-        end
-
-        context 'with puppetdb' do
-          let(:params){{
-            :enable_puppetdb => true
-          }}
-
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('pupmod::master') }
-          it { is_expected.to create_class('puppetdb::master::config') }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to create_class('simp::server::rsync_shares') }
           it { is_expected.to create_pam__access__manage('allow_simp') }
@@ -50,8 +34,6 @@ describe 'simp::server' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('pupmod::master') }
-          it { is_expected.to_not create_class('puppetdb::master::config') }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to create_class('simp::server::rsync_shares') }
           it { is_expected.to_not create_pam__access__manage('allow_simp') }
@@ -64,8 +46,6 @@ describe 'simp::server' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('pupmod::master') }
-          it { is_expected.to_not create_class('puppetdb::master::config') }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to_not create_class('simp::server::rsync_shares') }
           it { is_expected.to create_pam__access__manage('allow_simp') }
