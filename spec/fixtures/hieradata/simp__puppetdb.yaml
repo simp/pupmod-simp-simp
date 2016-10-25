@@ -1,0 +1,2 @@
+---
+puppetdb::master::config::restart_puppet: false
