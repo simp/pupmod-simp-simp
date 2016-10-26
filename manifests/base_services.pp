@@ -22,7 +22,7 @@ class simp::base_services {
   package { 'netlabel_tools':
     ensure => 'latest'
   }
-  
+
   service { 'netlabel':
     ensure     => 'running',
     enable     => true,
