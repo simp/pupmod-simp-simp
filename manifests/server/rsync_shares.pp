@@ -12,7 +12,10 @@
 # == Parameters
 # [*rsync_base*]
 #   Type: Absolute Path
-#   Default: hiera('rsync::base', versioncmp(simp_version(),'5') ? { '-1' => "/srv/rsync", default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"})
+#   Default: hiera('rsync::base', versioncmp(simp_version(),'5') ? {
+#     '-1' => "/srv/rsync",
+#     default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"
+#   })
 #     The path to the beginning of the rsync space for this system.
 #
 # [*use_stunnel*]
@@ -31,7 +34,10 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server::rsync_shares (
-  $rsync_base  = hiera('rsync::base', versioncmp(simp_version(),'5') ? { '-1' => '/srv/rsync', default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"}),
+  $rsync_base  = hiera('rsync::base', versioncmp(simp_version(),'5') ? {
+                        '-1' => '/srv/rsync',
+                        default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"
+                      }),
   $use_stunnel = defined('$::use_stunnel') ? { true => $::use_stunnel, default => hiera('rsync::server::use_stunnel',true) },
   $hosts_allow = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets','127.0.0.1') },
 ){
