@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_a6d7a04e",
+        "filename": "manifests/rsyslog/stock/log_server.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-11-01T18:48:50Z",
+      "side": 1,
+      "message": "Need to be flipped",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 84
+      },
+      "revId": "5fb0eb386c7cf41d3caf037998729f6f54c78380",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_c6ace4f0",
         "filename": "manifests/rsyslog/stock/log_server.pp",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2016-11-01T18:30:05Z",
       "side": 1,
       "message": "These should be flipped",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 31
+      },
+      "revId": "5fb0eb386c7cf41d3caf037998729f6f54c78380",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_c6daa479",
+        "filename": "manifests/rsyslog/stock/log_server.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-11-01T18:48:50Z",
+      "side": 1,
+      "message": "Actually this is fine. The comments do not match this, but the functional code is correct.",
+      "parentUuid": "baa041b7_c6ace4f0",
       "range": {
         "startLine": 166,
         "startChar": 0,
