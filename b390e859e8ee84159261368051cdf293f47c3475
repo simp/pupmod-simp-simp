@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_03b2b3e5",
+        "filename": "Gemfile",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-11-03T17:18:27Z",
+      "side": 1,
+      "message": "this needs to change.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 3
+      },
+      "revId": "b390e859e8ee84159261368051cdf293f47c3475",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
