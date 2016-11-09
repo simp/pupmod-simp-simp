@@ -105,6 +105,10 @@
       "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
+      "name": "simp/rsyslog",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
       "name": "simp/simpcat",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },

@@ -45,7 +45,8 @@ Requires: pupmod-simp-pupmod < 8.0.0-0
 Requires: pupmod-simp-pupmod >= 7.0.0-0
 Requires: pupmod-simp-rsync < 6.0.0-0
 Requires: pupmod-simp-rsync >= 5.0.0-0
-Requires: pupmod-simp-rsyslog >= 5.0.0-0
+Requires: pupmod-simp-rsyslog < 7.0.0-0
+Requires: pupmod-simp-rsyslog >= 6.0.0-0
 Requires: pupmod-simp-selinux >= 1.0.0-1
 Requires: pupmod-simp-simp_apache < 6.0.0-0
 Requires: pupmod-simp-simp_apache >= 5.0.0-0
