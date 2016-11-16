@@ -25,8 +25,8 @@ Requires: pupmod-simp-freeradius < 6.0.0-0
 Requires: pupmod-simp-freeradius >= 5.0.3-0
 Requires: pupmod-simp-ganglia < 7.0.0-0
 Requires: pupmod-simp-ganglia >= 6.0.0-0
-Requires: pupmod-simp-iptables < 5.0.0-0
-Requires: pupmod-simp-iptables >= 4.1.5-0
+Requires: pupmod-simp-iptables < 6.0.0-0
+Requires: pupmod-simp-iptables >= 5.0.0-0
 Requires: pupmod-simp-logrotate < 5.0.0-0
 Requires: pupmod-simp-logrotate >= 4.1.1-0
 Requires: pupmod-simp-named < 6.0.0-0
