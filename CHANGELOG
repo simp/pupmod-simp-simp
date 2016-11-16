@@ -1,5 +1,6 @@
 * Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
 - Updated iptables dependency version
+- Updated openldap dependency version
 
 * Tue Oct 25 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
 - Added logic to ensure simp::puppetdb manages the puppetserver service via
