@@ -1,3 +1,6 @@
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
+- Remove comliance map and General housekeeping
+
 * Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
 - Updated iptables dependency version
 - Updated openldap dependency version
