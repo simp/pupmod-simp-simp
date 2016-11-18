@@ -33,7 +33,7 @@ end
 group :system_tests do
   #gem 'beaker'
   # Need this for SELinux workarounds until the PR gets accepted
-  gem 'beaker'
+  gem 'beaker', :git => 'https://github.com/trevor-vaughan/beaker', :ref => 'BKR-931-2.51.0'
   gem 'beaker-rspec'
   gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', '>= 1.0.5')
 end
