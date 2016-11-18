@@ -116,5 +116,4 @@ class simp::server::rsync_shares (
   validate_bool($use_stunnel)
   validate_net_list($hosts_allow)
 
-  compliance_map()
 }
