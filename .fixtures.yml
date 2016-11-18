@@ -50,7 +50,6 @@ fixtures:
     datacat:
       repo: "https://github.com/simp/puppet-datacat"
       branch: "simp-master"
-    compliance: "https://github.com/simp/pupmod-simp-compliance_markup"
     dhcp: "https://github.com/simp/pupmod-simp-dhcp"
     freeradius: "https://github.com/simp/pupmod-simp-freeradius"
     ganglia: "https://github.com/simp/pupmod-simp-ganglia"

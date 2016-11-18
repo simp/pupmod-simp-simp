@@ -133,7 +133,6 @@ class simp (
   if !empty($puppet_server) { validate_net_list($puppet_server) }
   if !empty($puppet_server_ip) { validate_net_list($puppet_server_ip) }
 
-  compliance_map()
 
   if !$enable_filebucketing {
     File { backup => false }

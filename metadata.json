@@ -115,10 +115,6 @@
     {
       "name": "simp/simplib",
       "version_requirement": ">= 2.0.0 < 3.0.0"
-    },
-    {
-      "name": "simp/compliance_markup",
-      "version_requirement": ">= 1.0.2 < 2.0.0"
     }
   ],
   "requirements": [
