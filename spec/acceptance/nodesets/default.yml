@@ -7,6 +7,7 @@ HOSTS:
       - simp_server
       - nfs_server
       - mco_server
+      - rsyslog_server
       - el7
     platform:   el-7-x86_64
     box:        centos/7
@@ -47,6 +48,7 @@ HOSTS:
       - nfs_server
       - el6
       - mco_server
+      - rsyslog_server
     platform:   el-6-x86_64
     box:        centos/6
     #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
@@ -82,6 +84,6 @@ HOSTS:
 
 CONFIG:
   log_level: verbose
-  type:      foss
+  type:      aio
   vagrant_memsize: 2048
   # vb_gui: true
