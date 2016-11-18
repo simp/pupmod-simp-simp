@@ -56,7 +56,6 @@ class simp::nfs::export_home (
   validate_net_list($client_nets)
   validate_bool($create_home_dirs)
 
-  compliance_map()
 
   include '::nfs'
   include '::nfs::idmapd'

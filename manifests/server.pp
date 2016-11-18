@@ -28,7 +28,6 @@ class simp::server (
   validate_bool($allow_simp_user)
   validate_bool($enable_rsync_shares)
 
-  compliance_map()
 
   if $allow_simp_user {
     pam::access::manage { 'allow_simp':

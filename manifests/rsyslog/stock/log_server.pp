@@ -93,7 +93,6 @@ class simp::rsyslog::stock::log_server (
   validate_integer($rotate)
   validate_net_list($client_nets)
 
-  compliance_map()
 
   # Now, since this is a log server, we'll probably want to run logrotate once
   # per hour to make sure we don't eat up all of our disk space.
