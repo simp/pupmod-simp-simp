@@ -30,7 +30,7 @@
     },
     {
       "name": "simp/aide",
-      "version_requirement": ">= 4.1.2 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "simp/simp_apache",
@@ -38,7 +38,7 @@
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 5.1.1 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_puppet",
@@ -50,15 +50,15 @@
     },
     {
       "name": "simp/clamav",
-      "version_requirement": ">= 4.1.2 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "simp/dhcp",
-      "version_requirement": ">= 4.1.2 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "simp/freeradius",
-      "version_requirement": ">= 5.0.3 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/ganglia",
@@ -70,7 +70,7 @@
     },
     {
       "name": "simp/logrotate",
-      "version_requirement": ">= 4.1.1 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "simp/named",
@@ -90,7 +90,7 @@
     },
     {
       "name": "simp/pki",
-      "version_requirement": ">= 4.2.5 < 5.0.0"
+      "version_requirement": ">= 5.0.0 < 6.0.0"
     },
     {
       "name": "simp/postfix",
