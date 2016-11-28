@@ -20,6 +20,16 @@ describe 'simp::server' do
           facts
         end
 
+        simp_server_rsync_base = {}
+
+        before(:each) do
+          Puppet::Parser::Functions.newfunction(:simp_server_rsync_base, :type => :rvalue) { |args|
+            simp_server_rsync_base.call(args[0])
+          }
+
+          simp_server_rsync_base.stubs(:call).returns(['simp','production'])
+        end
+
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::server') }
