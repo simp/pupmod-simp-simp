@@ -1,4 +1,7 @@
-* Wed Nov 23 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 5.0.0-0
+* Tue Nov 29 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+- Updated mcollective resources to match 5.X.
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 2.0.0-0
 - update requirement versions
 
 * Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
