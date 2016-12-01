@@ -41,8 +41,8 @@ Requires: pupmod-simp-postfix < 6.0.0-0
 Requires: pupmod-simp-postfix >= 5.0.0-0
 Requires: pupmod-simp-pupmod < 8.0.0-0
 Requires: pupmod-simp-pupmod >= 7.0.0-0
-Requires: pupmod-simp-rsync < 6.0.0-0
-Requires: pupmod-simp-rsync >= 5.0.0-0
+Requires: pupmod-simp-rsync < 7.0.0-0
+Requires: pupmod-simp-rsync >= 6.0.0-0
 Requires: pupmod-simp-rsyslog < 7.0.0-0
 Requires: pupmod-simp-rsyslog >= 6.0.0-0
 Requires: pupmod-simp-selinux >= 1.0.0-1
