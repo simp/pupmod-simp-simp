@@ -102,7 +102,6 @@ fixtures:
     sudo: https://github.com/simp/pupmod-simp-sudo
     sudosh: https://github.com/simp/pupmod-simp-sudosh
     svckill: https://github.com/simp/pupmod-simp-svckill
-    sysctl: https://github.com/simp/pupmod-simp-sysctl
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     upstart: https://github.com/simp/pupmod-simp-upstart

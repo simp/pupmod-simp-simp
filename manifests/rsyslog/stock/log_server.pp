@@ -175,8 +175,8 @@ class simp::rsyslog::stock::log_server (
     }
     if $use_default_dhcpd_rules {
       rsyslog::rule::local { '0_default_dhcpd':
-        rule      => 'if ($programname == \'dhcpd\') then',
-        dyna_file => 'dhcpd_template',
+        rule            => 'if ($programname == \'dhcpd\') then',
+        dyna_file       => 'dhcpd_template',
         stop_processing => true
       }
     }
@@ -234,22 +234,22 @@ class simp::rsyslog::stock::log_server (
     }
     if $use_default_message_rules {
       rsyslog::rule::local { '9_default_message':
-        rule      => '*.info;mail.none;authpriv.none;cron.none;local6.none;local5.none',
-        dyna_file => 'messages_template',
+        rule            => '*.info;mail.none;authpriv.none;cron.none;local6.none;local5.none',
+        dyna_file       => 'messages_template',
         stop_processing => true
       }
     }
     if $use_default_mail_rules {
       rsyslog::rule::local { '0_default_mail':
-        rule      => 'mail.*',
-        dyna_file => 'maillog_template',
+        rule            => 'mail.*',
+        dyna_file       => 'maillog_template',
         stop_processing => true
       }
     }
     if $use_default_cron_rules {
       rsyslog::rule::local { '0_default_cron':
-        rule      => 'cron.*',
-        dyna_file => 'cron_template',
+        rule            => 'cron.*',
+        dyna_file       => 'cron_template',
         stop_processing => true
       }
     }
@@ -261,15 +261,15 @@ class simp::rsyslog::stock::log_server (
     }
     if $use_default_spool_rules {
       rsyslog::rule::local { '0_default_spool':
-        rule      => 'if ($syslogfacility-text == \'uucp\' or ($syslogfacility-text == \'news\' and $syslogpriority-text == \'crit\')) then',
-        dyna_file => 'spooler_template',
+        rule            => 'if ($syslogfacility-text == \'uucp\' or ($syslogfacility-text == \'news\' and $syslogpriority-text == \'crit\')) then',
+        dyna_file       => 'spooler_template',
         stop_processing => true
       }
     }
     if $use_default_boot_rules {
       rsyslog::rule::local { '0_default_boot':
-        rule      => 'local7.*',
-        dyna_file => 'boot_template',
+        rule            => 'local7.*',
+        dyna_file       => 'boot_template',
         stop_processing => true
       }
     }
