@@ -1,6 +1,7 @@
+# Common aliases
 #
 class simp::sudoers::aliases (
-  Array[AbsolutePath] $audit_alias = [
+  Array[Stdlib::AbsolutePath] $audit_alias = [
     '/bin/cat',
     '/bin/ls',
     '/usr/bin/lsattr',
@@ -17,19 +18,19 @@ class simp::sudoers::aliases (
     '/usr/bin/getent',
     '/usr/bin/tail'
   ],
-  Array[AbsolutePath] $delegating_alias = [
+  Array[Stdlib::AbsolutePath] $delegating_alias = [
     '/usr/sbin/visudo',
     '/bin/chown',
     '/bin/chmod',
     '/bin/chgrp'
   ],
-  Array[AbsolutePath] $drivers_alias = [
+  Array[Stdlib::AbsolutePath] $drivers_alias = [
     '/sbin/modprobe'
   ],
-  Array[AbsolutePath] $locate_alias = [
+  Array[Stdlib::AbsolutePath] $locate_alias = [
     '/usr/sbin/updatedb'
   ],
-  Array[AbsolutePath] $networking_alias = [
+  Array[Stdlib::AbsolutePath] $networking_alias = [
     '/sbin/route',
     '/sbin/ifconfig',
     '/bin/ping',
@@ -41,17 +42,17 @@ class simp::sudoers::aliases (
     '/sbin/iwconfig',
     '/sbin/mii-tool'
   ],
-  Array[AbsolutePath] $processes_alias = [
+  Array[Stdlib::AbsolutePath] $processes_alias = [
     '/bin/nice',
     '/bin/kill',
     '/usr/bin/kill',
     '/usr/bin/killall'
   ],
-  Array[AbsolutePath] $services_alias = [
+  Array[Stdlib::AbsolutePath] $services_alias = [
     '/sbin/service',
     '/sbin/chkconfig'
   ],
-  Array[AbsolutePath] $selinux_alias = [
+  Array[Stdlib::AbsolutePath] $selinux_alias = [
     '/sbin/restorecon',
     '/usr/bin/audit2why',
     '/usr/bin/audit2allow',
@@ -59,12 +60,12 @@ class simp::sudoers::aliases (
     '/usr/sbin/setenforce',
     '/usr/sbin/setsebool'
   ],
-  Array[AbsolutePath] $software_alias = [
+  Array[Stdlib::AbsolutePath] $software_alias = [
     '/bin/rpm',
     '/usr/bin/up2date',
     '/usr/bin/yum'
   ],
-  Array[AbsolutePath] $storage_alias = [
+  Array[Stdlib::AbsolutePath] $storage_alias = [
     '/sbin/fdisk',
     '/sbin/sfdisk',
     '/sbin/parted',
@@ -72,7 +73,7 @@ class simp::sudoers::aliases (
     '/bin/mount',
     '/bin/umount'
   ],
-  Array[AbsolutePath] $su_alias = [ '/bin/su' ]
+  Array[Stdlib::AbsolutePath] $su_alias = [ '/bin/su' ]
 ) {
 
   sudo::alias::cmnd {

@@ -59,11 +59,11 @@
 #
 class simp::mountpoints (
   Boolean $secure_tmp_mounts = true,
+  Boolean $manage_tmp_perms  = true,
+  Boolean $manage_proc       = true,
   Array $tmp_opts            = ['noexec','nodev','nosuid'],
   Array $var_tmp_opts        = ['noexec','nodev','nosuid'],
   Array $dev_shm_opts        = ['noexec','nodev','nosuid'],
-  Boolean $manage_tmp_perms  = true,
-  Boolean $manage_proc       = true,
   Integer[0,2] $proc_hidepid = 2,
   String $proc_gid           = ''
 ) {
@@ -149,12 +149,6 @@ class simp::mountpoints (
       }
     }
 
-    if (defined('$::simplib::manage_tmp_perms') and
-        getvar('::simplib::manage_tmp_perms') and
-        getvar('::tmp_mount_tmp')) {
-      File['/tmp'] -> Mount['/tmp']
-    }
-
     # If /var/tmp is mounted
     if getvar('::tmp_mount_var_tmp') and !empty($::tmp_mount_var_tmp) {
       $tmp_mount_var_tmp_opts = split($::tmp_mount_var_tmp,',')
@@ -209,12 +203,6 @@ class simp::mountpoints (
       }
     }
 
-    if (defined('$::simplib::manage_tmp_perms') and
-        getvar('::simplib::manage_tmp_perms')  and
-        getvar('::tmp_mount_var_tmp')) {
-      File['/var/tmp'] -> Mount['/var/tmp']
-    }
-
     # If /dev/shm is mounted
     if getvar('::tmp_mount_dev_shm') and !empty($::tmp_mount_dev_shm) {
       $tmp_mount_dev_shm_opts = split($::tmp_mount_dev_shm,',')
@@ -265,7 +253,8 @@ fi
         owner  => 'root',
         group  => 'root',
         mode   => 'u+rwx,g+rwx,o+rwxt',
-        force  => true
+        force  => true,
+        before => Mount['/tmp']
       }
 
       file { '/var/tmp':
@@ -273,7 +262,8 @@ fi
         owner  => 'root',
         group  => 'root',
         mode   => 'u+rwx,g+rwx,o+rwxt',
-        force  => true
+        force  => true,
+        before => Mount['/var/tmp']
       }
 
       file { '/usr/tmp':

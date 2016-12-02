@@ -21,19 +21,19 @@
 #     Set to false if you want to see the chatter from yum.
 #
 class simp::yum_schedule (
-    $minute   = '12',
-    $hour     = '0',
-    $monthday = '*',
-    $month    = '*',
-    $weekday  = '*',
-    $repos    = ['all'],
-    $disable = [],
-    $exclude_pkgs = [],
-    $randomize = 5,
+    $minute        = '12',
+    $hour          = '0',
+    $monthday      = '*',
+    $month         = '*',
+    $weekday       = '*',
+    $repos         = ['all'],
+    $disable       = [],
+    $exclude_pkgs  = [],
+    $randomize     = 5,
     Boolean $quiet = true
 ) {
   cron { 'yum_update':
-    command  => template('simplib/yum-cron.erb'),
+    command  => template('simp/yum-cron.erb'),
     user     => 'root',
     minute   => $minute,
     hour     => $hour,
