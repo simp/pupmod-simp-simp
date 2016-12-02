@@ -15,11 +15,11 @@ Requires: pupmod-simp-auditd < 7.0.0-0
 Requires: pupmod-simp-auditd >= 6.0.0-0
 Requires: pupmod-simp-autofs < 6.0.0-0
 Requires: pupmod-simp-autofs >= 5.0.0-0
-Requires: pupmod-simp-clamav < 6.0.0-0
+Requires: pupmod-simp-clamav < 7.0.0-0
 Requires: pupmod-simp-clamav >= 5.0.0-0
-Requires: pupmod-simp-dhcp < 6.0.0-0
+Requires: pupmod-simp-dhcp < 7.0.0-0
 Requires: pupmod-simp-dhcp >= 5.0.0-0
-Requires: pupmod-simp-freeradius < 7.0.0-0
+Requires: pupmod-simp-freeradius < 8.0.0-0
 Requires: pupmod-simp-freeradius >= 6.0.0-0
 Requires: pupmod-simp-ganglia < 7.0.0-0
 Requires: pupmod-simp-ganglia >= 6.0.0-0
@@ -27,7 +27,7 @@ Requires: pupmod-simp-iptables < 6.0.0-0
 Requires: pupmod-simp-iptables >= 5.0.0-0
 Requires: pupmod-simp-logrotate < 6.0.0-0
 Requires: pupmod-simp-logrotate >= 5.0.0-0
-Requires: pupmod-simp-named < 6.0.0-0
+Requires: pupmod-simp-named < 7.0.0-0
 Requires: pupmod-simp-named >= 5.0.0-0
 Requires: pupmod-simp-ntpd < 6.0.0-0
 Requires: pupmod-simp-ntpd >= 5.0.0-0
@@ -46,7 +46,7 @@ Requires: pupmod-simp-rsync >= 6.0.0-0
 Requires: pupmod-simp-rsyslog < 7.0.0-0
 Requires: pupmod-simp-rsyslog >= 6.0.0-0
 Requires: pupmod-simp-selinux >= 1.0.0-1
-Requires: pupmod-simp-simp_apache < 6.0.0-0
+Requires: pupmod-simp-simp_apache < 7.0.0-0
 Requires: pupmod-simp-simp_apache >= 5.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
 Requires: pupmod-simp-simpcat >= 6.0.0-0
@@ -67,7 +67,7 @@ Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.1.0-0
 Requires: pupmod-simp-tcpwrappers >= 5.0.0-0
 Requires: pupmod-simp-tcpwrappers < 6.0.0-0
 Requires: pupmod-simp-tftpboot >= 5.0.0-0
-Requires: pupmod-simp-tftpboot < 6.0.0-0
+Requires: pupmod-simp-tftpboot < 7.0.0-0
 Requires: pupmod-simp-upstart >= 5.0.0-0
 Requires: pupmod-simp-upstart < 6.0.0-0
 Requires: pupmod-simp-xinetd >= 3.0.0-0
