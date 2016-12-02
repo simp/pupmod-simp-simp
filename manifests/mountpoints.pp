@@ -232,7 +232,7 @@ class simp::mountpoints (
     }
 
     if $::operatingsystem in ['RedHat','CentOS'] and (versioncmp($::operatingsystemmajrelease,'6') == 0) {
-      include 'upstart'
+      include '::upstart'
 
       # There is a bizarre bug where /tmp and /var/tmp will have incorrect
       # permissions after the *second* reboot after bootstrapping SIMP. This

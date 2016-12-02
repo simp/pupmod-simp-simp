@@ -36,27 +36,26 @@ class simp::sysctl (
   $kernel__core_uses_pid   = '1',
   $kernel__dmesg_restrict  = '1',                                 # CCE-27366-4
   # Does not apply to RHEL 7 systems
-  $kernel__exec_shield                           = '1',           # CCE-27007-4
-  $kernel__panic                                 = '10',
-  $kernel__randomize_va_space                    = '2',           # CCE-26999-3
-  $kernel__sysrq                                 = '0',
-  $net__ipv4__conf__all__accept_redirects        = '0',           # CCE-27027-2
-  $net__ipv4__conf__all__accept_source_route     = '0',           # CCE-27037-1
-  $net__ipv4__conf__all__log_martians            = '1',           # CCE-27066-0
-  $net__ipv4__conf__all__rp_filter               = '1',           # CCE-26979-5
-  $net__ipv4__conf__all__secure_redirects        = '0',           # CCE-26854-0
-  $net__ipv4__conf__all__send_redirects          = '0',           # CCE-27004-1
-  $net__ipv4__conf__default__accept_redirects    = '0',           # CCE-27015-7
-  $net__ipv4__conf__default__accept_source_route = '0',           # CCE-26983-7
-  $net__ipv4__conf__default__rp_filter           = '1',           # CCE-26915-9
-  $net__ipv4__conf__default__secure_redirects    = '0',           # CCE-26831-8
-  $net__ipv4__conf__default__send_redirects      = '0',           # CCE-27001-7
-  $net__ipv4__icmp_echo_ignore_broadcasts        = '1',           # CCE-26883-9
-  $net__ipv4__icmp_ignore_bogus_error_responses  = '1',           # CCE-26993-6
-  $net__ipv4__tcp_challenge_ack_limit            = '2147483647',  # CVE-2016-5696 mitigation
-  $net__ipv4__tcp_max_syn_backlog                = '4096',
-  $net__ipv4__tcp_syncookies                     = '1',           # CCE-27053-8
-  $enable_ipv6                                   = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) },
+  $kernel__exec_shield                            = '1',          # CCE-27007-4
+  $kernel__panic                                  = '10',
+  $kernel__randomize_va_space                     = '2',          # CCE-26999-3
+  $kernel__sysrq                                  = '0',
+  $net__ipv4__conf__all__accept_redirects         = '0',          # CCE-27027-2
+  $net__ipv4__conf__all__accept_source_route      = '0',          # CCE-27037-1
+  $net__ipv4__conf__all__log_martians             = '1',          # CCE-27066-0
+  $net__ipv4__conf__all__rp_filter                = '1',          # CCE-26979-5
+  $net__ipv4__conf__all__secure_redirects         = '0',          # CCE-26854-0
+  $net__ipv4__conf__all__send_redirects           = '0',          # CCE-27004-1
+  $net__ipv4__conf__default__accept_redirects     = '0',          # CCE-27015-7
+  $net__ipv4__conf__default__accept_source_route  = '0',          # CCE-26983-7
+  $net__ipv4__conf__default__rp_filter            = '1',          # CCE-26915-9
+  $net__ipv4__conf__default__secure_redirects     = '0',          # CCE-26831-8
+  $net__ipv4__conf__default__send_redirects       = '0',          # CCE-27001-7
+  $net__ipv4__icmp_echo_ignore_broadcasts         = '1',          # CCE-26883-9
+  $net__ipv4__icmp_ignore_bogus_error_responses   = '1',          # CCE-26993-6
+  $net__ipv4__tcp_challenge_ack_limit             = '2147483647', # CVE-2016-5696 mitigation
+  $net__ipv4__tcp_max_syn_backlog                 = '4096',
+  $net__ipv4__tcp_syncookies                      = '1',          # CCE-27053-8
   $net__ipv6__conf__all__accept_redirects         = '0',
   $net__ipv6__conf__all__autoconf                 = '0',
   $net__ipv6__conf__all__forwarding               = '0',
@@ -68,7 +67,9 @@ class simp::sysctl (
   $net__ipv6__conf__default__autoconf             = '0',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   $net__ipv6__conf__default__dad_transmits        = '0',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   $net__ipv6__conf__default__max_addresses        = '1',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  $net__ipv6__conf__default__router_solicitations = '0'           # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  $net__ipv6__conf__default__router_solicitations = '0',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
+
+  $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) }
 ) {
 
   validate_integer($net__netfilter__nf_conntrack_max)
@@ -188,8 +189,19 @@ class simp::sysctl (
         'net.ipv4.tcp_syncookies':                    value => $net__ipv4__tcp_syncookies;
       }
 
+      file { '/var/core':
+        ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0640',
+        before => [
+          Sysctl['kernel.core_pattern'],
+          Sysctl['kernel.core_uses_pid'],
+        ]
+      }
+
       if ( $::operatingsystem in ['RedHat','CentOS'] ) and ( $::operatingsystemmajrelease == '6' ) {
-            sysctl { 'kernel.exec-shield': value => $kernel__exec_shield; }
+        sysctl { 'kernel.exec-shield': value => $kernel__exec_shield; }
       }
 
       if $enable_ipv6 {
@@ -211,20 +223,13 @@ class simp::sysctl (
         }
       }
       else {
-        if $::ipv6_enabled {
+        if $facts['ipv6_enabled'] {
           sysctl { 'net.ipv6.conf.all.disable_ipv6': value => '1'; }
         }
       }
-
-      file { '/var/core':
-        ensure => 'directory',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0640'
-      }
     }
     default : {
-      warning('Only RedHat and CentOS are currently supported by "simplib::sysctl"')
+      warning('Only RedHat and CentOS are currently supported by "simp::sysctl"')
     }
   }
 }

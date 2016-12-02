@@ -55,7 +55,6 @@ class simp::yum (
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $os_gpg_url           = '',
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url      = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url         = ''
-
 ){
   validate_net_list($servers)
 
@@ -78,7 +77,7 @@ class simp::yum (
   }
 
   $_simp_repo_enable = $enable_simp_repos ? { true => 1, default => 0 }
-  $_os_repo_enable = $enable_os_repos ? { true => 1, default => 0 }
+  $_os_repo_enable   = $enable_os_repos ?   { true => 1, default => 0 }
 
   if empty($os_gpg_url) {
     $_temp_os_gpg_url = $::operatingsystem ? {
