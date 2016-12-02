@@ -62,8 +62,8 @@ Requires: pupmod-simp-sudosh >= 5.0.0-0
 Requires: pupmod-simp-sudosh < 6.0.0-0
 Requires: pupmod-simp-svckill >= 2.0.0-0
 Requires: pupmod-simp-svckill < 3.0.0-0
-Requires: pupmod-simp-sysctl >= 5.0.0-0
-Requires: pupmod-simp-sysctl < 6.0.0-0
+Requires: pupmod-herculesteam-augeasproviders_sysctl < 3.0.0-0
+Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.1.0-0
 Requires: pupmod-simp-tcpwrappers >= 5.0.0-0
 Requires: pupmod-simp-tcpwrappers < 6.0.0-0
 Requires: pupmod-simp-tftpboot >= 5.0.0-0
