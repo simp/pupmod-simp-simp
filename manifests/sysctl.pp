@@ -69,6 +69,7 @@ class simp::sysctl (
   $net__ipv6__conf__default__max_addresses        = '1',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   $net__ipv6__conf__default__router_solicitations = '0',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
 
+  $core_dumps  = $::simp::core_dumps,
   $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) }
 ) {
 
@@ -198,6 +199,15 @@ class simp::sysctl (
           Sysctl['kernel.core_pattern'],
           Sysctl['kernel.core_uses_pid'],
         ]
+      }
+      if !$core_dumps {
+        pam::limits::add { 'prevent_core':
+          domain => '*',
+          type   => 'hard',
+          item   => 'core',
+          value  => '0',
+          order  => '100'
+        }
       }
 
       if ( $::operatingsystem in ['RedHat','CentOS'] ) and ( $::operatingsystemmajrelease == '6' ) {
