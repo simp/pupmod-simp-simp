@@ -1,5 +1,3 @@
-# == Class: simp
-#
 # This class provides the basis of what a native SIMP system should
 # be. It is expected that users may deviate from this configuration
 # over time, but this should be an effective starting place.
@@ -14,7 +12,6 @@
 #
 # @param rsync_stunnel
 # Type: FQDN
-# Default: hiera('rsync::stunnel',hiera('puppet::server'))
 #   The rsync server from which files should be retrieved.
 #
 # @param is_rsyslog_server Boolean
@@ -57,6 +54,9 @@
 # @param puppet_server_ip
 #   Type: IP Address
 #   See $puppet_server above.
+#
+# @params use_sudoers_aliases Boolean
+#   If true, enable simp site sudoers aliases.
 #
 # @params runlevel String
 #   Expects: 1-5, rescue, multi-user, or graphical
@@ -117,6 +117,7 @@ class simp (
   Optional[Array[String]] $filebucket_server          = undef,
   String                  $puppet_server              = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
   Optional[String]        $puppet_server_ip           = undef
+  Boolean                 $use_sudoers_aliases        = true,
   String                  $runlevel                   = '3',
   Boolean                 $core_dumps                 = false,
   String                  $max_logins                 = '10',
@@ -183,6 +184,10 @@ class simp (
 
   if $use_fips {
     include '::simp::fips'
+  }
+
+  if $use_sudoers_aliases {
+    include '::simp::sudoers'
   }
 
   if $puppet_server_ip and !empty($puppet_server) {
