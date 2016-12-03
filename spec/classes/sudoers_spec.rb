@@ -17,7 +17,7 @@ describe 'simp::sudoers' do
       context 'with common_aliases => false' do
         let(:params) {{ :common_aliases => false }}
         it { is_expected.to contain_sudo__default_entry('00_main') }
-        it { is_expected.to create_class('::simp::sudoers::aliases') }
+        it { is_expected.not_to create_class('::simp::sudoers::aliases') }
       end
 
     end

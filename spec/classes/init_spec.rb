@@ -16,6 +16,7 @@ describe 'simp' do
           end
 
           facts[:selinux_current_mode] = 'enforcing'
+          facts['puppet_vardir'] = '/opt/puppetlabs/puppet/cache'
 
           facts
         end
@@ -31,6 +32,32 @@ describe 'simp' do
 
           it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
         end
+
+        it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
+
+        context 'rsync_stunnel logic' do
+          context 'with rsync_stunnel defined' do
+            let(:params) {{ :rsync_stunnel => 'puppet.bar.baz' }}
+            it { is_expected.to create_stunnel__add('rsync').with({
+              :connect => ['puppet.bar.baz:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+          context 'with rsync_stunnel undefined but servername defined' do
+            let(:facts) { facts.merge({ :servername => 'puppet.server.name' })}
+            let(:params) {{ :rsync_stunnel => '' }}
+            it { is_expected.to create_stunnel__add('rsync').with({
+              :connect => ['puppet.server.name:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+          context 'with neither defined' do
+            let(:facts) { facts.merge({ :servername => '' })}
+            let(:params) {{ :rsync_stunnel => '' }}
+            it { is_expected.not_to create_stunnel__add('rsync') }
+          end
+        end
+
       end
     end
   end
