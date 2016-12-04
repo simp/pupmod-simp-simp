@@ -58,14 +58,14 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::mountpoints (
-  Boolean $secure_tmp_mounts = true,
-  Boolean $manage_tmp_perms  = true,
-  Boolean $manage_proc       = true,
-  Array $tmp_opts            = ['noexec','nodev','nosuid'],
-  Array $var_tmp_opts        = ['noexec','nodev','nosuid'],
-  Array $dev_shm_opts        = ['noexec','nodev','nosuid'],
-  Integer[0,2] $proc_hidepid = 2,
-  String $proc_gid           = ''
+  Boolean $secure_tmp_mounts      = true,
+  Boolean $manage_tmp_perms       = true,
+  Boolean $manage_proc            = true,
+  Array $tmp_opts                 = ['noexec','nodev','nosuid'],
+  Array $var_tmp_opts             = ['noexec','nodev','nosuid'],
+  Array $dev_shm_opts             = ['noexec','nodev','nosuid'],
+  Integer[0,2] $proc_hidepid      = 2,
+  Variant[String,Undef] $proc_gid = undef
 ) {
 
   # Set some basic mounts (may be RHEL specific...)
@@ -143,8 +143,9 @@ class simp::mountpoints (
         notify   => Exec['remount /tmp']
       }
 
+      $_remount_tmp_opts = join($tmp_opts,',')
       exec { 'remount /tmp':
-        command     => "/bin/mount -o remount,${tmp_opts} /tmp",
+        command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
         refreshonly => true
       }
     }
@@ -197,8 +198,9 @@ class simp::mountpoints (
         notify   => Exec['remount /var/tmp']
       }
 
+      $_remount_var_tmp_opts = join($var_tmp_opts,',')
       exec { 'remount /var/tmp':
-        command     => "/bin/mount -o remount,${var_tmp_opts} /var/tmp",
+        command     => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
         refreshonly => true
       }
     }
