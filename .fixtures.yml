@@ -66,6 +66,7 @@ fixtures:
     java_ks:
       repo: https://github.com/simp/puppetlabs-java_ks
       branch: simp-master
+    kmod: https://github.com/simp/puppet-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     mcollective:

@@ -1,3 +1,7 @@
+* Mon Dec 05 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+- Added simp::kmod_blacklist profile to manage the kernel blacklist using puppet-kmod
+  - config migrated from simplib
+
 * Thu Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
 - Removed pupmod-simp-sysctl in favor of augeas-sysctl
 
