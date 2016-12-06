@@ -17,6 +17,8 @@ describe 'simp::server' do
 
           facts[:selinux_current_mode] = 'enforcing'
 
+          facts[:simp_rsync_environments] = ['production', 'simp']
+
           facts
         end
 
