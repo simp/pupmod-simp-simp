@@ -8,7 +8,7 @@
 #
 # @param rsync_base
 #   The path to the beginning of the rsync space for this system. There must be
-#   a directory per environmet that you want to serve to clients.
+#   a directory per environment that you want to serve to clients.
 #
 #   * **NOTE** If you change this, you **MUST** create a custom fact for
 #     ``simp_rsync_environments`` with a Fact ``weight`` higher than ``1``.
