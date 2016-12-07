@@ -68,40 +68,33 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_server (
-  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
-  $rotate_period = 'weekly',
-  $rotate = '12',
-  $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs,
-  $server_conf = '',
-  $size = '',
-  $use_default_sudosh_rules = true,
-  $use_default_httpd_rules = true,
-  $use_default_dhcpd_rules = true,
-  $use_default_puppet_agent_rules = true,
-  $use_default_puppet_master_rules = true,
-  $use_default_audit_rules = true,
-  $use_default_slapd_rules = true,
-  $use_default_kern_rules = true,
-  $use_default_security_relevant_logs = true,
-  $use_default_message_rules = true,
-  $use_default_mail_rules = true,
-  $use_default_cron_rules = true,
-  $use_default_emerg_rules = true,
-  $use_default_spool_rules = true,
-  $use_default_boot_rules = true,
-  $use_iptables = defined('$::use_iptables') ? { true  => $::use_iptables, default =>  hiera('use_iptables') }
+  Array[String]                              $client_nets                        = defined('$::client_nets') ? { true  => $::client_nets, default => hiera('client_nets') },
+  Enum['daily','weekly','monthly','yearly']  $rotate_period                      = 'weekly',
+  Stdlib::Compat::Integer                    $rotate                             = '12',
+  String                                     $security_relevant_logs             = $::simp::rsyslog::stock::security_relevant_logs,
+  String                                     $server_conf                        = '',
+  String                                     $size                               = '',
+  Boolean                                    $use_default_sudosh_rules           = true,
+  Boolean                                    $use_default_httpd_rules            = true,
+  Boolean                                    $use_default_dhcpd_rules            = true,
+  Boolean                                    $use_default_puppet_agent_rules     = true,
+  Boolean                                    $use_default_puppet_master_rules    = true,
+  Boolean                                    $use_default_audit_rules            = true,
+  Boolean                                    $use_default_slapd_rules            = true,
+  Boolean                                    $use_default_kern_rules             = true,
+  Boolean                                    $use_default_security_relevant_logs = true,
+  Boolean                                    $use_default_message_rules          = true,
+  Boolean                                    $use_default_mail_rules             = true,
+  Boolean                                    $use_default_cron_rules             = true,
+  Boolean                                    $use_default_emerg_rules            = true,
+  Boolean                                    $use_default_spool_rules            = true,
+  Boolean                                    $use_default_boot_rules             = true,
+  Boolean                                    $use_iptables                       = defined('$::use_iptables') ? { true  => $::use_iptables,  default => hiera('use_iptables') }
 ) {
   include '::rsyslog'
   include '::rsyslog::server'
 
   assert_private()
-
-  validate_array_member($rotate_period,['daily','weekly','monthly','yearly'])
-  validate_bool($use_iptables)
-  validate_string($server_conf)
-  validate_integer($rotate)
-  validate_net_list($client_nets)
-
 
   # Now, since this is a log server, we'll probably want to run logrotate once
   # per hour to make sure we don't eat up all of our disk space.

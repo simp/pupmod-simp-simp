@@ -22,8 +22,8 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock (
-  $is_server = false,
-  $security_relevant_logs = "if \$programname == 'sudosh' or \$programname == 'yum' or \$syslogfacility-text == 'cron' or \$syslogfacility-text == 'authpriv' or \$syslogfacility-text == 'local5' or \$syslogfacility-text == 'local6' or \$syslogfacility-text == 'local7' or \$syslogpriority-text == 'emerg' or ( \$syslogfacility-text == 'kern' and \$msg startswith 'IPT:' ) then"
+  Boolean $is_server              = false,
+  String  $security_relevant_logs = "if \$programname == 'sudosh' or \$programname == 'yum' or \$syslogfacility-text == 'cron' or \$syslogfacility-text == 'authpriv' or \$syslogfacility-text == 'local5' or \$syslogfacility-text == 'local6' or \$syslogfacility-text == 'local7' or \$syslogpriority-text == 'emerg' or ( \$syslogfacility-text == 'kern' and \$msg startswith 'IPT:' ) then"
 ){
   include '::rsyslog'
   include '::logrotate'

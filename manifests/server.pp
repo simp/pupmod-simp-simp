@@ -21,14 +21,9 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server (
-  $allow_simp_user = true,
-  $enable_rsync_shares = true,
+  Boolean $allow_simp_user     = true,
+  Boolean $enable_rsync_shares = true,
 ){
-
-  validate_bool($allow_simp_user)
-  validate_bool($enable_rsync_shares)
-
-
   if $allow_simp_user {
     pam::access::manage { 'allow_simp':
       users   => 'simp',

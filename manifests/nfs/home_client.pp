@@ -24,13 +24,12 @@
 # * Kendall Moore <mailto:kmoore@keywcorp.com>
 #
 class simp::nfs::home_client (
-  $nfs_server = defined('$::nfs_server') ? { true => $::nfs_server, default => hiera('nfs::server') },
-  $port = '2049',
-  $sec = 'sys',
-  $use_autofs = true
+  String                   $nfs_server = defined('$::nfs_server') ? { true =>  $::nfs_server,  default => hiera('nfs::server') },
+  Stdlib::Compat::Integer  $port       = '2049',
+  String                   $sec        = 'sys',
+  Boolean                  $use_autofs = true
 ) {
 
-  validate_bool($use_autofs)
   validate_port($port)
 
   include '::nfs'

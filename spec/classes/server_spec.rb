@@ -17,7 +17,19 @@ describe 'simp::server' do
 
           facts[:selinux_current_mode] = 'enforcing'
 
+          facts[:simp_rsync_environments] = ['production', 'simp']
+
           facts
+        end
+
+        simp_server_rsync_base = {}
+
+        before(:each) do
+          Puppet::Parser::Functions.newfunction(:simp_server_rsync_base, :type => :rvalue) { |args|
+            simp_server_rsync_base.call(args[0])
+          }
+
+          simp_server_rsync_base.stubs(:call).returns(['simp','production'])
         end
 
         context 'with default parameters' do

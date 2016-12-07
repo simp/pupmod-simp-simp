@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -34,7 +34,7 @@
     },
     {
       "name": "simp/simp_apache",
-      "version_requirement": ">= 5.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     },
     {
       "name": "simp/auditd",
@@ -50,15 +50,15 @@
     },
     {
       "name": "simp/clamav",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     },
     {
       "name": "simp/dhcp",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     },
     {
       "name": "simp/freeradius",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 8.0.0"
     },
     {
       "name": "simp/ganglia",
@@ -74,7 +74,7 @@
     },
     {
       "name": "simp/named",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     },
     {
       "name": "simp/ntpd",
@@ -102,7 +102,7 @@
     },
     {
       "name": "simp/rsync",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/rsyslog",
@@ -115,6 +115,10 @@
     {
       "name": "simp/simplib",
       "version_requirement": ">= 2.0.0 < 3.0.0"
+    },
+    {
+      "name": "simp/tftpboot",
+      "version_requirement": ">= 5.0.0 < 7.0.0"
     }
   ],
   "requirements": [

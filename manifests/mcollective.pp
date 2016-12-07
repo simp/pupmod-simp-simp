@@ -75,55 +75,35 @@
 # Nick Markowski <nmarkowski@keywcorp.com>
 #
 class simp::mcollective (
-  $mco_server = true,
-  $mco_client = false,
-  $client_nets = defined('$::client_nets') ? { true  => getvar('::client_nets'), default =>  hiera('client_nets', ['127.0.0.1']) },
-  $truststore_certificate = '/etc/pki/cacerts/cacerts.pem',
-  $truststore_target = '/etc/activemq/truststore.jks',
-  $truststore_password = passgen('simp_mco_truststore'),
-  $keystore_certificate = "/etc/pki/public/${::fqdn}.pub",
-  $keystore_key = "/etc/pki/private/${::fqdn}.pem",
-  $keystore_target = '/etc/activemq/keystore.jks',
-  $keystore_password = passgen('simp_mco_keystore'),
-  $activemq_server_config = 'UNDEF',
-  $activemq_ssl = true,
-  $activemq_user = passgen('simp_mco_activemq_username', { 'length' => 12, 'complexity' => 0 }),
-  $activemq_password = passgen('simp_mco_activemq'),
-  $activemq_admin_user = passgen('simp_mco_activemq_admin_username', { 'length' => 12, 'complexity' => 0}),
-  $activemq_admin_password = passgen('simp_mco_activemq_admin'),
-  $activemq_port = '',
-  $activemq_console = false,
-  $activemq_memory_usage = '20 mb',
-  $activemq_store_usage = '1 gb',
-  $activemq_temp_usage = '100 mb',
-  $activemq_brokers = [ $::fqdn ],
-  $installplugins = true
+  Boolean                           $mco_server              = true,
+  Boolean                           $mco_client              = false,
+  Array[String]                     $client_nets             = defined('$::client_nets') ? { true => getvar('::client_nets'), default => hiera('client_nets', ['127.0.0.1']) },
+  Stdlib::Absolutepath              $truststore_certificate  = '/etc/pki/cacerts/cacerts.pem',
+  Stdlib::Absolutepath              $truststore_target       = '/etc/activemq/truststore.jks',
+  String                            $truststore_password     = passgen('simp_mco_truststore'),
+  Stdlib::Absolutepath              $keystore_certificate    = "/etc/pki/public/${::fqdn}.pub",
+  Stdlib::Absolutepath              $keystore_key            = "/etc/pki/private/${::fqdn}.pem",
+  Stdlib::Absolutepath              $keystore_target         = '/etc/activemq/keystore.jks',
+  String                            $keystore_password       = passgen('simp_mco_keystore'),
+  Optional[String]                  $activemq_server_config  = undef,
+  Boolean                           $activemq_ssl            = true,
+  String                            $activemq_user           = passgen('simp_mco_activemq_username', { 'length' => 12, 'complexity' => 0 }),
+  String                            $activemq_password       = passgen('simp_mco_activemq'),
+  String                            $activemq_admin_user     = passgen('simp_mco_activemq_admin_username', { 'length' => 12, 'complexity' => 0}),
+  String                            $activemq_admin_password = passgen('simp_mco_activemq_admin'),
+  String                            $activemq_port           = '',
+  Boolean                           $activemq_console        = false,
+  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_memory_usage   = '20 mb',
+  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_store_usage    = '1 gb',
+  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_temp_usage     = '100 mb',
+  Array[String]                     $activemq_brokers        = [$::fqdn],
+  Boolean                           $installplugins          = true
 ) {
 
-  validate_bool($mco_server)
-  validate_bool($mco_client)
   validate_net_list($client_nets)
-  validate_absolute_path($truststore_certificate)
-  validate_absolute_path($truststore_target)
-  validate_string($truststore_password)
-  validate_absolute_path($keystore_certificate)
-  validate_absolute_path($keystore_key)
-  validate_absolute_path($keystore_target)
-  validate_string($keystore_password)
-  validate_string($activemq_server_config)
-  validate_bool($activemq_ssl)
-  validate_string($activemq_user)
-  validate_string($activemq_password)
-  validate_string($activemq_admin_user)
-  validate_string($activemq_admin_password)
-  if !empty($activemq_port) { validate_port($activemq_port) }
-  validate_re($activemq_memory_usage, '^([0-9]+\s)[kmgt][b]$')
-  validate_re($activemq_store_usage, '^([0-9]+\s)[kmgt][b]$')
-  validate_re($activemq_temp_usage, '^([0-9]+\s)[kmgt][b]$')
-  validate_array($activemq_brokers)
-  validate_bool($installplugins)
 
   if !empty($activemq_port) {
+    validate_port($activemq_port)
     $_activemq_port = $activemq_port
   }
   else {
@@ -179,7 +159,7 @@ class simp::mcollective (
     include '::pki'
     include '::java'
 
-    if $activemq_server_config != 'UNDEF' {
+    if $activemq_server_config {
       $_activemq_server_config = $activemq_server_config
     }
     else {

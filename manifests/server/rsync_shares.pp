@@ -1,119 +1,129 @@
-# == Class: simp::server::rsync_shares
-#
-# Here we're setting up various rsync services that are needed by the SIMP
-# clients the system configuration.
+# Set up various rsync services that are needed by the SIMP clients
 #
 # If you don't have these provided somewhere, many of the modules will not
 # function properly.
 #
-# If you want additional BIND DNS spaces to be served out from rsync, you'll
-# need to enable them separately.
+# If you want additional ``BIND DNS`` spaces to be served out from rsync,
+# you'll need to enable them separately.
 #
-# == Parameters
-# [*rsync_base*]
-#   Type: Absolute Path
-#   Default: hiera('rsync::base', versioncmp(simp_version(),'5') ? {
-#     '-1' => "/srv/rsync",
-#     default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"
-#   })
-#     The path to the beginning of the rsync space for this system.
+# @param rsync_base
+#   The path to the beginning of the rsync space for this system. There must be
+#   a directory per environment that you want to serve to clients.
 #
-# [*use_stunnel*]
-# Type: Boolean
-# Default: hiera('rsync::server::use_stunnel',true)
-#   If true, set hosts_allow to '127.0.0.1' so that the stunnel'd rsync is
-#   used.
+#   * **NOTE** If you change this, you **MUST** create a custom fact for
+#     ``simp_rsync_environments`` with a Fact ``weight`` higher than ``1``.
 #
-# [*hosts_allow*]
-# Type: Net List
-# Default: hiera('client_nets','127.0.0.1')
-#   The hosts from which to allow access to the rsync shares.
-#   This option has no effect if $use_stunnel is true.
+# @see https://docs.puppet.com/facter/latest/custom_facts.html Custom Fact Walkthrough
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param rsync_environments
+#   The environments that are present under ``$rsync_base`` on the RSync server.
+#
+#   Be **VERY** careful if you change this from the fact that it references by
+#   default.
+#
+# @param use_stunnel If set, hosts_allow will be set to ``127.0.0.1`` so that
+#   the stunnel'd rsync will be used.
+#
+# @param hosts_allow
+#   The hosts from which to allow access to the rsync shares. This option has
+#   no effect if ``$use_stunnel`` is ``true``.
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server::rsync_shares (
-  $rsync_base  = hiera('rsync::base', versioncmp(simp_version(),'5') ? {
-                        '-1' => '/srv/rsync',
-                        default => "/srv/rsync/${::operatingsystem}/${::operatingsystemmajrelease}"
-                      }),
-  $use_stunnel = defined('$::use_stunnel') ? { true => $::use_stunnel, default => hiera('rsync::server::use_stunnel',true) },
-  $hosts_allow = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets','127.0.0.1') },
+  Stdlib::Absolutepath $rsync_base         = '/var/simp/rsync/environments',
+  Optional[Array]      $rsync_environments = $facts["simp_rsync_environments"],
+  Boolean              $use_stunnel        = defined('$::use_stunnel') ? { true => $::use_stunnel, default => lookup('rsync::server::use_stunnel', { 'default_value' => true }) },
+  Array[String]        $hosts_allow        = lookup('client_nets', Array, 'first', ['127.0.0.1']),
 ){
-  include 'rsync::server::global'
 
-  if $use_stunnel {
-    $l_hosts_allow = '127.0.0.1'
-  }
-  else {
-    $l_hosts_allow = $hosts_allow
-  }
-  rsync::server::section { 'default':
-    comment     => 'The default file path',
-    path        => "${rsync_base}/default",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'openldap_server':
-    auth_users  => ['openldap_rsync'],
-    comment     => 'Configuration for OpenLDAP',
-    path        => "${rsync_base}/openldap/server",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'bind_dns_default':
-    auth_users  => ['bind_dns_default_rsync'],
-    comment     => 'Default DNS configurations for named',
-    path        => "${rsync_base}/bind_dns/default",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'apache':
-    auth_users     => ['apache_rsync'],
-    comment        => 'Apache configurations',
-    path           => "${rsync_base}/apache",
-    hosts_allow    => '127.0.0.1',
-    outgoing_chmod => 'o-rwx'
-  }
-  rsync::server::section { 'tftpboot':
-    auth_users  => ['tftpboot_rsync'],
-    comment     => 'Tftpboot server configurations',
-    path        => "${rsync_base}/tftpboot",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'mcafee':
-    comment     => 'McAfee DAT files',
-    path        => "${rsync_base}/mcafee",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'clamav':
-    comment     => 'ClamAV Virus Database Updates',
-    path        => "${rsync_base}/clamav",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'dhcpd':
-    auth_users  => ['dhcpd_rsync'],
-    comment     => 'DHCP Configurations',
-    path        => "${rsync_base}/dhcpd",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'snmp':
-    comment     => 'SNMP MIBs and Modules',
-    path        => "${rsync_base}/snmp",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'freeradius':
-    auth_users  => ['freeradius_systems'],
-    comment     => 'Freeradius configuration files',
-    path        => "${rsync_base}/freeradius",
-    hosts_allow => $l_hosts_allow
-  }
-  rsync::server::section { 'jenkins_plugins':
-    comment     => 'Jenkins Configuration',
-    path        => "${rsync_base}/jenkins_plugins",
-    hosts_allow => $l_hosts_allow,
-  }
-
-  validate_absolute_path($rsync_base)
-  validate_bool($use_stunnel)
   validate_net_list($hosts_allow)
 
+  include '::rsync::server::global'
+
+  if $rsync_environments {
+    $_rsync_subdir = "${facts['operatingsystem']}/${facts['operatingsystemmajrelease']}"
+
+    if $use_stunnel {
+      $_hosts_allow = ['127.0.0.1']
+    }
+    else {
+      $_hosts_allow = $hosts_allow
+    }
+
+    $rsync_environments.each |String $_env| {
+      rsync::server::section { "default_${_env}":
+        comment     => "The default file path for Environment: ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/default",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "openldap_server_${_env}":
+        auth_users  => ["openldap_rsync_${_env}"],
+        comment     => "Configuration for OpenLDAP for Environment: ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/openldap/server",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "bind_dns_default_${_env}":
+        auth_users  => ["bind_dns_default_rsync_${_env}"],
+        comment     => "Default DNS configurations for named for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/bind_dns/default",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "apache_${_env}":
+        auth_users     => ["apache_rsync_${_env}"],
+        comment        => "Apache configurations for Environment ${_env}",
+        path           => "${rsync_base}/${_env}/${_rsync_subdir}/apache",
+        hosts_allow    => '127.0.0.1',
+        outgoing_chmod => 'o-rwx'
+      }
+
+      rsync::server::section { "tftpboot_${_env}":
+        auth_users  => ["tftpboot_rsync_${_env}"],
+        comment     => "Tftpboot server configurations for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/tftpboot",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "mcafee_${_env}":
+        comment     => "McAfee DAT files for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/mcafee",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "clamav_${_env}":
+        comment     => "ClamAV Virus Database Updates for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/clamav",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "dhcpd_${_env}":
+        auth_users  => ["dhcpd_rsync_${_env}"],
+        comment     => "DHCP Configurations for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/dhcpd",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "snmp_${_env}":
+        comment     => "SNMP MIBs and Modules for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/snmp",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "freeradius_${_env}":
+        auth_users  => ["freeradius_systems_${_env}"],
+        comment     => "Freeradius configuration files for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/freeradius",
+        hosts_allow => $_hosts_allow
+      }
+
+      rsync::server::section { "jenkins_plugins_${_env}":
+        comment     => "Jenkins Configuration for Environment ${_env}",
+        path        => "${rsync_base}/${_env}/${_rsync_subdir}/jenkins_plugins",
+        hosts_allow => $_hosts_allow,
+      }
+    }
+  }
 }

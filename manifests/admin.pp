@@ -46,24 +46,16 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
-  $admin_group = 'administrators',
-  $passwordless_admin_sudo = true,
-  $auditor_group = 'security',
-  $passwordless_auditor_sudo = true,
-  $admins_allowed_from = ['ALL'],
-  $auditors_allowed_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets',['ALL']) },
-  $force_sudosh = true
+  String        $admin_group               = 'administrators',
+  Boolean       $passwordless_admin_sudo   = true,
+  String        $auditor_group             = 'security',
+  Boolean       $passwordless_auditor_sudo = true,
+  Array[String] $admins_allowed_from       = ['ALL'],
+  Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
+  Boolean       $force_sudosh              = true
 ){
-  include 'simplib::sudoers'
 
-  validate_string($admin_group)
-  validate_bool($passwordless_admin_sudo)
-  validate_string($auditor_group)
-  validate_bool($passwordless_auditor_sudo)
-  validate_array($admins_allowed_from)
-  validate_array($auditors_allowed_from)
-  validate_bool($force_sudosh)
-
+  include '::simplib::sudoers'
 
   # Make sure that the administrators group can access your system remotely.
   # Without some entry like this, you will not be able to access the system

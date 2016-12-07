@@ -13,11 +13,11 @@
 # * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::krb5::client (
-  $kdc = hiera('puppet::server',$::servername),
-  $kdc_realm = $::domain
+  String $kdc       = hiera('puppet::server',$::servername),
+  String $kdc_realm = $::domain
 ) {
 
-  include 'krb5'
+  include '::krb5'
 
   krb5::conf::realm { $kdc_realm:
     admin_server => $kdc,

@@ -97,7 +97,7 @@ fixtures:
     ssh: https://github.com/simp/pupmod-simp-ssh
     stdlib:
       repo: https://github.com/simp/puppetlabs-stdlib
-      branch: simp-master
+      branch: master
     stunnel: https://github.com/simp/pupmod-simp-stunnel
     sssd: https://github.com/simp/pupmod-simp-sssd
     sudo: https://github.com/simp/pupmod-simp-sudo

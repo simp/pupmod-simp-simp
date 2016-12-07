@@ -64,27 +64,20 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::nfs::create_home_dirs (
-  $uri = hiera('ldap::uri'),
-  $base_dn = hiera('ldap::base_dn'),
-  $export_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv/nfs/home', default => '/var/nfs/home' },
-  $skel_dir = '/etc/skel',
-  $ldap_scope = 'one',
-  $bind_dn = hiera('ldap::bind_dn'),
-  $bind_pw = hiera('ldap::bind_pw'),
-  $port = $simp::nfs::params::port,
-  $tls = $simp::nfs::params::tls,
-  $quiet = true,
-  $syslog_facility = 'LOG_LOCAL6',
-  $syslog_priority = 'LOG_NOTICE',
+  Variant[String,Array[String]]  $uri             = hiera('ldap::uri'),
+  String                         $base_dn         = hiera('ldap::base_dn'),
+  Stdlib::Absolutepath           $export_dir      = versioncmp(simp_version(),'5') ? { '-1' => '/srv/nfs/home', default => '/var/nfs/home' },
+  Stdlib::Absolutepath           $skel_dir        = '/etc/skel',
+  Enum['one','sub','base']       $ldap_scope      = 'one',
+  String                         $bind_dn         = hiera('ldap::bind_dn'),
+  String                         $bind_pw         = hiera('ldap::bind_pw'),
+  String                         $port            = $simp::nfs::params::port,
+  Enum['ssl','start_tls','none'] $tls             = $simp::nfs::params::tls,
+  Boolean                        $quiet           = true,
+  String                         $syslog_facility = 'LOG_LOCAL6',
+  String                         $syslog_priority = 'LOG_NOTICE',
 ) inherits simp::nfs::params {
   assert_private()
-
-  validate_absolute_path($export_dir)
-  validate_absolute_path($skel_dir)
-  validate_array_member($ldap_scope, ['one','sub','base'])
-  validate_port($port)
-  validate_array_member($tls, ['ssl','start_tls','none'])
-  validate_bool($quiet)
 
   package { 'rubygem-net-ldap':
     ensure => 'latest'

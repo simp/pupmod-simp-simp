@@ -56,11 +56,11 @@ server=1;
 <%
   t_puppet_cmd_line = "puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
 
-  if not @runpuppet_wait_for_cert.empty? then
+  unless @runpuppet_wait_for_cert.empty?
     t_puppet_cmd_line += " --waitforcert #{@runpuppet_wait_for_cert}"
   end
 
-  if @runpuppet_print_stats then
+  if @runpuppet_print_stats
     t_puppet_cmd_line += " --evaltrace --summarize"
   end
 -%>
@@ -102,7 +102,7 @@ case "$1" in
     fi
 
 <%
-  if @use_fips then
+  if @use_fips
     _keylength = '2048'
   else
     _keylength = '4096'
@@ -130,8 +130,8 @@ EOM
 
 <%
    l_ntp_servers = @ntp_servers
-   if not l_ntp_servers.empty? then
-     if l_ntp_servers.kind_of?(Hash) then
+   unless l_ntp_servers.empty?
+     if l_ntp_servers.kind_of?(Hash)
        l_ntp_servers = l_ntp_servers.keys.sort
      end
 -%>

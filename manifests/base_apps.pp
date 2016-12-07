@@ -16,7 +16,7 @@
 class simp::base_apps (
 #   What level to ensure for all base apps. Valid values are: 'latest',
 #   'absent', or 'present'
-  $ensure = 'latest'
+  Enum['latest', 'absent','present'] $ensure = 'latest'
 ) {
   package { 'bc':           ensure => $ensure }
   package { 'bind-utils':   ensure => $ensure }
