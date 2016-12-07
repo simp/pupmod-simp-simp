@@ -15,13 +15,16 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::snmpd::server (
-  $monitor_user_auth_phrase,
-  $monitor_user_priv_phrase,
-  $admin_user_auth_phrase,
-  $admin_user_priv_phrase,
-  $allow_from = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') }
+  String         $monitor_user_auth_phrase,
+  String         $monitor_user_priv_phrase,
+  String         $admin_user_auth_phrase,
+  String         $admin_user_priv_phrase,
+  Array[String]  $allow_from = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets') }
 ) {
-  include 'snmpd'
+  validate_net_list($allow_from)
+
+  include '::snmpd'
+  include '::snmpd::authtrapenable'
 
   snmpd::agentaddress { 'allowed_hosts':
     allow_from => $allow_from
@@ -79,8 +82,6 @@ class simp::snmpd::server (
     write     => 'rwView'
   }
 
-  include 'snmpd::authtrapenable'
-
   snmpd::createuser { 'monitorUser':
     auth_phrase => $monitor_user_auth_phrase,
     priv_phrase => $monitor_user_priv_phrase
@@ -90,6 +91,4 @@ class simp::snmpd::server (
     auth_phrase => $admin_user_auth_phrase,
     priv_phrase => $admin_user_priv_phrase
   }
-
-  validate_net_list($allow_from)
 }

@@ -48,14 +48,12 @@
 # * Kendall Moore <kmoore@keywcorp.com>
 #
 class simp::nfs::export_home (
-  $data_dir = versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' },
-  $client_nets = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
-  $sec = ['sys'],
-  $create_home_dirs = false
+  Stdlib::Absolutepath  $data_dir         = versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' },
+  Array[String]         $client_nets      = defined('$::client_nets') ? { true  => $::client_nets,  default =>  hiera('client_nets') },
+  Array[String]         $sec              = ['sys'],
+  Boolean               $create_home_dirs = false
 ) {
   validate_net_list($client_nets)
-  validate_bool($create_home_dirs)
-
 
   include '::nfs'
   include '::nfs::idmapd'
@@ -102,7 +100,11 @@ class simp::nfs::export_home (
     }
   }
 
-  $_create_home_dirs = $create_home_dirs ? { true => Class['simp::nfs::create_home_dirs'], default => undef }
+  $_create_home_dirs = $create_home_dirs ? {
+    true => Class['simp::nfs::create_home_dirs'],
+    default => undef
+  }
+
   file {
     [ "${data_dir}/nfs",
       "${data_dir}/nfs/exports",

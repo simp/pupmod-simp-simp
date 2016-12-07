@@ -15,6 +15,12 @@
 #
 # @see https://docs.puppet.com/facter/latest/custom_facts.html Custom Fact Walkthrough
 #
+# @param rsync_environments
+#   The environments that are present under ``$rsync_base`` on the RSync server.
+#
+#   Be **VERY** careful if you change this from the fact that it references by
+#   default.
+#
 # @param use_stunnel If set, hosts_allow will be set to ``127.0.0.1`` so that
 #   the stunnel'd rsync will be used.
 #
@@ -25,29 +31,27 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server::rsync_shares (
-  String $rsync_base  = '/var/simp/rsync/environments',
-  Boolean $use_stunnel = defined('$::use_stunnel') ? { true => $::use_stunnel, default => lookup('rsync::server::use_stunnel', { 'default_value' => true }) },
-  Array[String] $hosts_allow = lookup('client_nets', Array, 'first', ['127.0.0.1']),
+  Stdlib::Absolutepath $rsync_base         = '/var/simp/rsync/environments',
+  Optional[Array]      $rsync_environments = $facts["simp_rsync_environments"],
+  Boolean              $use_stunnel        = defined('$::use_stunnel') ? { true => $::use_stunnel, default => lookup('rsync::server::use_stunnel', { 'default_value' => true }) },
+  Array[String]        $hosts_allow        = lookup('client_nets', Array, 'first', ['127.0.0.1']),
 ){
 
-  validate_absolute_path($rsync_base)
-  validate_bool($use_stunnel)
   validate_net_list($hosts_allow)
 
   include '::rsync::server::global'
 
-  $_rsync_subdir = "${facts['operatingsystem']}/${facts['operatingsystemmajrelease']}"
+  if $rsync_environments {
+    $_rsync_subdir = "${facts['operatingsystem']}/${facts['operatingsystemmajrelease']}"
 
-  if $use_stunnel {
-    $_hosts_allow = ['127.0.0.1']
-  }
-  else {
-    $_hosts_allow = $hosts_allow
-  }
+    if $use_stunnel {
+      $_hosts_allow = ['127.0.0.1']
+    }
+    else {
+      $_hosts_allow = $hosts_allow
+    }
 
-  if $facts['simp_rsync_environments'] and !empty($facts['simp_rsync_environments']) {
-    $facts['simp_rsync_environments'].each |String $_env| {
-
+    $rsync_environments.each |String $_env| {
       rsync::server::section { "default_${_env}":
         comment     => "The default file path for Environment: ${_env}",
         path        => "${rsync_base}/${_env}/${_rsync_subdir}/default",
@@ -121,8 +125,5 @@ class simp::server::rsync_shares (
         hosts_allow => $_hosts_allow,
       }
     }
-  }
-  else {
-    fail("${module_name} requires the 'simp_rsync_environments' fact to function")
   }
 }

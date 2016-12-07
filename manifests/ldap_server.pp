@@ -48,19 +48,19 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::ldap_server (
-  $is_slave = false,
-  $rid = '111',
-  $bind_dn = defined('$::bind_dn') ? { true => $::bind_dn, default => hiera('bind_dn','') },
-  $sync_dn = defined('$::sync_dn') ? { true => $::sync_dn, default => hiera('sync_dn','') },
-  $enable_lastbind = false
+  Boolean                 $is_slave        = false,
+  Stdlib::Compat::Integer $rid             = '111',
+  String                  $bind_dn         = defined('$::bind_dn') ? { true => $::bind_dn, default => hiera('bind_dn','') },
+  String                  $sync_dn         = defined('$::sync_dn') ? { true => $::sync_dn, default => hiera('sync_dn','') },
+  Boolean                 $enable_lastbind = false
 ){
 
   # Order matters with these top two!
-  include 'openldap'
-  include 'openldap::server'
-  include 'openldap::slapo::ppolicy'
-  include 'openldap::slapo::syncprov'
-  if $enable_lastbind { include 'openldap::slapo::lastbind' }
+  include '::openldap'
+  include '::openldap::server'
+  include '::openldap::slapo::ppolicy'
+  include '::openldap::slapo::syncprov'
+  if $enable_lastbind { include '::openldap::slapo::lastbind' }
 
   if $is_slave {
     openldap::server::syncrepl { $rid: }

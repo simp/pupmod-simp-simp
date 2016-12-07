@@ -22,7 +22,4 @@ class simp::nfs::params {
     'ssl' => '636',
     default => '389'
   }
-
-  validate_port($port)
-  validate_array_member($tls, ['ssl','start_tls','none'])
 }

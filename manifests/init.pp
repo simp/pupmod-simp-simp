@@ -96,17 +96,17 @@
 # Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp (
-  $is_mail_server = true,
-  $rsync_stunnel = hiera('rsync::stunnel',hiera('puppet::server',''),''),
-  $use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
-  $use_nscd = $::simp::params::use_nscd,
-  $use_sssd = $::simp::params::use_sssd,
-  $use_ssh_global_known_hosts = false,
-  $use_stock_sssd = true,
-  $enable_filebucketing = true,
-  $filebucket_server = '',
-  $puppet_server = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
-  $puppet_server_ip = ''
+  Boolean                 $is_mail_server             = true,
+  String                  $rsync_stunnel              = hiera('rsync::stunnel',hiera('puppet::server',''),''),
+  Boolean                 $use_ldap                   = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
+  Boolean                 $use_nscd                   = $::simp::params::use_nscd,
+  Boolean                 $use_sssd                   = $::simp::params::use_sssd,
+  Boolean                 $use_ssh_global_known_hosts = false,
+  Boolean                 $use_stock_sssd             = true,
+  Boolean                 $enable_filebucketing       = true,
+  Optional[Array[String]] $filebucket_server          = undef,
+  String                  $puppet_server              = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
+  Optional[String]        $puppet_server_ip           = undef
 ) inherits ::simp::params {
 
   if empty($rsync_stunnel) {
@@ -122,16 +122,7 @@ class simp (
   }
 
 
-  validate_bool($is_mail_server)
   if !empty($_rsync_stunnel) { validate_net_list($_rsync_stunnel) }
-  validate_bool($use_ldap)
-  validate_bool($use_nscd)
-  validate_bool($use_sssd)
-  validate_bool($use_stock_sssd)
-  validate_bool($enable_filebucketing)
-  if !empty($filebucket_server) { validate_net_list($filebucket_server) }
-  if !empty($puppet_server) { validate_net_list($puppet_server) }
-  if !empty($puppet_server_ip) { validate_net_list($puppet_server_ip) }
 
 
   if !$enable_filebucketing {
@@ -141,7 +132,9 @@ class simp (
     File { backup => true }
   }
 
-  if !empty($filebucket_server) {
+  if $filebucket_server {
+    validate_net_list($filebucket_server)
+
     filebucket { 'main': server => $filebucket_server }
   }
 
@@ -174,7 +167,7 @@ class simp (
     }
   }
 
-  if !empty($puppet_server_ip) and !empty($puppet_server) {
+  if $puppet_server_ip and !empty($puppet_server) {
     validate_net_list($puppet_server_ip)
 
     $l_pserver_alias = split($puppet_server,'.')

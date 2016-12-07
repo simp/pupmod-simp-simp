@@ -63,21 +63,17 @@
 #   $servers entries appropriately.
 #
 class simp::yum (
-  $servers,
-  $enable_simp_repos = true,
-  $enable_os_repos = true,
-  $enable_auto_updates = true,
-  $os_update_url = "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
-  $os_gpg_url = '',
-  $simp_update_url = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
-  $simp_gpg_url = ''
+  Array[String]                                        $servers,
+  Boolean                                              $enable_simp_repos    = true,
+  Boolean                                              $enable_os_repos      = true,
+  Boolean                                              $enable_auto_updates  = true,
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $os_update_url        = "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $os_gpg_url           = '',
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url      = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url         = ''
 
 ){
-  validate_array($servers)
   validate_net_list($servers)
-  validate_bool($enable_simp_repos)
-  validate_bool($enable_auto_updates)
-
 
   if $enable_auto_updates {
     include 'simplib::yum_schedule'

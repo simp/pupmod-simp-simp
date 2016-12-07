@@ -33,14 +33,12 @@
 # * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_server::forward (
-  $forward_hosts,
-  $failover_forward_hosts = [],
-  $log_transport = 'tcp'
+  Array[String]            $forward_hosts,
+  Array                    $failover_forward_hosts = [],
+  Enum['tcp','udp','relp'] $log_transport          = 'tcp'
 ) {
   validate_net_list($forward_hosts)
   if !empty($failover_forward_hosts) { validate_net_list($failover_forward_hosts) }
-  validate_array_member($log_transport,['tcp','udp','relp'])
-
 
   include '::rsyslog'
 

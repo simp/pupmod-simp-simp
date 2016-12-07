@@ -47,12 +47,12 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::sssd::client (
-  $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
-  $use_autofs      = true,
-  $use_sudo        = true,
-  $use_ssh         = true,
-  $enumerate_users = false,
-  $min_id          = '501'
+  Boolean                  $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
+  Boolean                  $use_autofs      = true,
+  Boolean                  $use_sudo        = true,
+  Boolean                  $use_ssh         = true,
+  Boolean                  $enumerate_users = false,
+  Stdlib::Compat::Integer  $min_id          = '501'
 ){
 
   if $use_ldap {
