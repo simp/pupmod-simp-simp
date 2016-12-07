@@ -102,8 +102,6 @@ class simp::kickstart_server (
   validate_net_list($puppet_ca)
   validate_port($puppet_ca_port)
 
-  inspect($runpuppet_wait_for_cert)
-
   $l_client_nets = nets2cidr($client_nets)
 
   simp_apache::add_site { 'ks':
