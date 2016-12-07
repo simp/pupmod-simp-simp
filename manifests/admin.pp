@@ -46,13 +46,13 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
- String        $admin_group               = 'administrators',
- Boolean       $passwordless_admin_sudo   = true,
- String        $auditor_group             = 'security',
- Boolean       $passwordless_auditor_sudo = true,
- Array[String] $admins_allowed_from       = ['ALL'],
- Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
- Boolean       $force_sudosh              = true
+  String        $admin_group               = 'administrators',
+  Boolean       $passwordless_admin_sudo   = true,
+  String        $auditor_group             = 'security',
+  Boolean       $passwordless_auditor_sudo = true,
+  Array[String] $admins_allowed_from       = ['ALL'],
+  Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
+  Boolean       $force_sudosh              = true
 ){
 
   include '::simplib::sudoers'

@@ -83,10 +83,10 @@
 #
 class simp::kickstart_server (
   Stdlib::Absolutepath                        $data_dir                = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  Array[String]                               $client_nets             = defined('$::client_nets') ? { true  =>                                                                    $::client_nets,    default =>  hiera('client_nets') },
+  Array[String]                               $client_nets             = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
   Boolean                                     $manage_dhcp             = true,
   Boolean                                     $manage_tftpboot         = true,
-  Variant[Array, Hash]                        $ntp_servers             = defined('$::ntpd::servers') ? { true =>                                                                   $::ntpd::servers,  default => hiera('ntpd::servers',[]) },
+  Variant[Array, Hash]                        $ntp_servers             = defined('$::ntpd::servers') ? { true => $::ntpd::servers,  default => hiera('ntpd::servers',[]) },
   String                                      $puppet_server           = hiera('puppet::server', $::servername),
   String                                      $puppet_ca               = hiera('puppet::ca', $::servername),
   Stdlib::Compat::Integer                     $puppet_ca_port          = hiera('puppet::ca_port', $::settings::ca_port),
