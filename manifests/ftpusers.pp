@@ -1,6 +1,6 @@
 # Populate /etc/ftpusers
 #
-# @params min_uid String
+# @params min_uid
 #   The start of the local user account IDs. This is used to populate
 #   /etc/ftpusers with all system accounts (below this number) so that
 #   they cannot ftp into the system.
@@ -8,7 +8,7 @@
 #   Set to an empty string ('') to disable.
 #
 class simp::ftpusers (
-  String $min_uid = '500'
+  Stdlib::Compat::Integer $min_uid = '500'
 ){
   if !empty($min_uid) {
     file { '/etc/ftpusers':
@@ -19,7 +19,7 @@ class simp::ftpusers (
       mode   => '0600',
     }
     ftpusers { '/etc/ftpusers':
-      min_id => $min_uid,
+      min_id => $min_uid
     }
   }
 }
