@@ -86,12 +86,8 @@
 # @params disable_rc_local Boolean
 #   If true, disable the use of the /etc/rc.local file.
 #
-# @params ftpusers_min String
-#   The start of the local user account IDs. This is used to populate
-#   /etc/ftpusers with all system accounts (below this number) so that
-#   they cannot ftp into the system.
-#
-#   Set to an empty string ('') to disable.
+# @params dns_autoconf Boolean
+#   If true, autoconfigure named if the dns::servers include the host.
 #
 # == Hiera Variables
 #
@@ -119,6 +115,8 @@ class simp (
   Boolean                 $use_sssd                   = $::simp::params::use_sssd,
   Boolean                 $use_ssh_global_known_hosts = false,
   Boolean                 $use_stock_sssd             = true,
+  Boolean                 $version_info               = true,
+  Boolean                 $manage_root_metadata       = true,
   Boolean                 $enable_filebucketing       = true,
   Optional[Array[String]] $filebucket_server          = undef,
   String                  $puppet_server              = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
@@ -141,7 +139,7 @@ class simp (
     $_rsync_stunnel = $rsync_stunnel
   }
 
-  if !empty($_rsync_stunnel) { validate_net_list($_rsync_stunnel) }
+  if !empty($_rsync_stunnel)    { validate_net_list($_rsync_stunnel) }
 
   if !$enable_filebucketing {
     File { backup => false }
@@ -199,6 +197,10 @@ class simp (
 
   if $manage_root_metadata {
     include '::simp::root_user'
+  }
+
+  if $dns_autoconf {
+    include '::simp::dns_autoconf'
   }
 
   if $puppet_server_ip and !empty($puppet_server){
