@@ -68,11 +68,6 @@
 #   Expects: 1-5, rescue, multi-user, or graphical
 #   The default runlevel to which the system should be set.
 #
-# @params core_dumps Boolean
-#   If true, enable core dumps on the system.
-#
-#   As set, meets CCE-27033-0
-#
 # @params max_logins Integer
 #   The number of logins that an account may have on the system at a given time
 #   as enforced by PAM. Set to undef to disable.
@@ -120,16 +115,15 @@ class simp (
   Boolean                 $enable_filebucketing       = true,
   Optional[Array[String]] $filebucket_server          = undef,
   String                  $puppet_server              = defined('$::servername') ? { true => $::servername, default => hiera('puppet::server','') },
-  Optional[String]        $puppet_server_ip           = undef
+  Optional[String]        $puppet_server_ip           = undef,
   Boolean                 $use_sudoers_aliases        = true,
   String                  $runlevel                   = '3',
-  Boolean                 $core_dumps                 = false,
   String                  $max_logins                 = '10',
   Boolean                 $manage_root_perms          = true,
   Boolean                 $disable_rc_local           = true,
-  String                  $ftpusers_min               = '500',
   Boolean                 $manage_root_user           = true,
-  Boolean                 $manage_root_group          = true
+  Boolean                 $manage_root_group          = true,
+  Boolean                 $dns_autoconf               = true
 ) inherits ::simp::params {
 
   if empty($rsync_stunnel) and defined('$::servername') {

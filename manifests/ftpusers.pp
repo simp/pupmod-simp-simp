@@ -6,6 +6,7 @@
 #   they cannot ftp into the system.
 #
 #   Set to an empty string ('') to disable.
+#
 class simp::ftpusers (
   String $min_uid = '500'
 ){

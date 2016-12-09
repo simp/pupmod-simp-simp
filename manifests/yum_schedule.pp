@@ -21,16 +21,16 @@
 #     Set to false if you want to see the chatter from yum.
 #
 class simp::yum_schedule (
-    String $minute              = '12',
-    String $hour                = '0',
-    String $monthday            = '*',
-    String $month               = '*',
-    String $weekday             = '*',
+    String        $minute       = '12',
+    String        $hour         = '0',
+    String        $monthday     = '*',
+    String        $month        = '*',
+    String        $weekday      = '*',
     Array[String] $repos        = ['all'],
     Array[String] $disable      = [],
     Array[String] $exclude_pkgs = [],
-    Integer $randomize          = 5,
-    Boolean $quiet              = true
+    Integer       $randomize    = 5,
+    Boolean       $quiet        = true
 ) {
   cron { 'yum_update':
     command  => template('simp/yum-cron.erb'),

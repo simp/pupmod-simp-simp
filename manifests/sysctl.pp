@@ -6,6 +6,11 @@
 #
 # See the kernel documentation for the functionality of each variable.
 #
+# @params core_dumps Boolean
+#   If true, enable core dumps on the system.
+#
+#   As set, meets CCE-27033-0
+#
 class simp::sysctl (
   # Performance Related Settings
   $net__netfilter__nf_conntrack_max      = '655360',
@@ -69,8 +74,8 @@ class simp::sysctl (
   $net__ipv6__conf__default__max_addresses        = '1',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   $net__ipv6__conf__default__router_solicitations = '0',          # SSG network_ipv6_limit_requests (No CCEs available at this time)
 
-  $core_dumps  = $::simp::core_dumps,
-  $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) }
+  Boolean $core_dumps  = false,
+  Boolean $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) }
 ) {
 
   validate_integer($net__netfilter__nf_conntrack_max)
