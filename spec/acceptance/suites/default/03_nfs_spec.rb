@@ -3,6 +3,20 @@ require 'spec_helper_acceptance'
 test_name 'simp nfs stock classes'
 
 describe 'simp nfs stock classes' do
+  before(:context) do
+    hosts.each do |host|
+      interfaces = fact_on(host, 'interfaces').strip.split(',')
+      interfaces.delete_if do |x|
+        x =~ /^lo/
+      end
+
+      interfaces.each do |iface|
+        if fact_on(host, "ipaddress_#{iface}").strip.empty?
+          on(host, "ifup #{iface}", :accept_all_exit_codes => true)
+        end
+      end
+    end
+  end
 
   let(:servers) { hosts_with_role( hosts, 'nfs_server' ) }
   let(:clients) { hosts_with_role( hosts, 'client' ) }

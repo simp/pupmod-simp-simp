@@ -3,6 +3,20 @@ require 'spec_helper_acceptance'
 test_name 'simp rsyslog stock classes'
 
 describe 'simp rsyslog stock classes' do
+  before(:context) do
+    hosts.each do |host|
+      interfaces = fact_on(host, 'interfaces').strip.split(',')
+      interfaces.delete_if do |x|
+        x =~ /^lo/
+      end
+
+      interfaces.each do |iface|
+        if fact_on(host, "ipaddress_#{iface}").strip.empty?
+          on(host, "ifup #{iface}", :accept_all_exit_codes => true)
+        end
+      end
+    end
+  end
 
   let(:servers) { hosts_with_role( hosts, 'rsyslog_server' ) }
 
