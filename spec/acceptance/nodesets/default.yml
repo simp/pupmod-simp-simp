@@ -7,13 +7,10 @@ HOSTS:
       - simp_server
       - nfs_server
       - mco_server
-      - rsyslog_server
       - el7
     platform:   el-7-x86_64
     box:        centos/7
-    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
     hypervisor: vagrant
-    vagrant_memsize: 2048
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
@@ -31,7 +28,6 @@ HOSTS:
       - mco_client
     platform:   el-7-x86_64
     box:        centos/7
-    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-7.0-64-nocm
     hypervisor: vagrant
     yum_repos:
       epel:
@@ -48,12 +44,9 @@ HOSTS:
       - nfs_server
       - el6
       - mco_server
-      - rsyslog_server
     platform:   el-6-x86_64
     box:        centos/6
-    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
     hypervisor: vagrant
-    vagrant_memsize: 2048
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
@@ -71,7 +64,6 @@ HOSTS:
       - mco_client
     platform:   el-6-x86_64
     box:        centos/6
-    #box_url:    https://vagrantcloud.com/puppetlabs/boxes/centos-6.6-64-nocm
     hypervisor: vagrant
     yum_repos:
       epel:

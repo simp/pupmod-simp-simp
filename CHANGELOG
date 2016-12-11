@@ -1,5 +1,10 @@
+* Sun Dec 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Removed the simp::rsyslog classes in favor of the new simp_rsyslog profile
+  module
+
 * Mon Dec 05 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
-- Added simp::kmod_blacklist profile to manage the kernel blacklist using puppet-kmod
+- Added simp::kmod_blacklist profile to manage the kernel blacklist using
+  puppet-kmod
   - config migrated from simplib
 
 * Thu Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
