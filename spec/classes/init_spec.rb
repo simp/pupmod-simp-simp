@@ -25,19 +25,15 @@ describe 'simp' do
         let(:precondition) {
           %(hiera_include('classes'))
         }
-        let(:big_params) {{
-          'dns_autoconf' => false
-        }}
 
         context 'default' do
-          let(:params) { big_params }
           # it { require 'pry';binding.pry }
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
         end
 
         context 'with_puppet_server' do
-          let(:params) { big_params.merge({ :puppet_server_ip => '1.2.3.4' }) }
+          let(:params) {{ :puppet_server_ip => '1.2.3.4' }}
 
           it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
         end
@@ -45,7 +41,7 @@ describe 'simp' do
 
         context 'rsync_stunnel logic' do
           context 'with rsync_stunnel defined' do
-            let(:params) { big_params.merge({ :rsync_stunnel => 'puppet.bar.baz' }) }
+            let(:params) {{ :rsync_stunnel => 'puppet.bar.baz' }}
             it { is_expected.to create_stunnel__add('rsync').with({
               :connect => ['puppet.bar.baz:8730'],
               :accept  => '127.0.0.1:873'
@@ -53,7 +49,7 @@ describe 'simp' do
           end
           context 'with rsync_stunnel undefined but servername defined' do
             let(:facts) { facts.merge({ :servername => 'puppet.server.name' })}
-            let(:params) { big_params.merge({ :rsync_stunnel => '' }) }
+            let(:params) {{ :rsync_stunnel => '' }}
             it { is_expected.to create_stunnel__add('rsync').with({
               :connect => ['puppet.server.name:8730'],
               :accept  => '127.0.0.1:873'
@@ -61,7 +57,7 @@ describe 'simp' do
           end
           context 'with neither defined' do
             let(:facts) { facts.merge({ :servername => '' })}
-            let(:params) { big_params.merge({ :rsync_stunnel => '' }) }
+            let(:params) {{ :rsync_stunnel => '' }}
             it { is_expected.not_to create_stunnel__add('rsync') }
           end
         end

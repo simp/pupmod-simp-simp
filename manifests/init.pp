@@ -123,7 +123,6 @@ class simp (
   Boolean                 $disable_rc_local           = true,
   Boolean                 $manage_root_user           = true,
   Boolean                 $manage_root_group          = true,
-  Boolean                 $dns_autoconf               = true
 ) inherits ::simp::params {
 
   if empty($rsync_stunnel) and defined('$::servername') {
@@ -191,10 +190,6 @@ class simp (
 
   if $manage_root_metadata {
     include '::simp::root_user'
-  }
-
-  if $dns_autoconf {
-    include '::simp::dns_autoconf'
   }
 
   if $puppet_server_ip and !empty($puppet_server){
