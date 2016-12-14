@@ -22,11 +22,7 @@
 #   It is highly recommended that you use Logstash as your syslog server if at
 #   all possible.
 #
-# @param use_nscd Boolean
-#   Whether or not to use NSCD in the installation instead of SSSD. If
-#   '$use_sssd = true' then this will not be referenced.
-#
-# @param use_sssd Boolean
+# @param sssd Boolean
 #   Whether or not to use SSSD in the installation.
 #   There are issues where SSSD will allow a login, even if the user's password
 #   has expire, if the user has a valid SSH key. However, in EL7+, there are
@@ -89,10 +85,7 @@
 # These variables are not necessarily used directly by this class but
 # are quite useful in getting your system functioning easily.
 #
-# @param use_sssd
-#   See above
-#
-# @param use_nscd
+# @param sssd
 #   See above
 #
 # @param simplib::timezone
@@ -104,10 +97,9 @@
 class simp (
   Boolean                 $is_mail_server             = true,
   String                  $rsync_stunnel              = hiera('rsync::stunnel',hiera('puppet::server',''),''),
-  Boolean                 $use_fips                   = defined('$::use_fips') ? { true => $::use_fips, default => hiera('use_fips',false) },
-  Boolean                 $use_ldap                   = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
-  Boolean                 $use_nscd                   = $::simp::params::use_nscd,
-  Boolean                 $use_sssd                   = $::simp::params::use_sssd,
+  Boolean                 $fips                       = simplib::lookup('simp_options::fips', { 'default_value' => false }),
+  Boolean                 $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Boolean                 $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => false }),
   Boolean                 $use_ssh_global_known_hosts = false,
   Boolean                 $use_stock_sssd             = true,
   Boolean                 $version_info               = true,
@@ -123,7 +115,7 @@ class simp (
   Boolean                 $disable_rc_local           = true,
   Boolean                 $manage_root_user           = true,
   Boolean                 $manage_root_group          = true,
-) inherits ::simp::params {
+) {
 
   if empty($rsync_stunnel) and defined('$::servername') {
     $_rsync_stunnel = $::servername
@@ -157,26 +149,18 @@ class simp (
     }
   }
 
-  if $use_ldap {
+  if $ldap {
     include '::openldap::pam'
     include '::openldap::client'
   }
 
-  if $use_sssd {
+  if $sssd {
     if $use_stock_sssd {
       include '::simp::sssd::client'
     }
   }
-  else {
-    if $use_nscd {
-      include 'nscd'
-      include 'nscd::passwd'
-      include 'nscd::group'
-      include 'nscd::services'
-    }
-  }
 
-  if $use_fips {
+  if $fips {
     include '::fips'
   }
 

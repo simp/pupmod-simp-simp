@@ -119,5 +119,8 @@ fixtures:
     motd:
       repo: https://github.com/jeefberkey/puppetlabs-motd
       branch: simp-master
+    nsswitch:
+      repo: https://github.com/jeefberkey/puppet-nsswitch
+      branch: SIMP-2235
   symlinks:
     simp: "#{source_dir}"
