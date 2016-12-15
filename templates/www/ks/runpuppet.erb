@@ -102,7 +102,7 @@ case "$1" in
     fi
 
 <%
-  if @use_fips
+  if @fips
     _keylength = '2048'
   else
     _keylength = '4096'

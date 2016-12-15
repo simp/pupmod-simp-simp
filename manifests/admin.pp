@@ -40,7 +40,7 @@ class simp::admin (
   Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
   Boolean       $force_sudosh              = true
 ){
-  include 'simplib::sudoers'
+  include '::simp::sudoers'
 
   # Make sure that the administrators group can access your system remotely.
   # Without some entry like this, you will not be able to access the system

@@ -11,7 +11,7 @@
 #
 # == Parameters
 #
-# [*use_ldap*]
+# [*ldap*]
 # Type: Boolean
 # Default: true
 #   If true, enable the LDAP hooks via SSSD. If false, makes this class a noop.
@@ -47,7 +47,7 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::sssd::client (
-  Boolean                  $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
+  Boolean                  $ldap            = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                  $use_autofs      = true,
   Boolean                  $use_sudo        = true,
   Boolean                  $use_ssh         = true,
@@ -55,7 +55,7 @@ class simp::sssd::client (
   Stdlib::Compat::Integer  $min_id          = '501'
 ){
 
-  if $use_ldap {
+  if $ldap {
     # We include these here because, without a domain, SSSD should not be
     # running and will, in fact, complain if you attempt to run without a
     # domain.

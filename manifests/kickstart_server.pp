@@ -67,9 +67,9 @@
 #   If set to '' or 0, the client will immediately timeout if a signed
 #   certificate is not presented.
 #
-# [*use_fips*]
+# [*fips*]
 # Type: Boolean
-# Default: defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('use_fips', false) }
+# Default: defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('fips', false) }
 #   If true, set puppet keylength to 2048, else 4096.
 #
 # [*sslverifyclient*]
@@ -82,17 +82,17 @@
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::kickstart_server (
-  Stdlib::Absolutepath                        $data_dir                = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  Array[String]                               $client_nets             = defined('$::client_nets') ? { true  => $::client_nets, default =>  hiera('client_nets') },
+  Stdlib::Absolutepath                        $data_dir                = '/var/www',
+  Array[String]                               $client_nets             = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
   Boolean                                     $manage_dhcp             = true,
   Boolean                                     $manage_tftpboot         = true,
-  Variant[Array, Hash]                        $ntp_servers             = defined('$::ntpd::servers') ? { true => $::ntpd::servers,  default => hiera('ntpd::servers',[]) },
-  String                                      $puppet_server           = hiera('puppet::server', $::servername),
-  String                                      $puppet_ca               = hiera('puppet::ca', $::servername),
-  Stdlib::Compat::Integer                     $puppet_ca_port          = hiera('puppet::ca_port', $::settings::ca_port),
+  Variant[Array, Hash]                        $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
+  String                                      $puppet_server           = simplib::lookup('simp_options::puppet::server', { 'default_value' => $::servername }),
+  String                                      $puppet_ca               = simplib::lookup('simp_options::puppet::ca', { 'default_value' => $::servername }),
+  Stdlib::Compat::Integer                     $puppet_ca_port          = simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 }),
   Boolean                                     $runpuppet_print_stats   = true,
   Variant[Enum[''], Stdlib::Compat::Integer]  $runpuppet_wait_for_cert = '10',
-  Boolean                                     $use_fips                = defined('$::fips_enabled') ? { true => str2bool($::fips_enabled), default => hiera('use_fips', false) },
+  Boolean                                     $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false }),
   String                                      $sslverifyclient         = 'none'
 ){
   if $manage_dhcp { include '::dhcp::dhcpd' }
