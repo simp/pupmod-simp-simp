@@ -1,5 +1,3 @@
-# == Class: simp::snmpd::server
-#
 # Configure a full-features SNMP server.
 #
 # This sets up a fairly robust SNMP server.
@@ -8,18 +6,15 @@
 # snmpwalk -v 3 -l authPriv -a SHA -A <monitor_user_auth_phrase> -x AES \
 #          -u monitorUser -X <monitor_user_priv_phrase> <hostname>
 #
-# == Parameters
 #
-# == Authors
-#
-# * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::snmpd::server (
   String         $monitor_user_auth_phrase,
   String         $monitor_user_priv_phrase,
   String         $admin_user_auth_phrase,
   String         $admin_user_priv_phrase,
-  Array[String]  $allow_from = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets') }
+  Array[String]  $allow_from = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
 ) {
   validate_net_list($allow_from)
 

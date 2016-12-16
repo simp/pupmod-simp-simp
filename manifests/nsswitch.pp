@@ -1,5 +1,8 @@
 # A SIMP provile for using the nsswitch module to manage /etc/nsswitch
 #
+# @param ldap SIMP global catalyst to enable LDAP
+# @param sssd SIMP global catalyst to enable sssd
+#
 class simp::nsswitch (
   $ldap = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   $sssd = simplib::lookup('simp_options::sssd', { 'default_value' => false })

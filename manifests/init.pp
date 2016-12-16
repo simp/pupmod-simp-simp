@@ -2,7 +2,7 @@
 # be. It is expected that users may deviate from this configuration
 # over time, but this should be an effective starting place.
 #
-# @param is_mail_server Boolean
+# @param is_mail_server
 #   If set to true, install a local mail service on the system. This
 #   will not conflict with using the postfix class to turn the system
 #   into a full server later on.
@@ -22,7 +22,7 @@
 #   It is highly recommended that you use Logstash as your syslog server if at
 #   all possible.
 #
-# @param sssd Boolean
+# @param sssd
 #   Whether or not to use SSSD in the installation.
 #   There are issues where SSSD will allow a login, even if the user's password
 #   has expire, if the user has a valid SSH key. However, in EL7+, there are
@@ -33,13 +33,13 @@
 #   If true, use the ssh_global_known_hosts function to gather the various host
 #   SSH public keys and populate the /etc/ssh/known_hosts file.
 #
-# @param version_info Boolean
+# @param version_info
 #   Drops SIMP and SIMP-version related information to the filesystem.
 #
-# @param manage_root_metadata Boolean
+# @param manage_root_metadata
 #   Include the simp::root_user class, which manages resources related to the root user.
 #
-# @param enable_filebucketing Boolean
+# @param enable_filebucketing
 #   If true, enable the server-side filebucket for all managed files on the
 #   client system.
 #
@@ -60,24 +60,24 @@
 # @params use_sudoers_aliases Boolean
 #   If true, enable simp site sudoers aliases.
 #
-# @params runlevel String
+# @params runlevel
 #   Expects: 1-5, rescue, multi-user, or graphical
 #   The default runlevel to which the system should be set.
 #
-# @params max_logins Integer
+# @params max_logins
 #   The number of logins that an account may have on the system at a given time
 #   as enforced by PAM. Set to undef to disable.
 #
 #   As set, meets CCE-27457-1
 #
-# @params manage_root_perms Boolean
+# @params manage_root_perms
 #   Ensure that /root has restricted permissions and proper SELinux
 #   contexts.
 #
-# @params disable_rc_local Boolean
+# @params disable_rc_local
 #   If true, disable the use of the /etc/rc.local file.
 #
-# @params dns_autoconf Boolean
+# @params dns_autoconf
 #   If true, autoconfigure named if the dns::servers include the host.
 #
 # == Hiera Variables
@@ -99,7 +99,7 @@ class simp (
   String                  $rsync_stunnel              = hiera('rsync::stunnel',hiera('puppet::server',''),''),
   Boolean                 $fips                       = simplib::lookup('simp_options::fips', { 'default_value' => false }),
   Boolean                 $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
-  Boolean                 $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => false }),
+  Boolean                 $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                 $use_ssh_global_known_hosts = false,
   Boolean                 $use_stock_sssd             = true,
   Boolean                 $version_info               = true,

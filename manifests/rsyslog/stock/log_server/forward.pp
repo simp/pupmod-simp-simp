@@ -1,5 +1,3 @@
-# == Class: simp::rsyslog::stock::log_server::forward
-#
 # Set this appropriately if you're forwarding your syslog data to somewhere
 # else.
 #
@@ -10,27 +8,19 @@
 #
 # Note: This will forward *all* logs to the named hosts.
 #
-# == Parameters
-#
-# [*forward_hosts*]
-#   Type: Array
+# @param forward_hosts
 #     The hosts to which to forward the logs.
 #     Be sure to append the port to the host if you wish to send to an
 #     alternate port.
 #
-# [*failover_forward_hosts*]
-#   Type: Array
-#   Default: []
+# @param failover_forward_hosts
 #     If present, the listed systems will be used as failover servers for the
 #     forwarded records.
 #
-# [*log_transport*]
-#   Type: One of ['tcp','udp','relp']
+# @param log_transport
 #   The transport to pass the data across. Make sure it stays lower case.
 #
-# == Authors
-#
-# * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_server::forward (
   Array[String]            $forward_hosts,

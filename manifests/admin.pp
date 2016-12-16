@@ -19,13 +19,10 @@
 #   default due to the expected use of SSH keys and lack of local passwords.
 #
 # @params admin_allowed_from Array
-# Type: Array of pam::access compatible entries
 #   The locations from which administrators are allowed to access the system.
 #   Set to all locations by default.
 #
 # @params auditors_allowed_from Array
-# Type: Array of pam::access compatible entries
-# Default: hiera('client_nets',['ALL'])
 #   The locations from which auditors are allowed to access the system.
 #   Set to client_nets by default with a fallback of ALL locations.
 #
@@ -37,7 +34,7 @@ class simp::admin (
   String        $auditor_group             = 'security',
   Boolean       $passwordless_auditor_sudo = true,
   Array[String] $admins_allowed_from       = ['ALL'],
-  Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
+  Array[String] $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['ALL'] }),
   Boolean       $force_sudosh              = true
 ){
   include '::simp::sudoers'

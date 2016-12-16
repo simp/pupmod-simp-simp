@@ -1,7 +1,7 @@
 <%
   t_allowroot = nil
-  if @l_client_nets then
-    t_allowroot = scope.function_munge_httpd_networks(Array(@l_client_nets)).map{ |x|
+  if @l_trusted_nets then
+    t_allowroot = scope.function_munge_httpd_networks(Array(@l_trusted_nets)).map{ |x|
       x = "    Allow from #{x}"
     }.join("\n")
   end

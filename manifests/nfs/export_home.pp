@@ -1,5 +1,3 @@
-# == Class: simp::nfs::export_home
-#
 # Define to configure an NFS server to share centralized home directories in
 # the NFSv4 way.
 #
@@ -26,34 +24,28 @@
 # The NFS clients must set the following:
 #   * nfs::client::conf::nfs_server : 'hostname_of_the_nfs_server'
 #
-# == Parameters
+# @param data_dir
 #
-# [*data_dir*]
-#   Type: Absolute Path
-#   Default: versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' }
-#
-# [*client_nets*]
+# @param trusted_nets
 #   The networks that are allowed to mount this space.
 #
-# [*sec*]
+# @param sec
 #   An Array of sec modes for the export.
 #
-# [*create_home_dirs*]
+# @param create_home_dirs
 #   Whether or not to automatically create user home directories
 #   from LDAP data.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
-# * Kendall Moore <kmoore@keywcorp.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Kendall Moore <kmoore@keywcorp.com>
 #
 class simp::nfs::export_home (
-  Stdlib::Absolutepath  $data_dir         = versioncmp(simp_version(),'5') ? { '-1' => '/srv', default => '/var' },
-  Array[String]         $client_nets      = defined('$::client_nets') ? { true  => $::client_nets,  default =>  hiera('client_nets') },
+  Stdlib::Absolutepath  $data_dir         = '/var',
+  Array[String]         $trusted_nets     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
   Array[String]         $sec              = ['sys'],
   Boolean               $create_home_dirs = false
 ) {
-  validate_net_list($client_nets)
+  validate_net_list($trusted_nets)
 
   include '::nfs'
   include '::nfs::idmapd'
@@ -67,7 +59,7 @@ class simp::nfs::export_home (
 
   if ! $::nfs::use_stunnel {
     nfs::server::export { 'nfs4_root':
-      client      => nets2cidr($client_nets),
+      client      => nets2cidr($trusted_nets),
       export_path => "${data_dir}/nfs/exports",
       sec         => $sec,
       fsid        => '0',
@@ -75,7 +67,7 @@ class simp::nfs::export_home (
     }
 
     nfs::server::export { 'home_dirs':
-      client      => nets2cidr($client_nets),
+      client      => nets2cidr($trusted_nets),
       export_path => "${data_dir}/nfs/exports/home",
       rw          => true,
       sec         => $sec

@@ -1,27 +1,21 @@
-# == Class: simp::nfs::home_client
-#
 # Set up an NFS4 client to point to the server that you defined with
 # nfs::stock::export_home.
 #
-# == Parameters
-#
-# [*nfs_server*]
+# @param nfs_server
 #   The NFS server to which you will be connecting.
 #
-# [*port*]
+# @param port
 #   The NFS port to which to connect.
 #
-# [*sec*]
+# @param sec
 #   The sec mode for the mount.
 #
-# [*use_autofs*]
+# @param use_autofs
 #   Whether or not to use autofs. Defaults to true for the benefits of
 #   autofs.
 #
-# == Authors
-#
-# * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
-# * Kendall Moore <mailto:kmoore@keywcorp.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Kendall Moore <mailto:kmoore@keywcorp.com>
 #
 class simp::nfs::home_client (
   String                   $nfs_server = defined('$::nfs_server') ? { true =>  $::nfs_server,  default => hiera('nfs::server') },

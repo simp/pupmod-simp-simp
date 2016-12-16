@@ -1,10 +1,6 @@
-# == Class: simp::ganglia::monitor
-#
 # Includes a stock configuration for gmond
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::ganglia::monitor {
   include 'ganglia::monitor'

@@ -1,13 +1,9 @@
-# == Class: simp::ganglia::web
-#
 # Creates a stock configuration for gmond, gmetad, and ganglia-web
 #
 # Note: In order to access the web front-end, you will need to
 # add users via ganglia::web::add_user.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::ganglia::web {
   include 'ganglia::web'

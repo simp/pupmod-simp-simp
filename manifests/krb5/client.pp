@@ -1,20 +1,17 @@
-# == Class: simp::krb5::client
-#
 # A stock client class that will connect with the stock KDC
 #
-# == Parameters
-#
-# [*kdc*]
+# @param kdc
 #   The default KDC for the $::domain realm.
 #   Defaults to the puppet server.
 #
-# == Authors
+# @param kdc_realm
+#   Kerberos Realm
 #
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::krb5::client (
   String $kdc       = hiera('puppet::server',$::servername),
-  String $kdc_realm = $::domain
+  String $kdc_realm = $facts['domain']
 ) {
 
   include '::krb5'

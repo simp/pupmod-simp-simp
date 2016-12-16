@@ -1,5 +1,3 @@
-# == Class: simp::freeradius::stock_ldap
-#
 # Provide a default configuration of FreeRadius that matches the one from Red
 # Hat that includes the ability to work properly with the default SIMP LDAP
 # configuration.
@@ -13,9 +11,7 @@
 #  add: objectClass
 #  objectClass: radiusprofile
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::freeradius::stock_ldap {
   include '::simp::freeradius::stock'

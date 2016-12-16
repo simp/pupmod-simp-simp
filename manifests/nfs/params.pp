@@ -1,13 +1,10 @@
-# == Class: simp::nfs::params ==
 #
-# == Parameters ==
-#
-# [*port*]
+# @param port
 #   The target port on the LDAP server.  If none specified,
 #   defaults to 389 for non-TLS/start_tls connections, and
 #   636 for SSL connections.
 #
-# [*tls*]
+# @param tls
 #   Whether or not to enable SSL/TLS for the connection.
 #   $tls = 'ssl'         -> LDAPS on port 636, unless  different *port* specified.
 #                           Uses simple_tls; No validation of the LDAP server's SSL

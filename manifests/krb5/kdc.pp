@@ -1,10 +1,6 @@
-# == Class: simp::krb5::kdc
-#
 # A default KDC class that will cover the needs of most users.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::krb5::kdc {
   include 'krb5::kdc'

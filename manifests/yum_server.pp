@@ -1,28 +1,18 @@
-# == Class: simp::yum_server
-#
 # This class sets up a YUM site at ${data_dir}/yum and is used by
 # the default SIMP server.
 #
-# == Parameters
+# @param data_dir
 #
-# [*data_dir*]
-#   Type: Absolute Path
-#   Default: versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' }
-#
-# [*client_nets*]
-# Type: Net List
-# Default: hiera('client_nets')
+# @param trusted_nets
 #   The networks to allow into the YUM server.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::yum_server (
-  Stdlib::Absolutepath $data_dir    = versioncmp(simp_version(),'5') ? { '-1' => '/srv/www', default => '/var/www' },
-  Array[String]        $client_nets = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets') }
+  Stdlib::Absolutepath $data_dir     = '/var/www',
+  Array[String]        $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
 ){
-  $l_client_nets = nets2cidr($client_nets)
+  $l_trusted_nets = nets2cidr($trusted_nets)
 
   simp_apache::add_site { 'yum':
     content => template('simp/etc/httpd/conf.d/yum.conf.erb')
@@ -34,7 +24,7 @@ class simp::yum_server (
       target => "${data_dir}/yum"
     }
 
-    file { '/srv/www/yum/SIMP':
+    file { $data_dir:
       ensure => 'directory',
       owner  => 'root',
       group  => 'apache',

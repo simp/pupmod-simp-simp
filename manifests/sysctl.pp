@@ -6,8 +6,74 @@
 #
 # See the kernel documentation for the functionality of each variable.
 #
-# @params core_dumps Boolean
-#   If true, enable core dumps on the system.
+# Performance Related Settings
+# @param net__netfilter__nf_conntrack_max
+# @param net__unix__max_dgram_qlen
+# @param net__ipv4__neigh__default__gc_thresh3
+# @param net__ipv4__neigh__default__gc_thresh2
+# @param net__ipv4__neigh__default__gc_thresh1
+# @param net__ipv4__neigh__default__proxy_qlen
+# @param net__ipv4__neigh__default__unres_qlen
+# @param net__ipv4__tcp_rmem
+# @param net__ipv4__tcp_wmem
+# @param net__ipv4__tcp_fin_timeout
+# @param net__ipv4__tcp_rfc1337
+# @param net__ipv4__tcp_keepalive_time
+# @param net__ipv4__tcp_mtu_probing
+# @param net__ipv4__tcp_no_metrics_save
+# @param net__core__rmem_max
+# @param net__core__wmem_max
+# @param net__core__optmem_max
+# @param net__core__netdev_max_backlog
+# @param net__core__somaxconn
+# @param net__ipv4__tcp_tw_reuse
+#
+# Security Related Settings:
+# @param fs__suid_dumpable
+#
+# If you change this, make sure you create the leading directories!
+# @param kernel__core_pattern
+# @param kernel__core_pipe_limit
+# @param kernel__core_uses_pid
+# @param kernel__dmesg_restrict
+#
+# Does not apply to RHEL 7 systems:
+# @param kernel__exec_shield
+# @param kernel__panic
+# @param kernel__randomize_va_space
+# @param kernel__sysrq
+# @param net__ipv4__conf__all__accept_redirects
+# @param net__ipv4__conf__all__accept_source_route
+# @param net__ipv4__conf__all__log_martians
+# @param net__ipv4__conf__all__rp_filter
+# @param net__ipv4__conf__all__secure_redirects
+# @param net__ipv4__conf__all__send_redirects
+# @param net__ipv4__conf__default__accept_redirects
+# @param net__ipv4__conf__default__accept_source_route
+# @param net__ipv4__conf__default__rp_filter
+# @param net__ipv4__conf__default__secure_redirects
+# @param net__ipv4__conf__default__send_redirects
+# @param net__ipv4__icmp_echo_ignore_broadcasts
+# @param net__ipv4__icmp_ignore_bogus_error_responses
+# @param net__ipv4__tcp_challenge_ack_limit
+# @param net__ipv4__tcp_max_syn_backlog
+# @param net__ipv4__tcp_syncookies
+# @param net__ipv6__conf__all__accept_redirects
+# @param net__ipv6__conf__all__autoconf
+# @param net__ipv6__conf__all__forwarding
+# @param net__ipv6__conf__default__accept_ra
+# @param net__ipv6__conf__default__accept_ra_defrtr
+# @param net__ipv6__conf__default__accept_ra_pinfo
+# @param net__ipv6__conf__default__accept_ra_rtr_pref
+# @param net__ipv6__conf__default__accept_redirects
+# @param net__ipv6__conf__default__autoconf
+# @param net__ipv6__conf__default__dad_transmits
+# @param net__ipv6__conf__default__max_addresses
+# @param net__ipv6__conf__default__router_solicitations
+#
+# @param core_dumps If true, enable core dumps on the system.
+# @param core_dump_dir Directory to place core dumps
+# @param ipv6 SIMP catalyst for enabling ipv6
 #
 #   As set, meets CCE-27033-0
 #
@@ -79,7 +145,7 @@ class simp::sysctl (
 
   Boolean              $core_dumps    = false,
   Stdlib::AbsolutePath $core_dump_dir = '/var/core',
-  Boolean              $enable_ipv6   = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) }
+  Boolean              $ipv6   = simplib::lookup('simp_options::ipv6', { 'default_value' => false }),
 ) {
 
   validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
@@ -168,7 +234,7 @@ class simp::sysctl (
         sysctl { 'kernel.exec-shield': value => $kernel__exec_shield; }
       }
 
-      if $enable_ipv6 {
+      if $ipv6 {
         sysctl { 'net.ipv6.conf.all.disable_ipv6': value => 0; }
           ->
         sysctl {

@@ -1,21 +1,13 @@
-# == Class: simp::base_apps
-#
 # This is a set of applications that you will want on most systems.
 #
-# == Parameters
-# [*ensure*]
-# Type: latest|present|absent
-# Default: latest
+# @param ensure
 #   The $ensure status of all of the included packages. Version
 #   pinning is not supported. If you need that, do not include this
 #   class.
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::base_apps (
-#   What level to ensure for all base apps. Valid values are: 'latest',
-#   'absent', or 'present'
   Enum['latest', 'absent','present'] $ensure = 'latest'
 ) {
   package { 'bc':           ensure => $ensure }
@@ -73,5 +65,4 @@ class simp::base_apps (
     }
   }
 
-  validate_array_member($ensure,['latest','present','absent'])
 }

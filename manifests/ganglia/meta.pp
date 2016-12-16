@@ -1,13 +1,9 @@
-# == Class: simp::ganglia::meta
-#
 # Creates a stock configuration for gmetad
 #
 # Note: This currently only adds data from the localhost.
 # You probably want to add additional at least one additional data source
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::ganglia::meta {
   include 'ganglia::meta'
