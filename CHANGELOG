@@ -1,3 +1,8 @@
+* Sun Dec 25 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Removal of "non-essential" profiles
+  - krb5 => simp_krb5
+  - rsyslog => simp_rsyslog
+
 * Mon Dec 05 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
 - Added simp::kmod_blacklist profile to manage the kernel blacklist using puppet-kmod
   - config migrated from simplib
