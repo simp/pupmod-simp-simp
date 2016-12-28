@@ -74,7 +74,6 @@ fixtures:
       branch: simp-master
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
-    nscd: https://github.com/simp/pupmod-simp-nscd
     ntpd: https://github.com/simp/pupmod-simp-ntpd
     oddjob: https://github.com/simp/pupmod-simp-oddjob
     openldap: https://github.com/simp/pupmod-simp-openldap
@@ -95,9 +94,7 @@ fixtures:
     simp_apache: https://github.com/simp/pupmod-simp-apache
     snmpd: https://github.com/simp/pupmod-simp-snmpd
     ssh: https://github.com/simp/pupmod-simp-ssh
-    stdlib:
-      repo: https://github.com/simp/puppetlabs-stdlib
-      branch: master
+    stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
     sssd: https://github.com/simp/pupmod-simp-sssd
     sudo: https://github.com/simp/pupmod-simp-sudo
@@ -107,5 +104,28 @@ fixtures:
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     upstart: https://github.com/simp/pupmod-simp-upstart
     xinetd: https://github.com/simp/pupmod-simp-xinetd
+
+    resolv:
+      repo: https://github.com/jeefberkey/pupmod-simp-resolv
+      branch: SIMP-2234
+    cron:
+      repo: https://github.com/jeefberkey/pupmod-simp-cron
+      branch: SIMP-2232
+    tuned: https://github.com/simp/pupmod-simp-tuned
+    at: https://github.com/simp/pupmod-simp-at
+    useradd:
+      repo: https://github.com/jeefberkey/pupmod-simp-useradd
+      branch: SIMP-2227
+    incron: https://github.com/simp/pupmod-simp-incron
+    chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
+    fips: https://github.com/simp/pupmod-simp-fips
+    swap: https://github.com/simp/pupmod-simp-swap
+    motd:
+      repo: https://github.com/simp/puppetlabs-motd
+      branch: simp-master
+    nsswitch:
+      repo: https://github.com/simp/puppet-nsswitch
+      branch: simp-master
+    issue: https://github.com/simp/pupmod-simp-issue
   symlinks:
     simp: "#{source_dir}"
