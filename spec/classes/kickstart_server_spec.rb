@@ -23,7 +23,7 @@ describe 'simp::kickstart_server' do
           facts
         end
 
-        let(:params){{:data_dir => '/var/www'}}
+        let(:params) {{:data_dir => '/var/www'}}
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('simp_apache') }
@@ -38,33 +38,48 @@ describe 'simp::kickstart_server' do
         it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/ntpdate/) }
 
         context 'alternate_data_dir' do
-          let(:params){{ :data_dir => '/srv/www' }}
+          let(:params) {{ :data_dir => '/srv/www' }}
           it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
         end
 
         context 'specify_ntp_servers_array' do
-          let(:params){{ :data_dir => '/var/www', :ntp_servers => ['1.2.3.4','5.6.7.8'] }}
+          let(:params) {{
+            :data_dir    => '/var/www',
+            :ntp_servers => ['1.2.3.4','5.6.7.8']
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate -b 1.2.3.4 5.6.7.8/) }
         end
 
         context 'specify_ntp_servers_hash' do
-          let (:params){{ :data_dir => '/var/www', :ntp_servers => { '1.2.3.4' => ['foo, bar'], '5.6.7.8' => ['baz'] } }}
+          let (:params) {{
+            :data_dir    => '/var/www',
+            :ntp_servers => {
+              '1.2.3.4' => ['foo, bar'],
+              '5.6.7.8' => ['baz']
+            }
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate -b 1.2.3.4 5.6.7.8/) }
         end
 
         context 'no_print_stats' do
-          let(:params){{ :data_dir => '/var/www', :runpuppet_print_stats => false }}
+          let(:params) {{
+            :data_dir              => '/var/www',
+            :runpuppet_print_stats => false
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/--evaltrace/) }
         end
 
         context 'no_wait_for_cert' do
-          let(:params){{ :data_dir => '/var/www', :runpuppet_wait_for_cert => '' }}
+          let(:params) {{
+            :data_dir                => '/var/www',
+            :runpuppet_wait_for_cert => ''
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/--waitforcert/) }

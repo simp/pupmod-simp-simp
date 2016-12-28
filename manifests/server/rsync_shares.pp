@@ -21,30 +21,30 @@
 #   Be **VERY** careful if you change this from the fact that it references by
 #   default.
 #
-# @param use_stunnel If set, hosts_allow will be set to ``127.0.0.1`` so that
+# @param stunnel If set, hosts_allow will be set to ``127.0.0.1`` so that
 #   the stunnel'd rsync will be used.
 #
 # @param hosts_allow
 #   The hosts from which to allow access to the rsync shares. This option has
-#   no effect if ``$use_stunnel`` is ``true``.
+#   no effect if ``$stunnel`` is ``true``.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server::rsync_shares (
   Stdlib::Absolutepath $rsync_base         = '/var/simp/rsync/environments',
   Optional[Array]      $rsync_environments = $facts["simp_rsync_environments"],
-  Boolean              $use_stunnel        = defined('$::use_stunnel') ? { true => $::use_stunnel, default => lookup('rsync::server::use_stunnel', { 'default_value' => true }) },
+  Boolean              $stunnel            = simplib::lookup('simp_options::stunnel', { 'default_value' => false }),
   Array[String]        $hosts_allow        = lookup('client_nets', Array, 'first', ['127.0.0.1']),
 ){
-
   validate_net_list($hosts_allow)
 
+  include '::rsync::server'
   include '::rsync::server::global'
 
   if $rsync_environments {
     $_rsync_subdir = "${facts['operatingsystem']}/${facts['operatingsystemmajrelease']}"
 
-    if $use_stunnel {
+    if $stunnel {
       $_hosts_allow = ['127.0.0.1']
     }
     else {

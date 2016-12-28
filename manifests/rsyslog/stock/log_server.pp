@@ -1,5 +1,3 @@
-# == Class: simp::rsyslog::stock::log_server
-#
 # This class provides a general purpose log server suitable for cenralized logging.
 #
 # It is highly recommended that you look to use the Logstash module at this point.
@@ -27,30 +25,28 @@
 #   7_default = catch all for security relevant logs that weren't caught by previous rules
 #   9_default = anything else gets sent to messages
 #
-# == Parameters
-#
-# [*client_nets*]
+# @param trusted_nets
 # Type: Array of networks
-# Default: hiera('client_nets')
+# Default: hiera('trusted_nets')
 #   The client networks to which to allow access to the rsyslog service.
 #
-# [*rotate_period*]
+# @param rotate_period
 # Type: One of 'daily', 'weekly', 'monthly', or 'yearly'
 # Default: 'weekly'
 #   The log rotate period.
 #
-# [*rotate*]
+# @param rotate
 # Type: Integer
 # Default: 12
 #   How many rotated logs to preserve. 3 months by default.
 #
-# [*size*]
+# @param size
 # Type: Logrotate compatible size value
 # Default: None
 #   The maximum size of a log file. $rotate_period will be ignored if
 #   this is specified.
 #
-# [*server_conf*]
+# @param server_conf
 # Type: String
 # Default: ''
 #   If set, Add the contained rsyslog configuration to the system
@@ -58,38 +54,36 @@
 #   provide a destination rule set for all logs coming into the
 #   server.
 #
-# [*use_iptables*]
+# @param firewall
 # Type: Boolean
 # Default: true
 #   Whether or not to use IPTables to restrict access to the system.
 #
-# == Authors
-#
-# * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_server (
-  Array[String]                              $client_nets                        = defined('$::client_nets') ? { true  => $::client_nets, default => hiera('client_nets') },
-  Enum['daily','weekly','monthly','yearly']  $rotate_period                      = 'weekly',
-  Stdlib::Compat::Integer                    $rotate                             = '12',
-  String                                     $security_relevant_logs             = $::simp::rsyslog::stock::security_relevant_logs,
-  String                                     $server_conf                        = '',
-  String                                     $size                               = '',
-  Boolean                                    $use_default_sudosh_rules           = true,
-  Boolean                                    $use_default_httpd_rules            = true,
-  Boolean                                    $use_default_dhcpd_rules            = true,
-  Boolean                                    $use_default_puppet_agent_rules     = true,
-  Boolean                                    $use_default_puppet_master_rules    = true,
-  Boolean                                    $use_default_audit_rules            = true,
-  Boolean                                    $use_default_slapd_rules            = true,
-  Boolean                                    $use_default_kern_rules             = true,
-  Boolean                                    $use_default_security_relevant_logs = true,
-  Boolean                                    $use_default_message_rules          = true,
-  Boolean                                    $use_default_mail_rules             = true,
-  Boolean                                    $use_default_cron_rules             = true,
-  Boolean                                    $use_default_emerg_rules            = true,
-  Boolean                                    $use_default_spool_rules            = true,
-  Boolean                                    $use_default_boot_rules             = true,
-  Boolean                                    $use_iptables                       = defined('$::use_iptables') ? { true  => $::use_iptables,  default => hiera('use_iptables') }
+  Array[String]           $trusted_nets                       = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
+  Boolean                 $firewall                           = simplib::lookup('simp_options::firewall', { 'default_value' => false }),
+  Stdlib::Compat::Integer $rotate                             = '12',
+  String                  $security_relevant_logs             = $::simp::rsyslog::stock::security_relevant_logs,
+  String                  $server_conf                        = '',
+  String                  $size                               = '',
+  Boolean                 $use_default_sudosh_rules           = true,
+  Boolean                 $use_default_httpd_rules            = true,
+  Boolean                 $use_default_dhcpd_rules            = true,
+  Boolean                 $use_default_puppet_agent_rules     = true,
+  Boolean                 $use_default_puppet_master_rules    = true,
+  Boolean                 $use_default_audit_rules            = true,
+  Boolean                 $use_default_slapd_rules            = true,
+  Boolean                 $use_default_kern_rules             = true,
+  Boolean                 $use_default_security_relevant_logs = true,
+  Boolean                 $use_default_message_rules          = true,
+  Boolean                 $use_default_mail_rules             = true,
+  Boolean                 $use_default_cron_rules             = true,
+  Boolean                 $use_default_emerg_rules            = true,
+  Boolean                 $use_default_spool_rules            = true,
+  Boolean                 $use_default_boot_rules             = true,
+  Enum['daily','weekly','monthly','yearly']  $rotate_period   = 'weekly',
 ) {
   include '::rsyslog'
   include '::rsyslog::server'

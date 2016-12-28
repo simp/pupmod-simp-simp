@@ -1,5 +1,3 @@
-# == Class: simp::sssd::client
-#
 # This class sets up an SSSD client based on the normal SIMP parameters.  This
 # should work for most out-of-the-box installations. Otherwise, it serves as an
 # example of what you can do to make it work for your environment.
@@ -9,53 +7,38 @@
 #
 # See: https://docs.puppetlabs.com/puppet/latest/reference/lang_resources_advanced.html#amending-attributes-with-a-collector
 #
-# == Parameters
-#
-# [*use_ldap*]
-# Type: Boolean
-# Default: true
+# @param ldap
 #   If true, enable the LDAP hooks via SSSD. If false, makes this class a noop.
 #
-# [*use_autofs*]
-# Type: Boolean
-# Default: true
+# @param use_autofs
 #   If true, enable autofs support in SSSD.
 #
-# [*use_sudo*]
-# Type: Boolean
-# Default: true
+# @param use_sudo
 #   If true, enable sudo support in SSSD.
 #
-# [*use_ssh*]
-# Type: Boolean
-# Default: true
+# @param use_ssh
 #   If true, enable ssh support in SSSD.
 #
-# [*enumerate_users*]
-# Type: Boolean
-# Default: false
+# @param enumerate_users
 #   If true, have SSSD list and cache all the users that it can find on the
 #   LDAP server.
 #
-# [*min_id*]
-# Type: Integer
-# Default: '501'
+# @param min_id
 #   The lowest ID number that SSSD should recognize from the remote server.
 #   This will be raised to '1000' in a future release.
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::sssd::client (
-  Boolean                  $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
-  Boolean                  $use_autofs      = true,
-  Boolean                  $use_sudo        = true,
-  Boolean                  $use_ssh         = true,
-  Boolean                  $enumerate_users = false,
-  Stdlib::Compat::Integer  $min_id          = '501'
+  Boolean $ldap            = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Boolean $use_autofs      = true,
+  Boolean $use_sudo        = true,
+  Boolean $use_ssh         = true,
+  Boolean $enumerate_users = false,
+  Integer $min_id          = 501
 ){
 
-  if $use_ldap {
+  if $ldap {
     # We include these here because, without a domain, SSSD should not be
     # running and will, in fact, complain if you attempt to run without a
     # domain.

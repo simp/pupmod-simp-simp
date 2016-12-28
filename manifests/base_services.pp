@@ -1,10 +1,7 @@
-# == Class: simp::base_services
-#
 # This class controls the state of various common system services that
 # you will generally want running on your system.
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::base_services {
 
@@ -13,16 +10,15 @@ class simp::base_services {
   # These services should be enabled, but not started if they can't be
   # found.
   service { 'irqbalance':
-      enable     => true,
-      hasrestart => true,
-      hasstatus  => false,
+    enable     => true,
+    hasrestart => true,
+    hasstatus  => false,
   }
 
   # These services need to be enabled and made sure to be running.
   package { 'netlabel_tools':
     ensure => 'latest'
   }
-
   service { 'netlabel':
     ensure     => 'running',
     enable     => true,
@@ -52,7 +48,7 @@ class simp::base_services {
 
       }
       else {
-        package { 'hal':      ensure => 'latest' }
+        package { 'hal': ensure => 'latest' }
 
         service { 'haldaemon':
           ensure     => 'running',

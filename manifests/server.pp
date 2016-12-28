@@ -1,24 +1,15 @@
-# == Class: simp::server
-#
 # This class sets up a SIMP server in such a way that it will be ready to serve
 # configuration data appropriately to your clients.
 #
-# == Parameters
-#
-# [*allow_simp_user*]
-# Type: Boolean
-# Default: true
+# @param allow_simp_user
 #   If true, ensure that the 'simp' user can login to the system.
 #
-# [*enable_rsync_shares*]
-# Type: Boolean
-# Default: true
+# @param enable_rsync_shares
 #   If true, enable all of the default SIMP rsync shares. You should not
 #   disable this unless you have specific needs and understand the dependencies
 #   on the various rsync shares.
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::server (
   Boolean $allow_simp_user     = true,

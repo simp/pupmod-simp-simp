@@ -56,7 +56,7 @@ server=1;
 <%
   t_puppet_cmd_line = "puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
 
-  unless @runpuppet_wait_for_cert.empty?
+  unless @runpuppet_wait_for_cert.nil?
     t_puppet_cmd_line += " --waitforcert #{@runpuppet_wait_for_cert}"
   end
 
@@ -102,7 +102,7 @@ case "$1" in
     fi
 
 <%
-  if @use_fips
+  if @fips
     _keylength = '2048'
   else
     _keylength = '4096'

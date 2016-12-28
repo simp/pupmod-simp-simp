@@ -1,17 +1,13 @@
-# == Class: simp::rsyslog::stock::log_local
-#
 # This class provides a general purpose log server suitable for local logging.
 #
 # WARNING: This is meant to be called from rsyslog::stock and should not be
 # used stand-alone.
 #
-# == Authors
-#
-# * Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::rsyslog::stock::log_shipper (
-  Array  $log_servers            = defined('$::log_servers') ? { true => $::log_servers, default => hiera('log_servers',[]) },
-  Array  $failover_log_servers   = defined('$::failover_log_servers') ? { true => $::failover_log_servers, default => hiera('failover_log_servers',[]) },
+  Array  $log_servers            = simplib::lookup('simp_options::syslog::log_servers', { 'default_value' => [] }),
+  Array  $failover_log_servers   = simplib::lookup('simp_options::syslog::failover_log_servers', { 'default_value' => [] }),
   String $security_relevant_logs = $::simp::rsyslog::stock::security_relevant_logs
 ) {
   assert_private()

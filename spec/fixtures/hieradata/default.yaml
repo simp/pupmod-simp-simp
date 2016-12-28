@@ -1,42 +1,42 @@
 ---
 # Globals
-client_nets :
+simp_options::trusted_nets :
   - 1.2.3.4/24
   - 5.6.7.8/16
-dns::search :
+simp_options::dns::search :
   - 'bar.baz'
-dns::servers :
+simp_options::dns::servers :
   - 1.2.3.4
-ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
-ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
-ldap::bind_pw : 's00per sekr3t!'
-ldap::bind_hash : '{SSHA}foobarbaz!!!!'
-ldap::sync_dn : "cn=sync,ou=Hosts,%{hiera('ldap::base_dn')}"
-ldap::sync_pw : 's00per sekr3t!'
-ldap::sync_hash : '{SSHA}foobarbaz!!!!'
-ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
-ldap::root_hash : '{SSHA}foobarbaz!!!!'
-ldap::uri :
+simp_options::ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
+simp_options::ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
+simp_options::ldap::bind_pw : 's00per sekr3t!'
+simp_options::ldap::bind_hash : '{SSHA}foobarbaz!!!!'
+simp_options::ldap::sync_dn : "cn=sync,ou=Hosts,%{hiera('ldap::base_dn')}"
+simp_options::ldap::sync_pw : 's00per sekr3t!'
+simp_options::ldap::sync_hash : '{SSHA}foobarbaz!!!!'
+simp_options::ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
+simp_options::ldap::root_hash : '{SSHA}foobarbaz!!!!'
+simp_options::ldap::uri :
   - 'ldap://server1.bar.baz'
   - 'ldap://server2.bar.baz'
-ldap::master : 'ldap://server1.bar.baz'
-log_servers :
+simp_options::ldap::master : 'ldap://server1.bar.baz'
+simp_options::syslog::log_servers :
   - 'syslog.bar.baz'
 pam::wheel_group : 'administrators'
-puppet::ca : 'puppet.bar.baz'
-puppet::ca_port : '8141'
-puppet::server : 'puppet.bar.baz'
-rsync::server : 'rsync.bar.baz'
-rsync::timeout : '1'
+simp_options::puppet::ca : 'puppet.bar.baz'
+simp_options::puppet::ca_port : '8141'
+simp_options::puppet::server : 'puppet.bar.baz'
+simp_options::rsync::server : 'rsync.bar.baz'
+simp_options::rsync::timeout : '1'
 ssg::profile : 'stig'
 selinux::enable : 'permissive'
-use_auditd : true
-use_iptables : true
-use_ldap : true
+simp_options::auditd : true
+simp_options::firewall : true
+simp_options::ldap : true
 
 # Management of Specific Classes
-simplib::runlevel::default : '3'
-simplib::resolv::nameservers :
+simp::runlevel : '3'
+resolv::nameservers :
   - 1.2.3.100
   - 5.6.7.100
 sssd::domains :
@@ -64,61 +64,56 @@ simp::snmpd::server::admin_user_priv_phrase :   'fun'
 # Remember: You need to copy everything that you want out of here if you want
 # to override things at a lower level!
 classes:
-  # You'll want this 99% of the time. However, you cannot use gfs2 with acpid!
-  - 'acpid'
-  - 'aide'
-  - 'auditd'
+  - '::aide'
+  - '::auditd'
   # Virus scanning.
-  - 'clamav'
-  # Ensuring reasonably sane defaults for both at and common.
-  - 'simplib::at'
-  - 'simplib::cron'
-  - 'simplib::chkrootkit'
-  - 'simplib::etc_default::nss'
-  - 'simplib::etc_default::useradd'
-  - 'simplib::host_conf'
-  - 'simplib::incron'
-  - 'simplib::issue'
-  - 'simplib::libuser_conf'
-  - 'simplib::login_defs'
-  - 'simplib::localusers'
-  - 'simplib::modprobe_blacklist'
-  - 'simplib::nsswitch'
-  - 'simplib::prelink'
-  - 'simplib::profile_settings'
-  - 'simplib::resolv'
-  - 'simplib::secure_mountpoints'
-  - 'simplib::sysconfig::init'
-  - 'simplib::sysctl'
-  - 'simplib::timezone'
-  - 'ntpd'
-  - 'openldap::pam'
+  - '::clamav'
+  - '::chkrootkit'
+  # Ensuring reasonably sane defaults.
+  - '::at'
+  - '::cron'
+  - '::incron'
+  - '::useradd'
+  - '::resolv'
+  - '::nsswitch'
+  - '::issue'
+  - '::tuned'
+  - '::swap'
+  - '::simp::kmod_blacklist'
+  - '::simp::mountpoints'
+  - '::simp::sysctl'
+  - '::timezone'
+  - '::ntpd'
   # Set up the access.conf basics, allow root locally and deny
   # everyone else from everywhere by default.
-  - 'pam::access'
+  - '::pam::access'
   # Enable 'wheel' access controls.
-  - 'pam::wheel'
+  - '::pam::wheel'
   # Set up the puppet server or client as appropriate for your system.
-  - 'pupmod'
+  - '::pupmod'
   # We certainly want logging
-  - 'simp::rsyslog::stock'
-  - 'selinux'
+  - '::simp::rsyslog::stock'
+  - '::selinux'
+  # Simp base class
+  - '::simp'
   # Set up the administrators group
-  - 'simp::admin'
+  - '::simp::admin'
   # A collection of applications that may be useful on most servers but are not
   # actually required for base functionality.
-  - 'simp::base_apps'
+  - '::simp::base_apps'
   # A group of services that you probably want running but are
   # technically optional.
-  - 'simp::base_services'
+  - '::simp::base_services'
   # This sets up an update schedule.
   # You should set variables under the simplib::yum_schedule namespace to
   # disable updates from specific repositories.
-#  - 'simp::yum'
+  - '::simp::yum'
   # Set up the SSH server and client.
-  - 'ssh'
-  - 'sudosh'
+  - '::ssh'
+  - '::sudosh'
   # We want to ensure that only the services we define in Puppet are
   # goig to be enabled and run.
-  - 'svckill'
-  - 'upstart'
+  - '::svckill'
+  # Add TPM support by default. This will grow over time but, if you have a
+  # TPM, you most likely want to use it!
+  - '::tpm'

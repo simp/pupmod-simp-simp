@@ -1,11 +1,7 @@
-# == Class: simp::freeradius::stock
-#
 # Provide a default configuration of FreeRadius that matches the one from Red
 # Hat.
 #
-# == Authors
-#
-# * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::freeradius::stock {
   include 'freeradius'

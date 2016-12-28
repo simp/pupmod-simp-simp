@@ -1,0 +1,32 @@
+<%
+    devnull = ''
+    if @quiet then
+      devnull = ' > /dev/null'
+    end
+
+    to_run="/usr/bin/yum clean all #{devnull}; /usr/bin/yum -q -y update --skip-broken"
+
+    if !@exclude_pkgs.empty? then
+        Array(@exclude_pkgs).flatten.each do |pkg|
+            to_run = to_run + " --exclude=" + pkg
+        end
+    end
+
+    if !(@repos.empty? or @repos.include?("all")) then
+        to_run = to_run + " --disablerepo=*"
+        Array(@repos).flatten.each do |repo|
+            to_run = to_run + " --enablerepo=" + repo
+        end
+    elsif !Array(@disable).flatten.delete_if{|x| x.empty?}.empty? then
+        Array(@disable).flatten.each do |repo|
+            to_run = to_run + " --disablerepo=" + repo
+        end
+    end
+
+    if !@randomize.zero? then
+      to_run = to_run + " -R " + @randomize.to_s
+    end
+
+    to_run = to_run + devnull
+-%>
+<%= to_run %><%= "" -%>

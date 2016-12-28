@@ -1,13 +1,13 @@
 # This class provides a default set of blacklist entries per the SCAP
 # Security Guide.
 #
-# @param enable_defaults Boolean
+# @param enable_defaults
 #   Enable to use the default blacklist, otherwise just the custom_blacklist will be used.
 #
-# @param blacklist Array[String]
+# @param blacklist
 #   List of kernel modules to be included by default
 #
-# @param custom_blacklist Array[String]
+# @param custom_blacklist
 #   Other kernel modules to be blacklisted
 #
 class simp::kmod_blacklist (
