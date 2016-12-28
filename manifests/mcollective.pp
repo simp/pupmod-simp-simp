@@ -178,13 +178,13 @@ class simp::mcollective (
       mq_cluster_brokers      => $activemq_brokers
     }
 
-    iptables::add_tcp_stateful_listen { 'allow_activemq':
+    iptables::listen::tcp_stateful { 'allow_activemq':
       client_nets => $client_nets,
       dports      => $_activemq_port
     }
 
-    pam::access::manage { 'activemq':
-      users   => 'activemq',
+    pam::access::rule { 'activemq':
+      users   => ['activemq'],
       origins => ['LOCAL'],
       notify  => Class['activemq::service']
     }

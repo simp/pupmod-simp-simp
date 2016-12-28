@@ -202,7 +202,7 @@ class simp (
   }
 
   if $max_logins {
-    pam::limits::add { 'max_logins':
+    pam::limits::rule { 'max_logins':
       domain => '*',
       type   => 'hard',
       item   => 'maxlogins',

@@ -221,7 +221,7 @@ class simp::sysctl (
         ]
       }
       if !$core_dumps {
-        pam::limits::add { 'prevent_core':
+        pam::limits::rule { 'prevent_core':
           domain => '*',
           type   => 'hard',
           item   => 'core',

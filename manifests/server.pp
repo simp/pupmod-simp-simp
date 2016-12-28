@@ -25,8 +25,8 @@ class simp::server (
   Boolean $enable_rsync_shares = true,
 ){
   if $allow_simp_user {
-    pam::access::manage { 'allow_simp':
-      users   => 'simp',
+    pam::access::rule { 'allow_simp':
+      users   => ['simp'],
       origins => ['ALL'],
       comment => 'The SIMP user, used to remotely login to the system in the case of a lockout.'
     }

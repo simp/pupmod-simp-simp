@@ -76,7 +76,7 @@ class simp::yum (
   validate_net_list($servers)
 
   if $enable_auto_updates {
-    include 'simplib::yum_schedule'
+    include '::simp::yum_schedule'
   }
   else {
     cron { 'yum_update': ensure => 'absent' }

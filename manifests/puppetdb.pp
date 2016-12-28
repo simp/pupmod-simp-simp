@@ -150,7 +150,7 @@ class simp::puppetdb (
   if $_simp_manage_firewall {
     include '::iptables'
 
-    iptables::add_tcp_stateful_listen { 'puppetdb':
+    iptables::listen::tcp_stateful { 'puppetdb':
       dports      => [$::puppetdb::ssl_listen_port],
       client_nets => $client_nets,
       # Need this for the auto-connect test script

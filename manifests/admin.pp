@@ -60,16 +60,16 @@ class simp::admin (
   # Make sure that the administrators group can access your system remotely.
   # Without some entry like this, you will not be able to access the system
   # remotely at all and will only be able to access the local system as root.
-  pam::access::manage { "Allow ${admin_group}":
+  pam::access::rule { "Allow ${admin_group}":
     comment => "Allow the ${admin_group} to access the system from anywhere",
-    users   => "(${admin_group})",
+    users   => ["(${admin_group})"],
     origins => $admins_allowed_from
   }
 
   # Allow the auditors to access the system.
-  pam::access::manage { "Allow ${auditor_group}":
+  pam::access::rule { "Allow ${auditor_group}":
     comment => "Allow the ${auditor_group} to access the system from anywhere",
-    users   => "(${auditor_group})",
+    users   => ["(${auditor_group})"],
     origins => $auditors_allowed_from
   }
 

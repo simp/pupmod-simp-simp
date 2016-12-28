@@ -108,9 +108,7 @@ fixtures:
     resolv:
       repo: https://github.com/jeefberkey/pupmod-simp-resolv
       branch: SIMP-2234
-    cron:
-      repo: https://github.com/jeefberkey/pupmod-simp-cron
-      branch: SIMP-2232
+    cron: https://github.com/simp/pupmod-simp-cron
     tuned: https://github.com/simp/pupmod-simp-tuned
     at: https://github.com/simp/pupmod-simp-at
     useradd:
