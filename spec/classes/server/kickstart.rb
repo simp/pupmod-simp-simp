@@ -1,6 +1,7 @@
+# Can't run this until lwe get access to server_facts
 require 'spec_helper'
 
-describe 'simp::kickstart_server' do
+describe 'simp::server::kickstart' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do

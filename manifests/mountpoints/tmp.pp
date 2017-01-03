@@ -1,40 +1,38 @@
 # This class manages the various tmp mounts with optional security features.
 #
-# @param secure_tmp
-#   If set to true>:
-#   * Set noexec,nosuid,nodev on temp directories as appropriate and bind mount
-#     /var/tmp to /tmp.
-#   * If /tmp is *not* a separate partition, then it will be bind mounted to
-#     itself with the modified settings.
-#   If set to <tt>false</tt>:
-#   * Do not manage the temp directories.
+# @see mount(8)
 #
-#   NOTE: If you have previously secured these directories, setting this to
-#   'false' will *not* set them to any particular other mode. This is because
-#   there is no way to know why you are changing these settings or what,
-#   exactly, you want them to be.
+# @param secure
+#   * Set ``noexec,nosuid,nodev`` on temp directories as appropriate and bind
+#     mount ``/var/tmp`` to ``/tmp``
+#   * If ``/tmp`` is *not* a separate partition, then it will be bind mounted
+#     to itself with the modified settings
+#
+#   * **NOTE:** If you have previously secured these directories, setting this
+#     to ``false`` will **not** set them to any particular other mode. This is
+#     because there is no way to know why you are changing these settings or
+#     what, exactly, you want them to be.
 #
 # @param tmp_opts
-#   If secure_tmp_mount is true, add these mount options to the /tmp
-#   directory. If set to an empty array, it will simply preserve the
-#   options that are currently in place.
+#   If ``$secure`` is ``true``, add these mount options to the ``/tmp``
+#   directory
 #
-#   Any 'no*' options will override their more permissive
-#   counterparts that are currently set on the system.
-#
-#   See man mount(8) for a list of options.
+#   * If set to an empty Array, it will simply preserve the options that are
+#     currently in place
+#   * Any ``no*`` options will override their more permissive counterparts that
+#     are currently set on the system
 #
 # @param var_tmp_opts
-#   Works the same way as *tmp_opts* above.
+#   Works the same way as ``$tmp_opts``
 #
 # @param dev_shm_opts
-#   Works the same way as *tmp_opts* above.
+#   Works the same way as ``$tmp_opts``
 #
 class simp::mountpoints::tmp (
-  Boolean $secure       = true,
-  Array   $tmp_opts     = ['noexec','nodev','nosuid'],
-  Array   $var_tmp_opts = ['noexec','nodev','nosuid'],
-  Array   $dev_shm_opts = ['noexec','nodev','nosuid']
+  Boolean       $secure       = true,
+  Array[String] $tmp_opts     = ['noexec','nodev','nosuid'],
+  Array[String] $var_tmp_opts = ['noexec','nodev','nosuid'],
+  Array[String] $dev_shm_opts = ['noexec','nodev','nosuid']
 ) {
 
   file { '/tmp':
@@ -42,8 +40,7 @@ class simp::mountpoints::tmp (
     owner  => 'root',
     group  => 'root',
     mode   => 'u+rwx,g+rwx,o+rwxt',
-    force  => true,
-    before => Mount['/tmp']
+    force  => true
   }
 
   file { '/var/tmp':
@@ -51,8 +48,7 @@ class simp::mountpoints::tmp (
     owner  => 'root',
     group  => 'root',
     mode   => 'u+rwx,g+rwx,o+rwxt',
-    force  => true,
-    before => Mount['/var/tmp']
+    force  => true
   }
 
   file { '/usr/tmp':
@@ -62,7 +58,6 @@ class simp::mountpoints::tmp (
     seltype => 'tmp_t',
     require => File['/var/tmp']
   }
-
 
   # If we decide to secure the tmp mounts....
   if $secure {
@@ -124,6 +119,8 @@ class simp::mountpoints::tmp (
       }
     }
 
+    File['/tmp'] -> Mount['/tmp']
+
     # If /var/tmp is mounted
     if $facts['tmp_mount_var_tmp'] and !empty($facts['tmp_mount_var_tmp']) {
       $_tmp_mount_var_tmp_opts = split($facts['tmp_mount_var_tmp'],',')
@@ -178,6 +175,8 @@ class simp::mountpoints::tmp (
         refreshonly => true
       }
     }
+
+    File['/var/tmp'] -> Mount['/var/tmp']
 
     # If /dev/shm is mounted
     if $facts['tmp_mount_dev_shm'] and !empty($facts['tmp_mount_dev_shm']) {

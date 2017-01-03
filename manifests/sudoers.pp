@@ -1,11 +1,16 @@
-# This class provides some useful aliases that many people have wanted
-# to use over time.
+# Provide useful aliases that many people have wanted to use over time.
 #
 # None of this is mandatory and all can be changed via the different
 # parameters.
 #
 # Each section simply adds the entry to the sudoers file by joining
 # the array together appropriately.
+#
+# @param common_aliases
+#   Enable the 'common' aliases from ``simp::suoders::aliases``
+#
+# @param default_entry
+#   The global default entry that should apply to **all** users
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -33,7 +38,5 @@ class simp::sudoers (
     content => $default_entry
   }
 
-  if $common_aliases {
-    include '::simp::sudoers::aliases'
-  }
+  if $common_aliases { include '::simp::sudoers::aliases' }
 }

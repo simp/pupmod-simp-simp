@@ -1,65 +1,51 @@
-# == Class: simp::puppetdb
-#
 # This class enables a PuppetDB server with defaults set for SIMP
 # compatibility.
 #
-# NOTE: Hiera variables *must* be set appropriately under the puppetdb
-# namespace.
+# **NOTE:** Hiera variables **must** be set appropriately under the puppetdb
+# namespace
 #
-# == Parameters
+# @param trusted_nets
+#   This is used to allow specific hosts access to PuppetDB
 #
-# [*client_nets*]
-#   Type: Array of IP Addresses/Hostnames
-#   Default: hiera('client_nets',['127.0.0.1'])
+#   * This should be restricted to only those hosts that need to talk to
+#     PuppetDB, primarly Puppet Masters.
 #
-#   This is used to allow specific hosts access to PuppetDB. This should be
-#   restricted to only those hosts that need to talk to PuppetDB, primarly
-#   Puppet Masters.
+#   * Unfortunately, this cannot be set via exported resources since PuppetDB
+#     needs to be running prior to exported resources functioning properly.
+#     Once PuppetDB is up, then you can switch this to exported resources mode
+#     using the **use_exported_resources** variable.
 #
-#   Unfortunately, this cannot be set via exported resources since PuppetDB
-#   needs to be running prior to exported resources functioning properly. Once
-#   PuppetDB is up, then you can switch this to exported resources mode using
-#   the *use_exported_resources* variable.
+# All other parameters are taken directly from ``puppetdb::server``
 #
-# All other parameters are taken directly from puppetdb::server and will be
-# collapsed into an embedded Hieradata file when data in modules exists.
-#
-# == Authors
-#
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::puppetdb (
-  Array[String]            $client_nets            = defined('$::client_nets') ? { true =>    $::client_nets,   default => hiera('client_nets',['127.0.0.1']) },
-  String                   $listen_address         = '127.0.0.1',
-  Stdlib::Compat::Integer  $listen_port            = '8138',
-  Boolean                  $open_listen_port       = false,
-  Boolean                  $ssl_deploy_certs       = true,
-  Boolean                  $ssl_set_cert_paths     = true,
-  String                   $ssl_listen_address     = '0.0.0.0',
-  Stdlib::Compat::Integer  $ssl_listen_port        = '8139',
-  Boolean                  $use_puppet_ssl_certs   = true,
-  Boolean                  $disable_ssl            = false,
-  Boolean                  $manage_package_repo    = false,
-  String                   $database_password      = passgen('simp_puppetdb'),
-  String                   $read_database_username = 'simp_puppetdb',
-  String                   $read_database_password = passgen('simp_read_puppetdb'),
-  String                   $read_database_name     = 'simp_puppetdb',
-  Boolean                  $read_database_ssl      = true,
-  Boolean                  $manage_firewall        = true,
-  Boolean                  $manage_puppetserver    = true,
-  String                   $java_max_memory        = '40%',
-  String                   $java_start_memory      = '',
-  Stdlib::Absolutepath     $java_tmpdir            = '/opt/puppetlabs/puppet/cache/pdb_tmp',
-  Boolean                  $java_heapdump_on_oom   = false,
-  Boolean                  $java_prefer_ipv4       = true,
-  Boolean                  $use_iptables           = defined('$::use_iptables') ? { true =>   $::use_iptables,  default => hiera('use_iptables', true) }
+  Simplib::Netlist     $trusted_nets           = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
+  Simplib::IP          $listen_address         = '127.0.0.1',
+  Simplib::Port        $listen_port            = 8138,
+  Boolean              $open_listen_port       = false,
+  Boolean              $ssl_deploy_certs       = true,
+  Boolean              $ssl_set_cert_paths     = true,
+  Simplib::IP          $ssl_listen_address     = '0.0.0.0',
+  Simplib::Port        $ssl_listen_port        = 8139,
+  Boolean              $use_puppet_ssl_certs   = true,
+  Boolean              $disable_ssl            = false,
+  Boolean              $manage_package_repo    = false,
+  String               $database_password      = passgen('simp_puppetdb'),
+  String               $read_database_username = 'simp_puppetdb',
+  String               $read_database_password = passgen('simp_read_puppetdb'),
+  String               $read_database_name     = 'simp_puppetdb',
+  Boolean              $read_database_ssl      = true,
+  Boolean              $manage_firewall        = true,
+  Boolean              $manage_puppetserver    = true,
+  String               $java_max_memory        = '40%',
+  Optional[String]     $java_start_memory      = undef,
+  Stdlib::Absolutepath $java_tmpdir            = '/opt/puppetlabs/puppet/cache/pdb_tmp',
+  Boolean              $java_heapdump_on_oom   = false,
+  Boolean              $java_prefer_ipv4       = true,
+  Boolean              $firewall               = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
-
-  validate_net_list($client_nets)
-  validate_port($listen_port)
-  validate_port($ssl_listen_port)
-
-  $_simp_manage_firewall = ($manage_firewall and $use_iptables)
+  $_simp_manage_firewall = ($manage_firewall and $firewall)
 
   $_java_max_memory = inline_template('<% if @java_max_memory[-1].chr == "%" %><%= (@memorysize_mb.to_f * (@java_max_memory[0..-2].to_f/100.0)).round.to_s + "m" %><% else %><%= @java_max_memory %><% end %>')
 
@@ -151,10 +137,10 @@ class simp::puppetdb (
     include '::iptables'
 
     iptables::listen::tcp_stateful { 'puppetdb':
-      dports      => [$::puppetdb::ssl_listen_port],
-      client_nets => $client_nets,
+      dports       => [$::puppetdb::ssl_listen_port],
+      trusted_nets => $trusted_nets,
       # Need this for the auto-connect test script
-      before      => Service[$::puppetdb::puppetdb_service]
+      before       => Service[$::puppetdb::puppetdb_service]
     }
   }
 }

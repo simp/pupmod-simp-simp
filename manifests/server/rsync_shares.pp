@@ -21,10 +21,10 @@
 #   Be **VERY** careful if you change this from the fact that it references by
 #   default.
 #
-# @param use_stunnel If set, hosts_allow will be set to ``127.0.0.1`` so that
+# @param stunnel If set, trusted_nets will be set to ``127.0.0.1`` so that
 #   the stunnel'd rsync will be used.
 #
-# @param hosts_allow
+# @param trusted_nets
 #   The hosts from which to allow access to the rsync shares. This option has
 #   no effect if ``$use_stunnel`` is ``true``.
 #
@@ -33,96 +33,94 @@
 class simp::server::rsync_shares (
   Stdlib::Absolutepath $rsync_base         = '/var/simp/rsync/environments',
   Optional[Array]      $rsync_environments = $facts["simp_rsync_environments"],
-  Boolean              $use_stunnel        = defined('$::use_stunnel') ? { true => $::use_stunnel, default => lookup('rsync::server::use_stunnel', { 'default_value' => true }) },
-  Array[String]        $hosts_allow        = lookup('client_nets', Array, 'first', ['127.0.0.1']),
+  Boolean              $stunnel            = simplib::lookup('simp_options::stunnel', { 'default_value' => false }),
+  Simplib::Netlist     $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
 ){
-
-  validate_net_list($hosts_allow)
 
   include '::rsync::server::global'
 
   if $rsync_environments {
     $_rsync_subdir = "${facts['operatingsystem']}/${facts['operatingsystemmajrelease']}"
 
-    if $use_stunnel {
-      $_hosts_allow = ['127.0.0.1']
+    if $stunnel {
+      $_trusted_nets = ['127.0.0.1']
     }
     else {
-      $_hosts_allow = $hosts_allow
+      $_trusted_nets = $trusted_nets
     }
 
     $rsync_environments.each |String $_env| {
       rsync::server::section { "default_${_env}":
-        comment     => "The default file path for Environment: ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/default",
-        hosts_allow => $_hosts_allow
+        comment      => "The default file path for Environment: ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/default",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "openldap_server_${_env}":
-        auth_users  => ["openldap_rsync_${_env}"],
-        comment     => "Configuration for OpenLDAP for Environment: ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/openldap/server",
-        hosts_allow => $_hosts_allow
+        auth_users   => ["openldap_rsync_${_env}"],
+        comment      => "Configuration for OpenLDAP for Environment: ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/openldap/server",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "bind_dns_default_${_env}":
-        auth_users  => ["bind_dns_default_rsync_${_env}"],
-        comment     => "Default DNS configurations for named for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/bind_dns/default",
-        hosts_allow => $_hosts_allow
+        auth_users   => ["bind_dns_default_rsync_${_env}"],
+        comment      => "Default DNS configurations for named for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/bind_dns/default",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "apache_${_env}":
         auth_users     => ["apache_rsync_${_env}"],
         comment        => "Apache configurations for Environment ${_env}",
         path           => "${rsync_base}/${_env}/${_rsync_subdir}/apache",
-        hosts_allow    => '127.0.0.1',
+        trusted_nets   => '127.0.0.1',
         outgoing_chmod => 'o-rwx'
       }
 
       rsync::server::section { "tftpboot_${_env}":
-        auth_users  => ["tftpboot_rsync_${_env}"],
-        comment     => "Tftpboot server configurations for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/tftpboot",
-        hosts_allow => $_hosts_allow
+        auth_users   => ["tftpboot_rsync_${_env}"],
+        comment      => "Tftpboot server configurations for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/tftpboot",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "mcafee_${_env}":
-        comment     => "McAfee DAT files for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/mcafee",
-        hosts_allow => $_hosts_allow
+        comment      => "McAfee DAT files for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/mcafee",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "clamav_${_env}":
-        comment     => "ClamAV Virus Database Updates for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/clamav",
-        hosts_allow => $_hosts_allow
+        comment      => "ClamAV Virus Database Updates for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/clamav",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "dhcpd_${_env}":
-        auth_users  => ["dhcpd_rsync_${_env}"],
-        comment     => "DHCP Configurations for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/dhcpd",
-        hosts_allow => $_hosts_allow
+        auth_users   => ["dhcpd_rsync_${_env}"],
+        comment      => "DHCP Configurations for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/dhcpd",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "snmp_${_env}":
-        comment     => "SNMP MIBs and Modules for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/snmp",
-        hosts_allow => $_hosts_allow
+        comment      => "SNMP MIBs and Modules for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/snmp",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "freeradius_${_env}":
-        auth_users  => ["freeradius_systems_${_env}"],
-        comment     => "Freeradius configuration files for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/freeradius",
-        hosts_allow => $_hosts_allow
+        auth_users   => ["freeradius_systems_${_env}"],
+        comment      => "Freeradius configuration files for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/freeradius",
+        trusted_nets => $_trusted_nets
       }
 
       rsync::server::section { "jenkins_plugins_${_env}":
-        comment     => "Jenkins Configuration for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/jenkins_plugins",
-        hosts_allow => $_hosts_allow,
+        comment      => "Jenkins Configuration for Environment ${_env}",
+        path         => "${rsync_base}/${_env}/${_rsync_subdir}/jenkins_plugins",
+        trusted_nets => $_trusted_nets
       }
     }
   }

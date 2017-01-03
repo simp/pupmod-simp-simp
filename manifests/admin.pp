@@ -1,76 +1,78 @@
-# == Class: simp::admin
+# Set up a host of common administrative functions including administrator
+# group system access, auditor access, and default ``sudo`` rules
 #
-# This class sets up a host of common administrative functions including
-# administrator group system access, auditor access, and default sudo rules.
+# @param admin_group
+#   The group name of the Administrators for the system
 #
-# == Parameters
+#   * This group will be provided with the ability to ``sudo`` to ``root`` on
+#     the system
 #
-# [*admin_group*]
-# Type: String
-# Default: administrators
-#   The group name of the administrators of the system.
-#   This group will be provided with the ability to sudo to root on the system.
+# @param passwordless_admin_sudo
+#   Allow administrators to use ``sudo`` without a password
 #
-# [*passwordless_admin_sudo*]
-# Type: Boolean
-# Default: true
-#   If true, allow administrators to use sudo without a password. This is on by
-#   default due to the expected use of SSH keys and lack of local passwords.
+#   * This is on by default due to the expected use of SSH keys without local
+#     passwords
 #
-# [*auditor_group*]
-# Type: String
-# Default: security
-#   The group name of the system auditors group.
-#   This group will be provided with the ability to perform selected safe
-#   commands as root on the system for auditing purposes.
+# @param auditor_group
+#   The group name of the system auditors group
 #
-# [*passwordless_auditor_sudo*]
-# Type: Boolean
-# Default: true
-#   If true, allow auditors to use sudo without a password. This is on by
-#   default due to the expected use of SSH keys and lack of local passwords.
+#   * This group is provided with the ability to perform selected safe commands
+#     as ``root`` on the system for auditing purposes
 #
-# [*admin_allowed_from*]
-# Type: Array of pam::access compatible entries
-# Default: ['ALL']
-#   The locations from which administrators are allowed to access the system.
-#   Set to all locations by default.
+# @param passwordless_auditor_sudo
+#   Allow auditors to use ``sudo`` without a password
 #
-# [*auditors_allowed_from*]
-# Type: Array of pam::access compatible entries
-# Default: hiera('client_nets',['ALL'])
-#   The locations from which auditors are allowed to access the system.
-#   Set to client_nets by default with a fallback of ALL locations.
+#   * This is on by default due to the expected use of SSH keys without local
+#     passwords
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param admin_allowed_from
+#   The locations from which administrators are allowed to access the system
+#
+# @param auditors_allowed_from
+#   The locations from which auditors are allowed to access the system
+#
+# @param force_logged_shell
+#   Only allow ``sudo`` to a shell via a logging shell
+#
+# @param logged_shell
+#   The name of the logged shell to use
+#
+# @param pam
+#   Allow SIMP management of the PAM stack
+#
+#   * Without this, it is quite likely that your system is not going to respond
+#     as expected with the rules in this class
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
-  String        $admin_group               = 'administrators',
-  Boolean       $passwordless_admin_sudo   = true,
-  String        $auditor_group             = 'security',
-  Boolean       $passwordless_auditor_sudo = true,
-  Array[String] $admins_allowed_from       = ['ALL'],
-  Array[String] $auditors_allowed_from     = defined('$::client_nets') ? { true => $::client_nets, default => hiera('client_nets',['ALL']) },
-  Boolean       $force_sudosh              = true
+  String         $admin_group               = 'administrators',
+  Boolean        $passwordless_admin_sudo   = true,
+  String         $auditor_group             = 'security',
+  Boolean        $passwordless_auditor_sudo = true,
+  Array[String]  $admins_allowed_from       = ['ALL'],
+  Array[String]  $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
+  Boolean        $force_logged_shell        = true,
+  Enum['sudosh'] $logged_shell              = 'sudosh',
+  Boolean        $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false })
 ){
 
   include '::simp::sudoers'
 
-  # Make sure that the administrators group can access your system remotely.
-  # Without some entry like this, you will not be able to access the system
-  # remotely at all and will only be able to access the local system as root.
-  pam::access::rule { "Allow ${admin_group}":
-    comment => "Allow the ${admin_group} to access the system from anywhere",
-    users   => ["(${admin_group})"],
-    origins => $admins_allowed_from
-  }
+  if $pam {
+    include '::pam'
 
-  # Allow the auditors to access the system.
-  pam::access::rule { "Allow ${auditor_group}":
-    comment => "Allow the ${auditor_group} to access the system from anywhere",
-    users   => ["(${auditor_group})"],
-    origins => $auditors_allowed_from
+    pam::access::rule { "Allow ${admin_group}":
+      comment => "Allow the ${admin_group} to access the system from anywhere",
+      users   => ["(${admin_group})"],
+      origins => $admins_allowed_from
+    }
+
+    pam::access::rule { "Allow ${auditor_group}":
+      comment => "Allow the ${auditor_group} to access the system from anywhere",
+      users   => ["(${auditor_group})"],
+      origins => $auditors_allowed_from
+    }
   }
 
   # Set up some default sudoers entries
@@ -83,50 +85,47 @@ class simp::admin (
     content => [ $auditor_group ]
   }
 
-  $_force_sudosh = $force_sudosh ? {
-    true    => '/usr/bin/sudosh',
-    default => 'ALL'
+  if $force_logged_shell {
+    # We restrict this so we don't need a fallback
+    if $logged_shell == 'sudosh' {
+      include '::sudosh'
+
+      $_shell_cmd = '/usr/bin/sudosh'
+    }
+  }
+  else {
+    $_shell_cmd = 'ALL'
   }
 
   sudo::user_specification { 'admin_global':
     user_list => "%${admin_group}",
-    host_list => 'ALL',
+    host_list => [$facts['fqdn']],
     runas     => 'ALL',
-    cmnd      => $_force_sudosh,
+    cmnd      => [$_shell_cmd],
     passwd    => !$passwordless_admin_sudo
   }
 
   # The following two are especially important if you're using sudosh.
   # They allow you to recover from destroying the certs in your environment.
-  sudo::user_specification { 'admin_run_puppetd':
+  sudo::user_specification { 'admin_run_puppet':
     user_list => "%${admin_group}",
-    host_list => 'ALL',
+    host_list => [$facts['fqdn']],
     runas     => 'root',
-    cmnd      => '/usr/sbin/puppetd',
-    passwd    => false
-  }
-
-  sudo::user_specification { 'admin_run_puppetca':
-    user_list => "%${admin_group}",
-    host_list => 'ALL',
-    runas     => 'root',
-    cmnd      => '/usr/sbin/puppetca',
-    passwd    => false
+    cmnd      => ['/usr/sbin/puppet', '/opt/puppetlabs/bin/puppet'],
+    passwd    => !$passwordless_admin_sudo
   }
 
   sudo::user_specification { 'admin_clean_puppet_certs':
     user_list => "%${admin_group}",
-    host_list => 'ALL',
+    host_list => [$facts['fqdn']],
     runas     => 'root',
-    # This really should be the ssldir from the client, but we need a
-    # client_settings fact for that.
-    cmnd      => "/bin/rm -rf ${settings::ssldir}",
-    passwd    => false
+    cmnd      => "/bin/rm -rf ${facts['puppet_settings']['ssldir']}",
+    passwd    => !$passwordless_admin_sudo
   }
 
   sudo::user_specification { 'auditors':
     user_list => "%${auditor_group}",
-    host_list => 'ALL',
+    host_list => [$facts['fqdn']],
     runas     => 'root',
     cmnd      => 'AUDIT',
     passwd    => !$passwordless_auditor_sudo

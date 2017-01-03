@@ -61,5 +61,4 @@ class simp::nsswitch (
   class { '::nsswitch':
     * => $default_params + $options
   }
-
 }

@@ -1,6 +1,7 @@
+# Can't run this until we get access to server_facts
 require 'spec_helper'
 
-describe 'simp::freeradius::stock_ldap' do
+describe 'simp::server::yum' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -20,8 +21,10 @@ describe 'simp::freeradius::stock_ldap' do
           facts
         end
 
-        it { is_expected.to create_class('simp::freeradius::stock_ldap') }
-        it { is_expected.to compile.with_all_deps }
+        context 'base' do
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_simp_apache__add_site('yum') }
+        end
       end
     end
   end

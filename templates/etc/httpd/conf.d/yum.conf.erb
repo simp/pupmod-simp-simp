@@ -1,7 +1,7 @@
 <%
   t_allowroot = nil
-  if @l_client_nets then
-    t_allowroot = scope.function_munge_httpd_networks(Array(@l_client_nets)).map{ |x|
+  if @_trusted_nets
+    t_allowroot = scope.function_munge_httpd_networks(Array(@_trusted_nets)).map{ |x|
       x = "    Allow from #{x}"
     }.join("\n")
   end
@@ -19,10 +19,10 @@ Alias <%= t_dir %> /var/www<%= t_dir %>
     Order allow,deny
     Allow from 127.0.0.1
     Allow from ::1
-<% if t_allowroot then -%>
+<% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
-    Allow from <%= @domain %>
+    Allow from <%= @facts['domain'] %>
 </Location>
 
 <% end -%>

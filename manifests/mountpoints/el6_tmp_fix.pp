@@ -1,12 +1,12 @@
+# There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect
+# permissions after the *second* reboot after bootstrapping SIMP. This upstart
+# job is an effective, but kludgy, way to remedy this issue
 #
+# We have not been able to repeat the issue reliably enough in a controlled
+# environment to determine the root cause.
 class simp::mountpoints::el6_tmp_fix {
   include '::upstart'
 
-  # There is a bizarre bug where /tmp and /var/tmp will have incorrect
-  # permissions after the *second* reboot after bootstrapping SIMP. This
-  # upstart job is an effective, but kludgy, way to remedy this issue. We
-  # have not been able to repeat the issue reliably enough in a
-  # controlled environment to determine the root cause.
   upstart::job { 'fix_tmp_perms':
     main_process_type => 'script',
     main_process      => '
@@ -24,5 +24,4 @@ fi
     start_on          => 'runlevel [0123456]',
     description       => 'Used to enforce /tmp and /var/tmp permissions to be 777.'
   }
-
 }

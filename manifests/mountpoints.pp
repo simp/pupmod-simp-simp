@@ -1,36 +1,47 @@
-# This class adds security settings to several mounts on the system.
+# Add security settings to several mounts on the system.
 #
-# @params manage_tmp_perms
-#   Ensure that  /tmp, /var/tmp, and /usr/tmp, all have the proper
+# @param manage_tmp_perms
+#   Ensure that  ``/tmp``, ``/var/tmp``, and ``/usr/tmp``, all have the proper
 #   permissions and SELinux contexts.
 #
-# @params manage_proc
-#   If set, manage the /proc mount on the system
+# @param manage_proc
+#   Manage the ``/proc`` mount on the system
 #
-# @params manage_sys
-#   If set, manage the /sys mount on the system
+# @param manage_sys
+#   Manage the ``/sys`` mount on the system
 #
-# @params manage_dev_pts
-#   If set, manage the /dev/pts mount on the system
+# @param sys_options
+#   The mountpoint options for ``/sys``
+#
+# @param manage_dev_pts
+#   Manage the ``/dev/pts`` mount on the system
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::mountpoints (
-  Boolean $manage_sys       = true,
   Boolean $manage_tmp_perms = true,
+  Boolean $manage_sys       = true,
+  String  $sys_options      = 'rw,nodev,noexec',
   Boolean $manage_dev_pts   = true,
   Boolean $manage_proc      = true
 ) {
 
-  # Set some basic mounts (may be RHEL specific...)
+  if $manage_tmp_perms { include '::simp::mountpoints::tmp' }
+  if $manage_proc { include '::simp::mountpoints::proc' }
+
+
+  if $facts['os']['name'] in ['RedHat','CentOS'] and (versioncmp($facts['os']['release']['major'],'6') == 0) {
+    include '::simp::mountpoints::el6_tmp_fix'
+  }
+
   if $manage_dev_pts {
     mount { '/dev/pts':
       ensure   => 'mounted',
       device   => 'devpts',
       fstype   => 'devpts',
       options  => 'rw,gid=5,mode=620,noexec',
-      dump     => '0',
-      pass     => '0',
+      dump     => 0,
+      pass     => 0,
       target   => '/etc/fstab',
       remounts => true
     }
@@ -40,23 +51,10 @@ class simp::mountpoints (
       ensure   => 'mounted',
       device   => 'sysfs',
       fstype   => 'sysfs',
-      options  => 'rw,nodev,noexec',
-      pass     => '0',
+      options  => $sys_options,
+      pass     => 0,
       target   => '/etc/fstab',
       remounts => true
     }
   }
-
-  if $manage_tmp_perms {
-    include '::simp::mountpoints::tmp'
-  }
-
-  if $manage_proc {
-    include '::simp::mountpoints::proc'
-  }
-
-  if $::operatingsystem in ['RedHat','CentOS'] and (versioncmp($::operatingsystemmajrelease,'6') == 0) {
-    include '::simp::mountpoints::el6_tmp_fix'
-  }
-
 }

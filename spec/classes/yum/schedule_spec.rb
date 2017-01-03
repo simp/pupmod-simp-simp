@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'simp::yum_schedule' do
+describe 'simp::yum::schedule' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       let(:facts) do

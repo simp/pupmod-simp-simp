@@ -1,13 +1,13 @@
 # Manage resources related to the root user
 #
-# @params manage_perms
+# @param manage_perms
 #   Ensure that /root has restricted permissions and proper SELinux
 #   contexts.
 #
-# @params manage_user
+# @param manage_user
 #   Ensure the root user has appropriate UIDs and groups, etc
 #
-# @params manage_group
+# @param manage_group
 #  Ensure the root group has appropriate UIDs, etc
 #
 class simp::root_user (

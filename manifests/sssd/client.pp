@@ -1,90 +1,95 @@
-# == Class: simp::sssd::client
+# This class sets up an SSSD client based on the normal SIMP parameters
 #
-# This class sets up an SSSD client based on the normal SIMP parameters.  This
-# should work for most out-of-the-box installations. Otherwise, it serves as an
-# example of what you can do to make it work for your environment.
+# This should work for most out-of-the-box installations. Otherwise, it serves
+# as an example of what you can do to make it work for your environment.
 #
 # Since this class calls several defines, you will want to use a resource
 # collector to enhance/override the resource declarations.
 #
-# See: https://docs.puppetlabs.com/puppet/latest/reference/lang_resources_advanced.html#amending-attributes-with-a-collector
+# If you don't specify either ``$ldap_domain`` or ``$local_domain``, this class
+# will not execute anything on the client.
 #
-# == Parameters
+# @see https://docs.puppetlabs.com/puppet/latest/reference/lang_resources_advanced.html#amending-attributes-with-a-collector Amending Attributes With a Collector
 #
-# [*use_ldap*]
-# Type: Boolean
-# Default: true
-#   If true, enable the LDAP hooks via SSSD. If false, makes this class a noop.
+# @param ldap_domain
+#   Enable the LDAP hooks via SSSD
 #
-# [*use_autofs*]
-# Type: Boolean
-# Default: true
-#   If true, enable autofs support in SSSD.
+# @param local_domain
+#   Enable the 'LOCAL' domain
 #
-# [*use_sudo*]
-# Type: Boolean
-# Default: true
-#   If true, enable sudo support in SSSD.
+# @param autofs
+#   Enable ``autofs`` support in SSSD
 #
-# [*use_ssh*]
-# Type: Boolean
-# Default: true
-#   If true, enable ssh support in SSSD.
+# @param sudo
+#   Enable ``sudo`` support in SSSD
 #
-# [*enumerate_users*]
-# Type: Boolean
-# Default: false
-#   If true, have SSSD list and cache all the users that it can find on the
-#   LDAP server.
+# @param ssh
+#   Enable ``ssh`` support in SSSD
 #
-# [*min_id*]
-# Type: Integer
-# Default: '501'
-#   The lowest ID number that SSSD should recognize from the remote server.
-#   This will be raised to '1000' in a future release.
+# @param enumerate_users
+#   Have SSSD list and cache all the users that it can find on the remote system
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+#   * Take care that you don't overwhelm your LDAP server if you enable this
+#
+# @param cache_credentials
+#   Have SSSD cache the credentials of users that login to the system
+#
+# @param min_id
+#   The lowest user ID that SSSD should recognize from the remote server
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::sssd::client (
-  Boolean                  $use_ldap        = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',true) },
-  Boolean                  $use_autofs      = true,
-  Boolean                  $use_sudo        = true,
-  Boolean                  $use_ssh         = true,
-  Boolean                  $enumerate_users = false,
-  Stdlib::Compat::Integer  $min_id          = '501'
+  Boolean $ldap_domain       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Boolean $local_domain      = true,
+  Boolean $autofs            = true,
+  Boolean $sudo              = true,
+  Boolean $ssh               = true,
+  Boolean $enumerate_users   = false,
+  Boolean $cache_credentials = true,
+  Integer $min_id            = 1000
 ){
-
-  if $use_ldap {
-    # We include these here because, without a domain, SSSD should not be
-    # running and will, in fact, complain if you attempt to run without a
-    # domain.
+  if $ldap_domain or $local_domain {
     include '::sssd'
 
     include '::sssd::service::nss'
     include '::sssd::service::pam'
 
-    if $use_autofs { include '::sssd::service::autofs' }
-    if $use_sudo { include '::sssd::service::sudo' }
-    if $use_ssh { include '::sssd::service::ssh' }
+    if $autofs { include '::sssd::service::autofs' }
+    if $sudo { include '::sssd::service::sudo' }
+    if $ssh { include '::sssd::service::ssh' }
 
-    sssd::domain { 'LDAP':
-      description       => 'LDAP Users Domain',
-      id_provider       => 'ldap',
-      auth_provider     => 'ldap',
-      chpass_provider   => 'ldap',
-      access_provider   => 'ldap',
-      sudo_provider     => 'ldap',
-      autofs_provider   => 'ldap',
-      # This needs to change in SIMP 6!
-      min_id            => $min_id,
-      enumerate         => $enumerate_users,
-      cache_credentials => true
+    if $local_domain {
+      sssd::domain { 'LOCAL':
+        description       => 'LOCAL Users Domain',
+        id_provider       => 'local',
+        auth_provider     => 'local',
+        access_provider   => 'permit',
+        min_id            => $min_id,
+        # These don't make sense on the local domain
+        enumerate         => false,
+        cache_credentials => false
+      }
     }
 
-    sssd::provider::ldap { 'LDAP':
-      ldap_default_authtok_type => 'password',
-      ldap_user_gecos           => 'dn'
+    if $ldap_domain {
+      sssd::domain { 'LDAP':
+        description       => 'LDAP Users Domain',
+        id_provider       => 'ldap',
+        auth_provider     => 'ldap',
+        chpass_provider   => 'ldap',
+        access_provider   => 'ldap',
+        sudo_provider     => 'ldap',
+        autofs_provider   => 'ldap',
+        min_id            => $min_id,
+        enumerate         => $enumerate_users,
+        cache_credentials => $cache_credentials
+      }
+
+      sssd::provider::ldap { 'LDAP':
+        ldap_default_authtok_type => 'password',
+        ldap_user_gecos           => 'dn'
+      }
     }
   }
 }

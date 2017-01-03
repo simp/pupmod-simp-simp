@@ -1,117 +1,76 @@
-# == Class: Simp MCollective
+# Set up java, activemq, and mcollective with SSL fully enabled
 #
-# This class sets up java, activemq, and mcollective with SSL fully enabled.
+# See the [MCollective README](modules/mcollective/README) for more information
 #
-# See the MCollective README for more information (modules/mcollective/README)
+# @param activemq_server_config
+#   The content for activemq
 #
-# == Parameters
+# @param trusted_nets
+#   The IP range on which the ``activemq_port`` variable will be open
 #
-# [*activemq_server_config*]
-# Type: Template
-# Default : template('simp/activemq.xml.erb')
-#   The template to use for activemq.
+# @param activemq_port
+#   The port to open for activemq
 #
-# [*client_nets*]
-# Type: Netlist in CIDR form
-# Default : $::client_nets
-#   The ip range on which the activemq_port variable will be open.
+# @param truststore_certificate
+#   Path to the CA file to be placed in the activemq truststore
 #
-# [*activemq_port*]
-# Type: String
-# Default: 61614
-#   The port to open for activemq.
+# @param truststore_target
+#   Path to install the activemq truststore
 #
-# [*truststore_certificate*]
-# Type: String
-# Default: /etc/pki/cacerts/cacerts.pem
-#   Path to the ca file to be placed in the activemq truststore.
+# @param truststore_password
+#   Password to access the activemq truststore
 #
-# [*truststore_target*]
-# Type: String
-# Default: '/etc/activemq/truststore.jks'
-#   Path to install the activemq truststore.
+# @param keystore_certificate
+#   Path to the cert to use for the activemq keystore
 #
-# [*truststore_password*]
-# Type: String
-# Default: No default
-#   Password to access the activemq truststore.
+# @param keystore_key
+#   Path to the key to use for the activemq keystore
 #
-# [*keystore_certificate*]
-# Type: String
-# Default: /etc/pki/public/${::fqdn}.pub
-#   Path to the cert to use for the activemq keystore.
+# @param keystore_target
+#   Path to install the activemq keystore
 #
-# [*keystore_key*]
-# Type: String
-# Default: /etc/pki/private/${::fqdn}.pem
-#   Path to the key to use for the activemq keystore.
+# @param keystore_password
+#   Password to access the activemq keystore
 #
-# [*keystore_target*]
-# Type: String
-# Default: /etc/activemq/keystore.jks
-#   Path to install the activemq keystore.
-#
-# [*keystore_password*]
-# Type: String
-# Default: No default
-#   Password to access the activemq keystore.
-#
-# [*installplugins*]
-# Type: boolean
-# Default: true
+# @param installplugins
 #   Install the Puppet, Service and Package mcollective plugins
 #
-# == Hiera Variables
-#
-# All hiera variables are used in both mcollective and activemq
-# modules.  See the mcollective module README for further documentation.
-#
-# == Example Setup
-#
-# See the MCollective README for usage. (modules/mcollective/README)
-#
-# == Authors
-#
-# Nick Markowski <nmarkowski@keywcorp.com>
+# @author Nick Markowski <nmarkowski@keywcorp.com>
 #
 class simp::mcollective (
-  Boolean                           $mco_server              = true,
-  Boolean                           $mco_client              = false,
-  Array[String]                     $client_nets             = defined('$::client_nets') ? { true => getvar('::client_nets'), default => hiera('client_nets', ['127.0.0.1']) },
-  Stdlib::Absolutepath              $truststore_certificate  = '/etc/pki/cacerts/cacerts.pem',
-  Stdlib::Absolutepath              $truststore_target       = '/etc/activemq/truststore.jks',
-  String                            $truststore_password     = passgen('simp_mco_truststore'),
-  Stdlib::Absolutepath              $keystore_certificate    = "/etc/pki/public/${::fqdn}.pub",
-  Stdlib::Absolutepath              $keystore_key            = "/etc/pki/private/${::fqdn}.pem",
-  Stdlib::Absolutepath              $keystore_target         = '/etc/activemq/keystore.jks',
-  String                            $keystore_password       = passgen('simp_mco_keystore'),
-  Optional[String]                  $activemq_server_config  = undef,
-  Boolean                           $activemq_ssl            = true,
-  String                            $activemq_user           = passgen('simp_mco_activemq_username', { 'length' => 12, 'complexity' => 0 }),
-  String                            $activemq_password       = passgen('simp_mco_activemq'),
-  String                            $activemq_admin_user     = passgen('simp_mco_activemq_admin_username', { 'length' => 12, 'complexity' => 0}),
-  String                            $activemq_admin_password = passgen('simp_mco_activemq_admin'),
-  String                            $activemq_port           = '',
-  Boolean                           $activemq_console        = false,
-  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_memory_usage   = '20 mb',
-  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_store_usage    = '1 gb',
-  Pattern[/^([0-9]+\s)[kmgt][b]$/]  $activemq_temp_usage     = '100 mb',
-  Array[String]                     $activemq_brokers        = [$::fqdn],
-  Boolean                           $installplugins          = true
+  Boolean                          $mco_server              = true,
+  Boolean                          $mco_client              = false,
+  Simplib::Netlist                 $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
+  Stdlib::Absolutepath             $truststore_certificate  = '/etc/pki/cacerts/cacerts.pem',
+  Stdlib::Absolutepath             $truststore_target       = '/etc/activemq/truststore.jks',
+  String                           $truststore_password     = passgen('simp_mco_truststore'),
+  Stdlib::Absolutepath             $keystore_certificate    = "/etc/pki/public/${::fqdn}.pub",
+  Stdlib::Absolutepath             $keystore_key            = "/etc/pki/private/${::fqdn}.pem",
+  Stdlib::Absolutepath             $keystore_target         = '/etc/activemq/keystore.jks',
+  String                           $keystore_password       = passgen('simp_mco_keystore'),
+  Optional[String]                 $activemq_server_config  = undef,
+  Boolean                          $activemq_ssl            = true,
+  String                           $activemq_user           = passgen('simp_mco_activemq_username', { 'length' => 12, 'complexity' => 0 }),
+  String                           $activemq_password       = passgen('simp_mco_activemq'),
+  String                           $activemq_admin_user     = passgen('simp_mco_activemq_admin_username', { 'length' => 12, 'complexity' => 0}),
+  String                           $activemq_admin_password = passgen('simp_mco_activemq_admin'),
+  Optional[Simplib::Port]          $activemq_port           = undef,
+  Boolean                          $activemq_console        = false,
+  Pattern[/^([0-9]+\s)[kmgt][b]$/] $activemq_memory_usage   = '20 mb',
+  Pattern[/^([0-9]+\s)[kmgt][b]$/] $activemq_store_usage    = '1 gb',
+  Pattern[/^([0-9]+\s)[kmgt][b]$/] $activemq_temp_usage     = '100 mb',
+  Simplib::Netlist                 $activemq_brokers        = [$facts['fqdn']],
+  Boolean                          $installplugins          = true
 ) {
-
-  validate_net_list($client_nets)
-
-  if !empty($activemq_port) {
-    validate_port($activemq_port)
+  if $activemq_port {
     $_activemq_port = $activemq_port
   }
   else {
     if $activemq_ssl {
-      $_activemq_port = '61614'
+      $_activemq_port = 61614
     }
     else {
-      $_activemq_port = '61613'
+      $_activemq_port = 61613
     }
   }
 
@@ -179,8 +138,8 @@ class simp::mcollective (
     }
 
     iptables::listen::tcp_stateful { 'allow_activemq':
-      client_nets => $client_nets,
-      dports      => $_activemq_port
+      trusted_nets => $trusted_nets,
+      dports       => $_activemq_port
     }
 
     pam::access::rule { 'activemq':

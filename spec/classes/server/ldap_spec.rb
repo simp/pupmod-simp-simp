@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'simp::ganglia::stock' do
+describe 'simp::server::ldap' do
   context 'supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
@@ -20,10 +20,21 @@ describe 'simp::ganglia::stock' do
           facts
         end
 
-        # Won't pass until SIMP-1723 is completed.
-        pending("it { is_expected.to create_class('simp::ganglia::monitor') }")
-        pending("it { is_expected.to create_class('simp::ganglia::meta') }")
-        pending("it { is_expected.to create_class('simp::ganglia::web') }")
+        it { is_expected.to compile.with_all_deps }
+
+        context 'is_slave' do
+          let(:params){{ :is_slave => true }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_openldap__server__syncrepl('111') }
+        end
+
+        context 'use_lastbind' do
+          let(:params){{ :enable_lastbind => true }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_class('openldap::slapo::lastbind') }
+        end
       end
     end
   end

@@ -1,26 +1,19 @@
-# == Class: simp::base_services
-#
 # This class controls the state of various common system services that
 # you will generally want running on your system.
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_services {
 
+  package { 'irqbalance': ensure => 'latest' }
   package { 'mcstrans': ensure => 'latest' }
+  package { 'netlabel_tools': ensure => 'latest' }
 
-  # These services should be enabled, but not started if they can't be
-  # found.
   service { 'irqbalance':
-      enable     => true,
-      hasrestart => true,
-      hasstatus  => false,
-  }
-
-  # These services need to be enabled and made sure to be running.
-  package { 'netlabel_tools':
-    ensure => 'latest'
+    enable     => true,
+    hasrestart => true,
+    hasstatus  => false,
+    require    => Package['irqbalance']
   }
 
   service { 'netlabel':
@@ -31,15 +24,15 @@ class simp::base_services {
     require    => Package['netlabel_tools']
   }
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'RedHat','CentOS': {
-      if $::operatingsystemmajrelease > '6' {
+      if $facts['os']['release']['major'] > '6' {
         # For now, these will be commentd out and ignored by svckill
         # Puppet cannot enable these services because there is no
         # init.d script or systemd script to do so.
 
-        #        service { 'quotaon': enable => true }
-        #        service { 'messagebus': enable  => true }
+        # service { 'quotaon': enable => true }
+        # service { 'messagebus': enable  => true }
         svckill::ignore { 'quotaon': }
         svckill::ignore { 'messagebus': }
 
@@ -49,10 +42,9 @@ class simp::base_services {
           hasstatus  => false,
           require    => Package['mcstrans']
         }
-
       }
       else {
-        package { 'hal':      ensure => 'latest' }
+        package { 'hal': ensure => 'latest' }
 
         service { 'haldaemon':
           ensure     => 'running',
@@ -91,7 +83,7 @@ class simp::base_services {
       }
     }
     default: {
-      fail("${::operatingsystem} is not yet supported by ${module_name}")
+      fail("${facts['os']['name']} is not yet supported by ${module_name}")
     }
   }
 }
