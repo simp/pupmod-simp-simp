@@ -1,4 +1,6 @@
 ---
 simp_options::firewall: true
+simp_options::puppet::server : 'localhost'
+simp_options::ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
 sssd::domains:
   - LOCAL
