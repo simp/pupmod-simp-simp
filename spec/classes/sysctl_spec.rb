@@ -10,25 +10,14 @@ describe 'simp::sysctl' do
       context "with default parameters" do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('simp::sysctl') }
-        it { is_expected.to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
-        it { is_expected.to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
-      end
-
-      context "with ipv6_enabled = true" do
-        let(:facts) do
-          facts[:ipv6_enabled] = true
-          facts
-        end
-
+        it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
+        it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
         it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
       end
 
-      context "with ipv6 = false and ipv6_enabled = true" do
-        new_facts = facts.dup
-        new_facts[:ipv6_enabled] = true
-        let(:facts) { new_facts }
-        let(:params) {{ :ipv6 => false }}
-        it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
+      context "with ipv6 = true" do
+        let(:params) {{ :ipv6 => true }}
+        it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 0 ) }
       end
 
       context "kernel__core_pattern with absolute path" do
@@ -74,8 +63,18 @@ describe 'simp::sysctl' do
         }
       end
 
-      context 'with core_dumps => false' do
-        it { is_expected.to create_pam__limits__add('prevent_core') }
+      context 'with core_dumps => true' do
+        let(:params) {{ :core_dumps => true }}
+        it { is_expected.to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
+        it { is_expected.to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
+      end
+
+      context 'with pam => true and core_dumps => false' do
+        let(:params) {{
+          :pam => true,
+          :core_dumps => false
+        }}
+        it { is_expected.to create_pam__limits__rule('prevent_core') }
       end
 
     end

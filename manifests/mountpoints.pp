@@ -19,11 +19,11 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::mountpoints (
-  Boolean $manage_tmp_perms = true,
-  Boolean $manage_sys       = true,
-  String  $sys_options      = 'rw,nodev,noexec',
-  Boolean $manage_dev_pts   = true,
-  Boolean $manage_proc      = true
+  Boolean       $manage_tmp_perms = true,
+  Boolean       $manage_sys       = true,
+  Array[String] $sys_options      = ['rw','nodev','noexec'],
+  Boolean       $manage_dev_pts   = true,
+  Boolean       $manage_proc      = true
 ) {
 
   if $manage_tmp_perms { include '::simp::mountpoints::tmp' }
@@ -51,7 +51,7 @@ class simp::mountpoints (
       ensure   => 'mounted',
       device   => 'sysfs',
       fstype   => 'sysfs',
-      options  => $sys_options,
+      options  => join($sys_options,','),
       pass     => 0,
       target   => '/etc/fstab',
       remounts => true

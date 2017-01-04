@@ -20,6 +20,7 @@ describe 'simp::server::kickstart' do
           # This is to replace the Puppet server provided $::servername variable.
           # In the future, this should move to using the $server_facts hash.
           facts[:servername] = 'my.happy.server'
+          facts[:server_facts] = { :servername => 'my.happy.server' }
 
           facts
         end
@@ -30,7 +31,7 @@ describe 'simp::server::kickstart' do
         it { is_expected.to create_class('simp_apache') }
         it { is_expected.to create_class('dhcp::dhcpd') }
         it { is_expected.to create_class('tftpboot') }
-        it { is_expected.to create_simp_apache__add_site('ks').with_content(/Allow from 1.2.3.4\/24/) }
+        it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.4\/24/) }
         it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
         it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet=.*--waitforcert 10.*--evaltrace --summarize/) }
         it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet_server="puppet.bar.baz"/) }
@@ -65,7 +66,7 @@ describe 'simp::server::kickstart' do
         end
 
         context 'no_wait_for_cert' do
-          let(:params){{ :data_dir => '/var/www', :runpuppet_wait_for_cert => '' }}
+          let(:params){{ :data_dir => '/var/www', :runpuppet_wait_for_cert => false }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/--waitforcert/) }

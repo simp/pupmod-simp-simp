@@ -23,7 +23,7 @@ describe 'simp::server::yum' do
 
         context 'base' do
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_simp_apache__add_site('yum') }
+          it { is_expected.to contain_simp_apache__site('yum') }
         end
       end
     end

@@ -6,9 +6,6 @@
 class simp::base_services {
 
   package { 'irqbalance': ensure => 'latest' }
-  package { 'mcstrans': ensure => 'latest' }
-  package { 'netlabel_tools': ensure => 'latest' }
-
   service { 'irqbalance':
     enable     => true,
     hasrestart => true,
@@ -16,6 +13,7 @@ class simp::base_services {
     require    => Package['irqbalance']
   }
 
+  package { 'netlabel_tools': ensure => 'latest' }
   service { 'netlabel':
     ensure     => 'running',
     enable     => true,
@@ -24,6 +22,7 @@ class simp::base_services {
     require    => Package['netlabel_tools']
   }
 
+  package { 'mcstrans': ensure => 'latest' }
   case $facts['os']['name'] {
     'RedHat','CentOS': {
       if $facts['os']['release']['major'] > '6' {
@@ -45,7 +44,6 @@ class simp::base_services {
       }
       else {
         package { 'hal': ensure => 'latest' }
-
         service { 'haldaemon':
           ensure     => 'running',
           enable     => true,

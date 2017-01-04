@@ -57,25 +57,26 @@
 # @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::server::kickstart (
-  Stdlib::Absolutepath    $data_dir                = '/var/www',
-  Simplib::Netlist        $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
-  Boolean                 $manage_dhcp             = true,
-  Boolean                 $manage_tftpboot         = true,
-  Variant[Array, Hash]    $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
-  Optional[Simplib::Host] $puppet_server           = simplib::lookup('simp_options::puppet::server', { 'default_value' => undef }),
-  Optional[Simplib::Host] $puppet_ca               = simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef }),
-  Simplib::Port           $puppet_ca_port          = simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 }),
-  Boolean                 $runpuppet_print_stats   = true,
-  Integer[0]              $runpuppet_wait_for_cert = 10,
-  Boolean                 $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false }),
-  Enum['require','none']  $sslverifyclient         = 'none'
+  Stdlib::Absolutepath        $data_dir                = '/var/www',
+  Simplib::Netlist            $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
+  Boolean                     $manage_dhcp             = true,
+  Boolean                     $manage_tftpboot         = true,
+  Variant[Array, Hash]        $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
+  Optional[Simplib::Host]     $puppet_server           = simplib::lookup('simp_options::puppet::server', { 'default_value' => undef }),
+  Optional[Simplib::Host]     $puppet_ca               = simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef }),
+  Simplib::Port               $puppet_ca_port          = simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 }),
+  Boolean                     $runpuppet_print_stats   = true,
+  Variant[Integer[0],Boolean] $runpuppet_wait_for_cert = 10,
+  Boolean                     $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false }),
+  Enum['require','none']      $sslverifyclient         = 'none'
 ){
   if $manage_dhcp     { include '::dhcp::dhcpd' }
   if $manage_tftpboot { include '::tftpboot' }
 
   $_trusted_nets = nets2cidr($trusted_nets)
 
-  simp_apache::add_site { 'ks':
+  include '::simp_apache'
+  simp_apache::site { 'ks':
     content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
   }
 

@@ -14,7 +14,8 @@ class simp::server::yum (
 ){
   $_trusted_nets = nets2cidr($trusted_nets)
 
-  simp_apache::add_site { 'yum':
+  include '::simp_apache'
+  simp_apache::site { 'yum':
     content => template('simp/etc/httpd/conf.d/yum.conf.erb')
   }
 

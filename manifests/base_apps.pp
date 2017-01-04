@@ -20,9 +20,9 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_apps (
-  Enum['latest', 'absent','present'] $ensure               = 'latest',
-  Boolean                            $manage_elinks_config = true,
-  Array[String,1]                    $core_apps = [
+  Enum['latest','absent','present'] $ensure               = 'latest',
+  Boolean                           $manage_elinks_config = true,
+  Array[String,1]                   $core_apps = [
     'bind-utils',
     'bridge-utils',
     'dos2unix',
@@ -42,7 +42,7 @@ class simp::base_apps (
     'words',
     'x86info'
   ],
-  Optional[Array[String,1]]         $extra_apps = undef
+  Optional[Array[String,1]]        $extra_apps = undef
 ) {
 
   package { $core_apps: ensure => $ensure }

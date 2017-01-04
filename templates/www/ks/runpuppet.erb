@@ -16,7 +16,7 @@ function ensure_running {
   running="false"
   timeout=0
   while [ $timeout -lt 300 ] && [ "$running" == "false" ]; do
-    if [[ "$(/usr/bin/curl -sS --cert $ssldir/ssl/certs/<%= @fqdn %>.pem --key $ssldir/puppet/ssl/private_keys/<%= @fqdn %>.pem -k -H 'Accept: s' https://<%= @_puppet_ca %>:$ca_port/puppet-ca/v1/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
+    if [[ "$(/usr/bin/curl -sS --cert $ssldir/ssl/certs/<%= @fqdn %>.pem --key $ssldir/puppet/ssl/private_keys/<%= @fqdn %>.pem -k -H 'Accept: s' https://<%= @ca_server %>:$ca_port/puppet-ca/v1/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
       running="true"
     fi
     timeout=$[$timeout+1]
@@ -48,7 +48,7 @@ if [ "$LOCKED" == 'true' ]; then
 fi
 
 # Change me to meet the needs of your domain!
-puppet_server="<%= @_puppet_server %>";
+puppet_server="<%= @puppet_server %>";
 
 logfile="/root/puppet.bootstrap.log";
 delim="--------------------------------------------------------------------------------";
@@ -56,7 +56,7 @@ server=1;
 <%
   t_puppet_cmd_line = "puppet agent --onetime --no-daemonize --no-show_diff --no-splay"
 
-  unless @runpuppet_wait_for_cert.empty?
+  if @runpuppet_wait_for_cert
     t_puppet_cmd_line += " --waitforcert #{@runpuppet_wait_for_cert}"
   end
 
@@ -102,7 +102,7 @@ case "$1" in
     fi
 
 <%
-  if @use_fips
+  if @fips
     _keylength = '2048'
   else
     _keylength = '4096'
@@ -116,7 +116,7 @@ case "$1" in
     logdir            = /var/log/puppetlabs/puppet
     report            = false
     rundir            = /var/run/puppetlabs
-    server            = <%= @_puppet_server %>
+    server            = <%= @puppet_server %>
     ssldir            = /etc/puppetlabs/puppet/ssl
     trusted_node_data = true
     stringify_facts   = false
@@ -125,8 +125,8 @@ case "$1" in
 EOM
 
     echo "$puppet_conf" > /etc/puppetlabs/puppet/puppet.conf;
-    echo "ca_server = <%= @_puppet_ca %>" >> /etc/puppetlabs/puppet/puppet.conf;
-    echo "ca_port = <%= @_puppet_ca_port %>" >> /etc/puppetlabs/puppet/puppet.conf;
+    echo "ca_server = <%= @puppet_ca %>" >> /etc/puppetlabs/puppet/puppet.conf;
+    echo "ca_port = <%= @puppet_ca_port %>" >> /etc/puppetlabs/puppet/puppet.conf;
 
 <%
    l_ntp_servers = @ntp_servers

@@ -100,7 +100,7 @@ class simp::sysctl (
   Integer[0]           $net__core__somaxconn                           = 2048,
   Integer[0,1]         $net__ipv4__tcp_tw_reuse                        = 1,
   Integer[0,1]         $fs__suid_dumpable                              = 0,          # CCE-27044-7
-  Stdlib::Absolutepath $kernel__core_pattern                           = '/var/core/%u_%g_%p_%t_%h_%e.core',
+  String               $kernel__core_pattern                           = '/var/core/%u_%g_%p_%t_%h_%e.core',
   Integer[0]           $kernel__core_pipe_limit                        = 0,
   Integer[0,1]         $kernel__core_uses_pid                          = 1,
   Integer[0,1]         $kernel__dmesg_restrict                         = 1,          # CCE-27366-4
@@ -139,7 +139,8 @@ class simp::sysctl (
 
   Boolean              $core_dumps                                     = false,
   Stdlib::AbsolutePath $core_dump_dir                                  = '/var/core',
-  Boolean              $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false })
+  Boolean              $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean              $ipv6                                           = simplib::lookup('simp_options::ipv6', { 'default_value' => false })
 ) {
 
   validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
@@ -204,25 +205,27 @@ class simp::sysctl (
         'net.ipv4.tcp_syncookies'                          : value => $net__ipv4__tcp_syncookies;
       }
 
-      file { $core_dump_dir:
-        ensure => 'directory',
-        owner  => 'root',
-        group  => 'root',
-        mode   => '0640',
-        before => [
+      if $core_dumps {
+        file { $core_dump_dir:
+          ensure => 'directory',
+          owner  => 'root',
+          group  => 'root',
+          mode   => '0640',
+          before => [
           Sysctl['kernel.core_pattern'],
           Sysctl['kernel.core_uses_pid'],
-        ]
+          ]
+        }
       }
       if ($pam and !$core_dumps) {
         include '::pam'
 
         pam::limits::rule { 'prevent_core':
-          domain => '*',
-          type   => 'hard',
-          item   => 'core',
-          value  => 0,
-          order  => 100
+          domains => ['*'],
+          type    => 'hard',
+          item    => 'core',
+          value   => 0,
+          order   => 100
         }
       }
 
@@ -230,7 +233,7 @@ class simp::sysctl (
         sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
       }
 
-      if $facts['ipv6_enabled'] {
+      if $ipv6 {
         sysctl { 'net.ipv6.conf.all.disable_ipv6': value => 0 }
           ->
         sysctl {
@@ -249,9 +252,7 @@ class simp::sysctl (
         }
       }
       else {
-        if $facts['ipv6_enabled'] {
-          sysctl { 'net.ipv6.conf.all.disable_ipv6': value => 1 }
-        }
+        sysctl { 'net.ipv6.conf.all.disable_ipv6': value => 1 }
       }
     }
     default : {
