@@ -1,4 +1,4 @@
-# This class sets up a YUM site at ${data_dir}/yum and is used by
+# This class sets up a YUM site at `${data_dir}/yum` and is used by
 # the default SIMP server.
 #
 # @param data_dir
