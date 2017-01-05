@@ -47,20 +47,20 @@ class simp::server::ldap (
   include '::openldap::slapo::syncprov'
   if $enable_lastbind { include '::openldap::slapo::lastbind' }
 
-  $s_rid = "${rid}"
+  $s_rid = to_string($rid)
   if $is_slave {
     openldap::server::syncrepl { $s_rid: }
   }
 
   if !empty($bind_dn) {
-    openldap::server::add_limits { 'Host_Bind_DN_Unlimited_Query':
+    openldap::server::limits { 'Host_Bind_DN_Unlimited_Query':
       who    => $bind_dn,
       limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
   }
 
   if !empty($sync_dn) {
-    openldap::server::add_limits { 'LDAP_Sync_DN_Unlimited_Query':
+    openldap::server::limits { 'LDAP_Sync_DN_Unlimited_Query':
       who    => $sync_dn,
       limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
