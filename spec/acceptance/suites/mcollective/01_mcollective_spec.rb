@@ -32,13 +32,13 @@ describe 'simp::mcollective class' do
       pattern =>  'ALL'
     }
 
-    iptables::add_tcp_stateful_listen { 'i_love_testing':
-      order        => '8',
-      client_nets  => 'ALL',
-      dports       => '22'
+    iptables::listen::tcp_stateful { 'i_love_testing':
+      order        => 8,
+      trusted_nets => ['ALL'],
+      dports       => 22
     }
 
-    pam::access::manage { 'vagrant':
+    pam::access::rule { 'vagrant':
       users    => ['vagrant'],
       origins  => ['ALL']
     }
@@ -76,10 +76,10 @@ describe 'simp::mcollective class' do
   let(:server_hieradata) {
     <<-EOS
 ---
-client_nets:
+simp_options::trusted_nets:
   - 'ALL'
 
-use_iptables: true
+simp_options::firewall: true
 
 pki_dir : '/etc/pki/simp-testing/pki'
 pki::private_key_source : "file://%{hiera('pki_dir')}/private/%{::fqdn}.pem"

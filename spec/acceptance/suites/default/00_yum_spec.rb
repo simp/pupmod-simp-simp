@@ -26,19 +26,19 @@ describe 'simp::yum class' do
       pattern => 'ALL'
     }
 
-    iptables::add_tcp_stateful_listen { 'i_love_testing':
-      order => '8',
-      client_nets => 'ALL',
-      dports => '22'
+    iptables::listen::tcp_stateful { 'i_love_testing':
+      order        => 8,
+      trusted_nets => ['ALL'],
+      dports       => 22
     }
   EOM
 
   let(:manifest) {
     <<-EOS
-      include 'simp::yum_server'
+      include 'simp::server::yum'
       include 'simp::yum'
 
-      Class['simp::yum_server'] -> Class['simp::yum']
+      Class['simp::server::yum'] -> Class['simp::yum']
 
       #{ssh_allow}
     EOS
@@ -47,21 +47,18 @@ describe 'simp::yum class' do
   let(:hieradata) {
     <<-EOM
 ---
-client_nets:
+simp_options::trusted_nets:
   - ALL
 
-pki_dir : '/etc/pki/simp-testing/pki'
-pki::private_key_source : "file://%{hiera('pki_dir')}/private/%{::fqdn}.pem"
-pki::public_key_source : "file://%{hiera('pki_dir')}/public/%{::fqdn}.pub"
-pki::cacerts_sources :
-  - "file://%{hiera('pki_dir')}/cacerts"
+simp_apache::ssl::app_pki_dir : '/etc/pki/simp-testing'
+simp_apache::ssl::app_pki_external_source : '/etc/pki/simp-testing/pki'
+# simp_apache::ssl::app_pki_ca_dir : "file://%{hiera('pki_dir')}/cacerts"
+# simp_apache::ssl::app_pki_cert : "file://%{hiera('pki_dir')}/public/%{::fqdn}.pub"
+# simp_apache::ssl::app_pki_key : "file://%{hiera('pki_dir')}/private/%{::fqdn}.pem"
 
 simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
 simp_apache::ssl::sslverifyclient : 'none'
-apache::rsync_server : '127.0.0.1'
-apache::rsync_web_root : false
-apache::ssl::sslverifyclient : 'none'
 
 simp::yum::servers:
   - "%{::fqdn}"

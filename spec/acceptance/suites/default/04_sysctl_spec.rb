@@ -4,7 +4,7 @@ test_name 'simp::sysctl class'
 
 describe 'simp::sysctl class' do
   let(:disable_ipv6_hieradata) {{
-    'simp::sysctl::enable_ipv6' => false
+    'simp::sysctl::ipv6' => false
   }}
 
   let(:manifest) {
@@ -24,24 +24,24 @@ describe 'simp::sysctl class' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
 
-      it 'sysctl should enable ipv6 by default' do
+      it 'sysctl should disable ipv6 by default' do
         result = on(host,"sysctl -n net.ipv6.conf.all.disable_ipv6")
-        expect(result.output.strip).to eq('0')
+        expect(result.output.strip).to eq('1')
       end
 
     end
 
-    context 'sysctl with enable ipv6 = false' do
+    context 'sysctl with enable ipv6 = true' do
 
       it 'set hieradata' do
         set_hieradata_on(host, disable_ipv6_hieradata)
       end
 
-      it 'set ipv6_enable = true' do
+      it 'set ipv6 = true' do
         on(host, "sysctl net.ipv6.conf.all.disable_ipv6=0")
       end
 
-      it 'should apply simplib::sysctl with no errors' do
+      it 'should apply simp::sysctl with no errors' do
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
 
