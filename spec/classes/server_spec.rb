@@ -36,20 +36,21 @@ describe 'simp::server' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to create_class('simp::server::rsync_shares') }
-          it { is_expected.to create_pam__access__manage('allow_simp') }
-          it { is_expected.to create_sudo__user_specification('default_simp') }
+          it { is_expected.not_to create_pam__access__rule('allow_simp') }
+          it { is_expected.not_to create_sudo__user_specification('default_simp') }
         end
 
-        context 'without the simp user' do
+        context 'with allow_simp_user => true' do
           let(:params){{
-            :allow_simp_user => false
+            :pam => true,
+            :allow_simp_user => true
           }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to create_class('simp::server::rsync_shares') }
-          it { is_expected.to_not create_pam__access__manage('allow_simp') }
-          it { is_expected.to_not create_sudo__user_specification('default_simp') }
+          it { is_expected.to create_pam__access__rule('allow_simp') }
+          it { is_expected.to create_sudo__user_specification('default_simp') }
         end
 
         context 'without rsync shares' do
@@ -60,8 +61,6 @@ describe 'simp::server' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::server') }
           it { is_expected.to_not create_class('simp::server::rsync_shares') }
-          it { is_expected.to create_pam__access__manage('allow_simp') }
-          it { is_expected.to create_sudo__user_specification('default_simp') }
         end
       end
     end

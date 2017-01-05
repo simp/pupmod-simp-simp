@@ -5,32 +5,38 @@ describe 'simp' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
-          if ['RedHat','CentOS'].include?(facts[:operatingsystem]) && facts[:operatingsystemmajrelease].to_s < '7'
-            facts[:apache_version] = '2.2'
-            facts[:grub_version] = '0.9'
-            facts[:init_systems] = ['rc','sysv','upstart']
-          else
-            facts[:apache_version] = '2.4'
-            facts[:grub_version] = '2.0~beta'
-            facts[:init_systems] = ['rc','sysv','systemd']
-          end
-
-          facts[:selinux_current_mode] = 'enforcing'
-
+          facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+          facts[:server_facts] = {
+            :servername => 'puppet.bar.baz',
+            :serverip   => '1.2.3.4'
+          }
           facts
         end
 
-        let(:precondition) {
-          %(hiera_include('classes'))
-        }
-
-        it { is_expected.to compile.with_all_deps }
-
-        context 'with_puppet_server' do
-          let(:params) {{ :puppet_server_ip => '1.2.3.4' }}
-
+        context 'default' do
+          # it { require 'pry';binding.pry }
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
           it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
         end
+
+        context 'rsync_stunnel logic' do
+          context 'with rsync_stunnel defined' do
+            let(:params) {{ :rsync_stunnel => 'other.test.host' }}
+            it { is_expected.to create_stunnel__connection('rsync').with({
+              :connect => ['other.test.host:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+          context 'with rsync_stunnel => true' do
+            let(:params) {{ :rsync_stunnel => true }}
+            it { is_expected.to create_stunnel__connection('rsync').with({
+              :connect => ['1.2.3.4:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+        end
+
       end
     end
   end

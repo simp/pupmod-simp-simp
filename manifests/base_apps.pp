@@ -1,77 +1,72 @@
-# == Class: simp::base_apps
+# This is a set of applications that you will want on most systems
 #
-# This is a set of applications that you will want on most systems.
+# @param ensure
+#   The ``$ensure`` status of all of the included packages
 #
-# == Parameters
-# [*ensure*]
-# Type: latest|present|absent
-# Default: latest
-#   The $ensure status of all of the included packages. Version
-#   pinning is not supported. If you need that, do not include this
-#   class.
+#   * Version pinning is not supported
+#   * If you need version pinning, do not include this class
 #
-# == Authors
-#   * Trevor Vaughan <tvaughan@onyxpoint.com>
+# @param core_apps
+#   The main list of applications to install
+#
+#   * Take care if you decide to change or eliminate this list
+#
+# @param extra_apps
+#   A list of other applications that you wish to install
+#
+# @param manage_elinks_config
+#   Add some useful settings to the global elinks configuration
+#
+# @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_apps (
-#   What level to ensure for all base apps. Valid values are: 'latest',
-#   'absent', or 'present'
-  Enum['latest', 'absent','present'] $ensure = 'latest'
+  Enum['latest','absent','present'] $ensure               = 'latest',
+  Boolean                           $manage_elinks_config = true,
+  Array[String,1]                   $core_apps = [
+    'bind-utils',
+    'bridge-utils',
+    'dos2unix',
+    'elinks',
+    'hunspell',
+    'lslk',
+    'lsof',
+    'man',
+    'man-pages',
+    'mlocate',
+    'pax',
+    'pinfo',
+    'sos',
+    'star',
+    'symlinks',
+    'vim-enhanced',
+    'words',
+    'x86info'
+  ],
+  Optional[Array[String,1]]        $extra_apps = undef
 ) {
-  package { 'bc':           ensure => $ensure }
-  package { 'bind-utils':   ensure => $ensure }
-  package { 'bridge-utils': ensure => $ensure }
-  package { 'dos2unix':     ensure => $ensure }
-  package { 'elinks':       ensure => $ensure }
-  package { 'genisoimage':  ensure => $ensure }
-  package { 'iptstate':     ensure => $ensure }
-  package { 'lftp':         ensure => $ensure }
-  package { 'lsof':         ensure => $ensure }
-  package { 'man-pages':    ensure => $ensure }
-  package { 'mlocate':      ensure => $ensure }
-  package { 'pax':          ensure => $ensure }
-  package { 'pinfo':        ensure => $ensure }
-  package { 'screen':       ensure => $ensure }
-  package { 'sos':          ensure => $ensure }
-  package { 'star':         ensure => $ensure }
-  package { 'symlinks':     ensure => $ensure }
-  package { 'telnet':       ensure => $ensure }
-  package { 'vim-enhanced': ensure => $ensure }
-  package { 'words':        ensure => $ensure }
-  package { 'x86info':      ensure => $ensure }
 
-  file { '/etc/elinks.conf':
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    require => Package['elinks']
+  package { $core_apps: ensure => $ensure }
+
+  if $extra_apps {
+    package { $extra_apps: ensure => $ensure }
   }
 
-  file_line { 'elinks_ui_lang':
-    path => '/etc/elinks.conf',
-    line => 'set ui.language = "System"'
-  }
-
-  file_line { 'elinks_css_disable':
-    path => '/etc/elinks.conf',
-    line => 'set document.css.enable = 0'
-  }
-
-  case $::operatingsystem {
-    'RedHat','CentOS': {
-      if $::operatingsystemmajrelease > '6' {
-        package { 'hunspell':       ensure => $ensure }
-      }
-      else {
-        package { 'aspell':       ensure => $ensure }
-        package { 'lslk':         ensure => $ensure }
-        package { 'man':          ensure => $ensure }
-      }
+  if $manage_elinks_config {
+    file { '/etc/elinks.conf':
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => Package['elinks']
     }
-    default: {
-      fail("${::operatingsystem} is not yet supported by ${module_name}")
+
+    file_line { 'elinks_ui_lang':
+      path => '/etc/elinks.conf',
+      line => 'set ui.language = "System"'
+    }
+
+    file_line { 'elinks_css_disable':
+      path => '/etc/elinks.conf',
+      line => 'set document.css.enable = 0'
     }
   }
-
-  validate_array_member($ensure,['latest','present','absent'])
 }

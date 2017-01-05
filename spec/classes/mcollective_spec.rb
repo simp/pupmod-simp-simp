@@ -5,7 +5,7 @@ describe 'simp::mcollective' do
     on_supported_os.each do |os, facts|
       let(:facts) {
         facts[:puppetversion] = %x{puppet --version}.strip
-
+        facts[:mco_version] = '2.9.1'
         facts
       }
 

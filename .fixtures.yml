@@ -74,10 +74,11 @@ fixtures:
       branch: simp-master
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
-    nscd: https://github.com/simp/pupmod-simp-nscd
     ntpd: https://github.com/simp/pupmod-simp-ntpd
     oddjob: https://github.com/simp/pupmod-simp-oddjob
-    openldap: https://github.com/simp/pupmod-simp-openldap
+    openldap:
+      repo: https://github.com/jeannegreulich/pupmod-simp-openldap
+      branch: SIMP-2180
     pam: https://github.com/simp/pupmod-simp-pam
     pki: https://github.com/simp/pupmod-simp-pki
     postfix: https://github.com/simp/pupmod-simp-postfix
@@ -87,7 +88,9 @@ fixtures:
       branch: simp-master
     file_concat: https://github.com/simp/puppet-lib-file_concat
     pupmod: https://github.com/simp/pupmod-simp-pupmod
-    rsync: https://github.com/simp/pupmod-simp-rsync
+    rsync:
+      repo: https://github.com/trevor-vaughan/pupmod-simp-rsync
+      branch: SIMP-1695
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
     simpcat: https://github.com/simp/pupmod-simp-concat
@@ -95,9 +98,7 @@ fixtures:
     simp_apache: https://github.com/simp/pupmod-simp-apache
     snmpd: https://github.com/simp/pupmod-simp-snmpd
     ssh: https://github.com/simp/pupmod-simp-ssh
-    stdlib:
-      repo: https://github.com/simp/puppetlabs-stdlib
-      branch: master
+    stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
     sssd: https://github.com/simp/pupmod-simp-sssd
     sudo: https://github.com/simp/pupmod-simp-sudo
@@ -107,5 +108,22 @@ fixtures:
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     upstart: https://github.com/simp/pupmod-simp-upstart
     xinetd: https://github.com/simp/pupmod-simp-xinetd
+
+    resolv: https://github.com/simp/pupmod-simp-resolv
+    cron: https://github.com/simp/pupmod-simp-cron
+    tuned: https://github.com/simp/pupmod-simp-tuned
+    at: https://github.com/simp/pupmod-simp-at
+    useradd: https://github.com/simp/pupmod-simp-useradd
+    incron: https://github.com/simp/pupmod-simp-incron
+    chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
+    fips: https://github.com/simp/pupmod-simp-fips
+    swap: https://github.com/simp/pupmod-simp-swap
+    motd:
+      repo: https://github.com/simp/puppetlabs-motd
+      branch: simp-master
+    nsswitch:
+      repo: https://github.com/simp/puppet-nsswitch
+      branch: simp-master
+    issue: https://github.com/simp/pupmod-simp-issue
   symlinks:
     simp: "#{source_dir}"

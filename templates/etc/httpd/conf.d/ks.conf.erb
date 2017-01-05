@@ -1,7 +1,7 @@
 <%
   t_allowroot = nil
-  if @l_client_nets then
-    t_allowroot = scope.function_munge_httpd_networks(Array(@l_client_nets)).map{ |x|
+  if @_trusted_nets
+    t_allowroot = scope.function_munge_httpd_networks(Array(@_trusted_nets)).map{ |x|
       x = "    Allow from #{x}"
     }.join("\n")
   end
@@ -15,7 +15,7 @@ Alias /ks /var/www/ks
 <% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
-    Allow from <%= @domain %>
+    Allow from <%= @facts['domain'] %>
     <IfModule mod_ssl>
       SSLVerifyClient <%= @sslverifyclient %>
     </IfModule>

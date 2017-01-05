@@ -1,82 +1,60 @@
-# == Class: simp::yum
+# Set up the ``/etc/yum`` directory, and ensures that ``yum-skip-broken`` is
+# installed.
 #
-# This class sets up the /etc/yum directory, and ensures that
-# yum-skip-broken is installed.
+# @param servers
+#   The FQDN or IP of the yum server to which to connect
 #
-# == Parameters
+# @param enable_simp_repos
+#   Enable the default SIMP repositories
 #
-# [*servers*]
-# Type: Array of FQDN or IP address
-#   The FQDN or IP of the yum server to which to connect for the default
-#   repositories.
+#   * You should probably leave this as is unless you really know what you are
+#     doing
 #
-# [*enable_simp_repos*]
-# Type: Boolean
-# Default: true
-#   If true, enable the default SIMP repositories. You should probably
-#   leave this as is unless you really know what you are doing.
+# @param enable_auto_updates
+#   Enable the automatic yum cron job
 #
-# [*enable_auto_updates*]
-# Type: Boolean
-# Default: true
-#   If true, enable the automatic yum cron job. If false, remove it.
+# @param os_update_url
+#   A specially crafted string that handles the case where you want to pass in
+#   multiple yum servers
 #
-# [*os_update_url*]
-# Type: String
-# Default: "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates"
-#   This is a specially crafted string that handles the case where you want to
-#   pass in multiple yum servers.
+#   * The string ``YUM_SERVER`` (all caps) will be replaced with the various
+#     ``$servers`` entries appropriately
 #
-#   The string YUM_SERVER (all caps) will be replaced with the various $servers
-#   entries appropriately.
+#   * This is not ideal but there is no way to know exactly how you wish to
+#     structure your repositories if you deviate from the base
 #
-#   This is not ideal but there is no way to know exactly how you wish to
-#   structure your repositories if you deviate from the base.
+# @param os_gpg_url
+#   A specially crafted string that handles GPG url creation
 #
-# [*os_gpg_url*]
-# Type: String
-#   Default: ''
-#     If set, this is a specially crafted string that handles GPG url creation.
+#   * The string ``YUM_SERVER`` (all caps) will be replaced with the various
+#     ``$servers`` entries appropriately
 #
-#     The string YUM_SERVER (all caps) will be replaced with the various
-#     $servers entries appropriately.
+# @param simp_update_url
+#   A specially crafted string that handles the case where you want to pass in
+#   multiple yum servers
 #
+#   * The string ``YUM_SERVER`` (all caps) will be replaced with the various
+#     ``$servers`` entries appropriately
 #
-# [*simp_update_url*]
-# Type: String
-# Default: "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}"
-#   This is a specially crafted string that handles the case where you
-#   want to pass in multiple yum servers.
+# @param simp_gpg_url
+#   A specially crafted string that handles GPG url creation
 #
-#   The string YUM_SERVER (all caps) will be replaced with the various
-#   $servers entries appropriately.
-#
-#   This is not ideal but there is no way to know exactly how you wish
-#   to structure your repositories if you deviate from the base.
-#
-# [*simp_gpg_url*]
-# Type: String
-# Default: "https://YUM_SERVER/yum/SIMP"
-#   This is a specially crafted string that handles GPG url creation.
-#
-#   The string YUM_SERVER (all caps) will be replaced with the various
-#   $servers entries appropriately.
+#   * The string ``YUM_SERVER`` (all caps) will be replaced with the various
+#     ``$servers`` entries appropriately
 #
 class simp::yum (
-  Array[String]                                        $servers,
-  Boolean                                              $enable_simp_repos    = true,
-  Boolean                                              $enable_os_repos      = true,
-  Boolean                                              $enable_auto_updates  = true,
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $os_update_url        = "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/Updates",
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $os_gpg_url           = '',
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url      = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url         = ''
+  Simplib::Netlist                                     $servers,
+  Boolean                                              $enable_simp_repos   = true,
+  Boolean                                              $enable_os_repos     = true,
+  Boolean                                              $enable_auto_updates = true,
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $os_update_url       = "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/Updates",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $os_gpg_url          = '',
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url     = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url        = ''
 
 ){
-  validate_net_list($servers)
-
   if $enable_auto_updates {
-    include 'simplib::yum_schedule'
+    include '::simp::yum::schedule'
   }
   else {
     cron { 'yum_update': ensure => 'absent' }
@@ -97,9 +75,9 @@ class simp::yum (
   $_os_repo_enable = $enable_os_repos ? { true => 1, default => 0 }
 
   if empty($os_gpg_url) {
-    $_temp_os_gpg_url = $::operatingsystem ? {
-      'RedHat' => "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
-      default  => "https://YUM_SERVER/yum/${::operatingsystem}/${::operatingsystemmajrelease}/${::hardwaremodel}/RPM-GPG-KEY-${::operatingsystem}-${::operatingsystemmajrelease}"
+    $_temp_os_gpg_url = $facts['os']['name'] ? {
+      'RedHat' => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
+      default  => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"
     }
 
     $_os_gpg_url = simp_yumrepo_mangle($_temp_os_gpg_url, $servers)
@@ -117,14 +95,14 @@ class simp::yum (
 
   yumrepo { 'os_updates':
     baseurl         => simp_yumrepo_mangle($os_update_url, $servers),
-    descr           => "All ${::operatingsystem} ${::operatingsystemmajrelease} ${::hardwaremodel} base packages and updates",
+    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${::hardwaremodel} base packages and updates",
     enabled         => $_os_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => $_os_gpg_url,
+    gpgkey          => join(split($_os_gpg_url,"\n"),"\n    "),
     sslverify       => 0,
     keepalive       => 0,
-    metadata_expire => '3600',
+    metadata_expire => 3600,
     tag             => 'firstrun'
   }
 
@@ -134,10 +112,10 @@ class simp::yum (
     enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => $_simp_gpg_url,
+    gpgkey          => join(split($_simp_gpg_url,"\n"),"\n    "),
     sslverify       => 0,
     keepalive       => 0,
-    metadata_expire => '3600',
+    metadata_expire => 3600,
     tag             => 'firstrun'
   }
 }
