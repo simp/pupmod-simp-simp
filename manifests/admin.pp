@@ -90,25 +90,25 @@ class simp::admin (
     if $logged_shell == 'sudosh' {
       include '::sudosh'
 
-      $_shell_cmd = '/usr/bin/sudosh'
+      $_shell_cmd = ['/usr/bin/sudosh']
     }
   }
   else {
-    $_shell_cmd = 'ALL'
+    $_shell_cmd = ['ALL']
   }
 
   sudo::user_specification { 'admin_global':
-    user_list => "%${admin_group}",
+    user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'ALL',
-    cmnd      => [$_shell_cmd],
+    cmnd      => $_shell_cmd,
     passwd    => !$passwordless_admin_sudo
   }
 
   # The following two are especially important if you're using sudosh.
   # They allow you to recover from destroying the certs in your environment.
   sudo::user_specification { 'admin_run_puppet':
-    user_list => "%${admin_group}",
+    user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'root',
     cmnd      => ['/usr/sbin/puppet', '/opt/puppetlabs/bin/puppet'],
@@ -116,18 +116,18 @@ class simp::admin (
   }
 
   sudo::user_specification { 'admin_clean_puppet_certs':
-    user_list => "%${admin_group}",
+    user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'root',
-    cmnd      => "/bin/rm -rf ${facts['puppet_settings']['ssldir']}",
+    cmnd      => ["/bin/rm -rf ${facts['puppet_settings']['ssldir']}"],
     passwd    => !$passwordless_admin_sudo
   }
 
   sudo::user_specification { 'auditors':
-    user_list => "%${auditor_group}",
+    user_list => ["%${auditor_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'root',
-    cmnd      => 'AUDIT',
+    cmnd      => ['AUDIT'],
     passwd    => !$passwordless_auditor_sudo
   }
 }
