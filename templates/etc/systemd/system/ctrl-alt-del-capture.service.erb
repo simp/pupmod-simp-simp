@@ -1,0 +1,13 @@
+[Unit]
+Description=Log calls to Ctrl-Alt-Delete - Managed by Puppet
+
+[Service]
+Type=simple
+StandardOutput=syslog
+SyslogIdentifier=ctrl-alt-del
+SyslogFacility=<%= @facility %>
+SyslogLevel=<%= @severity %>
+ExecStart=<%= @_log_cmnd %>
+
+[Install]
+WantedBy=ctrl-alt-del.target

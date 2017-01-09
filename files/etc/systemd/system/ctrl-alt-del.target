@@ -1,0 +1,6 @@
+[Unit]
+Description=Ctrl-Alt-Delete Capture - Managed by Puppet
+Documentation=man:systemd.special(7)
+DefaultDependencies=no
+Wants=ctrl-alt-del-capture.service
+AllowIsolate=no

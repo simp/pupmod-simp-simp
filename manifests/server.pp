@@ -49,7 +49,7 @@ class simp::server (
     }
 
     sudo::user_specification { 'default_simp':
-      user_list => 'simp',
+      user_list => ['simp'],
       runas     => 'root',
       cmnd      => ['/bin/su root', '/bin/su - root']
     }
