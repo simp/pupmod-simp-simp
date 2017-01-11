@@ -87,13 +87,13 @@ class simp::server::rsync_shares (
 
       rsync::server::section { "mcafee_${_env}":
         comment     => "McAfee DAT files for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/mcafee",
+        path        => "${rsync_base}/${_env}/mcafee",
         hosts_allow => $_trusted_nets
       }
 
       rsync::server::section { "clamav_${_env}":
         comment     => "ClamAV Virus Database Updates for Environment ${_env}",
-        path        => "${rsync_base}/${_env}/${_rsync_subdir}/clamav",
+        path        => "${rsync_base}/${_env}/clamav",
         hosts_allow => $_trusted_nets
       }
 
