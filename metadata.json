@@ -42,7 +42,7 @@
     },
     {
       "name": "herculesteam/augeasproviders_puppet",
-      "version_requirement": ">= 2.0.2 < 3.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
       "name": "simp/autofs",
