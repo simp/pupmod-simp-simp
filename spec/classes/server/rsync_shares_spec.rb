@@ -53,13 +53,13 @@ describe 'simp::server::rsync_shares' do
         it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
         it { is_expected.to create_rsync__server__section("mcafee_#{environment}") }
         it { is_expected.to create_rsync__server__section("jenkins_plugins_#{environment}") }
-        it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_redhat_6") }
-        it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_redhat_7") }
-        it { is_expected.to create_rsync__server__section("apache_#{environment}_redhat") }
-        it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_redhat") }
-        it { is_expected.to create_rsync__server__section("dhcpd_#{environment}_redhat") }
-        it { is_expected.to create_rsync__server__section("snmp_#{environment}_redhat") }
-        it { is_expected.to create_rsync__server__section("freeradius_#{environment}_redhat") }
+        it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_6") }
+        it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
+        it { is_expected.to create_rsync__server__section("apache_#{environment}_RedHat") }
+        it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_RedHat") }
+        it { is_expected.to create_rsync__server__section("dhcpd_#{environment}_RedHat") }
+        it { is_expected.to create_rsync__server__section("snmp_#{environment}_RedHat") }
+        it { is_expected.to create_rsync__server__section("freeradius_#{environment}_RedHat") }
 
         context 'with a limited share set' do
           let(:facts) do
@@ -98,13 +98,13 @@ describe 'simp::server::rsync_shares' do
           it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
           it { is_expected.to_not create_rsync__server__section("mcafee_#{environment}") }
           it { is_expected.to_not create_rsync__server__section("jenkins_plugins_#{environment}") }
-          it { is_expected.to_not create_rsync__server__section("bind_dns_default_#{environment}_redhat_6") }
-          it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_redhat_7") }
-          it { is_expected.to create_rsync__server__section("apache_#{environment}_redhat") }
-          it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_redhat") }
-          it { is_expected.to_not create_rsync__server__section("dhcpd_#{environment}_redhat") }
-          it { is_expected.to_not create_rsync__server__section("snmp_#{environment}_redhat") }
-          it { is_expected.to_not create_rsync__server__section("freeradius_#{environment}_redhat") }
+          it { is_expected.to_not create_rsync__server__section("bind_dns_default_#{environment}_RedHat_6") }
+          it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
+          it { is_expected.to create_rsync__server__section("apache_#{environment}_RedHat") }
+          it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_RedHat") }
+          it { is_expected.to_not create_rsync__server__section("dhcpd_#{environment}_RedHat") }
+          it { is_expected.to_not create_rsync__server__section("snmp_#{environment}_RedHat") }
+          it { is_expected.to_not create_rsync__server__section("freeradius_#{environment}_RedHat") }
         end
       end
     end

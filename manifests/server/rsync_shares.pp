@@ -58,9 +58,7 @@ class simp::server::rsync_shares (
 
       # Do the Global items first
       if $rsync_environments[$_env]['rsync']['global'] {
-        unless defined('$_globals_dir') {
-          $_globals_dir = 'rsync/Global'
-        }
+        $_globals_dir = 'rsync/Global'
 
         if 'clamav' in $rsync_environments[$_env]['rsync']['global']['shares'] {
           rsync::server::section { "clamav_${_env}":
@@ -89,77 +87,64 @@ class simp::server::rsync_shares (
 
       # OS Specific Items
       (keys($rsync_environments[$_env]['rsync']) - ['global','id']).each |String $_os| {
+        $_os_id = $rsync_environments[$_env]['rsync'][$_os]['id']
 
         # OS Major Version Specific Items
         (keys($rsync_environments[$_env]['rsync'][$_os]) - ['global','id']).each |String $_os_maj_ver| {
+          $_os_maj_ver_id = $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['id']
 
           if 'bind_dns' in $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['shares'] {
-            rsync::server::section { "bind_dns_default_${_env}_${_os}_${_os_maj_ver}":
-              auth_users  => ["bind_dns_default_rsync_${_env}_${_os}_${_os_maj_ver}"],
-              comment     => "Default DNS configurations for named for Environment ${_env} on ${_os} ${_os_maj_ver}",
-              path        => join([
-                                "${rsync_base}/${_env}/rsync",
-                                $rsync_environments[$_env]['rsync'][$_os]['id'],
-                                $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['id'],
-                                'bind_dns/default'],'/'),
+            rsync::server::section { "bind_dns_default_${_env}_${_os_id}_${_os_maj_ver_id}":
+              auth_users  => ["bind_dns_default_rsync_${_env}_${_os_id}_${_os_maj_ver_id}"],
+              comment     => "Default DNS configurations for named for Environment ${_env} on ${_os_id} ${_os_maj_ver_id}",
+              path        => "${rsync_base}/${_env}/rsync/${_os_id}/${_os_maj_ver_id}/bind_dns/default",
               hosts_allow => $_trusted_nets
             }
-
           }
         }
 
         # OS Global Items
         if 'apache' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
-          rsync::server::section { "apache_${_env}_${_os}":
+          rsync::server::section { "apache_${_env}_${_os_id}":
             auth_users     => ["apache_rsync_${_env}_${_os}"],
             comment        => "Apache configurations for Environment ${_env} on ${_os}",
-            path           => join(["${rsync_base}/${_env}/rsync",
-                              $rsync_environments[$_env]['rsync'][$_os]['global']['id'],
-                              'Global/apache'],'/'),
+            path           => "${rsync_base}/${_env}/rsync/${_os_id}/Global/apache",
             hosts_allow    => ['127.0.0.1'],
             outgoing_chmod => 'o-rwx'
           }
         }
 
         if 'tftpboot' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
-          rsync::server::section { "tftpboot_${_env}_${_os}":
+          rsync::server::section { "tftpboot_${_env}_${_os_id}":
             auth_users  => ["tftpboot_rsync_${_env}_${_os}"],
             comment     => "Tftpboot server configurations for Environment ${_env} on ${_os}",
-            path           => join(["${rsync_base}/${_env}/rsync",
-                              $rsync_environments[$_env]['rsync'][$_os]['global']['id'],
-                              'Global/tftpboot'],'/'),
+            path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/tftpboot",
             hosts_allow => $_trusted_nets
           }
         }
 
         if 'dhcpd' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
-          rsync::server::section { "dhcpd_${_env}_${_os}":
+          rsync::server::section { "dhcpd_${_env}_${_os_id}":
             auth_users  => ["dhcpd_rsync_${_env}_${_os}"],
             comment     => "DHCP Configurations for Environment ${_env} on ${_os}",
-            path           => join(["${rsync_base}/${_env}/rsync",
-                              $rsync_environments[$_env]['rsync'][$_os]['global']['id'],
-                              'Global/dhcpd'],'/'),
+            path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/dhcpd",
             hosts_allow => $_trusted_nets
           }
         }
 
         if 'snmp' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
-          rsync::server::section { "snmp_${_env}_${_os}":
+          rsync::server::section { "snmp_${_env}_${_os_id}":
             comment     => "SNMP MIBs and Modules for Environment ${_env} on ${_os}",
-            path           => join(["${rsync_base}/${_env}/rsync",
-                              $rsync_environments[$_env]['rsync'][$_os]['global']['id'],
-                              'Global/snmp'],'/'),
+            path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/snmp",
             hosts_allow => $_trusted_nets
           }
         }
 
         if 'freeradius' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
-          rsync::server::section { "freeradius_${_env}_${_os}":
+          rsync::server::section { "freeradius_${_env}_${_os_id}":
             auth_users  => ["freeradius_systems_${_env}_${_os}"],
             comment     => "Freeradius configuration files for Environment ${_env} on ${_os}",
-            path           => join(["${rsync_base}/${_env}/rsync",
-                              $rsync_environments[$_env]['rsync'][$_os]['global']['id'],
-                              'Global/freeradius'],'/'),
+            path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/freeradius",
             hosts_allow => $_trusted_nets
           }
         }
