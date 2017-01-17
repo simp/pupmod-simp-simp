@@ -26,16 +26,8 @@
 #
 class simp::server (
   Boolean $allow_simp_user     = false,
-  Boolean $enable_rsync_shares = true,
-  Boolean $enable_kickstart    = true,
-  Boolean $enable_ldap         = true,
-  Boolean $enable_yum          = true,
   Boolean $pam                 = simplib::lookup('simp_options::pam', { 'default_value' => false })
 ) {
-  if $enable_rsync_shares { include '::simp::server::rsync_shares' }
-  if $enable_kickstart { include '::simp::server::kickstart' }
-  if $enable_ldap { include '::simp::server::ldap' }
-  if $enable_yum { include '::simp::server::yum' }
 
   if $allow_simp_user {
     if $pam {
