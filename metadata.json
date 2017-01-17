@@ -26,39 +26,39 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.9.0 < 5.0.0"
+      "version_requirement": ">= 4.13.1 < 5.0.0"
     },
     {
       "name": "simp/aide",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
-    },
-    {
-      "name": "simp/simp_apache",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
-    },
-    {
-      "name": "simp/auditd",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
+      "name": "simp/simp_apache",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/auditd",
+      "version_requirement": ">= 7.0.0 < 8.0.0"
+    },
+    {
       "name": "herculesteam/augeasproviders_puppet",
-      "version_requirement": ">= 2.0.2 < 3.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
       "name": "simp/autofs",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/clamav",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/dhcp",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/freeradius",
-      "version_requirement": ">= 6.0.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
       "name": "simp/ganglia",
@@ -66,31 +66,31 @@
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/logrotate",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/named",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/ntpd",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/openldap",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/pam",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/pki",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/postfix",
@@ -98,7 +98,7 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 7.0.0 < 8.0.0"
+      "version_requirement": ">= 7.1.0 < 8.0.0"
     },
     {
       "name": "simp/rsync",
@@ -106,7 +106,7 @@
     },
     {
       "name": "simp/rsyslog",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
       "name": "simp/simpcat",
@@ -118,7 +118,7 @@
     },
     {
       "name": "simp/tftpboot",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     }
   ],
   "requirements": [
