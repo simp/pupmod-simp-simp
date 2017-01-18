@@ -23,8 +23,6 @@ Requires: pupmod-simp-dhcp < 7.0.0-0
 Requires: pupmod-simp-dhcp >= 6.0.0-0
 Requires: pupmod-simp-freeradius < 8.0.0-0
 Requires: pupmod-simp-freeradius >= 7.0.0-0
-Requires: pupmod-simp-ganglia < 7.0.0-0
-Requires: pupmod-simp-ganglia >= 6.0.0-0
 Requires: pupmod-simp-iptables < 7.0.0-0
 Requires: pupmod-simp-iptables >= 6.0.0-0
 Requires: pupmod-simp-logrotate < 7.0.0-0
