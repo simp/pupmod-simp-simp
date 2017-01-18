@@ -1,3 +1,6 @@
+* Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+- Removed any dangling references or dependencies on ganglia or snmpd
+
 * Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.1-0
 - Added a 'simp::ctrl_alt_del' class for managing the behavior of giving a
   system the three finger death punch
