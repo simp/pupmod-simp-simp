@@ -138,7 +138,6 @@ class simp (
   if $ldap {
     include '::openldap::client'
 
-    if $pam { include '::openldap::pam' }
   }
 
   if $manage_rc_local { include '::simp::rc_local' }
