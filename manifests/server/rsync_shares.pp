@@ -57,10 +57,10 @@ class simp::server::rsync_shares (
     keys($rsync_environments).each |String $_env| {
 
       # Do the Global items first
-      if $rsync_environments[$_env]['rsync']['global'] {
+      if $rsync_environments[$_env]['rsync']['Global'] {
         $_globals_dir = 'rsync/Global'
 
-        if 'clamav' in $rsync_environments[$_env]['rsync']['global']['shares'] {
+        if 'clamav' in $rsync_environments[$_env]['rsync']['Global']['shares'] {
           rsync::server::section { "clamav_${_env}":
             comment     => "ClamAV Virus Database Updates for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/clamav",
@@ -68,7 +68,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'mcafee' in $rsync_environments[$_env]['rsync']['global']['shares'] {
+        if 'mcafee' in $rsync_environments[$_env]['rsync']['Global']['shares'] {
           rsync::server::section { "mcafee_${_env}":
             comment     => "McAfee DAT files for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/mcafee",
@@ -76,7 +76,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'jenkins_plugins' in $rsync_environments[$_env]['rsync']['global']['shares'] {
+        if 'jenkins_plugins' in $rsync_environments[$_env]['rsync']['Global']['shares'] {
           rsync::server::section { "jenkins_plugins_${_env}":
             comment     => "Jenkins Configuration for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/jenkins_plugins",
@@ -86,11 +86,11 @@ class simp::server::rsync_shares (
       }
 
       # OS Specific Items
-      (keys($rsync_environments[$_env]['rsync']) - ['global','id']).each |String $_os| {
-        $_os_id = $rsync_environments[$_env]['rsync'][$_os]['id']
+      (keys($rsync_environments[$_env]['rsync']) - ['Global','id']).each |String $_os| {
+        $_os_id = $_os
 
         # OS Major Version Specific Items
-        (keys($rsync_environments[$_env]['rsync'][$_os]) - ['global','id']).each |String $_os_maj_ver| {
+        (keys($rsync_environments[$_env]['rsync'][$_os]) - ['Global','id']).each |String $_os_maj_ver| {
           $_os_maj_ver_id = $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['id']
 
           if 'bind_dns' in $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['shares'] {
@@ -104,7 +104,7 @@ class simp::server::rsync_shares (
         }
 
         # OS Global Items
-        if 'apache' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
+        if 'apache' in $rsync_environments[$_env]['rsync'][$_os]['Global']['shares'] {
           rsync::server::section { "apache_${_env}_${_os_id}":
             auth_users     => ["apache_rsync_${_env}_${_os}"],
             comment        => "Apache configurations for Environment ${_env} on ${_os}",
@@ -114,7 +114,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'tftpboot' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
+        if 'tftpboot' in $rsync_environments[$_env]['rsync'][$_os]['Global']['shares'] {
           rsync::server::section { "tftpboot_${_env}_${_os_id}":
             auth_users  => ["tftpboot_rsync_${_env}_${_os}"],
             comment     => "Tftpboot server configurations for Environment ${_env} on ${_os}",
@@ -123,7 +123,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'dhcpd' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
+        if 'dhcpd' in $rsync_environments[$_env]['rsync'][$_os]['Global']['shares'] {
           rsync::server::section { "dhcpd_${_env}_${_os_id}":
             auth_users  => ["dhcpd_rsync_${_env}_${_os}"],
             comment     => "DHCP Configurations for Environment ${_env} on ${_os}",
@@ -132,7 +132,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'snmp' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
+        if 'snmp' in $rsync_environments[$_env]['rsync'][$_os]['Global']['shares'] {
           rsync::server::section { "snmp_${_env}_${_os_id}":
             comment     => "SNMP MIBs and Modules for Environment ${_env} on ${_os}",
             path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/snmp",
@@ -140,7 +140,7 @@ class simp::server::rsync_shares (
           }
         }
 
-        if 'freeradius' in $rsync_environments[$_env]['rsync'][$_os]['global']['shares'] {
+        if 'freeradius' in $rsync_environments[$_env]['rsync'][$_os]['Global']['shares'] {
           rsync::server::section { "freeradius_${_env}_${_os_id}":
             auth_users  => ["freeradius_systems_${_env}_${_os}"],
             comment     => "Freeradius configuration files for Environment ${_env} on ${_os}",

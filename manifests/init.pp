@@ -126,7 +126,7 @@ class simp (
 
   if $manage_root_metadata { include '::simp::root_user' }
 
-  if ($restrict_max_logins and $pam) { include '::simp::pam_rule::max_logins' }
+  if ($restrict_max_logins and $pam) { include '::simp::pam_limits::max_logins' }
 
   if $mail_server == 'remote' {
     include '::postfix::server'
