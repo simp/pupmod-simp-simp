@@ -7,39 +7,18 @@ describe 'simp::server::rsync_shares' do
         let(:facts) do
           facts[:simp_rsync_environments] = {
             environment => {
-              'rsync' => {
-                'global' => {
-                  'id' => 'Global',
-                  'shares' => [
-                    'clamav',
-                    'mcafee',
-                    'jenkins_plugins'
-                  ]
+              "rsync" => {
+                "Global" => { "id" => "Global", "shares" => ["clamav", "jenkins_plugins", "mcafee"] },
+                "CentOS" => {
+                  "id"     => 'CentOS',
+                  "6"      => { "id" => "6",      "shares" => ["bind_dns"] },
+                  "7"      => { "id" => "7",      "shares" => ["bind_dns"] },
+                  "Global" => { "id" => "Global", "shares" => ["apache", "dhcpd", "freeradius", "snmp", "tftpboot"] }
                 },
-                'redhat' => {
-                  'id' => 'RedHat',
-                  '6' => {
-                    'id' => '6',
-                    'shares' => [
-                      'bind_dns'
-                    ]
-                  },
-                  '7' => {
-                    'id' => '7',
-                    'shares' => [
-                      'bind_dns'
-                    ]
-                  },
-                  'global' => {
-                    'id' => 'Global',
-                    'shares' => [
-                      'apache',
-                      'dhcpd',
-                      'freeradius',
-                      'snmp',
-                      'tftpboot'
-                    ]
-                  }
+                "RedHat" => {
+                  "6"      => { "id" => "6",      "shares" => ["bind_dns"] },
+                  "7"      => { "id" => "7",      "shares" => ["bind_dns"] },
+                  "Global" => { "id" => "Global", "shares" => ["apache", "dhcpd", "freeradius", "snmp", "tftpboot"] }
                 }
               }
             }
