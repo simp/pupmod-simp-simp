@@ -28,7 +28,6 @@ class simp::base_apps (
     'dos2unix',
     'elinks',
     'hunspell',
-    'lslk',
     'lsof',
     'man',
     'man-pages',
