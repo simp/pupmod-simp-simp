@@ -7,6 +7,7 @@ simp_options::dns::search :
   - 'bar.baz'
 simp_options::dns::servers :
   - 1.2.3.4
+# simp_options::ldap : true
 simp_options::ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
 simp_options::ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
 simp_options::ldap::bind_pw : 's00per sekr3t!'
@@ -27,10 +28,9 @@ simp_options::puppet::ca_port : 8141
 simp_options::puppet::server : 'puppet.bar.baz'
 simp_options::rsync::server : 'rsync.bar.baz'
 simp_options::rsync::timeout : 1
-simp_options::selinux : 'permissive'
+simp_options::selinux : false
 simp_options::auditd : true
 simp_options::firewall : true
-# simp_options::ldap : true
 
 # Management of Specific Classes
 sssd::domains :

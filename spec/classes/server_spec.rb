@@ -5,6 +5,9 @@ describe 'simp::server' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
+          facts[:puppet_settings] = { :ssldir => '/opt/puppet/somewhere/ssl' }
+          facts[:augeasversion] = '1.4.0'
+          facts[:openssh_version] = '5.7'
           facts
         end
 
