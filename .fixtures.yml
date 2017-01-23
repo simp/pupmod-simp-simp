@@ -98,14 +98,13 @@ fixtures:
     file_concat: https://github.com/simp/puppet-lib-file_concat
     pupmod: https://github.com/simp/pupmod-simp-pupmod
     resolv: https://github.com/simp/pupmod-simp-resolv
-    rsync:
-      repo: https://github.com/trevor-vaughan/pupmod-simp-rsync
-      branch: SIMP-1695
+    rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
+    simp_options: https://github.com/simp/pupmod-simp-simp_options
     ssh: https://github.com/simp/pupmod-simp-ssh
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel

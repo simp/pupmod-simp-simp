@@ -31,8 +31,10 @@ describe "SIMP Rsync Environments" do
     it 'should return a Hash of environments' do
       expect(Facter.fact(:simp_rsync_environments).value).to eql({
           'simp' => {
+            'id' => 'simp',
             'rsync' => {
-              'Global' => {
+              'id' => 'rsync',
+              'global' => {
                 'id' => 'Global',
                 'shares' => [
                   'mcafee',

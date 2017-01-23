@@ -13,74 +13,74 @@ describe 'simp_yumrepo_gpgkeys' do
   let(:url) { 'https://YUM_SERVER/yum/SIMP' }
   let(:servers) { ['1.1.1.1', '2.2.2.2'] }
   let(:expected_output) {
-    { 'centos-6-x86_64' => 
-      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-6\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-Security-6\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-6\n" + 
+    { 'centos-6-x86_64' =>
+      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-6\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-Security-6\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-6\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-Security-6",
 
       'centos-7-x86_64' =>
-      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-7\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" + 
+      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-7\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-7",
 
       'redhat-6-x86_64' =>
-      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" + 
+      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release",
 
       'redhat-7-x86_64' =>
-      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" + 
-      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" + 
-      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" + 
+      "https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release"
 
     }
-      
+
   }
 
   context 'supported operating systems' do

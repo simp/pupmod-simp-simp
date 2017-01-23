@@ -37,24 +37,28 @@ Facter.add('simp_rsync_environments') do
 
           last = nil
           dir_parts.each_with_index do |p,i|
+            key = p.downcase
+
             if dir_parts[i+2]
               if last
                 if last.is_a?(Hash)
-                  last[p] ||= {}
-                  last = last[p]
+                  last[key] ||= {}
+                  last[key]['id'] = p
+                  last = last[key]
                 end
               else
-                environment_hash[p] ||= {}
-                last = environment_hash[p]
+                environment_hash[key] ||= {}
+                environment_hash[key]['id'] = p
+                last = environment_hash[key]
               end
             else
               if last.is_a?(Hash)
                 # We need to add an 'id' value to the Hash because Facter
                 # downcases all Hash keys
-                last[p] ||= {}
-                last[p]['id'] = p
-                last[p]['shares'] ||= []
-                last[p]['shares'] << dir_parts[i+1]
+                last[key] ||= {}
+                last[key]['id'] = p
+                last[key]['shares'] ||= []
+                last[key]['shares'] << dir_parts[i+1]
               end
 
               break

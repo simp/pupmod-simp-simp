@@ -41,8 +41,7 @@ class simp::server::rsync_shares (
   Boolean              $stunnel            = simplib::lookup('simp_options::stunnel', { 'default_value' => false }),
   Simplib::Netlist     $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
 ){
-
-  include '::rsync::server::global'
+  include '::rsync::server'
 
   if $rsync_environments and !empty($rsync_environments) {
 
@@ -53,13 +52,16 @@ class simp::server::rsync_shares (
       $_trusted_nets = $trusted_nets
     }
 
+    # Puppet lint doesn't like lambdas
+    # https://github.com/rodjek/puppet-lint/issues/549
+    # lint:ignore:variable_scope
     # Process each environment that was found
-    keys($rsync_environments).each |String $_env| {
+    (keys($rsync_environments) - ['id']).each |String $_env| {
 
       # Do the Global items first
-      if $rsync_environments[$_env]['rsync']['Global'] {
+      if $rsync_environments[$_env]['rsync']['global'] {
         $_globals_dir   = 'rsync/Global'
-        $_global_shares = $rsync_environments[$_env]['rsync']['Global']['shares']
+        $_global_shares = $rsync_environments[$_env]['rsync']['global']['shares']
 
         if 'clamav' in $_global_shares {
           rsync::server::section { "clamav_${_env}":
@@ -87,11 +89,11 @@ class simp::server::rsync_shares (
       }
 
       # OS Specific Items
-      (keys($rsync_environments[$_env]['rsync']) - ['Global','id']).each |String $_os| {
+      (keys($rsync_environments[$_env]['rsync']) - ['global','id']).each |String $_os| {
         $_os_id = $rsync_environments[$_env]['rsync'][$_os]['id']
 
         # OS Major Version Specific Items
-        (keys($rsync_environments[$_env]['rsync'][$_os]) - ['Global','id']).each |String $_os_maj_ver| {
+        (keys($rsync_environments[$_env]['rsync'][$_os]) - ['global','id']).each |String $_os_maj_ver| {
           $_os_maj_ver_id     = $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['id']
           $_os_maj_ver_shares = $rsync_environments[$_env]['rsync'][$_os][$_os_maj_ver]['shares']
 
@@ -106,7 +108,7 @@ class simp::server::rsync_shares (
         }
 
         # OS Global Items
-        $_os_global_shares = $rsync_environments[$_env]['rsync'][$_os]['Global']['shares']
+        $_os_global_shares = $rsync_environments[$_env]['rsync'][$_os]['global']['shares']
 
         if 'apache' in $_os_global_shares {
           rsync::server::section { "apache_${_env}_${_os_id}":
@@ -154,5 +156,6 @@ class simp::server::rsync_shares (
         }
       }
     }
+    # lint:endignore
   }
 }
