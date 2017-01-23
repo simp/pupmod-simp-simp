@@ -5,6 +5,7 @@
 - Removed any dangling references or dependencies on ganglia or snmpd
 - Rearranged logic in sysctl and removed the ipv6 catalyst. ipv6 will now be
   unmanaged by default.
+- Beefed up simp::server class to include more default classes
 
 * Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.1-0
 - Added a 'simp::ctrl_alt_del' class for managing the behavior of giving a
@@ -17,7 +18,7 @@
 * Thu Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
 - Removed pupmod-simp-sysctl in favor of augeas-sysctl
 
-* Thu Nov 29 2016 Nicholas Hughes Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+* Thu Nov 29 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
 - Introduced rsyslog rule orders so messages hit 'stop' rules before they
   reach 'catch-alls'.  By doing so, log duplication is prevented.
 - Modified the spooler log local rule to ensure both uucp and news
