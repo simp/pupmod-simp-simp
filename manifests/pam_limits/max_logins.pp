@@ -12,10 +12,10 @@ class simp::pam_limits::max_logins (
 ) {
 
   pam::limits::rule { 'max_logins':
-    domain => '*',
-    type   => 'hard',
-    item   => 'maxlogins',
-    value  => $value,
-    order  => 100
+    domains => ['*'],
+    type    => 'hard',
+    item    => 'maxlogins',
+    value   => $value,
+    order   => 100
   }
 }

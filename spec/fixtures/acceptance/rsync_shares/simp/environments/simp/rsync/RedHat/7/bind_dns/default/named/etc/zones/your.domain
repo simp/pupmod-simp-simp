@@ -1,0 +1,9 @@
+zone "your.domain" IN {
+	type master;
+	file "forward/your.domain.db";
+};
+
+zone "0.0.10.in-addr.arpa" IN {
+	type master;
+	file "reverse/0.0.10.db";
+};

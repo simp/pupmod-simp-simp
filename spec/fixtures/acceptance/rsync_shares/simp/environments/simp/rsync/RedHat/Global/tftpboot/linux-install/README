@@ -1,0 +1,10 @@
+You will need to copy the pxelinux.0 and the appropriate kickstart images for
+your systems into this directory as well as the 'msgs' directory from your
+distribution.
+
+By default, each set of files should be placed into a directory of the form
+'operatingsystem-version-architecture'.
+
+For Example:
+
+'RHEL 6 x86_64' would be 'rhel-6-x86_64'

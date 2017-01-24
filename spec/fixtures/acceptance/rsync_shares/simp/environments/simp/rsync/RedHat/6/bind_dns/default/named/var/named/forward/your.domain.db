@@ -1,0 +1,10 @@
+$TTL	86400
+your.domain.		IN SOA	ns.your.domain. hostmaster.your.domain. (
+					2008072900
+					3H		; refresh
+					15M		; retry
+					1W		; expiry
+					1D )		; minimum
+	        IN NS		ns.your.domain.
+		
+ns          IN	A	10.0.0.1
