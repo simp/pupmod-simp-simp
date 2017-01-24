@@ -1,0 +1,9 @@
+$TTL	86400
+@		IN SOA	your.domain. ns.your.domain. (
+					2008072900
+					1h		; refresh
+					15m		; retry
+					1w		; expiry
+					1d )		; minimum
+		IN NS	ns.your.domain.
+1	IN	PTR	ns.your.domain.

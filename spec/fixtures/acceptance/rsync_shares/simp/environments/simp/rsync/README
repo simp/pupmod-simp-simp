@@ -1,0 +1,7 @@
+This directory should have the following structure for the associated
+simp::server::rsync_shares class to work properly:
+
+Globals => Any shares that are not bound by OS specific issues
+<OperatingSystem>/<MajorRelease> => Shares that are specific to the OS and release
+
+No other directory structure is supported at this time
