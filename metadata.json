@@ -81,7 +81,7 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/openldap",
+      "name": "simp/simp_openldap",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {

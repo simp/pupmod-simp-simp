@@ -136,7 +136,7 @@ class simp (
   }
 
   if $ldap {
-    include '::openldap::client'
+    include '::simp_openldap::client'
 
   }
 

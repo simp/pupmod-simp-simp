@@ -31,8 +31,8 @@ Requires: pupmod-simp-named < 7.0.0-0
 Requires: pupmod-simp-named >= 6.0.0-0
 Requires: pupmod-simp-ntpd < 7.0.0-0
 Requires: pupmod-simp-ntpd >= 6.0.0-0
-Requires: pupmod-simp-openldap < 7.0.0-0
-Requires: pupmod-simp-openldap >= 6.0.0-0
+Requires: pupmod-simp-simp_openldap < 7.0.0-0
+Requires: pupmod-simp-simp_openldap >= 6.0.0-0
 Requires: pupmod-simp-pam < 7.0.0-0
 Requires: pupmod-simp-pam >= 6.0.0-0
 Requires: pupmod-simp-pki < 7.0.0-0

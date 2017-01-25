@@ -26,14 +26,14 @@ describe 'simp::server::ldap' do
           let(:params){{ :is_slave => true }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_openldap__server__syncrepl('111') }
+          it { is_expected.to create_simp_openldap__server__syncrepl('111') }
         end
 
         context 'use_lastbind' do
           let(:params){{ :enable_lastbind => true }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('openldap::slapo::lastbind') }
+          it { is_expected.to create_class('simp_openldap::slapo::lastbind') }
         end
       end
     end
