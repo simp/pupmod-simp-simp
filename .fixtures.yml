@@ -103,7 +103,7 @@ fixtures:
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
-    #simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
+    simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     ssh: https://github.com/simp/pupmod-simp-ssh
     stdlib: https://github.com/simp/puppetlabs-stdlib
@@ -121,4 +121,3 @@ fixtures:
     xinetd: https://github.com/simp/pupmod-simp-xinetd
   symlinks:
     simp: "#{source_dir}"
-    simp_openldap: "#{source_dir}/../simp_openldap"
