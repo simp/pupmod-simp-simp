@@ -5,7 +5,7 @@ test_name 'Secure Mountpoints'
 describe 'simplib::secure_mountpoints class' do
   # On CentOS6, secure_mountpoints
   # includes 'upstart' class,
-  #  which uses the auditd::add_rules resource
+  #  which uses the auditd::rule resource
   #    which includes 'auditd' class
   #      which  by default enables auditing ($enable_auditing) and syslog logging
   #      ($to_syslog) and thus includes auditd::config::logging
