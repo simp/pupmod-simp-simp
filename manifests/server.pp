@@ -10,24 +10,58 @@
 #   * You should **not** disable this unless you have specific needs and
 #     understand the dependencies on the various rsync shares
 #
-# @param enable_kickstart
-#   Set the system up as a kickstart server
-#
-# @param enable_ldap
-#   Set the system up as an OpenLDAP server
-#
-# @param enable_yum
-#   Set the system up as a YUM server
-#
 # @param pam
 #   Enable SIMP management of the PAM stack
+#
+# @param clamav
+#   Enable SIMP management of Antivirus
+#
+# @param selinux
+#   Enable SIMP management of SELinux
+#
+# @param auditd
+#   Enable SIMP management of auditing
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server (
-  Boolean $allow_simp_user     = false,
-  Boolean $pam                 = simplib::lookup('simp_options::pam', { 'default_value' => false })
+  Boolean $allow_simp_user = false,
+  Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value' => false }),
+  Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
+  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false })
 ) {
+
+  include '::aide'
+  include '::at'
+  include '::chkrootkit'
+  include '::cron'
+  include '::incron'
+  include '::issue'
+  include '::nsswitch'
+  include '::ntpd'
+  include '::pam::access'
+  include '::pam::wheel'
+  include '::pupmod'
+  include '::resolv'
+  include '::ssh'
+  include '::sudosh'
+  include '::svckill'
+  include '::swap'
+  include '::timezone'
+  include '::tuned'
+  include '::useradd'
+  include '::simp::admin'
+  include '::simp::base_apps'
+  include '::simp::base_services'
+  include '::simp::kmod_blacklist'
+  include '::simp::mountpoints'
+  include '::simp::server::rsync_shares'
+  include '::simp::sysctl'
+
+  if $clamav  { include '::clamav' }
+  if $selinux { include '::selinux' }
+  if $auditd  { include '::auditd' }
 
   if $allow_simp_user {
     if $pam {

@@ -114,6 +114,7 @@ fixtures:
     svckill: https://github.com/simp/pupmod-simp-svckill
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
+    timezone: https://github.com/simp/puppet-timezone
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart

@@ -46,15 +46,15 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
-  String         $admin_group               = 'administrators',
-  Boolean        $passwordless_admin_sudo   = true,
-  String         $auditor_group             = 'security',
-  Boolean        $passwordless_auditor_sudo = true,
-  Array[String]  $admins_allowed_from       = ['ALL'],
-  Array[String]  $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
-  Boolean        $force_logged_shell        = true,
-  Enum['sudosh'] $logged_shell              = 'sudosh',
-  Boolean        $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false })
+  String           $admin_group               = 'administrators',
+  Boolean          $passwordless_admin_sudo   = true,
+  String           $auditor_group             = 'security',
+  Boolean          $passwordless_auditor_sudo = true,
+  Simplib::Netlist $admins_allowed_from       = ['ALL'],
+  Simplib::Netlist $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
+  Boolean          $force_logged_shell        = true,
+  Enum['sudosh']   $logged_shell              = 'sudosh',
+  Boolean          $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false })
 ){
 
   include '::simp::sudoers'
@@ -105,6 +105,14 @@ class simp::admin (
     passwd    => !$passwordless_admin_sudo
   }
 
+  sudo::user_specification { 'auditors':
+    user_list => ["%${auditor_group}"],
+    host_list => [$facts['fqdn']],
+    runas     => 'root',
+    cmnd      => ['AUDIT'],
+    passwd    => !$passwordless_auditor_sudo
+  }
+
   # The following two are especially important if you're using sudosh.
   # They allow you to recover from destroying the certs in your environment.
   sudo::user_specification { 'admin_run_puppet':
@@ -123,11 +131,4 @@ class simp::admin (
     passwd    => !$passwordless_admin_sudo
   }
 
-  sudo::user_specification { 'auditors':
-    user_list => ["%${auditor_group}"],
-    host_list => [$facts['fqdn']],
-    runas     => 'root',
-    cmnd      => ['AUDIT'],
-    passwd    => !$passwordless_auditor_sudo
-  }
 }
