@@ -9,12 +9,12 @@
 #   ldap::master will be used as the master server.
 #
 #   If you want to use values other than the defaults as provided with
-#   openldap::server::syncrepl. Leave this as 'false', include this
-#   class and call openldap::server::syncrepl with your values as
+#   simp_openldap::server::syncrepl. Leave this as 'false', include this
+#   class and call simp_openldap::server::syncrepl with your values as
 #   appropriate.
 #
 # @param rid
-#   The RID of the system. See openldap::server::syncrepl for
+#   The RID of the system. See simp_openldap::server::syncrepl for
 #   additional information.
 #
 # @param bind_dn
@@ -41,26 +41,26 @@ class simp::server::ldap (
 ){
 
   # Order matters with these top two!
-  include '::openldap'
-  include '::openldap::server'
-  include '::openldap::slapo::ppolicy'
-  include '::openldap::slapo::syncprov'
-  if $enable_lastbind { include '::openldap::slapo::lastbind' }
+  include '::simp_openldap'
+  include '::simp_openldap::server'
+  include '::simp_openldap::slapo::ppolicy'
+  include '::simp_openldap::slapo::syncprov'
+  if $enable_lastbind { include '::simp_openldap::slapo::lastbind' }
 
   $s_rid = to_string($rid)
   if $is_slave {
-    openldap::server::syncrepl { $s_rid: }
+    simp_openldap::server::syncrepl { $s_rid: }
   }
 
   if !empty($bind_dn) {
-    openldap::server::limits { 'Host_Bind_DN_Unlimited_Query':
+    simp_openldap::server::limits { 'Host_Bind_DN_Unlimited_Query':
       who    => $bind_dn,
       limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
   }
 
   if !empty($sync_dn) {
-    openldap::server::limits { 'LDAP_Sync_DN_Unlimited_Query':
+    simp_openldap::server::limits { 'LDAP_Sync_DN_Unlimited_Query':
       who    => $sync_dn,
       limits => ['size.soft=unlimited','size.hard=unlimited','size.prtotal=unlimited']
     }
