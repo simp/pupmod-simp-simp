@@ -1,11 +1,11 @@
 * Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
-
 - Removing including of simp::server::* classes from the simp::server
   class in favor of including them in the class list in hiera.
 - Removed any dangling references or dependencies on ganglia or snmpd
 - Rearranged logic in sysctl and removed the ipv6 catalyst. ipv6 will now be
   unmanaged by default.
 - Beefed up simp::server class to include more default classes
+- Made $rsync_stunnel enabled by default
 
 * Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.1-0
 - Added a 'simp::ctrl_alt_del' class for managing the behavior of giving a
