@@ -1,3 +1,7 @@
+* Mon Feb 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
+- Modified rsync stunnel logic to add a connection to the rsync server
+  only if the machine is *not* the rsync server.
+
 * Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
 - Removing including of simp::server::* classes from the simp::server
   class in favor of including them in the class list in hiera.

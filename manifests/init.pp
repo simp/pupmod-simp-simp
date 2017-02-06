@@ -167,9 +167,11 @@ class simp (
       $_rsync_stunnel_svr = $rsync_stunnel
     }
 
-    stunnel::connection { 'rsync':
-      connect => ["${_rsync_stunnel_svr}:8730"],
-      accept  => '127.0.0.1:873'
+    if !host_is_me($_rsync_stunnel_svr) {
+      stunnel::connection { 'rsync':
+        connect => ["${_rsync_stunnel_svr}:8730"],
+        accept  => '127.0.0.1:873'
+      }
     }
   }
 }
