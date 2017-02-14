@@ -13,11 +13,29 @@ describe 'simp' do
           facts
         end
 
-        context 'with default parameters' do
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
-          it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
-          it { is_expected.to create_stunnel__connection('rsync') }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
+        it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
+        it { is_expected.to create_stunnel__connection('rsync') }
+        it { is_expected.to_not create_filebucket('simp') }
+
+        context 'with filebucketing' do
+          context 'with local path' do
+            let(:params) {{ :enable_filebucketing => true }}
+
+            it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
+            it { is_expected.to create_filebucket('simp').with_path("#{facts[:puppet_vardir]}/simp/filebucket") }
+          end
+
+          context 'with remote server' do
+            let(:params) {{
+              :enable_filebucketing => true,
+              :filebucket_server    => 'my.puppet.server'
+            }}
+
+            it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
+            it { is_expected.to create_filebucket('simp').with_server(params[:filebucket_server]) }
+          end
         end
 
         context 'rsync_stunnel logic' do

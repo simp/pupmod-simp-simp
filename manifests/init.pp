@@ -30,11 +30,18 @@
 #   * This has no effect if the ``$server_facts`` Hash is not populated
 #
 # @param enable_filebucketing
-#   If true, enable the server-side filebucket for all managed files on the
-#   client system.
+#   Enable the filebucket for all managed files
+#
+# @param filebucket_name
+#   The name of the filebucket that should be used
 #
 # @param filebucket_server
 #   Sets up a remote filebucket target if set
+#
+# @param filebucket_path
+#   The local system path to use as the filebucket
+#
+#   * Has no effect if ``$filebucket_server`` is set
 #
 # @param use_sudoers_aliases
 #   If true, enable simp site sudoers aliases
@@ -88,8 +95,10 @@ class simp (
   Boolean                         $use_ssh_global_known_hosts = false,
   Boolean                         $version_info               = true,
   Boolean                         $puppet_server_hosts_entry  = true,
-  Boolean                         $enable_filebucketing       = true,
-  Optional[Simplib::Netlist]      $filebucket_server          = undef,
+  Boolean                         $enable_filebucketing       = false,
+  String                          $filebucket_name            = 'simp',
+  Optional[Simplib::Host]      $filebucket_server          = undef,
+  Stdlib::Absolutepath            $filebucket_path            = "${facts['puppet_vardir']}/simp/filebucket",
   Boolean                         $use_sudoers_aliases        = true,
   Simp::Runlevel                  $runlevel                   = 3,
   Boolean                         $restrict_max_logins        = true,
@@ -103,15 +112,22 @@ class simp (
   Boolean                         $stock_sssd                 = true
 ) {
 
-  File { backup => $enable_filebucketing }
-
-  if $filebucket_server { filebucket { 'main': server => $filebucket_server } }
-
   file { "${facts['puppet_vardir']}/simp":
     ensure => 'directory',
     mode   => '0750',
     owner  => 'root',
     group  => 'root'
+  }
+
+  if $enable_filebucketing {
+    File { backup => $filebucket_name }
+
+    if $filebucket_server {
+      filebucket { $filebucket_name: server => $filebucket_server }
+    }
+    else {
+      filebucket { $filebucket_name: path => $filebucket_path }
+    }
   }
 
   runlevel { to_string($runlevel): }
