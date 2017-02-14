@@ -46,19 +46,18 @@ describe 'simp::yum class' do
 
   let(:hieradata) {
     <<-EOM
----
+---simp_apache::rsync_server : '127.0.0.1'
+simp_apache::rsync_web_root : false
 simp_options::trusted_nets:
   - ALL
 
-simp_apache::ssl::app_pki_dir : '/etc/pki/simp-testing'
-simp_apache::ssl::app_pki_external_source : '/etc/pki/simp-testing/pki'
-# simp_apache::ssl::app_pki_ca_dir : "file://%{hiera('pki_dir')}/cacerts"
-# simp_apache::ssl::app_pki_cert : "file://%{hiera('pki_dir')}/public/%{::fqdn}.pub"
-# simp_apache::ssl::app_pki_key : "file://%{hiera('pki_dir')}/private/%{::fqdn}.pem"
+simp_options::rsync: false
+simp_options::pki: true
+simp_options::pki::source : '/etc/pki/simp-testing/pki'
 
 simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
-simp_apache::ssl::sslverifyclient : 'none'
+simp_apache::ssl::sslverifyclient: none
 
 simp::yum::servers:
   - "%{::fqdn}"
