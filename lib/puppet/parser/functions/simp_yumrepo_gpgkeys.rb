@@ -1,5 +1,4 @@
 module Puppet::Parser::Functions
-
   newfunction(:simp_yumrepo_gpgkeys, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
     Take a URL and a list of YUM servers and return a valid list of
     GPG Keys that pertain to the SIMP load.
@@ -18,47 +17,23 @@ module Puppet::Parser::Functions
       raise Puppet::ParseError, "simp_yumrepo_gpgkeys(): expects the second argument to be an array or string, got #{args[0].inspect} which is of type #{args[0].class}"
     end
 
-    # Common GPG Keys
-    gpg_keys = %w(
-      RPM-GPG-KEY-puppetlabs
-      RPM-GPG-KEY-SIMP
-      RPM-GPG-KEY-EPEL
-      RPM-GPG-KEY-elasticsearch
-      RPM-GPG-KEY-grafana
-    )
+    # Common gpg keys, distributed in simp-gpgkeys
+    gpg_keys = [
+      'RPM-GPG-KEY-puppet',
+      'RPM-GPG-KEY-puppetlabs',
+      'RPM-GPG-KEY-SIMP',
+      'RPM-GPG-KEY-EPEL',
+      'RPM-GPG-KEY-elasticsearch',
+      'RPM-GPG-KEY-grafana'
+    ]
 
-    case "#{Facter.value('operatingsystem')}#{Facter.value('operatingsystemmajrelease')}"
-      when /(RedHat|CentOS)6/
-        gpg_keys += %w(
-          RPM-GPG-KEY-EPEL-6
-        )
-        case "#{Facter.value('operatingsystem')}"
-          when /CentOS/
-            gpg_keys += %w(
-              RPM-GPG-KEY-CentOS-6
-              RPM-GPG-KEY-CentOS-Security-6
-            )
-          when /RedHat/
-            gpg_keys += %w(
-              RPM-GPG-KEY-redhat-release
-            )
-        end
-      when /(RedHat|CentOS)7/
-        gpg_keys += %w(
-          RPM-GPG-KEY-EPEL-7
-        )
-        case "#{Facter.value('operatingsystem')}"
-          when /CentOS/
-            gpg_keys += %w(
-              RPM-GPG-KEY-CentOS-7
-            )
-          when /RedHat/
-            gpg_keys += %w(
-              RPM-GPG-KEY-redhat-release
-            )
-        end
-      else
-        Puppet.warning("#{Facter.value('operatingsystem')} #{Facter.value('operatingsystemmajrelease')}  support not yet complete")
+    os_name    = Facter.value('os')['name']
+    os_maj_rel = Facter.value('os')['release']['major']
+
+    if ['RedHat','CentOS'].include? os_name
+      gpg_keys << 'RPM-GPG-KEY-EPEL-6' if os_maj_rel == '6'
+      gpg_keys << 'RPM-GPG-KEY-EPEL-7' if os_maj_rel == '7'
+      gpg_keys << 'RPM-GPG-KEY-redhat-release' if os_name == 'RedHat'
     end
 
     toret = []
@@ -68,6 +43,5 @@ module Puppet::Parser::Functions
     end
 
     toret.flatten.join("\n    ")
-
   end
 end

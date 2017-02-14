@@ -47,11 +47,10 @@ class simp::yum (
   Boolean                                              $enable_simp_repos   = true,
   Boolean                                              $enable_os_repos     = true,
   Boolean                                              $enable_auto_updates = true,
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $os_update_url       = "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/Updates",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $os_update_url       = "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}/Updates",
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $os_gpg_url          = '',
-  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url     = "https://YUM_SERVER/yum/SIMP/${::hardwaremodel}",
+  Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url     = "https://YUM_SERVER/yum/SIMP/${facts['architecture']}",
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url        = ''
-
 ){
   if $enable_auto_updates {
     include '::simp::yum::schedule'
@@ -64,20 +63,20 @@ class simp::yum (
     '/etc/yum',
     '/etc/yum.repos.d'
   ]:
-      ensure  => 'directory',
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      recurse => true
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    recurse => true
   }
 
   $_simp_repo_enable = $enable_simp_repos ? { true => 1, default => 0 }
-  $_os_repo_enable = $enable_os_repos ? { true => 1, default => 0 }
+  $_os_repo_enable   = $enable_os_repos ?   { true => 1, default => 0 }
 
   if empty($os_gpg_url) {
     $_temp_os_gpg_url = $facts['os']['name'] ? {
-      'RedHat' => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/RPM-GPG-KEY-redhat-release",
-      default  => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${::hardwaremodel}/RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"
+      'RedHat' => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}/RPM-GPG-KEY-redhat-release",
+      default  => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}/RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"
     }
 
     $_os_gpg_url = simp_yumrepo_mangle($_temp_os_gpg_url, $servers)
@@ -95,11 +94,11 @@ class simp::yum (
 
   yumrepo { 'os_updates':
     baseurl         => simp_yumrepo_mangle($os_update_url, $servers),
-    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${::hardwaremodel} base packages and updates",
+    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
     enabled         => $_os_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => join(split($_os_gpg_url,"\n"),"\n    "),
+    gpgkey          => join(split($_os_gpg_url,"\n"),"\n   "),
     sslverify       => 0,
     keepalive       => 0,
     metadata_expire => 3600,
@@ -112,7 +111,7 @@ class simp::yum (
     enabled         => $_simp_repo_enable,
     enablegroups    => 0,
     gpgcheck        => 1,
-    gpgkey          => join(split($_simp_gpg_url,"\n"),"\n    "),
+    gpgkey          => join(split($_simp_gpg_url,"\n"),"\n   "),
     sslverify       => 0,
     keepalive       => 0,
     metadata_expire => 3600,
