@@ -1,8 +1,11 @@
-* Mon Feb 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
+* Tue Feb 14 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Ensure that the filebucket is appropriately set for both local and remote use
+
+* Mon Feb 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.0.0-0
 - Modified rsync stunnel logic to add a connection to the rsync server
   only if the machine is *not* the rsync server.
 
-* Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+* Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
 - Removing including of simp::server::* classes from the simp::server
   class in favor of including them in the class list in hiera.
 - Removed any dangling references or dependencies on ganglia or snmpd
@@ -11,7 +14,7 @@
 - Beefed up simp::server class to include more default classes
 - Made $rsync_stunnel enabled by default
 
-* Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.1-0
+* Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
 - Added a 'simp::ctrl_alt_del' class for managing the behavior of giving a
   system the three finger death punch
 
