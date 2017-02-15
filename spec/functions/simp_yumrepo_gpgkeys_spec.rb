@@ -86,7 +86,10 @@ describe 'simp_yumrepo_gpgkeys' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         before :each do
-          Facter.stubs(:value).with('os').returns facts[:os]
+          # SIMP's provided facts use symbols as keys, which are not accessible
+          # in Puppet. See SIMP-2696
+          structured_os = { 'name' => facts[:os][:name].to_s, 'release' => { 'major' => facts[:os][:release][:major].to_s } }
+          Facter.stubs(:value).with('os').returns structured_os
         end
 
         let(:facts) { facts }
