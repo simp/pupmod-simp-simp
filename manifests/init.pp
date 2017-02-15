@@ -54,6 +54,10 @@
 #
 #   * Has no effect if ``$pam`` is ``false``
 #
+# @param manage_ctrl_alt_del
+#   Include the ``simp::ctrl_alt_del`` class, which, by default, disables the
+#   use of ctrl_alt_del and logs all instances of the event.
+#
 # @param manage_root_metadata
 #   Include the ``simp::root_user`` class, which manages resources related to
 #   the ``root`` user
@@ -102,6 +106,7 @@ class simp (
   Boolean                         $use_sudoers_aliases        = true,
   Simp::Runlevel                  $runlevel                   = 3,
   Boolean                         $restrict_max_logins        = true,
+  Boolean                         $manage_ctrl_alt_del        = true,
   Boolean                         $manage_root_metadata       = true,
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
@@ -139,6 +144,8 @@ class simp (
   if $use_sudoers_aliases { include '::simp::sudoers' }
 
   if $version_info { include '::simp::version' }
+
+  if $manage_ctrl_alt_del { include '::simp::ctrl_alt_del' }
 
   if $manage_root_metadata { include '::simp::root_user' }
 
