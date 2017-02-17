@@ -19,12 +19,14 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6",
 
     'centos-7-x86_64' =>
@@ -33,12 +35,14 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7",
 
     'redhat-6-x86_64' =>
@@ -47,6 +51,7 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet\n" +
@@ -54,6 +59,7 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-6\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release",
 
@@ -63,6 +69,7 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
       "    https://1.1.1.1/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet\n" +
@@ -70,6 +77,7 @@ describe 'simp_yumrepo_gpgkeys' do
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-elasticsearch\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-grafana\n" +
+      "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-7\n" +
       "    https://2.2.2.2/yum/SIMP/GPGKEYS/RPM-GPG-KEY-redhat-release"
   }}

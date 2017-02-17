@@ -23,7 +23,8 @@ module Puppet::Parser::Functions
       'RPM-GPG-KEY-puppetlabs',
       'RPM-GPG-KEY-SIMP',
       'RPM-GPG-KEY-elasticsearch',
-      'RPM-GPG-KEY-grafana'
+      'RPM-GPG-KEY-grafana',
+      'RPM-GPG-KEY-PGDG-94'
     ]
 
     os_name    = Facter.value('os')['name']
