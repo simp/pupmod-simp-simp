@@ -1,3 +1,6 @@
+* Fri Feb 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
+- Refine list of GPG keys used by simp::yum::server
+
 * Tue Feb 14 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
 - Ensure that the filebucket is appropriately set for both local and remote use
 
