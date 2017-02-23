@@ -233,9 +233,9 @@ class simp::sysctl (
         sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
       }
 
-      if $ipv6 !~ Undef {
-        $_ipv6 = $ipv6 ? { true => 0, false => 1 }
-        sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_ipv6 }
+      unless $ipv6.is_a(Undef) {
+        $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
+        sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_disable_ipv6 }
         if $ipv6 {
           sysctl {
             default                                      : require => Sysctl['net.ipv6.conf.all.disable_ipv6'];
