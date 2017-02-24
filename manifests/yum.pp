@@ -52,11 +52,11 @@ class simp::yum (
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url     = "https://YUM_SERVER/yum/SIMP/${facts['architecture']}",
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url        = ''
 ){
-  if $enable_auto_updates {
+  if $enable_auto_updates == true {
     include '::simp::yum::schedule'
   }
   else {
-    cron { 'yum_update': ensure => 'absent' }
+    cron { 'simp_yum_updates': ensure => 'absent' }
   }
 
   file { [
