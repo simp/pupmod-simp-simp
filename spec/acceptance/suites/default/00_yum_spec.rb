@@ -46,7 +46,8 @@ describe 'simp::yum class' do
 
   let(:hieradata) {
     <<-EOM
----simp_apache::rsync_server : '127.0.0.1'
+---
+simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
 simp_options::trusted_nets:
   - ALL
