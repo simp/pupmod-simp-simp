@@ -6,53 +6,25 @@ fixtures:
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
-    augeasproviders:
-      repo: https://github.com/simp/augeasproviders
-      branch: simp-master
-    augeasproviders_base:
-      repo: https://github.com/simp/augeasproviders_base
-      branch: simp-master
-    augeasproviders_core:
-      repo: https://github.com/simp/augeasproviders_core
-      branch: simp-master
-    augeasproviders_grub:
-      repo: https://github.com/simp/augeasproviders_grub
-      branch: simp-master
-    augeasproviders_puppet:
-      repo: https://github.com/simp/augeasproviders_puppet
-      branch: simp-master
-    augeasproviders_apache:
-      repo: https://github.com/simp/augeasproviders_apache
-      branch: simp-master
-    augeasproviders_mounttab:
-      repo: https://github.com/simp/augeasproviders_mounttab
-      branch: simp-master
-    augeasproviders_nagios:
-      repo: https://github.com/simp/augeasproviders_nagios
-      branch: simp-master
-    augeasproviders_pam:
-      repo: https://github.com/simp/augeasproviders_pam
-      branch: simp-master
-    augeasproviders_postgresql:
-      repo: https://github.com/simp/augeasproviders_postgresql
-      branch: simp-master
-    augeasproviders_shellvar:
-      repo: https://github.com/simp/augeasproviders_shellvar
-      branch: simp-master
-    augeasproviders_ssh:
-      repo: https://github.com/simp/augeasproviders_ssh
-      branch: simp-master
-    augeasproviders_sysctl:
-      repo: https://github.com/simp/augeasproviders_sysctl
-      branch: simp-master
+    augeasproviders: https://github.com/simp/augeasproviders
+    augeasproviders_base: https://github.com/simp/augeasproviders_base
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
+    augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
+    augeasproviders_apache: https://github.com/simp/augeasproviders_apache
+    augeasproviders_mounttab: https://github.com/simp/augeasproviders_mounttab
+    augeasproviders_nagios: https://github.com/simp/augeasproviders_nagios
+    augeasproviders_pam: https://github.com/simp/augeasproviders_pam
+    augeasproviders_postgresql: https://github.com/simp/augeasproviders_postgresql
+    augeasproviders_shellvar: https://github.com/simp/augeasproviders_shellvar
+    augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
+    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat: https://github.com/simp/puppetlabs-concat
     cron: https://github.com/simp/pupmod-simp-cron
-    datacat:
-      repo: https://github.com/simp/puppet-datacat
-      branch: simp-master
+    datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
     freeradius: https://github.com/simp/pupmod-simp-freeradius
@@ -60,26 +32,18 @@ fixtures:
       repo: https://github.com/simp/puppet-haveged
       branch: simp-master
     incron: https://github.com/simp/pupmod-simp-incron
-    inifile:
-      repo: https://github.com/simp/puppetlabs-inifile
-      branch: simp-master
+    inifile: https://github.com/simp/puppetlabs-inifile
     iptables: https://github.com/simp/pupmod-simp-iptables
     issue: https://github.com/simp/pupmod-simp-issue
-    java:
-      repo: https://github.com/simp/puppetlabs-java
-      branch: simp-master
-    java_ks:
-      repo: https://github.com/simp/puppetlabs-java_ks
-      branch: simp-master
+    java: https://github.com/simp/puppetlabs-java
+    java_ks: https://github.com/simp/puppetlabs-java_ks
     kmod: https://github.com/simp/puppet-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     mcollective:
       repo: https://github.com/simp/pupmod-simp-mcollective
       branch: simp-master
-    motd:
-      repo: https://github.com/simp/puppetlabs-motd
-      branch: simp-master
+    motd: https://github.com/simp/puppetlabs-motd
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
     nsswitch:
