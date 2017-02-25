@@ -6,11 +6,6 @@
 #   * Version pinning is not supported
 #   * If you need version pinning, do not include this class
 #
-# @param core_apps
-#   The main list of applications to install
-#
-#   * Take care if you decide to change or eliminate this list
-#
 # @param extra_apps
 #   A list of other applications that you wish to install
 #
@@ -21,8 +16,11 @@
 #
 class simp::base_apps (
   Enum['latest','absent','present'] $ensure               = 'latest',
-  Boolean                           $manage_elinks_config = true,
-  Array[String,1]                   $core_apps = [
+  Optional[Array[String,1]]         $extra_apps           = undef,
+  Boolean                           $manage_elinks_config = true
+) {
+
+  $core_apps = [
     'bind-utils',
     'bridge-utils',
     'dos2unix',
@@ -40,15 +38,13 @@ class simp::base_apps (
     'vim-enhanced',
     'words',
     'x86info'
-  ],
-  Optional[Array[String,1]]        $extra_apps = undef
-) {
-
-  package { $core_apps: ensure => $ensure }
-
-  if $extra_apps {
-    package { $extra_apps: ensure => $ensure }
+  ]
+  $apps = $extra_apps ? {
+    Array   => $core_apps + $extra_apps,
+    default => $core_apps
   }
+  package { $apps: ensure => $ensure }
+
 
   if $manage_elinks_config {
     file { '/etc/elinks.conf':
