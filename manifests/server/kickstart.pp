@@ -5,6 +5,8 @@
 # to work but you can use your own if you already have them.
 #
 # @param data_dir
+#   The location of the web root in which the kickstart directory,
+#   'ks', will reside.
 #
 # @param trusted_nets
 #   The networks to allow into the Kickstart server.
@@ -16,7 +18,7 @@
 #   If true, have this node act as a TFTP server.
 #
 # @param manage_runpuppet
-#   If true, drop the runpuppet script in $data_dir.
+#   If true, generate the runpuppet script in $data_dir/ks.
 #
 # @param sslverifyclient
 #   Verify the certificate of the kickstart client.  One of optional, require,
