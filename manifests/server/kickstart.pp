@@ -1,8 +1,12 @@
 # This class provides a working framework for providing a kickstart
 # server for your client hosts.
 #
-# Note, you need both a DHCP and TFTP server for unattended Kickstart
-# to work but you can use your own if you already have them.
+# @note You need both a DHCP and TFTP server for unattended Kickstart
+#       to work but you can use your own if you already have them.
+#
+# @note This module uses the legacy simp_apache module to provide
+#       web-hosting, and as such **requires** the use of Hiera or
+#       another APL source to properly configure the web server.
 #
 # @param data_dir
 #   The location of the web root in which the kickstart directory,
