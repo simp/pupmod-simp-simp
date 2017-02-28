@@ -42,7 +42,7 @@ class simp::server::kickstart (
   if $manage_tftpboot  { include '::tftpboot' }
   if $manage_runpuppet {
     class { 'simp::server::kickstart::runpuppet':
-      data_dir => $data_dir
+      location => "${data_dir}/ks/runpuppet"
     }
   }
 

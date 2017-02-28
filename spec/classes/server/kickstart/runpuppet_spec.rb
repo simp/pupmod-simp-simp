@@ -12,7 +12,6 @@ describe 'simp::server::kickstart::runpuppet' do
 
         context 'specify_ntp_servers_array' do
           let(:params) {{
-            :data_dir    => '/var/www',
             :ntp_servers => ['1.2.3.4','5.6.7.8']
           }}
 
@@ -22,7 +21,6 @@ describe 'simp::server::kickstart::runpuppet' do
 
         context 'specify_ntp_servers_hash' do
           let (:params) {{
-            :data_dir    => '/var/www',
             :ntp_servers => {
               '1.2.3.4' => ['foo, bar'],
               '5.6.7.8' => ['baz']
@@ -35,7 +33,6 @@ describe 'simp::server::kickstart::runpuppet' do
 
         context 'no_print_stats' do
           let(:params) {{
-            :data_dir              => '/var/www',
             :runpuppet_print_stats => false
           }}
 
@@ -45,7 +42,6 @@ describe 'simp::server::kickstart::runpuppet' do
 
         context 'no_wait_for_cert' do
           let(:params) {{
-            :data_dir                => '/var/www',
             :runpuppet_wait_for_cert => false
           }}
 

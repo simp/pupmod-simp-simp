@@ -6,6 +6,12 @@ describe 'simp::server::kickstart' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
+          facts[:puppet_settings] = {
+            :agent => {
+              :server    => 'my.happy.server',
+              :ca_server => 'my.happy.server'
+            }
+          }
           # This is to replace the Puppet server provided $::servername variable.
           # In the future, this should move to using the $server_facts hash.
           facts[:servername] = 'my.happy.server'
@@ -22,7 +28,7 @@ describe 'simp::server::kickstart' do
         it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.4\/24/) }
         it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
         it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet=.*--waitforcert 10.*--evaltrace --summarize/) }
-        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet_server="puppet.bar.baz"/) }
+        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet_server=\"puppet.bar.baz\"/) }
         it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ca_server = puppet.bar.baz/) }
         it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ca_port = 8141/) }
         it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/ntpdate/) }
