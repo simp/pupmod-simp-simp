@@ -116,7 +116,7 @@ case "$1" in
     logdir            = /var/log/puppetlabs/puppet
     report            = false
     rundir            = /var/run/puppetlabs
-    server            = <%= @puppet_server %>
+    server            = <%= @_puppet_server %>
     ssldir            = /etc/puppetlabs/puppet/ssl
     trusted_node_data = true
     stringify_facts   = false
@@ -125,7 +125,7 @@ case "$1" in
 EOM
 
     echo "$puppet_conf" > /etc/puppetlabs/puppet/puppet.conf;
-    echo "ca_server = <%= @puppet_ca %>" >> /etc/puppetlabs/puppet/puppet.conf;
+    echo "ca_server = <%= @_puppet_ca %>" >> /etc/puppetlabs/puppet/puppet.conf;
     echo "ca_port = <%= @puppet_ca_port %>" >> /etc/puppetlabs/puppet/puppet.conf;
 
 <%

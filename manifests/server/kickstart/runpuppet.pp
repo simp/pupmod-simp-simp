@@ -58,15 +58,21 @@ class simp::server::kickstart::runpuppet (
   if $puppet_server {
     $_puppet_server = $puppet_server
   }
-  else {
+  elsif defined('::server_facts') {
     $_puppet_server = $server_facts['servername']
+  }
+  else {
+    $_puppet_server = $facts['puppet_settings']['agent']['server']
   }
 
   if $puppet_ca {
     $_puppet_ca = $puppet_ca
   }
-  else {
+  elsif defined('::server_facts') {
     $_puppet_ca = $server_facts['servername']
+  }
+  else {
+    $_puppet_ca = $facts['puppet_settings']['agent']['ca_server']
   }
 
   file { $location:
