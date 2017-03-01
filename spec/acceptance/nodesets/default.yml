@@ -9,14 +9,11 @@ HOSTS:
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: vagrant
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
-        gpgkeys:
-          - https://getfedora.org/static/352C64E5.txt
-      simp:
-        baseurl: https://dl.bintray.com/simp/5.1.X
-        gpgcheck: 0
+    # yum_repos:
+    #   epel:
+    #     mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+    #     gpgkeys:
+    #       - https://getfedora.org/static/352C64E5.txt
   server-el6:
     roles:
       - simp_server
@@ -24,17 +21,14 @@ HOSTS:
     platform:   el-6-x86_64
     box:        centos/6
     hypervisor: vagrant
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
-        gpgkeys:
-          - https://getfedora.org/static/0608B895.txt
-      simp:
-        baseurl: https://dl.bintray.com/simp/4.2.X
-        gpgcheck: 0
+    # yum_repos:
+    #   epel:
+    #     mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+    #     gpgkeys:
+    #       - https://getfedora.org/static/0608B895.txt
 CONFIG:
   log_level: verbose
   type:      aio
-  vagrant_memsize: 512
+  vagrant_memsize: 2048
   synced_folder: disabled
   # vb_gui: true

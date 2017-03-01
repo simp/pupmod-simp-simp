@@ -9,7 +9,10 @@ describe 'simp' do
           facts[:augeasversion] = '1.2.3'
           facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
           facts[:puppet_settings] = {
-            'ssldir' => '/opt/puppetlabs/puppet/vardir'
+            'ssldir' => '/opt/puppetlabs/puppet/vardir',
+            'agent' => {
+              'server' => 'puppet.bar.baz'
+            }
           }
           facts[:server_facts] = {
             :servername => 'puppet.bar.baz',
@@ -59,6 +62,13 @@ describe 'simp' do
             let(:params) {{ :rsync_stunnel => true }}
             it { is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['1.2.3.4:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+          context 'without $server_facts' do
+            let(:facts) {facts.merge({ :server_facts => nil })}
+            it { is_expected.to create_stunnel__connection('rsync').with({
+              :connect => ['puppet.bar.baz:8730'],
               :accept  => '127.0.0.1:873'
             }) }
           end

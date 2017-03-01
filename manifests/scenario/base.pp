@@ -145,8 +145,11 @@ class simp::scenario::base (
   }
 
   if $rsync_stunnel {
-    if $rsync_stunnel == true {
-      $_rsync_stunnel_svr = $server_facts['serverip']
+    if $rsync_stunnel == true  {
+      $_rsync_stunnel_svr = $server_facts ? {
+        Hash    => $server_facts['serverip'],
+        default => $facts['puppet_settings']['agent']['server']
+      }
     }
     else {
       $_rsync_stunnel_svr = $rsync_stunnel

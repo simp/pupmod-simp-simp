@@ -17,7 +17,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::scenario::poss (
-  Boolean                         $puppet_server_hosts_entry  = $::simp::puppet_server_hosts_entry
+  Boolean $puppet_server_hosts_entry  = $::simp::puppet_server_hosts_entry
 ) inherits ::simp {
 
   assert_private()

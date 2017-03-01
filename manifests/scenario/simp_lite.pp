@@ -36,7 +36,7 @@ class simp::scenario::simp_lite {
 
   # Options *must* be set first (or in Hiera/ENC)!
   class { 'simp_options':
-    *           => ($::simp::default_options + $_simp_options)
+    * => ($::simp::default_options + $_simp_options)
   }
 
   include 'simp::scenario::base'
