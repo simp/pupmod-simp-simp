@@ -69,6 +69,7 @@ fixtures:
     simp_apache: https://github.com/simp/pupmod-simp-apache
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
+    simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
     ssh: https://github.com/simp/pupmod-simp-ssh
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel

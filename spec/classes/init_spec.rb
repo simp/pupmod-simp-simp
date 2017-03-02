@@ -5,7 +5,12 @@ describe 'simp' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
+          facts[:openssh_version] = '5.8'
+          facts[:augeasversion] = '1.2.3'
           facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+          facts[:puppet_settings] = {
+            'ssldir' => '/opt/puppetlabs/puppet/vardir'
+          }
           facts[:server_facts] = {
             :servername => 'puppet.bar.baz',
             :serverip   => '1.2.3.4'
@@ -59,6 +64,20 @@ describe 'simp' do
           end
         end
 
+        context 'scenario' do
+          scenarios = ['simp', 'simp_lite', 'poss']
+
+          scenarios.each do |scenario|
+            context scenario do
+              let(:params) {{
+                :scenario => scenario
+              }}
+
+              it { is_expected.to compile.with_all_deps }
+              it { is_expected.to create_class("simp::scenario::#{scenario}") }
+            end
+          end
+        end
       end
     end
   end
