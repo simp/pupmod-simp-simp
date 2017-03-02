@@ -20,6 +20,8 @@ describe 'simp class' do
 
   let(:manifest) {
     <<-EOS
+      # This would be in site.pp, or an ENC or classifier
+      include 'simp_options'
       include 'simp'
     EOS
   }
@@ -40,10 +42,11 @@ simp_options::ldap::sync_pw: 's00per sekr3t!'
 simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
 simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
 # simp_options::log_servers: ['#{host_fqdn}']
-sssd::domains: ['LDAP']
+sssd::domains: ['LOCAL']
 simp::yum::servers: ['#{host_fqdn}']
 
-# Settings required for acceptance test
+# Settings required for acceptance test, some may be required
+simp::scenario: simp
 simp_options::rsync: false
 simp_options::clamav: false
 simp_options::pki: true
@@ -52,6 +55,9 @@ simp_options::trusted_nets: ['ALL']
 simp::yum::os_update_url: http://mirror.centos.org/centos/$releasever/os/$basearch/
 simp::yum::enable_simp_repos: false
 
+# Settings to make beaker happy
+ssh::server::conf::permitrootlogin: true
+ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
         EOF
       }
 
@@ -59,14 +65,27 @@ simp::yum::enable_simp_repos: false
         set_hieradata_on(host, options)
       end
 
+      # These boxes have no root password by default...
+      it 'should set the root password' do
+        on(hosts, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
+        on(hosts, 'echo password | passwd root --stdin')
+      end
+
       it 'should set up needed repositories' do
         install_package host, 'epel-release'
         on host, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash'
       end
 
-      it 'should work with default values' do
-        apply_manifest_on(host, manifest, :catch_failures => true)
-        apply_manifest_on(host, manifest, :catch_failures => true)
+      it 'should put something in portreserve so the service starts' do
+        # the portreserve service will fail unless something is configured
+        on host, 'mkdir -p /etc/portreserve'
+        on host, 'echo rndc/tcp > /etc/portreserve/named'
+      end
+
+      it 'should bootstrap in a few runs' do
+        apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
+        apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
+        host.reboot
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
 
