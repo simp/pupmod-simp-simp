@@ -20,7 +20,7 @@
 #   * An associated array, ending with ``exclusions`` can be used to eliminate
 #     classes from the array deeper in your lookup stack.
 #
-#     Example - Include everything at the top level but eliminate the ``medocre_stuff`` class
+#     Example - Include everything at the top level but eliminate the ``mediocre_stuff`` class
 #
 #       classes :
 #         - mediocre_stuff
