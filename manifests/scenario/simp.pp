@@ -12,11 +12,6 @@
 class simp::scenario::simp {
   assert_private()
 
-  # Options *must* be set first (or in Hiera/ENC)!
-  class { 'simp_options':
-    * => $::simp::default_options
-  }
-
   include 'simp::scenario::base'
 
   include 'aide'

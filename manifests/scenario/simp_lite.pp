@@ -27,18 +27,6 @@
 class simp::scenario::simp_lite {
   assert_private()
 
-  $_simp_options = {
-    'firewall'    => false,
-    'pam'         => false,
-    'selinux'     => false,
-    'tcpwrappers' => false
-  }
-
-  # Options *must* be set first (or in Hiera/ENC)!
-  class { 'simp_options':
-    * => ($::simp::default_options + $_simp_options)
-  }
-
   include 'simp::scenario::base'
 
   include 'aide'

@@ -154,27 +154,6 @@ class simp (
   Boolean                         $stock_sssd                 = true
 ) {
 
-  # The defaults for the ``simp_options`` class in a full SIMP environment
-  # See the docs for more information:
-  #   http://www.puppetmodule.info/github/simp/pupmod-simp-simp_options/master/
-  $default_options = {
-    auditd      => true,
-    clamav      => true,
-    firewall    => true,
-    haveged     => true,
-    ipsec       => false,
-    kerberos    => false,
-    ldap        => true,
-    logrotate   => true,
-    pam         => true,
-    pki         => 'simp',
-    selinux     => true,
-    sssd        => true,
-    stunnel     => true,
-    syslog      => true,
-    tcpwrappers => true
-  }
-
   file { "${facts['puppet_vardir']}/simp":
     ensure => 'directory',
     mode   => '0750',
