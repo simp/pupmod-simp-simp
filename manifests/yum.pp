@@ -56,7 +56,7 @@ class simp::yum (
     include '::simp::yum::schedule'
   }
   else {
-    cron { 'simp_yum_updates': ensure => 'absent' }
+    cron { 'simp_yum_update': ensure => 'absent' }
   }
 
   file { [
