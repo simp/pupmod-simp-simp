@@ -61,10 +61,6 @@ ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
         EOF
       }
 
-      it 'should set the root password' do
-        on host, %(puppet resource user root password='$1$7bRgAR9U$UPTitX0uQfe/LUrW7z6.e/')
-      end
-
       it 'should set up simp_options through hiera' do
         set_hieradata_on(host, options)
       end

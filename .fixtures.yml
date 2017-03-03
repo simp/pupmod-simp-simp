@@ -5,9 +5,7 @@ fixtures:
     activemq: https://github.com/simp/pupmod-simp-activemq
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
-    at:
-      repo: https://github.com/jeefberkey/pupmod-simp-at
-      branch: SIMP-2779
+    at: https://github.com/simp/pupmod-simp-at
     augeasproviders: https://github.com/simp/augeasproviders
     augeasproviders_base: https://github.com/simp/augeasproviders_base
     augeasproviders_core: https://github.com/simp/augeasproviders_core
