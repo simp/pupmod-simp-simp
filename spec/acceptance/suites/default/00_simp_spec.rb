@@ -67,8 +67,8 @@ ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
 
       # These boxes have no root password by default...
       it 'should set the root password' do
-        on(hosts, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
-        on(hosts, 'echo password | passwd root --stdin')
+        on(host, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
+        on(host, 'echo password | passwd root --stdin')
       end
 
       it 'should set up needed repositories' do
