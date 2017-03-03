@@ -127,7 +127,7 @@ class simp::scenario::base (
   if $manage_rc_local { include '::simp::rc_local' }
 
   if $puppet_server_hosts_entry {
-    if $server_facts and $server_facts['servername'] and $server_facts['serverip'] {
+    if getvar('server_facts') and $server_facts['servername'] and $server_facts['serverip'] {
       $_pserver_alias = split($server_facts['servername'],'.')[0]
 
       host { $server_facts['servername']:

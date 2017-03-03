@@ -71,8 +71,10 @@ describe 'simplib::secure_mountpoints class' do
           on(host,%(mount -o remount,exec #{dir}))
           # Need a user other than root to execute the file
           on(host,%(puppet resource user touch_test_user ensure=present))
+          # Need to be able to use 'su'
+          on(host,%(sed -i 's/^-:/+:/g' /etc/security/access.conf))
           # Touch a file!
-          on(host,%(sudo -u touch_test_user #{dir}/touch_test #{dir}/touch_test_output))
+          on(host,%(su touch_test_user -c '#{dir}/touch_test #{dir}/touch_test_output'))
           # Check the permissions
           expect(
             on(host,%(stat -c "%U" #{dir}/touch_test_output)).output.strip
