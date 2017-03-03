@@ -84,5 +84,7 @@ fixtures:
     upstart: https://github.com/simp/pupmod-simp-upstart
     useradd: https://github.com/simp/pupmod-simp-useradd
     xinetd: https://github.com/simp/pupmod-simp-xinetd
+    '../acceptance/rsync_shares/simp':
+      repo: https://github.com/simp/simp-rsync.git
   symlinks:
     simp: "#{source_dir}"
