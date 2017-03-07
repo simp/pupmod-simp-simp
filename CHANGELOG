@@ -1,3 +1,9 @@
+* Wed Mar 01 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
+- Add the basic SIMP scenarios to the module
+  - simp -> full SIMP profile
+  - simp_lite -> SIMP with the more aggressive parts removed
+  - poss -> only connect to the puppet server
+
 * Fri Feb 24 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.1-0
 - Moved runpuppet template to its own class so the rupuppet script
   can be managed independently from the simp::server::kickstart class

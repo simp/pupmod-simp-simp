@@ -1,6 +1,40 @@
-# This class provides the basis of what a native SIMP system should
-# be. It is expected that users may deviate from this configuration
-# over time, but this should be an effective starting place.
+# This class provides an entry point to configuring your systems to take full
+# advantage of SIMP capabilities.
+#
+# This is primarily done through the ``simp::scenario`` classes that provide
+# specifically supported configurations of core SIMP systems and clients.
+#
+# If you're planning to use SIMP capabilities, you should always include this
+# class.
+#
+# @param scenario
+#   The SIMP 'scenario' that you wish to apply to your system
+#
+#   * See the classes under ``simp::scenario`` for details of each supported
+#     option
+#
+# @param enable_data_includes
+#   Allows you to provide an array, accessible via the ``lookup()`` function,
+#   that can contain a list of classes that you wish to include into your node
+#
+#   * An associated array, ending with ``exclusions`` can be used to eliminate
+#     classes from the array deeper in your lookup stack.
+#
+#     Example - Include everything at the top level but eliminate the ``mediocre_stuff`` class
+#
+#       classes :
+#         - mediocre_stuff
+#         - awesome_stuff
+#         - super_awesome_stuff
+#
+#       classes_excludes :
+#         - mediocre_stuff
+#
+# @param data_includes_array_name
+#   The name of the array that you wish to use for your class lists
+#
+#   * An associated ``${data_include_name}_excludes`` class will also be used
+#     for explicit class exclusion
 #
 # @param mail_server
 #   Install a local mail service on the system
@@ -94,6 +128,9 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp (
+  Enum['simp','simp_lite','poss'] $scenario                   = 'simp',
+  Boolean                         $enable_data_includes       = true,
+  String                          $data_includes_array_name   = 'classes',
   Variant[Boolean,Enum['remote']] $mail_server                = true,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::rsync', { 'default_value' => true }),
   Boolean                         $use_ssh_global_known_hosts = false,
@@ -110,10 +147,10 @@ class simp (
   Boolean                         $manage_root_metadata       = true,
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
-  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value'   => false }),
-  Boolean                         $fips                       = simplib::lookup('simp_options::fips', { 'default_value'  => false }),
-  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value'  => false }),
-  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
+  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean                         $fips                       = simplib::lookup('simp_options::fips', { 'default_value' => false }),
+  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true
 ) {
 
@@ -135,66 +172,16 @@ class simp (
     }
   }
 
-  runlevel { to_string($runlevel): }
-
-  if ($sssd and $stock_sssd) { include '::simp::sssd::client' }
-
-  if $fips { include '::fips' }
-
-  if $use_sudoers_aliases { include '::simp::sudoers' }
+  include "simp::scenario::${scenario}"
 
   if $version_info { include '::simp::version' }
 
-  if $manage_ctrl_alt_del { include '::simp::ctrl_alt_del' }
+  if $enable_data_includes {
+    $_classes_to_include = lookup($data_includes_array_name, Array[String], 'unique', [])
+    $_classes_to_exclude = lookup("${data_includes_array_name}_exclusions", Array[String], 'unique', [])
 
-  if $manage_root_metadata { include '::simp::root_user' }
+    $_final_class_list = ($_classes_to_include - $_classes_to_exclude)
 
-  if ($restrict_max_logins and $pam) { include '::simp::pam_limits::max_logins' }
-
-  if $mail_server == 'remote' {
-    include '::postfix::server'
-  }
-  elsif $mail_server {
-    include '::postfix'
-  }
-
-  if $ldap {
-    include '::simp_openldap::client'
-  }
-
-  if $manage_rc_local { include '::simp::rc_local' }
-
-  if $puppet_server_hosts_entry {
-    if $server_facts and $server_facts['servername'] and $server_facts['serverip'] {
-      $_pserver_alias = split($server_facts['servername'],'.')[0]
-
-      host { $server_facts['servername']:
-        ensure       => 'present',
-        host_aliases => $_pserver_alias,
-        ip           => $server_facts['serverip']
-      }
-    }
-  }
-
-  if $use_ssh_global_known_hosts {
-    ssh_global_known_hosts()
-
-    sshkey_prune { '/etc/ssh/ssh_known_hosts': }
-  }
-
-  if $rsync_stunnel {
-    if $rsync_stunnel == true {
-      $_rsync_stunnel_svr = $server_facts['serverip']
-    }
-    else {
-      $_rsync_stunnel_svr = $rsync_stunnel
-    }
-
-    if !host_is_me($_rsync_stunnel_svr) {
-      stunnel::connection { 'rsync':
-        connect => ["${_rsync_stunnel_svr}:8730"],
-        accept  => '127.0.0.1:873'
-      }
-    }
+    include $_final_class_list
   }
 }
