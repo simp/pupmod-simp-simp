@@ -23,6 +23,7 @@ module Puppet::Parser::Functions
       'RPM-GPG-KEY-puppetlabs',
       'RPM-GPG-KEY-SIMP',
       'RPM-GPG-KEY-elasticsearch',
+      'RPM-GPG-KEY-grafana-legacy',
       'RPM-GPG-KEY-grafana',
       'RPM-GPG-KEY-PGDG-94'
     ]
