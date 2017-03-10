@@ -1,4 +1,6 @@
 * Wed Mar 01 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
+- Added the new Grafana GPG key to the list and retained the old one until they
+  re-sign their old packages.
 - Add the basic SIMP scenarios to the module
   - simp -> full SIMP profile
   - simp_lite -> SIMP with the more aggressive parts removed
