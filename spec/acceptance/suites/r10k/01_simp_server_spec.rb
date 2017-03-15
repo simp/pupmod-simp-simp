@@ -64,6 +64,9 @@ describe 'install environment via r10k and puppetserver' do
       it 'should be idempotent' do
         apply_manifest_on(master, master_manifest, :catch_changes => true )
       end
+      it 'should enable trusted_server_facts' do
+        on(master, 'puppet config --section master set trusted_server_facts true')
+      end
     end
   end
 
@@ -76,6 +79,7 @@ describe 'install environment via r10k and puppetserver' do
       scp_to(master, 'spec/acceptance/suites/r10k/files/Puppetfile', '/etc/puppetlabs/code/environments/production/Puppetfile')
     end
     it 'should install the Puppetfile' do
+      on(master, 'cd /etc/puppetlabs/code/environments/production; /opt/puppetlabs/puppet/bin/r10k puppetfile install', :accept_all_exit_codes => true)
       on(master, 'cd /etc/puppetlabs/code/environments/production; /opt/puppetlabs/puppet/bin/r10k puppetfile install')
       on(master, 'chown -R root.puppet /etc/puppetlabs/code/environments/production/modules')
       on(master, 'chmod -R g+rX /etc/puppetlabs/code/environments/production/modules')
@@ -91,6 +95,7 @@ describe 'install environment via r10k and puppetserver' do
       node /puppet/ {
         include 'simp'
         include 'simp::server'
+        include 'simp::server::rsync_shares'
         include 'pupmod'
         include 'pupmod::master'
       }
@@ -107,12 +112,15 @@ describe 'install environment via r10k and puppetserver' do
       simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
       simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
       simp_options::auditd: true
+      simp_options::fips: false
+      fips::enabled: false # TODO remove when fips pr is merged
       simp_options::haveged: true
-      simp_options::pam: true
       simp_options::logrotate: true
+      simp_options::pam: true
       simp_options::selinux: true
-      simp_options::tcpwrappers: true
       simp_options::stunnel: true
+      simp_options::tcpwrappers: true
+      simp_options::firewall: true
 
       # simp_options::log_servers: ['#{master_fqdn}']
       sssd::domains: ['LOCAL']
@@ -148,12 +156,12 @@ describe 'install environment via r10k and puppetserver' do
       ssh::server::conf::permitrootlogin: true
       ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
     EOF
-    on(master, 'mkdir -p /etc/puppetlabs/code/environments/production/{hieradata,manifests} /var/simp/environments/production/simp_autofiles')
+    on(master, 'mkdir -p /etc/puppetlabs/code/environments/production/{hieradata,manifests} /var/simp/environments/production/{simp_autofiles,site_files/modules/pki_files/files/keydist}')
     scp_to(master, 'spec/acceptance/suites/r10k/files/hiera.yaml', '/etc/puppetlabs/puppet/hiera.yaml')
     create_remote_file(master, '/etc/puppetlabs/code/environments/production/manifests/site.pp', site_pp)
     create_remote_file(master, '/etc/puppetlabs/code/environments/production/hieradata/default.yaml', default_yaml)
-    on(master, 'chown -R root.puppet /etc/puppetlabs/code/environments/production/{hieradata,manifests}')
-    on(master, 'chmod -R g+rX /etc/puppetlabs/code/environments/production/{hieradata,manifests}')
+    on(master, 'chown -R root.puppet /etc/puppetlabs/code/environments/production/{hieradata,manifests} /var/simp/environments/production/site_files/modules/pki_files/files/keydist')
+    on(master, 'chmod -R g+rX /etc/puppetlabs/code/environments/production/{hieradata,manifests} /var/simp/environments/production/site_files/modules/pki_files/files/keydist')
     on(master, 'chown -R puppet.puppet /var/simp/environments/production/simp_autofiles')
     on(master, 'puppet resource service puppetserver ensure=running')
   end
