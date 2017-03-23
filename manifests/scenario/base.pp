@@ -91,7 +91,6 @@ class simp::scenario::base (
   Boolean                         $manage_root_perms          = $::simp::manage_root_perms,
   Boolean                         $manage_rc_local            = $::simp::manage_rc_local,
   Boolean                         $pam                        = $::simp::pam,
-  Boolean                         $fips                       = $::simp::fips,
   Boolean                         $ldap                       = $::simp::ldap,
   Boolean                         $sssd                       = $::simp::sssd,
   Boolean                         $stock_sssd                 = $::simp::stock_sssd
@@ -102,8 +101,6 @@ class simp::scenario::base (
   runlevel { to_string($runlevel): }
 
   if ($sssd and $stock_sssd) { include '::simp::sssd::client' }
-
-  if $fips { include '::fips' }
 
   if $use_sudoers_aliases { include '::simp::sudoers' }
 
