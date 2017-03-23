@@ -1,5 +1,8 @@
 # Set up a YUM update schedule.
 #
+# @param enable
+#   Enable or disable the update schedule
+#
 # @param minute String Cron minute
 # @param hour String Cron hour
 # @param monthday String Cron monthday
@@ -25,6 +28,7 @@
 #     Set to false if you want to see the chatter from yum
 #
 class simp::yum::schedule (
+  Boolean                       $enable       = true,
   Variant[String,Array[String]] $minute       = '12',
   Variant[String,Array[String]] $hour         = '0',
   Variant[String,Array[String]] $monthday     = '*',
@@ -36,7 +40,13 @@ class simp::yum::schedule (
   Integer                       $randomize    = 5,
   Boolean                       $quiet        = true
 ) {
+  $_ensure = $enable ? {
+    true    => 'present',
+    default => 'absent'
+  }
+
   cron { 'simp_yum_update':
+    ensure   => $_ensure,
     command  => template('simp/yum-cron.erb'),
     user     => 'root',
     minute   => $minute,

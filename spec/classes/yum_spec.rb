@@ -7,55 +7,93 @@ describe 'simp::yum' do
         facts
       end
 
-      context 'with default parameters' do
-        it { is_expected.to compile.with_all_deps }
-        it 'creates the SIMP Yumrepo' do
-          is_expected.to contain_yumrepo('simp').with(
-            gpgkey:  %r{^https://yum.bar.baz/yum/SIMP},
-            baseurl: %r{^https://yum.bar.baz/yum/SIMP}
-          )
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to_not contain_yumrepo('simp') }
+
+      context 'when `enable_simp_internet_repos` is set' do
+        context 'when `simp_version` is valid' do
+          let(:params) {{
+            :enable_simp_internet_repos => true,
+            :simp_version               => '6.0.0-foobar'
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_yumrepo('simp-project_6_X') }
+          it { is_expected.to contain_yumrepo('simp-project_6_X_Dependencies') }
         end
 
-        if (facts[:os][:release][:major].to_s == '6') && (facts[:os][:name] == 'CentOS')
-          it 'creates the OS Updates Yumrepo' do
-            is_expected.to contain_yumrepo('os_updates').with(
-              gpgkey: %r{^https://yum.bar.baz/yum/CentOS/6/x86_64/RPM-GPG-KEY-CentOS-6},
-              baseurl: %r{^https://yum.bar.baz/yum/CentOS/6/x86_64/Updates}
-            )
-          end
-        else
-          it 'creates the OS Update Yumrepo' do
-            is_expected.to contain_yumrepo('os_updates')
+        context 'when `simp_version` is invalid' do
+          invalid_versions = [
+            '60.0.0-foo',
+            'unknown',
+            'blah'
+          ]
+
+          invalid_versions.each do |version|
+            context "with version #{version}" do
+              let(:params) {{
+                :enable_simp_internet_repos => true,
+                :simp_version               => version
+              }}
+
+              it {
+                expect {
+                  is_expected.to compile.with_all_deps
+                }.to raise_error(/SIMP version .* is not supported/)
+              }
+            end
           end
         end
       end
 
-      context 'when `enable_simp_repos` is set' do
+      context 'when `enable_simp_local_repos` is set' do
         context 'to true' do
-          let(:params) { { enable_simp_repos: true } }
+          let(:params) {{
+            :enable_simp_local_repos => true,
+            :servers                 => ['yum.bar.baz']
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_yumrepo('simp').with_enabled('1') }
-        end
 
-        context 'to false' do
-          let(:params) { { enable_simp_repos: false } }
+          it 'creates the SIMP Yumrepo' do
+            is_expected.to contain_yumrepo('simp').with(
+              gpgkey:  %r{^https://yum.bar.baz/yum/SIMP},
+              baseurl: %r{^https://yum.bar.baz/yum/SIMP}
+            )
+          end
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_yumrepo('simp').with_enabled('0') }
+          if (facts[:os][:release][:major].to_s == '6') && (facts[:os][:name] == 'CentOS')
+            it 'creates the OS Updates Yumrepo' do
+              is_expected.to contain_yumrepo('os_updates').with(
+                gpgkey: %r{^https://yum.bar.baz/yum/CentOS/6/x86_64/RPM-GPG-KEY-CentOS-6},
+                baseurl: %r{^https://yum.bar.baz/yum/CentOS/6/x86_64/Updates}
+              )
+            end
+          else
+            it 'creates the OS Update Yumrepo' do
+              is_expected.to contain_yumrepo('os_updates')
+            end
+          end
         end
       end
 
       context 'when `enable_os_repos` is set' do
         context 'to true' do
-          let(:params) { { enable_os_repos: true } }
+          let(:params) {{
+            :enable_simp_local_repos => true,
+            :enable_os_repos         => true
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_yumrepo('os_updates').with_enabled('1') }
         end
 
         context 'to false' do
-          let(:params) { { enable_os_repos: false } }
+          let(:params) {{
+            :enable_simp_local_repos => true,
+            :enable_os_repos         => false
+          }}
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_yumrepo('os_updates').with_enabled('0') }
@@ -68,14 +106,14 @@ describe 'simp::yum' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('Simp::Yum::Schedule') }
-          it { is_expected.to contain_cron('simp_yum_update').without_ensure }
+          it { is_expected.to contain_cron('simp_yum_update').with_ensure('present')}
         end
 
         context 'to false' do
           let(:params) { { enable_auto_updates: false } }
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.not_to contain_class('Simp::Yum::Schedule') }
+          it { is_expected.to contain_class('Simp::Yum::Schedule') }
           it { is_expected.to contain_cron('simp_yum_update').with_ensure('absent') }
         end
       end
@@ -89,7 +127,10 @@ describe 'simp::yum' do
 
         netlists.each do |netlist|
           context "to #{netlist[:desc]}" do
-            base_params = { servers: netlist[:list] }
+            base_params = {
+              :enable_simp_local_repos => true,
+              :servers                 => netlist[:list]
+            }
 
             context 'and `os_update_url` is set' do
               context 'to a valid string' do
