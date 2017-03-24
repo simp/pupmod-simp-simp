@@ -1,3 +1,8 @@
+* Thu Mar 23 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.1.0-0
+  - move fips from base scenario to simp scenario
+  - made the inclusion of fips module not depend on simp_options::fips setting
+  - it is included because it used to turn fips on and off.
+
 * Wed Mar 01 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
 - Added the new Grafana GPG key to the list and retained the old one until they
   re-sign their old packages.

@@ -23,6 +23,7 @@ class simp::scenario::simp {
   # Ensuring reasonably sane defaults
   include 'at'
   include 'cron'
+  include 'fips'
   include 'incron'
   include 'useradd'
   include 'resolv'
