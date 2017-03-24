@@ -10,11 +10,11 @@ describe 'simp::yum' do
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to_not contain_yumrepo('simp') }
 
-      context 'when `enable_simp_internet_repos` is set' do
+      context 'when `internet_simp_repos` is set' do
         context 'when `simp_version` is valid' do
           let(:params) {{
-            :enable_simp_internet_repos => true,
-            :simp_version               => '6.0.0-foobar'
+            :internet_simp_repos => true,
+            :simp_version        => '6.0.0-foobar'
           }}
 
           it { is_expected.to compile.with_all_deps }
@@ -32,8 +32,8 @@ describe 'simp::yum' do
           invalid_versions.each do |version|
             context "with version #{version}" do
               let(:params) {{
-                :enable_simp_internet_repos => true,
-                :simp_version               => version
+                :internet_simp_repos => true,
+                :simp_version        => version
               }}
 
               it {
@@ -46,11 +46,25 @@ describe 'simp::yum' do
         end
       end
 
-      context 'when `enable_simp_local_repos` is set' do
+      context 'when `local_simp_repos` is set' do
+        context 'without servers' do
+          let(:params) {{
+            :local_simp_repos   => true,
+            :local_os_repos     => true
+          }}
+
+          it {
+            expect {
+              is_expected.to compile.with_all_deps
+            }.to raise_error(/You must specify.*if you enable/)
+          }
+        end
+
         context 'to true' do
           let(:params) {{
-            :enable_simp_local_repos => true,
-            :servers                 => ['yum.bar.baz']
+            :local_simp_repos   => true,
+            :local_os_repos     => true,
+            :local_repo_servers => ['yum.bar.baz']
           }}
 
           it { is_expected.to compile.with_all_deps }
@@ -78,11 +92,12 @@ describe 'simp::yum' do
         end
       end
 
-      context 'when `enable_os_repos` is set' do
+      context 'when `local_os_repos` is set' do
         context 'to true' do
           let(:params) {{
-            :enable_simp_local_repos => true,
-            :enable_os_repos         => true
+            :local_repo_servers => ['foo.bar.baz'],
+            :local_simp_repos => true,
+            :local_os_repos   => true
           }}
 
           it { is_expected.to compile.with_all_deps }
@@ -91,8 +106,9 @@ describe 'simp::yum' do
 
         context 'to false' do
           let(:params) {{
-            :enable_simp_local_repos => true,
-            :enable_os_repos         => false
+            :local_repo_servers => ['foo.bar.baz'],
+            :local_simp_repos => true,
+            :local_os_repos   => false
           }}
 
           it { is_expected.to compile.with_all_deps }
@@ -100,9 +116,9 @@ describe 'simp::yum' do
         end
       end
 
-      context 'when `enable_auto_updates` is set' do
+      context 'when `auto_update` is set' do
         context 'to true' do
-          let(:params) { { enable_auto_updates: true } }
+          let(:params) { { auto_update: true } }
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('Simp::Yum::Schedule') }
@@ -110,7 +126,7 @@ describe 'simp::yum' do
         end
 
         context 'to false' do
-          let(:params) { { enable_auto_updates: false } }
+          let(:params) { { auto_update: false } }
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('Simp::Yum::Schedule') }
@@ -128,13 +144,13 @@ describe 'simp::yum' do
         netlists.each do |netlist|
           context "to #{netlist[:desc]}" do
             base_params = {
-              :enable_simp_local_repos => true,
-              :servers                 => netlist[:list]
+              :local_simp_repos   => true,
+              :local_repo_servers => netlist[:list]
             }
 
-            context 'and `os_update_url` is set' do
+            context 'and `local_os_update_url` is set' do
               context 'to a valid string' do
-                let(:params) { base_params.merge(os_update_url: 'https://YUM_SERVER/os/updates/') }
+                let(:params) { base_params.merge(local_os_update_url: 'https://YUM_SERVER/os/updates/') }
 
                 it { is_expected.to compile.with_all_deps }
                 it 'contains Yumrepo[os_updates]' do
@@ -152,9 +168,9 @@ describe 'simp::yum' do
               end
             end
 
-            context 'and `os_gpg_url` is set' do
+            context 'and `local_os_gpg_url` is set' do
               context 'to a valid string' do
-                let(:params) { base_params.merge(os_gpg_url: 'https://YUM_SERVER/os/RPM-GPG-KEY-os') }
+                let(:params) { base_params.merge(local_os_gpg_url: 'https://YUM_SERVER/os/RPM-GPG-KEY-os') }
 
                 it { is_expected.to compile.with_all_deps }
                 it 'contains Yumrepo[os_updates]' do
@@ -172,9 +188,9 @@ describe 'simp::yum' do
               end
             end
 
-            context 'and `simp_update_url` is set' do
+            context 'and `local_simp_update_url` is set' do
               context 'to a valid string' do
-                let(:params) { base_params.merge(simp_update_url: 'https://YUM_SERVER/simp/updates/') }
+                let(:params) { base_params.merge(local_simp_update_url: 'https://YUM_SERVER/simp/updates/') }
 
                 it { is_expected.to compile.with_all_deps }
                 it 'contains Yumrepo[simp]' do
@@ -192,9 +208,9 @@ describe 'simp::yum' do
               end
             end
 
-            context 'and `simp_gpg_url` is set' do
+            context 'and `local_simp_gpg_url` is set' do
               context 'to a valid string' do
-                let(:params) { base_params.merge(simp_gpg_url: 'https://YUM_SERVER/simp/RPM-GPG-KEY-simp') }
+                let(:params) { base_params.merge(local_simp_gpg_url: 'https://YUM_SERVER/simp/RPM-GPG-KEY-simp') }
 
                 it { is_expected.to compile.with_all_deps }
                 it 'contains Yumrepo[simp]' do

@@ -60,7 +60,7 @@ simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
 simp_apache::ssl::sslverifyclient: none
 
-simp::yum::servers:
+simp::yum::local_repo_servers:
   - "%{::fqdn}"
     EOM
   }
