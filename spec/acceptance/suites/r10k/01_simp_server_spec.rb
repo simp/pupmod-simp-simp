@@ -95,7 +95,7 @@ describe 'install environment via r10k and puppetserver' do
         include 'pupmod::master'
       }
     EOF
-    common_yaml = <<-EOF
+    default_yaml = <<-EOF
       # Options
       simp_options::dns::servers: ['8.8.8.8']
       simp_options::puppet::server: #{master_fqdn}
@@ -112,6 +112,7 @@ describe 'install environment via r10k and puppetserver' do
       simp_options::logrotate: true
       simp_options::selinux: true
       simp_options::tcpwrappers: true
+      simp_options::stunnel: true
 
       # simp_options::log_servers: ['#{master_fqdn}']
       sssd::domains: ['LOCAL']
@@ -126,6 +127,11 @@ describe 'install environment via r10k and puppetserver' do
       simp::yum::os_update_url: http://mirror.centos.org/centos/$releasever/os/$basearch/
       simp::yum::enable_simp_repos: false
       simp::scenario::base::puppet_server_hosts_entry: false
+      # Make sure puppet doesn't run (hopefully)
+      pupmod::agent::cron::minute: '0'
+      pupmod::agent::cron::hour: '0'
+      pupmod::agent::cron::weekday: '0'
+      pupmod::agent::cron::month: '1'
 
       # Settings to make beaker happy
       sudo::user_specifications:
@@ -142,12 +148,13 @@ describe 'install environment via r10k and puppetserver' do
       ssh::server::conf::permitrootlogin: true
       ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
     EOF
-    on(master, 'mkdir -p /etc/puppetlabs/code/environments/production/{hieradata,manifests}')
+    on(master, 'mkdir -p /etc/puppetlabs/code/environments/production/{hieradata,manifests} /var/simp/environments/production/simp_autofiles')
     scp_to(master, 'spec/acceptance/suites/r10k/files/hiera.yaml', '/etc/puppetlabs/puppet/hiera.yaml')
     create_remote_file(master, '/etc/puppetlabs/code/environments/production/manifests/site.pp', site_pp)
-    create_remote_file(master, '/etc/puppetlabs/code/environments/production/hieradata/default.yaml', common_yaml)
+    create_remote_file(master, '/etc/puppetlabs/code/environments/production/hieradata/default.yaml', default_yaml)
     on(master, 'chown -R root.puppet /etc/puppetlabs/code/environments/production/{hieradata,manifests}')
     on(master, 'chmod -R g+rX /etc/puppetlabs/code/environments/production/{hieradata,manifests}')
+    on(master, 'chown -R puppet.puppet /var/simp/environments/production/simp_autofiles')
     on(master, 'puppet resource service puppetserver ensure=running')
   end
 
@@ -159,7 +166,7 @@ describe 'install environment via r10k and puppetserver' do
         sleep(30)
         on(agent, "puppet agent -t --ca_port 8141 --server #{master_fqdn}", :acceptable_exit_codes => [0,2,4,6])
         agent.reboot
-        sleep(180)
+        sleep(240)
         on(agent, "puppet agent -t --ca_port 8141 --server #{master_fqdn}", :acceptable_exit_codes => [0,2])
       end
       it 'should be idempotent' do
