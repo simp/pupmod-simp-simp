@@ -1,3 +1,4 @@
+# vim: set expandtab ts=2 sw=2:
 require 'spec_helper'
 
 describe 'simp' do
@@ -27,6 +28,29 @@ describe 'simp' do
         it { is_expected.to create_stunnel__connection('rsync') }
         it { is_expected.to_not create_filebucket('simp') }
 
+        # For use with the next test
+        it { is_expected.to create_class('aide') }
+        context 'when removing classes using a knockout in simp::classes' do
+          {
+            "when classes are just added" => {
+              :params => {
+                "classes" => [ 'simp::yum' ]
+              },
+              :contains => [ 'simp::yum'],
+              :not_contains => [ ],
+            }
+          }.each do |ctxt, hash |
+            context ctxt do
+              let (:params) do
+                hash[:params]
+              end
+              it { is_expected.to compile.with_all_deps }
+              hash[:contains].each do |klass| 
+                it { is_expected.to create_class(klass) }
+              end
+            end
+          end
+        end
 
         context 'with filebucketing' do
           context 'with local path' do

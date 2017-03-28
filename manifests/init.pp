@@ -13,28 +13,20 @@
 #   * See the classes under ``simp::scenario`` for details of each supported
 #     option
 #
-# @param enable_data_includes
-#   Allows you to provide an array, accessible via the ``lookup()`` function,
-#   that can contain a list of classes that you wish to include into your node
+# @param classes
+#   A list of classes that you wish to include in your SIMP stack
 #
-#   * An associated array, ending with ``exclusions`` can be used to eliminate
-#     classes from the array deeper in your lookup stack.
+#   * This Array has been enabled with the ``knockout_prefix`` of ``--``
+#   * Any Array item in the lookup hierarchy that you prefix with ``--`` will
+#     be **removed** from the Array
 #
-#     Example - Include everything at the top level but eliminate the ``mediocre_stuff`` class
-#
-#       classes :
-#         - mediocre_stuff
-#         - awesome_stuff
-#         - super_awesome_stuff
-#
-#       classes_excludes :
-#         - mediocre_stuff
-#
-# @param data_includes_array_name
-#   The name of the array that you wish to use for your class lists
-#
-#   * An associated ``${data_include_name}_excludes`` class will also be used
-#     for explicit class exclusion
+#   @example The following list would include the `apache` class and exclude
+#     the `ntpd` class.
+#     ```
+#     ---
+#     simp::classes:
+#         - 'apache'
+#         - '--ntpd'
 #
 # @param mail_server
 #   Install a local mail service on the system
@@ -128,9 +120,10 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp (
-  Enum['simp','simp_lite','poss'] $scenario                   = 'simp',
+  Hash                            $scenario_map,
+  Enum['simp', 'simp_lite', 'poss', 'none'] $scenario         = 'simp',
   Boolean                         $enable_data_includes       = true,
-  String                          $data_includes_array_name   = 'classes',
+  Optional[Array]                 $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = true,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::rsync', { 'default_value' => true }),
   Boolean                         $use_ssh_global_known_hosts = false,
@@ -151,9 +144,10 @@ class simp (
   Boolean                         $fips                       = simplib::lookup('simp_options::fips', { 'default_value' => false }),
   Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
-  Boolean                         $stock_sssd                 = true
+  Boolean                         $stock_sssd                 = true,
 ) {
 
+  simp::merge_scenario_classes($scenario, $scenario_map, $classes).include
   file { "${facts['puppet_vardir']}/simp":
     ensure => 'directory',
     mode   => '0750',
@@ -172,16 +166,7 @@ class simp (
     }
   }
 
-  include "simp::scenario::${scenario}"
-
   if $version_info { include '::simp::version' }
 
-  if $enable_data_includes {
-    $_classes_to_include = lookup($data_includes_array_name, Array[String], 'unique', [])
-    $_classes_to_exclude = lookup("${data_includes_array_name}_exclusions", Array[String], 'unique', [])
-
-    $_final_class_list = ($_classes_to_include - $_classes_to_exclude)
-
-    include $_final_class_list
-  }
 }
+# vim: set expandtab ts=2 sw=2:

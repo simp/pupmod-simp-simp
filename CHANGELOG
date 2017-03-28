@@ -1,3 +1,8 @@
+* Wed Mar 29 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.0.0-0
+- Fixed the confusion with the 'classes' global Array
+- Added support for a 'simp::classes' Array with a knockout prefix of '--'
+- Moved scenarios into data in modules
+
 * Thu Mar 23 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.1.0-0
   - move fips from base scenario to simp scenario
   - made the inclusion of fips module not depend on simp_options::fips setting
