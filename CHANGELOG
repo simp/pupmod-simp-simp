@@ -1,6 +1,7 @@
 * Mon Apr 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
 - Updated the YUM configuration so that no repos are set up by default and it
   is simple to connect to the public repos for SIMP.
+- Yum repos are now individual profiles that can be included ala carte
 
 * Wed Mar 29 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.0.0-0
 - Fixed the confusion with the 'classes' global Array

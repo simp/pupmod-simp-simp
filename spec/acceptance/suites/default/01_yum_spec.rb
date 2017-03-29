@@ -37,6 +37,8 @@ describe 'simp::yum class' do
     <<-EOS
       include 'simp::server::yum'
       include 'simp::yum'
+      include 'simp::yum::repo::local_simp'
+      include 'simp::yum::repo::local_os_updates'
 
       Class['simp::server::yum'] -> Class['simp::yum']
 
@@ -60,8 +62,9 @@ simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
 simp_apache::ssl::sslverifyclient: none
 
-simp::yum::local_simp_repos: true
-simp::yum::local_repo_servers:
+simp::yum::repo::local_os_updates::servers:
+  - "%{::fqdn}"
+simp::yum::repo::local_simp::servers:
   - "%{::fqdn}"
     EOM
   }

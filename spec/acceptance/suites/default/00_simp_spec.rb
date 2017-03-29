@@ -23,6 +23,7 @@ describe 'simp class' do
       # This would be in site.pp, or an ENC or classifier
       include 'simp_options'
       include 'simp'
+      include 'simp::yum::repo::local_os_updates'
     EOS
   }
 
@@ -43,7 +44,10 @@ simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
 simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
 # simp_options::log_servers: ['#{host_fqdn}']
 sssd::domains: ['LOCAL']
-simp::yum::local_repo_servers: ['#{host_fqdn}']
+simp::yum::repo::simp::servers: ['#{host_fqdn}']
+simp::yum::repo::local_os_updates::servers:
+  - '#{host_fqdn}'
+  - http://mirror.centos.org/centos/$releasever/os/$basearch/
 
 # Settings required for acceptance test, some may be required
 simp::scenario: simp
@@ -52,9 +56,6 @@ simp_options::clamav: false
 simp_options::pki: true
 simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['ALL']
-simp::yum::local_os_repos: true
-simp::yum::local_os_update_url: http://mirror.centos.org/centos/$releasever/os/$basearch/
-simp::yum::local_simp_repos: false
 
 # Settings to make beaker happy
 ssh::server::conf::permitrootlogin: true
