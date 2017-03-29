@@ -29,7 +29,8 @@ class simp::server (
   Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value' => false }),
   Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value' => false }),
   Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
-  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false })
+  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
+  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => "" }),
 ) {
 
   include '::aide'
