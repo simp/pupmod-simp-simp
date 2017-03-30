@@ -1,6 +1,9 @@
 # Set up the ``/etc/yum`` directory, and ensures that ``yum-skip-broken`` is
 # installed.
 #
+# @param api_version [SemVer]
+#   The API version for this class.
+#
 # @param servers
 #   The FQDN or IP of the yum server to which to connect
 #
@@ -43,7 +46,8 @@
 #     ``$servers`` entries appropriately
 #
 class simp::yum (
-  Simplib::Netlist                                     $servers,
+  Pattern[/^\d+\.\d+\.\d+$/]                           $api_version         = '1.0.0',
+  Optional[Simplib::Netlist]                           $servers             = undef,
   Boolean                                              $enable_simp_repos   = true,
   Boolean                                              $enable_os_repos     = true,
   Boolean                                              $enable_auto_updates = true,
@@ -52,13 +56,6 @@ class simp::yum (
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl]           $simp_update_url     = "https://YUM_SERVER/yum/SIMP/${facts['architecture']}",
   Variant[Stdlib::HTTPSUrl, Stdlib::HTTPUrl, Enum['']] $simp_gpg_url        = ''
 ){
-  if $enable_auto_updates == true {
-    include '::simp::yum::schedule'
-  }
-  else {
-    cron { 'simp_yum_update': ensure => 'absent' }
-  }
-
   file { [
     '/etc/yum',
     '/etc/yum.repos.d'
@@ -70,51 +67,16 @@ class simp::yum (
     recurse => true
   }
 
-  $_simp_repo_enable = $enable_simp_repos ? { true => 1, default => 0 }
-  $_os_repo_enable   = $enable_os_repos ?   { true => 1, default => 0 }
+  case SemVer($api_version) {
+    SemVer[SemVerRange('>=1.0.0 <2.0.0')]: {
+      if $servers.is_a(Undef) {
+        fail('Parameter `servers` is required for this version of the API.')
+      }
 
-  if empty($os_gpg_url) {
-    $_temp_os_gpg_url = $facts['os']['name'] ? {
-      'RedHat' => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}/RPM-GPG-KEY-redhat-release",
-      default  => "https://YUM_SERVER/yum/${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}/RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"
+      class { simp::yum::api_v1: }
     }
-
-    $_os_gpg_url = simp_yumrepo_mangle($_temp_os_gpg_url, $servers)
-  }
-  else {
-    $_os_gpg_url = simp_yumrepo_mangle($os_gpg_url, $servers)
-  }
-
-  if empty($simp_gpg_url) {
-    $_simp_gpg_url = simp_yumrepo_gpgkeys('https://YUM_SERVER/yum/SIMP', $servers)
-  }
-  else {
-    $_simp_gpg_url = simp_yumrepo_mangle($simp_gpg_url, $servers)
-  }
-
-  yumrepo { 'os_updates':
-    baseurl         => simp_yumrepo_mangle($os_update_url, $servers),
-    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
-    enabled         => $_os_repo_enable,
-    enablegroups    => 0,
-    gpgcheck        => 1,
-    gpgkey          => join(split($_os_gpg_url,"\n"),"\n   "),
-    sslverify       => 0,
-    keepalive       => 0,
-    metadata_expire => 3600,
-    tag             => 'firstrun'
-  }
-
-  yumrepo { 'simp':
-    baseurl         => simp_yumrepo_mangle($simp_update_url, $servers),
-    descr           => 'SIMP Packages',
-    enabled         => $_simp_repo_enable,
-    enablegroups    => 0,
-    gpgcheck        => 1,
-    gpgkey          => join(split($_simp_gpg_url,"\n"),"\n   "),
-    sslverify       => 0,
-    keepalive       => 0,
-    metadata_expire => 3600,
-    tag             => 'firstrun'
+    default: {
+      fail("ERROR: Invalid API version for ${name}")
+    }
   }
 }

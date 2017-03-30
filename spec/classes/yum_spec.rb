@@ -7,6 +7,18 @@ describe 'simp::yum' do
         facts
       end
 
+      context 'when `$api_version` is set' do
+        context 'to a value in the `>=1.0.0 <2.0.0` range' do
+          let(:params) { { api_version: '1.0.0'} }
+          it { is_expected.to compile.with_all_deps }
+        end
+
+        context 'to a value in the `>=2.0.0 <3.0.0` range' do
+          let(:params) { { api_version: '2.0.0'} }
+          it { is_expected.to raise_error(Puppet::Error) }
+        end
+      end
+
       context 'with default parameters' do
         it { is_expected.to compile.with_all_deps }
         it 'creates the SIMP Yumrepo' do
