@@ -1,9 +1,10 @@
+# @return String
 function simp::yum::repo::gpgkey_string(
   Array[Simp::Hostorurl] $servers,
   Array[String]          $simp_gpgkeys,
   String                 $simp_baseurl_path,
   Simp::Urls             $extra_gpgkey_urls = [],
-) >> String {
+) {
   $_standard_gpgkey_urls = $servers.filter |$_server| {
     $_server !~ Variant[Stdlib::HTTPSUrl,Stdlib::HTTPUrl]
   }.map |$_server| {

@@ -1,7 +1,8 @@
+# @return String
 function simp::yum::repo::baseurl_string(
   Array[Simp::Hostorurl] $servers,
-  String $simp_baseurl_path,
-) >> String {
+  String                 $simp_baseurl_path,
+) {
   $_server_urls = $servers.map |$_server| {
     if $_server =~ Variant[Stdlib::HTTPSUrl,Stdlib::HTTPUrl] {
       regsubst($_server, '/$', '')
