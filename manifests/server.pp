@@ -30,12 +30,16 @@ class simp::server (
   Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
   Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
   Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
-  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => "simp" }),
+  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
   Array[String] $classes   = [],
   Hash[String, Array]   $scenario_map,
 ) {
 
-  simp::merge_scenario_classes($scenario, $scenario_map, $classes).include
+  if $scenario_map.has_key($scenario) {
+    include simp::knockout(union($scenario_map[$scenario], $classes))
+  } else {
+    fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
+  }
 
   if $clamav  { include '::clamav' }
   if $selinux { include '::selinux' }

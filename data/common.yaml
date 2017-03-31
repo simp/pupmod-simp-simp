@@ -1,3 +1,30 @@
+---
+lookup_options:
+  simp::scenario_map:
+    merge:
+      strategy: deep
+      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+  simp::classes:
+    merge:
+      strategy: deep
+      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+  simp::server::scenario_map:
+    merge:
+      strategy: deep
+      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+  simp::server::classes:
+    merge:
+      strategy: deep
+      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+
 simp::scenario_map:
   none: []
   poss:
@@ -70,6 +97,7 @@ simp::scenario_map:
     - selinux
     - svckill
     - fips
+
 simp::server::data:
   - simp::server::rsync_shares
   # Shared with 'poss'
@@ -111,29 +139,3 @@ simp::server::scenario_map:
   poss: "%{alias('simp::server::data')}"
   simp_lite: "%{alias('simp::server::data')}"
   simp: "%{alias('simp::server::data')}"
-lookup_options:
-  simp::scenario_map:
-    merge:
-      strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
-      #knockout_prefix: --
-      sort_merge_arrays: true
-  simp::classes:
-    merge:
-      strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
-      #knockout_prefix: --
-      sort_merge_arrays: true
-  simp::server::scenario_map:
-    merge:
-      strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
-      #knockout_prefix: --
-      sort_merge_arrays: true
-  simp::server::classes:
-    merge:
-      strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
-      #knockout_prefix: --
-      sort_merge_arrays: true
-
