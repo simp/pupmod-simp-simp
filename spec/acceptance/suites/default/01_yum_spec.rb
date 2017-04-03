@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'simp::yum class'
+test_name 'simp yum configuration'
 
-describe 'simp::yum class' do
+describe 'simp yum configuration' do
   before(:context) do
     hosts.each do |host|
       interfaces = fact_on(host, 'interfaces').strip.split(',')
@@ -36,11 +36,11 @@ describe 'simp::yum class' do
   let(:manifest) {
     <<-EOS
       include 'simp::server::yum'
-      include 'simp::yum'
       include 'simp::yum::repo::local_simp'
       include 'simp::yum::repo::local_os_updates'
 
-      Class['simp::server::yum'] -> Class['simp::yum']
+      Class['simp::server::yum'] -> Class['simp::yum::repo::local_simp']
+      Class['simp::server::yum'] -> Class['simp::yum::repo::local_os_updates']
 
       #{ssh_allow}
     EOS
