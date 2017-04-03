@@ -1,6 +1,6 @@
 # @return String
 function simp::yum::repo::gpgkey_string(
-  Array[Simp::Hostorurl] $servers,
+  Array[Simp::HostOrURL] $servers,
   Array[String]          $simp_gpgkeys,
   String                 $simp_baseurl_path,
   Simp::Urls             $extra_gpgkey_urls = [],

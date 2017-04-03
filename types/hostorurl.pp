@@ -1,4 +1,4 @@
-type Simp::Hostorurl = Variant[
+type Simp::HostOrURL = Variant[
   Simplib::Host,
   Simplib::Host::Port,
   Simplib::Hostname,

@@ -47,7 +47,7 @@
 #   An optional Array of Urls to include additional GPG key files
 #
 class simp::yum::repo::local_simp (
-  Array[Simp::Hostorurl]   $servers,
+  Array[Simp::HostOrURL]   $servers,
   Boolean                  $enable_repo       = true,
   Simp::Urls               $extra_gpgkey_urls = [],
 ){
