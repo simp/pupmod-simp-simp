@@ -54,7 +54,7 @@ simp::scenario_map:
     - simp::admin
     - simp::base_apps
     - simp::base_services
-    - simp::yum
+    - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::sysctl
@@ -85,7 +85,7 @@ simp::scenario_map:
     - simp::admin
     - simp::base_apps
     - simp::base_services
-    - simp::yum
+    - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::sysctl
@@ -127,7 +127,6 @@ simp::server::data:
   - '--simp::scenario::base'
   - '--auditd'
   - '--clamav'
-  - '--simp::yum'
   # These classes are only in 'simp'
   - pam::wheel
   - selinux

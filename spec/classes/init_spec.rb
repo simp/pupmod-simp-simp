@@ -34,9 +34,9 @@ describe 'simp' do
           {
             "when classes are just added" => {
               :params => {
-                "classes" => [ 'simp::yum' ]
+                "classes" => [ 'simp::yum::schedule' ]
               },
-              :contains => [ 'simp::yum'],
+              :contains => [ 'simp::yum::schedule'],
               :not_contains => [ ],
             }
           }.each do |ctxt, hash |
@@ -124,7 +124,7 @@ describe 'simp' do
             'simp::admin',
             'simp::base_apps',
             'simp::base_services',
-            'simp::yum',
+            'simp::yum::schedule',
             'simp::kmod_blacklist',
             'simp::mountpoints',
             'simp::sysctl',
