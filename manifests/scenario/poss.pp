@@ -22,8 +22,6 @@ class simp::scenario::poss (
 
   assert_private()
 
-  include '::pupmod'
-
   if $puppet_server_hosts_entry {
     if $server_facts and $server_facts['servername'] and $server_facts['serverip'] {
       $_pserver_alias = split($server_facts['servername'],'.')[0]

@@ -29,6 +29,85 @@ describe 'simp::server' do
           it { is_expected.to create_pam__access__rule('allow_simp') }
           it { is_expected.to create_sudo__user_specification('default_simp') }
         end
+        context 'when scenario is set to' do
+          poss = [
+            'pupmod',
+          ]
+          simp_lite = [
+            'aide',
+            'auditd',
+            'chkrootkit',
+            'at',
+            'cron',
+            'incron',
+            'useradd',
+            'resolv',
+            'nsswitch',
+            'issue',
+            'tuned',
+            'swap',
+            'timezone',
+            'ntpd',
+            'simp::admin',
+            'simp::base_apps',
+            'simp::base_services',
+            'simp::kmod_blacklist',
+            'simp::mountpoints',
+            'simp::sysctl',
+            'ssh',
+            'sudosh',
+          ]
+          simp = [
+            'pam::wheel',
+            'svckill',
+          ]
+          scenarios = {
+            'simp' => {
+              'contains' => [
+                simp,
+                simp_lite,
+                poss,
+              ],
+              'does_not_contain' => [
+              ]
+            },
+            'simp_lite' => {
+              'contains' => [
+                simp_lite,
+                poss,
+                simp
+              ],
+              'does_not_contain' => [
+              ]
+            },
+            'poss' => {
+              'contains' => [
+                poss,
+                simp_lite,
+                simp,
+              ],
+              'does_not_contain' => [
+              ]
+            }
+          }
+
+          scenarios.each do |scenario, data|
+            context "'#{scenario}'" do
+              let(:params) {{
+                :scenario => scenario
+              }}
+
+              it { is_expected.to compile.with_all_deps }
+              data['contains'].flatten.each do |class_name|
+                it { is_expected.to contain_class("#{class_name}") }
+              end
+              data['does_not_contain'].flatten.each do |class_name|
+                it { is_expected.to_not contain_class("#{class_name}") }
+              end
+            end
+          end
+
+        end
 
       end
     end

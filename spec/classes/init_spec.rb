@@ -1,3 +1,4 @@
+# vim: set expandtab ts=2 sw=2:
 require 'spec_helper'
 
 describe 'simp' do
@@ -26,6 +27,30 @@ describe 'simp' do
         it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
         it { is_expected.to create_stunnel__connection('rsync') }
         it { is_expected.to_not create_filebucket('simp') }
+
+        # For use with the next test
+        it { is_expected.to create_class('aide') }
+        context 'when removing classes using a knockout in simp::classes' do
+          {
+            "when classes are just added" => {
+              :params => {
+                "classes" => [ 'simp::yum' ]
+              },
+              :contains => [ 'simp::yum'],
+              :not_contains => [ ],
+            }
+          }.each do |ctxt, hash |
+            context ctxt do
+              let (:params) do
+                hash[:params]
+              end
+              it { is_expected.to compile.with_all_deps }
+              hash[:contains].each do |klass| 
+                it { is_expected.to create_class(klass) }
+              end
+            end
+          end
+        end
 
         context 'with filebucketing' do
           context 'with local path' do
@@ -74,17 +99,86 @@ describe 'simp' do
           end
         end
 
-        context 'scenario' do
-          scenarios = ['simp', 'simp_lite', 'poss']
+        context 'when scenario is set to' do
+          poss = [
+            'pupmod',
+          ]
+          simp_lite = [
+            'simp::scenario::base',
+            'aide',
+            'auditd',
+            'clamav',
+            'chkrootkit',
+            'at',
+            'cron',
+            'incron',
+            'useradd',
+            'resolv',
+            'nsswitch',
+            'issue',
+            'tuned',
+            'swap',
+            'timezone',
+            'ntpd',
+            'simp_rsyslog',
+            'simp::admin',
+            'simp::base_apps',
+            'simp::base_services',
+            'simp::yum',
+            'simp::kmod_blacklist',
+            'simp::mountpoints',
+            'simp::sysctl',
+            'ssh',
+            'sudosh',
+          ]
+          simp = [
+            'pam::wheel',
+            'selinux',
+            'svckill',
+          ]
+          scenarios = {
+            'simp' => {
+              'contains' => [
+                simp,
+                simp_lite,
+                poss,
+              ],
+              'does_not_contain' => [
+              ]
+            },
+            'simp_lite' => {
+              'contains' => [
+                simp_lite,
+                poss,
+              ],
+              'does_not_contain' => [
+                simp
+              ]
+            },
+            'poss' => {
+              'contains' => [
+                poss,
+              ],
+              'does_not_contain' => [
+                simp_lite,
+                simp,
+              ]
+            }
+          }
 
-          scenarios.each do |scenario|
-            context scenario do
+          scenarios.each do |scenario, data|
+            context "'#{scenario}'" do
               let(:params) {{
                 :scenario => scenario
               }}
 
               it { is_expected.to compile.with_all_deps }
-              it { is_expected.to create_class("simp::scenario::#{scenario}") }
+              data['contains'].flatten.each do |class_name|
+                it { is_expected.to contain_class("#{class_name}") }
+              end
+              data['does_not_contain'].flatten.each do |class_name|
+                it { is_expected.to_not contain_class("#{class_name}") }
+              end
             end
           end
         end

@@ -26,38 +26,20 @@
 #
 class simp::server (
   Boolean $allow_simp_user = false,
-  Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value' => false }),
+  Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value'     => false }),
+  Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
   Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
-  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false })
+  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
+  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
+  Array[String] $classes   = [],
+  Hash[String, Array]   $scenario_map,
 ) {
 
-  include '::aide'
-  include '::at'
-  include '::chkrootkit'
-  include '::cron'
-  include '::incron'
-  include '::issue'
-  include '::nsswitch'
-  include '::ntpd'
-  include '::pam::access'
-  include '::pam::wheel'
-  include '::pupmod'
-  include '::resolv'
-  include '::ssh'
-  include '::sudosh'
-  include '::svckill'
-  include '::swap'
-  include '::timezone'
-  include '::tuned'
-  include '::useradd'
-  include '::simp::admin'
-  include '::simp::base_apps'
-  include '::simp::base_services'
-  include '::simp::kmod_blacklist'
-  include '::simp::mountpoints'
-  include '::simp::server::rsync_shares'
-  include '::simp::sysctl'
+  if $scenario_map.has_key($scenario) {
+    include simp::knockout(union($scenario_map[$scenario], $classes))
+  } else {
+    fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
+  }
 
   if $clamav  { include '::clamav' }
   if $selinux { include '::selinux' }

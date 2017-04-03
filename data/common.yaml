@@ -1,0 +1,140 @@
+---
+lookup_options:
+  simp::scenario_map:
+    merge:
+      strategy: deep
+      # Disable this for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+  simp::classes:
+    merge:
+      strategy: unique
+      # Disable this for now.
+      #knockout_prefix: --
+  simp::server::scenario_map:
+    merge:
+      strategy: deep
+      # Disable this for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+  simp::server::classes:
+    merge:
+      strategy: deep
+      # Disable this for now.
+      #knockout_prefix: --
+      sort_merge_arrays: true
+
+simp::scenario_map:
+  none: []
+  poss:
+    - pupmod
+    - simp::scenario::poss
+  simp_lite:
+    # Shared with 'poss'
+    - pupmod
+    # Shared with 'simp'
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - nsswitch
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::sysctl
+    - ssh
+    - sudosh
+  simp:
+    # Shared with 'poss'
+    - pupmod
+    # Shared with 'simp_lite'
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - nsswitch
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::sysctl
+    - ssh
+    - sudosh
+    # These classes are only in 'simp'
+    - pam::wheel
+    - selinux
+    - svckill
+    - fips
+
+simp::server::data:
+  - simp::server::rsync_shares
+  # Shared with 'poss'
+  - pupmod
+  # Shared with 'simp_lite'
+  - aide
+  - at
+  - chkrootkit
+  - cron
+  - incron
+  - issue
+  - nsswitch
+  - ntpd
+  - pam::access
+  - resolv
+  - ssh
+  - sudosh
+  - swap
+  - timezone
+  - tuned
+  - useradd
+  - simp::admin
+  - simp::base_apps
+  - simp::base_services
+  - simp::kmod_blacklist
+  - simp::mountpoints
+  - simp::sysctl
+  - '--simp::scenario::base'
+  - '--auditd'
+  - '--clamav'
+  - '--simp::yum'
+  # These classes are only in 'simp'
+  - pam::wheel
+  - selinux
+  - svckill
+
+simp::server::scenario_map:
+  none: []
+  poss: "%{alias('simp::server::data')}"
+  simp_lite: "%{alias('simp::server::data')}"
+  simp: "%{alias('simp::server::data')}"
