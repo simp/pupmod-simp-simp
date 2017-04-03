@@ -36,5 +36,7 @@ simp_options::firewall : true
 sssd::domains :
   - 'LDAP'
 
-simp::yum::servers :
+simp::yum::repo::local_simp::servers:
+  - 'yum.bar.baz'
+simp::yum::repo::local_os_updates::servers:
   - 'yum.bar.baz'
