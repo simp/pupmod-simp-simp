@@ -1,7 +1,7 @@
 # Configure yum to use the internet public repository for SIMP dependencies
 #
 # @param simp_release_slug
-#   The unique release "slug" of SIMP for the target release
+#   The unique release URL "slug" of SIMP for the target release
 #   (e.g., '6_X', '6_X_Alpha').
 #
 #   * Defaults to the version of the **puppet server**
