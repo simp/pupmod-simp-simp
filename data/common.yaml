@@ -3,25 +3,24 @@ lookup_options:
   simp::scenario_map:
     merge:
       strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      # Disable this for now.
       #knockout_prefix: --
       sort_merge_arrays: true
   simp::classes:
     merge:
-      strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      strategy: unique
+      # Disable this for now.
       #knockout_prefix: --
-      sort_merge_arrays: true
   simp::server::scenario_map:
     merge:
       strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      # Disable this for now.
       #knockout_prefix: --
       sort_merge_arrays: true
   simp::server::classes:
     merge:
       strategy: deep
-      # XXX: `knockout_prefix` is broken in an interesting way: it only merges arrays on the same source. Disable it for now.
+      # Disable this for now.
       #knockout_prefix: --
       sort_merge_arrays: true
 
