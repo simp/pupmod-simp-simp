@@ -115,7 +115,7 @@ class simp::server::rsync_shares (
             auth_users     => ["apache_rsync_${_env}_${_os}"],
             comment        => "Apache configurations for Environment ${_env} on ${_os}",
             path           => "${rsync_base}/${_env}/rsync/${_os_id}/Global/apache",
-            hosts_allow    => ['127.0.0.1'],
+            hosts_allow    => $_trusted_nets,
             outgoing_chmod => 'o-rwx'
           }
         }
