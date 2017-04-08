@@ -1,3 +1,7 @@
+* Thu Apr 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.0-0
+- Updated apache rsync hosts_allow to $trusted_nets. The previous value
+  of 127.0.0.1 would not allow apache to rsync if stunnel was disabled.
+
 * Mon Apr 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
 - Updated the YUM configuration so that no repos are set up by default and it
   is simple to connect to the public repos for SIMP.
