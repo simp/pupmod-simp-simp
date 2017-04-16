@@ -8,7 +8,7 @@
 # @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::server::auto_fakeca (
-  Boolean $delete_on_removal = true
+  Boolean $delete_on_removal = false
 ) {
   include 'incron'
 
