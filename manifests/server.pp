@@ -22,28 +22,40 @@
 # @param auditd
 #   Enable SIMP management of auditing
 #
+# @param auto_fakeca
+#   Set up the system so that the FakeCA generates certificates based on the
+#   signing of a host's Puppet certificate
+#
+#   * This triggers in real time based on the creation of a Puppet client
+#     certificate which means that it only works on a Puppet CA
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server (
-  Boolean $allow_simp_user = false,
-  Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value'     => false }),
-  Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
-  Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
-  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
-  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
-  Array[String] $classes   = [],
-  Hash[String, Array]   $scenario_map,
+  Hash[String, Array] $scenario_map,
+  Boolean             $allow_simp_user = false,
+  Boolean             $pam             = simplib::lookup('simp_options::pam', { 'default_value'     => false }),
+  Boolean             $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
+  Boolean             $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
+  Boolean             $auditd          = simplib::lookup('simp_options::auditd', { 'default_value'  => false }),
+  String              $scenario        = simplib::lookup('simp::scenario', { 'default_value'        => 'simp' }),
+  Array[String]       $classes         = [],
+  Boolean             $auto_fakeca     = false
 ) {
 
   if $scenario_map.has_key($scenario) {
     include simp::knockout(union($scenario_map[$scenario], $classes))
-  } else {
+  }
+  else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
+
+  ### DO NOT INCLUDE ANY CLASSES ABOVE THIS LINE ###
 
   if $clamav  { include '::clamav' }
   if $selinux { include '::selinux' }
   if $auditd  { include '::auditd' }
+  if $auto_fakeca { include 'simp::server::auto_fakeca' }
 
   if $allow_simp_user {
     if $pam {

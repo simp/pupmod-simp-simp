@@ -33,6 +33,11 @@ describe 'simp class' do
       let(:options) {
         <<-EOF
 # Mandatory Settings
+
+# Without this, ordering issues may cause the system to become inaccessible
+# after reboot
+simp_options::fips: true
+
 simp_options::dns::servers: ['8.8.8.8']
 simp_options::puppet::server: #{host_fqdn}
 simp_options::puppet::ca: #{host_fqdn}
@@ -60,6 +65,21 @@ simp_options::trusted_nets: ['ALL']
 # Settings to make beaker happy
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+
+# Debugging
+pam::access::users:
+  defaults:
+    origins:
+      - ALL
+    permission: '+'
+  vagrant:
+
+sudo::user_specifications:
+  vagrant_sudosh:
+    user_list: ['vagrant']
+    cmnd: ['/usr/bin/sudosh']
+    runas: root
+    passwd: false
         EOF
       }
 

@@ -1,0 +1,148 @@
+#!/opt/puppetlabs/puppet/bin/ruby
+
+require 'puppet'
+require 'yaml'
+require 'json'
+require 'fileutils'
+
+action, fqdn = ARGV
+
+USAGE = "Usage: #{$0} <ACTION> <HOST PEM>"
+PUPPET = '/opt/puppetlabs/bin/puppet'
+
+
+if action !~ /^IN_/
+  $stderr.puts "Error: First Argument: `#{action}` is an invalid incrond action"
+  $stderr.puts USAGE
+  exit 1
+end
+
+if fqdn =~ /^(.*)\.pem$/
+  fqdn = $1
+else
+  $stderr.puts "Error: Second Argument: `#{fqdn}` is an invalid `host.fqdn.pem`"
+  $stderr.puts USAGE
+  exit 1
+end
+
+if action == 'IN_CREATE'
+  domain = fqdn.split('.')
+  hostname = domain.shift
+  domain = domain.join('.')
+
+  puppet_vardir = %x{#{PUPPET} config --section master print vardir}.strip
+  puppet_factdir = File.join(puppet_vardir, 'yaml', 'facts')
+
+  # This is here because we need to actually compile a catalog for the node to
+  # figure out what environment the host belongs in since it could come from
+  # anywhere.
+  #
+  # This should be safe since the file will be immediately rewritten on the first
+  # real puppet run.
+  unless File.exist?(File.join(puppet_factdir, fqdn + '.yaml'))
+    host_fake_facts = Puppet::Node::Facts.new({
+      'name'   => fqdn,
+      'values' => {
+        'hostname'   => hostname,
+        'domain'     => domain,
+        'fqdn'       => fqdn,
+        'certname'   => fqdn,
+        'clientcert' => fqdn
+      }
+    })
+
+    puppet_user = %x{#{PUPPET} config --section master print user}.strip
+
+    fact_file = File.join(puppet_factdir, fqdn + '.yaml')
+    File.open(fact_file, 'w') do |fh|
+      fh.puts host_fake_facts.to_yaml
+    end
+
+    # Make sure the Puppet server doesn't choke on this
+    FileUtils.chown(puppet_user, nil, fact_file)
+  end
+
+  compilation = []
+  Dir.mktmpdir { |tmpdir|
+    FileUtils.touch('site.pp')
+
+    # Let's figure out where this node lives!
+    compilation = %x{puppet master --manifest=#{tmpdir} --compile #{fqdn} 2> /dev/null}.split("\n")
+  }
+
+  # Strip off any garbage
+  i = 0
+  compilation.each do |line|
+    if line =~ /^\{/
+      break
+    else
+      i = i+1
+    end
+  end
+
+  begin
+    catalog = JSON.parse(compilation[i..-1].join("\n"))
+  rescue JSON::ParseError
+    $stderr.puts "Error: Did not get a valid catalog for '#{fqdn}'"
+    exit 1
+  end
+
+  environment = catalog['environment']
+
+  # Now that the have the environment, we need any DNS Alt names that might
+  # belong to this host.
+
+  host_pki_id = [fqdn]
+
+  host_pemfile = File.join(%x{#{PUPPET} config --section ca print signeddir}.strip, fqdn + '.pem')
+  if File.exist?(host_pemfile)
+    require 'openssl'
+
+    host_cert = OpenSSL::X509::Certificate.new(File.read(host_pemfile))
+
+    host_alt_names = host_cert.extensions.select do |ext|
+      ext.to_s =~ /^subjectAltName/
+    end.first
+
+    if host_alt_names
+      host_alt_names = host_alt_names.value.split(',').map{|x| x = x.split('DNS:').last}
+    end
+
+    host_pki_id = host_pki_id + host_alt_names
+  end
+
+  fakeca = %{/var/simp/environments/#{environment}/FakeCA/gencerts_nopass.sh}
+
+  unless File.exist?(fakeca)
+    $stderr.puts "Error: No FakeCA found at '#{fakeca}'"
+    $stderr.puts "  Are you sure your environment is set up properly?"
+    exit 1
+  end
+
+  fakeca_cmd = %{#{fakeca} auto #{host_pki_id.join(',')}}
+
+  fakeca_cmd_output = %x{#{fakeca_cmd}}
+
+  unless $?.success?
+    $stderr.puts "Error: FakeCA Command `#{fakeca_cmd}` was not successful"
+    $stderr.puts "Command Output:"
+    $stderr.puts fakeca_cmd_output
+    exit 1
+  end
+elsif action == 'IN_DELETE'
+  keydist_path = '/var/simp/environments/simp/site_files/pki_files/files/keydist'
+
+  to_delete = File.join(keydist_path, fqdn)
+  backup_path = File.join(keydist_path, '.incron_backup')
+
+  if File.exist?(to_delete)
+    FileUtils.mkdir_p(backup_path)
+
+    FileUtils.mv(to_delete, File.join(backup_path, fqdn + Time.now.strftime('%Y_%m_%d-%H:%M:%S.%L')))
+  end
+else
+  $stderr.puts "Error: Action '#{action}' was not recognized"
+  exit 1
+end
+
+exit 0
