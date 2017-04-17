@@ -94,6 +94,10 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
+      "name": "simp/polkit",
+      "version_requirement": ">= 6.1.0 < 7.0.0"
+    },
+    {
       "name": "simp/postfix",
       "version_requirement": ">= 5.0.0 < 6.0.0"
     },

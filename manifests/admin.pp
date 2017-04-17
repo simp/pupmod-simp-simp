@@ -54,10 +54,11 @@ class simp::admin (
   Simplib::Netlist $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
   Boolean          $force_logged_shell        = true,
   Enum['sudosh']   $logged_shell              = 'sudosh',
-  Boolean          $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false })
+  Boolean          $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean          $set_polkit_admin_group    = true
 ){
 
-  include '::simp::sudoers'
+  include 'simp::sudoers'
 
   if $pam {
     include '::pam'
@@ -129,6 +130,22 @@ class simp::admin (
     runas     => 'root',
     cmnd      => ["/bin/rm -rf ${facts['puppet_settings']['ssldir']}"],
     passwd    => !$passwordless_admin_sudo
+  }
+
+  $_polkit_ensure = ($set_polkit_admin_group and $facts['os']['release']['major'] >= '7') ? {
+    true    => 'present',
+    default => 'absent'
+  }
+  $_content = @("EOF")
+    polkit.addAdminRule(function(action, subject) {
+      return ["unix-group:${admin_group}"];
+    });
+    |EOF
+
+  polkit::authorization::rule { "Set ${admin_group} group to a policykit administrator":
+    ensure   => $_polkit_ensure,
+    priority => 10,
+    content  => $_content,
   }
 
 }

@@ -26,6 +26,7 @@ fixtures:
     cron: https://github.com/simp/pupmod-simp-cron
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
+    file_concat: https://github.com/simp/puppet-lib-file_concat
     fips: https://github.com/simp/pupmod-simp-fips
     freeradius: https://github.com/simp/pupmod-simp-freeradius
     haveged:
@@ -53,12 +54,12 @@ fixtures:
     oddjob: https://github.com/simp/pupmod-simp-oddjob
     pam: https://github.com/simp/pupmod-simp-pam
     pki: https://github.com/simp/pupmod-simp-pki
+    polkit: https://github.com/simp/pupmod-simp-polkit
     postfix: https://github.com/simp/pupmod-simp-postfix
     postgresql: https://github.com/simp/puppetlabs-postgresql
     puppetdb:
       repo: https://github.com/simp/puppetlabs-puppetdb
       branch: simp-master
-    file_concat: https://github.com/simp/puppet-lib-file_concat
     pupmod: https://github.com/simp/pupmod-simp-pupmod
     resolv: https://github.com/simp/pupmod-simp-resolv
     rsync: https://github.com/simp/pupmod-simp-rsync
