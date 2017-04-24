@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -92,6 +92,10 @@
     {
       "name": "simp/pki",
       "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/polkit",
+      "version_requirement": ">= 6.1.0 < 7.0.0"
     },
     {
       "name": "simp/postfix",

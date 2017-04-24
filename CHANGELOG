@@ -1,3 +1,6 @@
+* Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1.0
+- Set the poklit administrator group
+
 * Thu Apr 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.0-0
 - Updated apache rsync hosts_allow to $trusted_nets. The previous value
   of 127.0.0.1 would not allow apache to rsync if stunnel was disabled.
