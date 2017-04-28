@@ -78,22 +78,24 @@ class simp::kmod_blacklist (
     $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
   }
 
+  $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} /bin/true" }, "\n")
+
+  file { $_disable_file:
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    content => "${_disable_file_content}\n"
+  }
+
+  file { $_obsolete_disable_file: ensure => absent }
+
   $_blacklist.each |String $mod| {
     kmod::blacklist { $mod: }
-    kmod::install { $mod:
-      file => $_disable_file
-    }
   }
 
   $_unblacklist.each |String $mod| {
     kmod::blacklist { $mod: ensure => 'absent' }
-    kmod::install { $mod:
-      ensure => 'absent',
-      file   => $_disable_file
-    }
   }
-
-  file { $_obsolete_disable_file: ensure => absent }
 
   # None of this works if we don't actually have the kernel capability
   if $facts['simplib_sysctl'] and $facts['simplib_sysctl']['kernel.modules_disabled'] {
