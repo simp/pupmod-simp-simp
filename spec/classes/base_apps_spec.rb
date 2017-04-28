@@ -25,7 +25,8 @@ describe 'simp::base_apps' do
           'words',
           'x86info',
           'irqbalance',
-          'netlabel_tools'
+          'netlabel_tools',
+          'bind-utils'
         ] }
 
         context 'with default parameters' do

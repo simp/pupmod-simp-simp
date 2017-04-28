@@ -46,7 +46,8 @@ class simp::base_apps (
     'words',
     'x86info',
     'irqbalance',
-    'netlabel_tools'
+    'netlabel_tools',
+    'bind-utils'
   ]
   $apps = $extra_apps ? {
     Array   => $core_apps + $extra_apps,
