@@ -11,9 +11,26 @@
 # @param custom_blacklist
 #   Additional kernel modules to be blacklisted
 #
+# @param allow_overrides
+#   Allow the addition of kernel module rules that come before the disabling of
+#   the module blacklist and disabling so that optional override autoloading
+#   can work properly
+#
+#   * If this is not set, you will be unable to optionally override the
+#     disabling of the modules
+#
+# @param lock_modules
+#   Disallow all further modification to modules without a reboot
+#
+#   * Requires that the ``kernel.modules_disabled`` sysctl option is available
+#
+# @param notify_if_reboot_required
+#   Trigger a 'reboot_notify' resource that will warn at every puppet run that
+#   a reboot is required if necessary.
+#
 class simp::kmod_blacklist (
-  Boolean         $enable_defaults  = true,
-  Array[String,1] $blacklist        = [
+  Boolean         $enable_defaults           = true,
+  Array[String,1] $blacklist                 = [
     'bluetooth',
     'cramfs',
     'dccp',
@@ -32,15 +49,76 @@ class simp::kmod_blacklist (
     'udf',
     'usb-storage'
   ],
-  Array[String]   $custom_blacklist = []
+  Array[String]   $custom_blacklist          = [],
+  Boolean         $allow_overrides           = true,
+  Boolean         $lock_modules              = false,
+  Boolean         $notify_if_reboot_required = true
 ) {
 
   if $enable_defaults {
     $_blacklist = $custom_blacklist + $blacklist
+    $_unblacklist = []
   }
   else {
+    # If we don't want to enable the defaults, we need to make sure they've been
+    # properly purged from the management files. Otherwise, the system is not
+    # resetting to the expected state.
+
     $_blacklist = $custom_blacklist
+    $_unblacklist = $blacklist - $custom_blacklist
   }
 
-  $_blacklist.each |String $mod| { kmod::blacklist { $mod: } }
+  # Overrides in modprobe are processed in shell glob alphabetical order
+  if $allow_overrides {
+    $_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
+    $_obsolete_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
+  }
+  else {
+    $_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
+    $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
+  }
+
+  $_blacklist.each |String $mod| {
+    kmod::blacklist { $mod: }
+    kmod::install { $mod:
+      file => $_disable_file
+    }
+  }
+
+  $_unblacklist.each |String $mod| {
+    kmod::blacklist { $mod: ensure => 'absent' }
+    kmod::install { $mod:
+      ensure => 'absent',
+      file   => $_disable_file
+    }
+  }
+
+  file { $_obsolete_disable_file: ensure => absent }
+
+  # None of this works if we don't actually have the kernel capability
+  if $facts['simplib_sysctl'] and $facts['simplib_sysctl']['kernel.modules_disabled'] {
+    if $lock_modules {
+      include simplib::stages
+
+      $_stage = 'simp_modprobe_lock'
+
+      # Unfortunately, there is no way to make this *absolutely last*, so we just
+      # have to do the best that we can.
+      stage { $_stage: require => Stage['simp_finalize'] }
+    }
+    else {
+      $_stage = 'main'
+    }
+
+    class { 'simp::kmod_blacklist::lock_modules':
+      enable                    => $lock_modules,
+      notify_if_reboot_required => $notify_if_reboot_required,
+      stage                     => $_stage
+    }
+  }
+  elsif $lock_modules {
+    notify { 'simp::kmod_blacklist cannot lock modules':
+      message => 'WARNING: Could not find `kernel.modules_disabled`, unable to lock kernel modules as requested by `simp::kmod_blacklist::lock_modules`'
+    }
+  }
 }

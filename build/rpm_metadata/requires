@@ -52,7 +52,7 @@ Requires: pupmod-simp-simp_apache >= 6.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
 Requires: pupmod-simp-simpcat >= 6.0.0-0
 Requires: pupmod-simp-simplib < 4.0.0-0
-Requires: pupmod-simp-simplib >= 3.1.0-0
+Requires: pupmod-simp-simplib >= 3.4.0-0
 Requires: pupmod-simp-ssh < 7.0.0-0
 Requires: pupmod-simp-ssh >= 6.0.0-0
 Requires: pupmod-simp-stunnel < 7.0.0-0

@@ -1,4 +1,12 @@
-* Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1.0
+* Thu Apr 27 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+- Updated the simp::kmod_blacklist class to also fully disable the module
+  loading
+- Provide the ability to override the disabled modules locally on the system by
+  default but also allow for enforcement
+- Provide the ability to lock module loading if the underlying OS has the
+  capability
+
+* Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1-0
 - Set the poklit administrator group
 
 * Thu Apr 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.0-0
