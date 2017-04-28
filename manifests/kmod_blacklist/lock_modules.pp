@@ -12,21 +12,31 @@
 #   notification will be printed during puppet runs until the system has been
 #   rebooted.
 #
+# @param persist
+#   Lock all modules at boot time.
+#
+#  * WARNING: It is *highly* likely that you will prevent important modules
+#    from loading (such as networking) if you enable this. Test thoroughly
+#    before enabling.
+#
 class simp::kmod_blacklist::lock_modules (
-  Boolean $enable                    = true,
-  Boolean $notify_if_reboot_required = true
+  $enable                    = true,
+  $notify_if_reboot_required = true,
+  $persist                   = false
 ) {
   if $enable {
     sysctl { 'kernel.modules_disabled':
-      apply => true,
-      value => 1
+      apply   => true,
+      value   => 1,
+      persist => $persist
     }
   }
   else {
     if ($facts['simplib_sysctl'] and ($facts['simplib_sysctl']['kernel.modules_disabled'] != 0)) {
       sysctl { 'kernel.modules_disabled':
-        apply => true,
-        value => 0
+        apply   => true,
+        value   => 0,
+        persist => $persist
       }
 
       if $notify_if_reboot_required {

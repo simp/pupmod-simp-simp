@@ -68,14 +68,28 @@ class simp::kmod_blacklist (
     $_unblacklist = $blacklist - $custom_blacklist
   }
 
-  # Overrides in modprobe are processed in shell glob alphabetical order
-  if $allow_overrides {
-    $_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
-    $_obsolete_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
+  # Fun fact, EL6 takes the first item found as authoritative and EL7 takes the
+  # last item found as authoritative
+  #
+  # We're going to make the assumption that this isn't going to change but we
+  # should obviously update our tests regularly
+  if ( $::operatingsystem in ['RedHat','CentOS'] ) and ( $::operatingsystemmajrelease == '6' ) {
+    $_late_prefix = '00'
+    $_early_prefix = 'zz'
   }
   else {
-    $_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
-    $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
+    $_late_prefix = 'zz'
+    $_early_prefix = '00'
+  }
+
+  # Overrides in modprobe are processed in shell glob alphabetical order
+  if $allow_overrides {
+    $_disable_file = "/etc/modprobe.d/${_late_prefix}_simp_disable.conf"
+    $_obsolete_disable_file = "/etc/modprobe.d/${_early_prefix}_simp_disable.conf"
+  }
+  else {
+    $_disable_file = "/etc/modprobe.d/${_early_prefix}_simp_disable.conf"
+    $_obsolete_disable_file = "/etc/modprobe.d/${_late_prefix}_simp_disable.conf"
   }
 
   $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} /bin/true" }, "\n")

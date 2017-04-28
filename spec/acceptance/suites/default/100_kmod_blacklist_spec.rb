@@ -101,7 +101,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'should prevent manual loading of the bluetooth module' do
-        on(host, %(/sbin/insmod `/sbin/modinfo -F filename bluetooth`))
+        on(host, %(/sbin/insmod `/sbin/modinfo -F filename bluetooth`), :acceptable_exit_codes => [1])
 
         on(host, 'modprobe bluetooth', :acceptable_exit_codes => [1])
       end
@@ -114,7 +114,7 @@ describe 'simp::kmod_blacklist class' do
         host.reboot
 
         on(host, 'modprobe crypto_null')
-        on(host, 'rmmod crypt_null')
+        on(host, 'rmmod crypto_null')
       end
     end
   end

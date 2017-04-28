@@ -131,6 +131,7 @@ simp::server::data:
   - pam::wheel
   - selinux
   - svckill
+  - fips
 
 simp::server::scenario_map:
   none: []
