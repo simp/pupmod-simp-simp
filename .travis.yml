@@ -24,7 +24,7 @@ env:
   global:
     - STRICT_VARIABLES=yes
   matrix:
-    - PUPPET_VERSION="~> 4.8.1"
+    - PUPPET_VERSION="~> 4.8.2"
     - PUPPET_VERSION="~> 4.9.0"
     - PUPPET_VERSION="~> 4.7.0"
     # --------------------------- non-critical versions
