@@ -1,5 +1,6 @@
 * Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1.0
 - Set the poklit administrator group
+- Merged base_services into base_apps, leaving a shim in base_services
 
 * Thu Apr 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.0-0
 - Updated apache rsync hosts_allow to $trusted_nets. The previous value

@@ -21,6 +21,7 @@ describe 'simp' do
           }
           facts
         end
+        let(:hieradata) { "sssd::domains: ['LDAP']" }
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
@@ -45,7 +46,7 @@ describe 'simp' do
                 hash[:params]
               end
               it { is_expected.to compile.with_all_deps }
-              hash[:contains].each do |klass| 
+              hash[:contains].each do |klass|
                 it { is_expected.to create_class(klass) }
               end
             end
