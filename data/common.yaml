@@ -153,6 +153,7 @@ simp::server::data:
 
 simp::server::scenario_map:
   none: []
+  idm: "%{alias('simp::server::data')}"
   poss: "%{alias('simp::server::data')}"
   simp_lite: "%{alias('simp::server::data')}"
   simp: "%{alias('simp::server::data')}"

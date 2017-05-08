@@ -121,7 +121,7 @@
 #
 class simp (
   Hash                            $scenario_map,
-  Enum['simp', 'simp_lite', 'poss', 'idm', 'none'] $scenario  = 'simp',
+  String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
   Optional[Array]                 $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = true,
