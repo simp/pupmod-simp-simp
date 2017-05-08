@@ -29,6 +29,24 @@ simp::scenario_map:
   poss:
     - pupmod
     - simp::scenario::poss
+
+  idm:
+    - issue
+    - nsswitch
+    - ntpd
+    - pam::access
+    - pam::wheel
+    - pupmod
+    - resolv
+    - simp_rsyslog
+    - simp_openldap::client
+    - simp::scenario::poss
+    - simp::pam_limits::max_logins
+    - simp::admin
+    - simp::sssd::client
+    - ssh
+    - useradd
+
   simp_lite:
     # Shared with 'poss'
     - pupmod
@@ -60,6 +78,7 @@ simp::scenario_map:
     - simp::sysctl
     - ssh
     - sudosh
+
   simp:
     # Shared with 'poss'
     - pupmod
