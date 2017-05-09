@@ -13,8 +13,8 @@
 #   rebooted.
 #
 class simp::kmod_blacklist::lock_modules (
-  $enable                    = true,
-  $notify_if_reboot_required = true
+  Boolean $enable                    = true,
+  Boolean $notify_if_reboot_required = true
 ) {
   if $enable {
     sysctl { 'kernel.modules_disabled':
