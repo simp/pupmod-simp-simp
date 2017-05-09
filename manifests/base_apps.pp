@@ -24,7 +24,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_apps (
-  Simp::PackageEnsure       $ensure               = simplib::lookup('simp_options::ensure', { 'default_value' => 'installed' }),
+  Simp::PackageEnsure       $ensure               = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   Optional[Array[String,1]] $extra_apps           = undef,
   Boolean                   $manage_elinks_config = true
 ) {
