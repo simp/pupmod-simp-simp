@@ -31,21 +31,14 @@ simp::scenario_map:
     - simp::scenario::poss
 
   idm:
-    - issue
     - nsswitch
-    - ntpd
     - pam::access
     - pam::wheel
     - pupmod
     - resolv
-    - simp_rsyslog
-    - simp_openldap::client
-    - simp::scenario::poss
-    - simp::pam_limits::max_logins
     - simp::admin
     - simp::sssd::client
     - ssh
-    - useradd
 
   simp_lite:
     # Shared with 'poss'
