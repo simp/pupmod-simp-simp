@@ -1,5 +1,5 @@
 * Wed May 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.2-0
-- Added an identity management scenario, 'idm'
+- Added an identity management scenario, 'remote_access'
 
 * Mon May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.0.1.0
 - Use the correct simp_options global catalyst for base_apps::ensure

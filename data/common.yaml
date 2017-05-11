@@ -30,7 +30,7 @@ simp::scenario_map:
     - pupmod
     - simp::scenario::poss
 
-  idm:
+  remote_access:
     - nsswitch
     - pam::access
     - pam::wheel
@@ -146,7 +146,7 @@ simp::server::data:
 
 simp::server::scenario_map:
   none: []
-  idm: "%{alias('simp::server::data')}"
+  remote_access: "%{alias('simp::server::data')}"
   poss: "%{alias('simp::server::data')}"
   simp_lite: "%{alias('simp::server::data')}"
   simp: "%{alias('simp::server::data')}"
