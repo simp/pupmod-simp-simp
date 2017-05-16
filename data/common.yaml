@@ -31,7 +31,7 @@ simp::scenario_map:
     - simp::scenario::poss
 
   remote_access:
-    - nsswitch
+    - simp::nsswitch
     - pam::access
     - pam::wheel
     - pupmod

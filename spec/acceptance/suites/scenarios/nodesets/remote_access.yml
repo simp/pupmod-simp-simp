@@ -7,13 +7,13 @@ HOSTS:
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: vagrant
-#  client-el7:
-#    roles:
-#      - client
-#      - el7
-#    platform:   el-7-x86_64
-#    box:        centos/7
-#    hypervisor: vagrant
+  client-el7:
+    roles:
+      - client
+      - el7
+    platform:   el-7-x86_64
+    box:        centos/7
+    hypervisor: vagrant
 #  client-el6:
 #    roles:
 #      - client
