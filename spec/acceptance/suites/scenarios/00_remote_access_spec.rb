@@ -11,8 +11,7 @@ test_name 'remote_access scenario'
 #   1. Create an ldap server on server-el7
 #   2. Add an LDAP 'test.user'
 #   3. Apply the remote_access scenario on client-el7 and client-el6
-#   4. Attempt to authenticate as 'test.user' on client-el7 and
-#      client-el6.
+#   4. Attempt to ssh as 'test.user' to client-el7 and client-el6.
 
 describe 'remote_access scenario' do
   before(:context) do
@@ -84,6 +83,11 @@ describe 'remote_access scenario' do
       result = on(ldap_server, "ldapsearch -Z -LLL -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w suP3rP@ssw0r! -x cn=test.user")
       expect(result.stdout).to include("dn: cn=test.user,ou=Group,#{base_dn}")
     end
+    # Copy in the password-less key
+    it 'should copy the test.user private key' do
+      scp_to(ldap_server, './spec/acceptance/suites/scenarios/files/id_rsa.example', '/tmp/testkey')
+      on(ldap_server, 'chmod 600 /tmp/testkey')
+    end
   end
 
   clients.each do |client|
@@ -92,7 +96,7 @@ describe 'remote_access scenario' do
       let(:client_fqdn) { fact_on(client, 'fqdn') }
       # Need this for sudosh2
       it 'should set up needed repositories' do
-        on(ldap_server, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash')
+        on(client, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash')
       end
       it 'should configure hiera' do
         set_hieradata_on(client, ERB.new(client_hieradata).result(binding))
@@ -101,7 +105,13 @@ describe 'remote_access scenario' do
         apply_manifest_on(client, client_manifest, :catch_failures => true)
         apply_manifest_on(client, client_manifest, :catch_failures => true)
       end
+      it 'should id test.user' do
+        result = on(client, 'id test.user', :acceptable_exit_codes => [0])
+        expect(result.stdout).to include("uid=10000(test.user)")
+      end
+      it 'should ssh from *server* to client' do
+        on(ldap_server, "ssh -o StrictHostKeyChecking=no -i /tmp/testkey test.user@#{client} echo Logged in successfully")
+      end
     end
   end
-
 end
