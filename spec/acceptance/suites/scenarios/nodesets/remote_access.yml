@@ -1,0 +1,30 @@
+HOSTS:
+  server-el7:
+    roles:
+      - server
+      - ldap_server
+      - el7
+    platform:   el-7-x86_64
+    box:        centos/7
+    hypervisor: vagrant
+#  client-el7:
+#    roles:
+#      - client
+#      - el7
+#    platform:   el-7-x86_64
+#    box:        centos/7
+#    hypervisor: vagrant
+#  client-el6:
+#    roles:
+#      - client
+#      - el6
+#    platform:   el-6-x86_64
+#    box:        centos/6
+#    hypervisor: vagrant
+
+CONFIG:
+  log_level: verbose
+  type:      aio
+  vagrant_memsize: 2048
+  synced_folder: disabled
+  # vb_gui: true

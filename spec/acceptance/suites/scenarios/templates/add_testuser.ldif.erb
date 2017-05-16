@@ -1,0 +1,29 @@
+dn: cn=test.user,ou=Group,<%= base_dn %>
+objectClass: posixGroup
+objectClass: top
+cn: test.user
+gidNumber: 10000
+description: 'Test user'
+
+dn: uid=test.user,ou=People,<%= base_dn %>
+uid: test.user
+cn: test.user
+givenName: Test
+sn: User
+mail: test.user@funurl.net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+objectClass: ldapPublicKey
+shadowMax: 1
+shadowMin: 1
+shadowWarning: 7
+shadowLastChange: 10701
+sshPublicKey:
+loginShell: /bin/bash
+uidNumber: 10000
+gidNumber: 10000
+homeDirectory: /home/test.user
+#suP3rP@ssw0r!
+userPassword: {SSHA}r2GaizHFWY8pcHpIClU0ye7vsO4uHv/y
