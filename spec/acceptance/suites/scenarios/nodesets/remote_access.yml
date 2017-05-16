@@ -14,13 +14,13 @@ HOSTS:
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: vagrant
-#  client-el6:
-#    roles:
-#      - client
-#      - el6
-#    platform:   el-6-x86_64
-#    box:        centos/6
-#    hypervisor: vagrant
+  client-el6:
+    roles:
+      - client
+      - el6
+    platform:   el-6-x86_64
+    box:        centos/6
+    hypervisor: vagrant
 
 CONFIG:
   log_level: verbose
