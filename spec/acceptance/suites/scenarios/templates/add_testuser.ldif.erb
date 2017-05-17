@@ -1,0 +1,31 @@
+dn: cn=test.user,ou=Group,<%= base_dn %>
+objectClass: posixGroup
+objectClass: top
+cn: test.user
+gidNumber: 10000
+description: 'Test user'
+
+dn: uid=test.user,ou=People,<%= base_dn %>
+uid: test.user
+cn: test.user
+givenName: Test
+sn: User
+mail: test.user@funurl.net
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+objectClass: shadowAccount
+objectClass: ldapPublicKey
+shadowMax: 1
+shadowMin: 1
+shadowWarning: 7
+shadowLastChange: 10701
+# Associated with the private key in files/
+# This key is password-less
+sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI9DPUsQXNTqU2nWShmMCnGOXPDYazX4yHFrI7Xw3p/r62Li6zaSSNuJ8varX24j8NNMK9EeYcQnrkEu+PE7kO7UTnat3AQFASAlnZTkqo4F/bQjoVEvVaZHaAupiiQYMJny+8R/0VrPGQGx3IR2ORuMs0nAZjjZK3pdmMNNi284Rox3qi9qCeQY0yO3sdyygRwtKyAJvOSwTVrTuYQrMVzWbWsbBk7wO27A7bwbaCZ/nZFzjwB+t3HTJ2t9ZSxCtH0tnvPUEtswZdVN+yAKwka8dyULvhnGtfc8wcA8OJoYmb5Sqh67QU+ofBRkj1I0F33VfEyrNME9q5jT0V2/uS5WJjUNPScBZeZjR60ZA791ZrmyAw9ybK55h8SNmZWi3/PyteaZnHVY4fe0M38MtHy2qh+vBp2o/aVIhGo/cWotQpZaPMnJeNzqlvNQXm04Rz+5BeOZBAOLH/TiJFXpEoNYLYPSy7p1Y22QKPoMmgjp5MiCvBhY1v60rHnogBOTor5rebD2R+KyVK6beLb/nABCoJNvquefE+fpo/5+zVr9IfCDnnTJLKtUuNetk6D0gl76bhsfiEsWz2r1ND7ihXjcv3z3v38V4mr8m3cmAuVU7mNYHZvwM5i55VNitS1qUiSkvccKBbnxa15e0YxXUfnq8PI/Yq2Iky/K4am/XMkw==
+loginShell: /bin/bash
+uidNumber: 10000
+gidNumber: 10000
+homeDirectory: /home/test.user
+#suP3rP@ssw0r!
+userPassword: {SSHA}r2GaizHFWY8pcHpIClU0ye7vsO4uHv/y

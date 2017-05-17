@@ -29,6 +29,17 @@ simp::scenario_map:
   poss:
     - pupmod
     - simp::scenario::poss
+
+  remote_access:
+    - simp::nsswitch
+    - pam::access
+    - pam::wheel
+    - pupmod
+    - resolv
+    - simp::admin
+    - simp::sssd::client
+    - ssh
+
   simp_lite:
     # Shared with 'poss'
     - pupmod
@@ -60,6 +71,7 @@ simp::scenario_map:
     - simp::sysctl
     - ssh
     - sudosh
+
   simp:
     # Shared with 'poss'
     - pupmod
@@ -134,6 +146,7 @@ simp::server::data:
 
 simp::server::scenario_map:
   none: []
+  remote_access: "%{alias('simp::server::data')}"
   poss: "%{alias('simp::server::data')}"
   simp_lite: "%{alias('simp::server::data')}"
   simp: "%{alias('simp::server::data')}"

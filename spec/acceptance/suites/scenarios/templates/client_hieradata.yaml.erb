@@ -1,0 +1,55 @@
+---
+# Mock up ldap
+
+simp_options::ldap::uri:
+  - 'ldap://<%= server_fqdn %>'
+simp_options::ldap::base_dn: '<%= base_dn %>'
+simp_options::ldap::bind_dn: 'cn=hostAuth,ou=Hosts,<%= base_dn %>'
+simp_options::ldap::bind_pw: 'foobarbaz'
+simp_options::ldap::bind_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
+simp_options::ldap::sync_dn: 'cn=LDAPSync,ou=Hosts,<%= base_dn %>'
+simp_options::ldap::sync_pw: 'foobarbaz'
+simp_options::ldap::sync_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
+simp_options::ldap::root_dn: 'cn=LDAPAdmin,ou=People,<%= base_dn %>'
+simp_options::ldap::master: 'ldap://<%= server_fqdn %>'
+# suP3rP@ssw0r!
+simp_openldap::server::conf::rootpw: "{SSHA}ZcqPNbcqQhDNF5jYTLGl+KAGcrHNW9oo"
+
+# Required for simp options
+simp_options::puppet::server: <%= client_fqdn %>
+simp_options::puppet::ca: <%= client_fqdn %>
+sssd::domains:
+  - LDAP
+
+# If you want internet, this is useful
+simp_options::dns::servers: ['8.8.8.8']
+
+# Emulate remote_access hiera
+simp::scenario: remote_access
+simp_options::auditd: false
+simp_options::clamav: false
+simp_options::firewall: false
+simp_options::haveged: false
+simp_options::ldap: true
+simp_options::logrotate: false
+simp_options::pam: true
+# Set to 'true' for non-puppetserver based acceptance
+#simp_options::pki: simp
+simp_options::selinux: false
+simp_options::sssd: true
+simp_options::stunnel: false
+simp_options::syslog: false
+simp_options::tcpwrappers: false
+simp_options::ipsec: false
+simp_options::kerberos: false
+
+# Extra tweaks for acceptance
+simp_options::rsync: false
+simp_options::clamav: false
+simp_options::pki: true
+simp_options::pki::source: '/etc/pki/simp-testing/pki'
+simp_options::trusted_nets: ['ALL']
+
+# Settings to make beaker happy
+ssh::server::conf::permitrootlogin: true
+ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
