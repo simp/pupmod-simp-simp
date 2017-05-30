@@ -1,0 +1,25 @@
+---
+# Set up LDAP
+simp_openldap::server::conf::default_ldif::ppolicy_pwd_min_age: 0
+simp_openldap::server::conf::default_ldif::ppolicy_pwd_failure_count_interval: 4
+simp_options::ldap: true
+simp_options::ldap::uri:
+  - 'ldap://<%= server_fqdn %>'
+simp_options::ldap::base_dn: '<%= base_dn %>'
+simp_options::ldap::bind_dn: 'cn=hostAuth,ou=Hosts,<%= base_dn %>'
+simp_options::ldap::bind_pw: 'foobarbaz'
+simp_options::ldap::bind_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
+simp_options::ldap::sync_dn: 'cn=LDAPSync,ou=Hosts,<%= base_dn %>'
+simp_options::ldap::sync_pw: 'foobarbaz'
+simp_options::ldap::sync_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
+simp_options::ldap::root_dn: 'cn=LDAPAdmin,ou=People,<%= base_dn %>'
+simp_options::ldap::master: 'ldap://<%= server_fqdn %>'
+# suP3rP@ssw0r!
+simp_openldap::server::conf::rootpw: "{SSHA}ZcqPNbcqQhDNF5jYTLGl+KAGcrHNW9oo"
+
+# Extra tweaks for acceptance
+simp_options::pki: true
+simp_options::pki::source: '/etc/pki/simp-testing/pki'
+simp_options::trusted_nets: ['ALL']
+ssh::server::conf::permitrootlogin: true
+ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys

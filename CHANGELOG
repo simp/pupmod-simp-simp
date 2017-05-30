@@ -1,4 +1,4 @@
-* Tue May 09 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+* Tue May 30 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
 - Updated the simp::kmod_blacklist class to also fully disable the module
   loading
 - Provide the ability to override the disabled modules locally on the system by
@@ -6,7 +6,10 @@
 - Provide the ability to lock module loading if the underlying OS has the
   capability
 
-* Mon May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.0-0
+* Wed May 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.2-0
+- Added a 'remote_access' scenario
+
+* Mon May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.0.1.0
 - Use the correct simp_options global catalyst for base_apps::ensure
 
 * Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1-0

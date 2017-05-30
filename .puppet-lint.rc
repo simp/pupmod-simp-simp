@@ -4,6 +4,7 @@
 --no-140chars-check
 --no-empty_string-check
 --no-trailing_comma-check
+--no-2sp_soft_tabs
 # This is here because the code can't handle lookups in parameters and we have
 # a LOT of those
 --no-parameter_order-check
