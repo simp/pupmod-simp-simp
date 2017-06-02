@@ -1,6 +1,9 @@
 ---
 fixtures:
   repositories:
+    # Kluge for testing the automatic cert generation
+    simp_environment: https://github.com/simp/simp-environment-skeleton
+    # End Kluge
     acpid: https://github.com/simp/pupmod-simp-acpid
     activemq: https://github.com/simp/pupmod-simp-activemq
     aide: https://github.com/simp/pupmod-simp-aide
@@ -86,7 +89,6 @@ fixtures:
     upstart: https://github.com/simp/pupmod-simp-upstart
     useradd: https://github.com/simp/pupmod-simp-useradd
     xinetd: https://github.com/simp/pupmod-simp-xinetd
-    '../acceptance/rsync_shares/simp':
-      repo: https://github.com/simp/simp-rsync.git
+    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync.git
   symlinks:
     simp: "#{source_dir}"

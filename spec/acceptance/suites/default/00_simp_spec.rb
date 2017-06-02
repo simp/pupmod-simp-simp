@@ -3,21 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'simp'
 
 describe 'simp class' do
-  before(:context) do
-    hosts.each do |host|
-      interfaces = fact_on(host, 'interfaces').strip.split(',')
-      interfaces.delete_if do |x|
-        x =~ /^lo/
-      end
-
-      interfaces.each do |iface|
-        if fact_on(host, "ipaddress_#{iface}").strip.empty?
-          on(host, "ifup #{iface}", :accept_all_exit_codes => true)
-        end
-      end
-    end
-  end
-
   let(:manifest) {
     <<-EOS
       # This would be in site.pp, or an ENC or classifier
@@ -60,6 +45,8 @@ simp_options::trusted_nets: ['ALL']
 # Settings to make beaker happy
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+useradd::securetty:
+  - ANY_SHELL
         EOF
       }
 
@@ -70,7 +57,7 @@ ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
       # These boxes have no root password by default...
       it 'should set the root password' do
         on(host, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
-        on(host, 'echo password | passwd root --stdin')
+        on(host, 'echo "root:password" | chpasswd')
       end
 
       it 'should set up needed repositories' do

@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 test_name 'simp::base_apps and simp::base_services class'
 
-describe 'simp::base_apps' do
+describe 'simp::base_apps class' do
   let(:hieradata) {
     <<-EOS
 ---

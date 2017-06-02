@@ -2,7 +2,7 @@ Obsoletes: pupmod-simp-test >= 0.0.1
 Requires: pupmod-herculesteam-augeasproviders_puppet < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_puppet >= 2.1.0-0
 Requires: pupmod-herculesteam-augeasproviders_sysctl < 3.0.0-0
-Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.1.0-0
+Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.2.0-0
 Requires: pupmod-puppetlabs-inifile < 2.0.0-0
 Requires: pupmod-puppetlabs-inifile >= 1.6.0-0
 Requires: pupmod-puppetlabs-postgresql < 5.0.0-0
@@ -52,7 +52,7 @@ Requires: pupmod-simp-simp_apache >= 6.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
 Requires: pupmod-simp-simpcat >= 6.0.0-0
 Requires: pupmod-simp-simplib < 4.0.0-0
-Requires: pupmod-simp-simplib >= 3.1.0-0
+Requires: pupmod-simp-simplib >= 3.4.0-0
 Requires: pupmod-simp-ssh < 7.0.0-0
 Requires: pupmod-simp-ssh >= 6.0.0-0
 Requires: pupmod-simp-stunnel < 7.0.0-0
