@@ -64,6 +64,7 @@ fixtures:
       repo: https://github.com/simp/puppetlabs-puppetdb
       branch: simp-master
     pupmod: https://github.com/simp/pupmod-simp-pupmod
+    puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization
     resolv: https://github.com/simp/pupmod-simp-resolv
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
