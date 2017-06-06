@@ -8,7 +8,6 @@
 # PE 2017.2   4.10  2.1.9  TBD
 ---
 language: ruby
-dist: trusty
 sudo: false
 cache: bundler
 before_script:
@@ -16,7 +15,9 @@ before_script:
 bundler_args: "--without development system_tests"
 before_install: rm Gemfile.lock || true
 script:
-- bundle exec rake test
+- bundle exec rake metadata_lint
+- bundle exec rake lint
+- bundle exec rake spec
 notifications:
   email: false
 rvm:
