@@ -1,0 +1,5 @@
+---
+# This data is used by puppetsync to customize .puppet-lint.rc options
+
+puppetlint_custom_flags:
+  - '--no-2sp_soft_tabs'
