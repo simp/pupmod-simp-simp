@@ -8,6 +8,7 @@
 # PE 2017.2   4.10  2.1.9  TBD
 ---
 language: ruby
+dist: trusty
 sudo: false
 cache: bundler
 before_script:
