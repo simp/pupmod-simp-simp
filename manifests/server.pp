@@ -4,12 +4,6 @@
 # @param allow_simp_user
 #   Ensure that the ``simp`` user can login to the system
 #
-# @param enable_rsync_shares
-#   Enable all of the default SIMP rsync shares
-#
-#   * You should **not** disable this unless you have specific needs and
-#     understand the dependencies on the various rsync shares
-#
 # @param pam
 #   Enable SIMP management of the PAM stack
 #
@@ -21,6 +15,19 @@
 #
 # @param auditd
 #   Enable SIMP management of auditing
+#
+# @param scenario
+#   The SIMP scenario to apply to the server
+#
+#   * It is **not advised** to change this from ``simp``
+#
+# @param classes
+#   Additional classes to include on the server in addition to those included
+#   in the ``scenario``
+#
+# @param scenario_map
+#   An **internal** parameter used for determining the correct classes to apply
+#   for the ``scenario``
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #

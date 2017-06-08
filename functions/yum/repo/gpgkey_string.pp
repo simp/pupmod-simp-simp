@@ -1,3 +1,18 @@
+# A function to return a proper set of SIMP YUM repositories for the default
+# build. Of limited use outside of an ISO install.
+#
+# @param servers
+#   The list of YUM servers
+#
+# @param simp_gpgkeys
+#   The list of GPG Keys for SIMP
+#
+# @param simp_baseurl_path
+#   The standard path to the yum repos on the servers
+#
+# @param extra_gpgkey_urls
+#   Additional GPG keys that need to be included
+#
 # @return String
 function simp::yum::repo::gpgkey_string(
   Array[Simp::HostOrURL] $servers,

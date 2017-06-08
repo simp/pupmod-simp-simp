@@ -1,9 +1,45 @@
-# Common aliases
+# A set of default sudoers aliases
+#
+# Take care not to add anything that can access a root shell
+#
+# @param audit_alias
+#   Commands useful for auditing the system
+#
+# @param delegating_alias
+#   Common system delegation activities
+#
+# @param drivers_alias
+#   Provides the ability to load and unload kernel modules
+#
+# @param locate_alias
+#   Allow a user to update the ``mlocate`` database
+#
+# @param networking_alias
+#   Allow a user to perform common network control activities
+#
+# @param processes_alias
+#   Allow a user to manage system processes
+#
+# @param services_alias
+#   Allow a user to manage system services
+#
+# @param selinux_alias
+#   Allow a user to modify and debug SELinux
+#
+# @param software_alias
+#   Allow for system software management
+#
+# @param storage_alias
+#   Allow for storage management
+#
+# @param su_alias
+#   Allow unfettered access to ``su``
 #
 class simp::sudoers::aliases (
   Array[Stdlib::AbsolutePath] $audit_alias = [
     '/bin/cat',
     '/bin/ls',
+    '/usr/bin/rvim',
     '/usr/bin/lsattr',
     '/sbin/aureport',
     '/sbin/ausearch',

@@ -8,7 +8,7 @@
 #     * haldaemon   (enabled by defauly by vendor)
 #     * portreserve (disabled by default by vendor)
 #     * quota_nld   (stopped by deafult by vendor)
-
+#
 # @param ensure
 #   The ``$ensure`` status of all of the included packages
 #
@@ -93,12 +93,19 @@ class simp::base_apps (
 
         # portreserve will only start if there is a file in the conf directory
         # such as: cups ipp dhcpd named slapd ldaps
+        file { '/etc/portreserve/sshd':
+          owner   => 'root',
+          group   => 'root',
+          content => "ssh/tcp\n",
+          require => Package['portreserve']
+        }
+
         service { 'portreserve':
           ensure     => 'running',
           enable     => true,
           hasrestart => true,
           hasstatus  => false,
-          require    => Package['portreserve']
+          require    => File['/etc/portreserve/sshd']
         }
 
         service { 'quota_nld':

@@ -1,5 +1,7 @@
 # Build a list of GPG keys needed by a simp repo
-# @return Array[String]
+#
+# @return [Array<String>]
+#
 function simp::yum::repo::gpgkeys::simp() {
 
   # Common keys, distributed in simp-gpgkeys

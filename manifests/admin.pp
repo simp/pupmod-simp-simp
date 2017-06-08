@@ -25,7 +25,7 @@
 #   * This is on by default due to the expected use of SSH keys without local
 #     passwords
 #
-# @param admin_allowed_from
+# @param admins_allowed_from
 #   The locations from which administrators are allowed to access the system
 #
 # @param auditors_allowed_from
@@ -42,6 +42,10 @@
 #
 #   * Without this, it is quite likely that your system is not going to respond
 #     as expected with the rules in this class
+#
+# @param set_polkit_admin_group
+#   If the system has PolicyKit support, will register ``$admin_group`` as a
+#   valid administrative group on the system
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
