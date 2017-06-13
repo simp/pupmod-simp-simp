@@ -1,3 +1,10 @@
+* Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
+- Due to lack of support for knockout_prefix for arrays in older versions
+  of Puppet, simp::knockout functionality has been moved to
+  simplib::knockout because multiple modules are using the function.
+- A wrapper has been put around simp::knockout for backwards-compatibility
+  in our code.
+
 * Tue May 30 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
 - Updated the simp::kmod_blacklist class to also fully disable the module
   loading
