@@ -14,8 +14,11 @@ class simp::yum::repo::internet_simp_server (
 ){
   $_release_slug = simp::yum::repo::sanitize_simp_release_slug( $simp_release_slug )
 
+  $_release = $facts['os']['release']['major']
+  $_arch = $facts['architecture']
+
   yumrepo { "simp-project_${_release_slug}":
-    baseurl         => "https://packagecloud.io/simp-project/${_release_slug}/el/\$releasever/\$basearch",
+    baseurl         => "https://packagecloud.io/simp-project/${_release_slug}/el/${_release}/${_arch}",
     descr           => 'The main SIMP repository',
     enabled         => 1,
     enablegroups    => 0,

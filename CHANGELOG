@@ -1,3 +1,7 @@
+* Thu Jum 15 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
+- simp::yum::internet_simp* repos now use facts in Yum repo baseurls in place
+  of yum macros, who's output is not reliable.
+
 * Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
 - Due to lack of support for knockout_prefix for arrays in older versions
   of Puppet, simp::knockout functionality has been moved to
