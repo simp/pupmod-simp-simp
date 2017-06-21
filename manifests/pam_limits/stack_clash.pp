@@ -1,4 +1,4 @@
-# Mitigate suceptibility to the 'stack clash' exlpoit by limiting
+# Mitigate susceptibility to the 'stack clash' exlpoit by limiting
 # the stack size and address size for local and remote users.
 #
 # These limitations do NOT guarantee immunity from the exploit, but
@@ -14,7 +14,7 @@
 #   https://gist.github.com/8f28ac8d908b3379fa9cee97b910ac54.git
 #
 # @param ignore_list
-#   Any prameter in this list will be given unlimited stack and
+#   Any parameter in this list will be given unlimited stack and
 #   address space.
 #
 #   Default: Ignore root, dbus, gdm. Root and dbus serve critical
