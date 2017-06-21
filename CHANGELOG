@@ -1,5 +1,5 @@
 * Wed Jun 21 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
-- Mitigated suceptibility to the 'stack clash' exlpoit by adding a
+- Mitigated susceptibility to the 'stack clash' exlpoit by adding a
   class to limit the stack size and address size for local and
   remote users.
 - These limitations do NOT guarantee immunity from the exploit, but
