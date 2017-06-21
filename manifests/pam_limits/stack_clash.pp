@@ -20,7 +20,7 @@
 #   Default: Ignore root, dbus, gdm. Root and dbus serve critical
 #   roles and are unlimited for obvious reasons. GDM is a stack
 #   heavy application that must be unlimited, or users run the
-#   risk of loosing GUI access to their system. 
+#   risk of losing GUI access to their system. 
 #
 # @param stack_limit
 #   The max stack size, in KB, that applications not in the
