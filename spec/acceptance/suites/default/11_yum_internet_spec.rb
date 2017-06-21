@@ -20,6 +20,7 @@ describe 'simp yum configuration' do
 
   let(:manifest) {
     <<-EOS
+      include 'simp::version'
       include 'simp::yum::repo::internet_simp_server'
       include 'simp::yum::repo::internet_simp_dependencies'
 
@@ -47,8 +48,8 @@ simp_apache::ssl::sslverifyclient: none
 
   context 'add repos to system' do
     hosts.each do |host|
-      set_hieradata_on(host, hieradata)
       it 'should work with no errors' do
+        set_hieradata_on(host, hieradata)
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
       it 'should be idempotent' do
