@@ -71,6 +71,12 @@ for full details.
 The SIMP module has the following scenarios defined for getting started with
 different configurations easily:
 
+**NOTE**
+
+| SIMP scenarios always target the Puppet **client** systems. The SIMP server
+| is always kept in the safest mode by default but can be overridden explicitly
+| in Hiera if desired.
+
 * ``simp``
   * The default scenario. Enables all modules to support the default SIMP
     infrastructure configured around security best practices and compatibility

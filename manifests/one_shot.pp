@@ -5,7 +5,7 @@
 # configuration
 #
 # @param enable_user
-#   Add a standalone user account that will be able to login to the system
+#   Add a one_shot user account that will be able to login to the system
 #
 # @param user_name
 #   The username to use for remote access
@@ -68,9 +68,9 @@
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
-class simp::standalone (
+class simp::one_shot (
   Boolean             $enable_user                  = true,
-  String              $user_name                    = 'simp_standalone',
+  String              $user_name                    = 'simp_one_shot',
   Optional[String[8]] $user_password                = undef,
   Integer             $user_uid                     = 1777,
   Integer             $user_gid                     = $user_uid,
@@ -91,11 +91,11 @@ class simp::standalone (
 
   if $enable_user {
     unless ($user_password or $user_ssh_authorized_key) {
-      fail("You must specify either 'simp::standalone::user_password' or 'simp::standalone::user_ssh_authorized_key'")
+      fail("You must specify either 'simp::one_shot::user_password' or 'simp::one_shot::user_ssh_authorized_key'")
     }
   }
 
-  contain 'simp::standalone::user'
+  contain 'simp::one_shot::user'
 
   # Handle VMWare systems on EL6
   if ($facts['virtual'] == 'vmware') and ($facts['os']['name'] in ['CentOS','RedHat']) and (versioncmp($facts['os']['release']['major'], '6') == 1) {
@@ -114,11 +114,11 @@ class simp::standalone (
   #
   # The only place where this may have issues is if there are changes that are
   # based on facts that would require an additional run to take effect
-  stage { 'simp_standalone_finalization':
+  stage { 'simp_one_shot_finalization':
     require => Stage['simp_finalize']
   }
 
-  class { 'simp::standalone::finalize':
-    stage => 'simp_standalone_finalization'
+  class { 'simp::one_shot::finalize':
+    stage => 'simp_one_shot_finalization'
   }
 }

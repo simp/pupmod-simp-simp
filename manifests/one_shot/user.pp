@@ -3,7 +3,7 @@
 # Configure a 'stand alone' system user
 #
 # @param enable
-#   Enable the standalone capabilities
+#   Enable the one_shot capabilities
 #
 # @param username
 #   The username to use for remote access
@@ -45,19 +45,19 @@
 #   from
 #
 #   * Set to ``['ALL']`` to allow from any location
-class simp::standalone::user (
-  Boolean             $enable                  = $simp::standalone::enable_user,
-  String              $username                = $simp::standalone::user_name,
-  Optional[String]    $password                = $simp::standalone::user_password,
-  Pattern['^/']       $home                    = $simp::standalone::user_home,
-  Integer             $uid                     = $simp::standalone::user_uid,
-  Integer             $gid                     = $simp::standalone::user_gid,
-  Optional[String[1]] $ssh_authorized_key      = $simp::standalone::user_ssh_authorized_key,
-  String[1]           $ssh_authorized_key_type = $simp::standalone::user_ssh_authorized_key_type,
-  String              $sudo_users              = $simp::standalone::user_sudo_users,
-  Boolean             $passwordless_sudo       = $simp::standalone::user_passwordless_sudo,
-  Array[String]       $sudo_commands           = $simp::standalone::user_sudo_commands,
-  Array[String]       $allowed_from            = $simp::standalone::user_allowed_from
+class simp::one_shot::user (
+  Boolean             $enable                  = $simp::one_shot::enable_user,
+  String              $username                = $simp::one_shot::user_name,
+  Optional[String]    $password                = $simp::one_shot::user_password,
+  Pattern['^/']       $home                    = $simp::one_shot::user_home,
+  Integer             $uid                     = $simp::one_shot::user_uid,
+  Integer             $gid                     = $simp::one_shot::user_gid,
+  Optional[String[1]] $ssh_authorized_key      = $simp::one_shot::user_ssh_authorized_key,
+  String[1]           $ssh_authorized_key_type = $simp::one_shot::user_ssh_authorized_key_type,
+  String              $sudo_users              = $simp::one_shot::user_sudo_users,
+  Boolean             $passwordless_sudo       = $simp::one_shot::user_passwordless_sudo,
+  Array[String]       $sudo_commands           = $simp::one_shot::user_sudo_commands,
+  Array[String]       $allowed_from            = $simp::one_shot::user_allowed_from
 ) {
   assert_private()
 

@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'simp "standalone" scenario'
+test_name 'simp "one_shot" scenario'
 
-describe 'simp "standalone" scenario' do
+describe 'simp "one_shot" scenario' do
   def has_puppet(host)
     on(host, 'test -f /opt/puppetlabs/bin/puppet', :accept_all_exit_codes => true).exit_code == 0
   end
@@ -23,15 +23,30 @@ simp_options::puppet::ca: #{host_fqdn}
 sssd::domains: ['LOCAL']
 
 # Settings required for acceptance test, some may be required
-simp::scenario: standalone
-simp::standalone::user_ssh_authorized_key: #{ssh_authorized_key}
+simp::scenario: one_shot
+simp::one_shot::user_ssh_authorized_key: #{ssh_authorized_key}
 
-# 'simp_standalone'
-simp::standalone::user_password: '$6$jQ3VdTtWGDnCyqI8$triqoAkFqI8nDR9jNJeawj9.kqVh0KPQLjjw35vfB3.33Gb76Di/C4dBmDSUbtsFnZnPwIVB4iKGYTyigDqlj/'
+# 'simp_one_shot'
+simp::one_shot::user_password: '$6$jQ3VdTtWGDnCyqI8$triqoAkFqI8nDR9jNJeawj9.kqVh0KPQLjjw35vfB3.33Gb76Di/C4dBmDSUbtsFnZnPwIVB4iKGYTyigDqlj/'
 
+# Disable network stuff
 simp_options::rsync: false
 simp_options::clamav: false
+simp_options::ldap: false
+
+# Enable everything else
+simp_options::auditd: true
+simp_options::firewall: true
+simp_options::haveged: true
+simp_options::logrotate: true
+simp_options::pam: true
+simp_options::selinux: true
+simp_options::sssd: true
+simp_options::syslog: true
+simp_options::tcpwrappers: true
 simp_options::pki: true
+simp_options::sssd: true
+
 simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['ALL']
 
@@ -84,7 +99,7 @@ useradd::securetty:
     end
 
     it 'should no longer have the finalization script installed' do
-      on(host, 'test ! -f /usr/local/sbin/simp_standalone_finalize.sh')
+      on(host, 'test ! -f /usr/local/sbin/simp_one_shot_finalize.sh')
     end
   end
 end

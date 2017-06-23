@@ -110,7 +110,7 @@ simp::scenario_map:
     - svckill
     - fips
 
-  standalone:
+  one_shot:
     # Shared with 'simp'
     - pupmod
     - simp::scenario::base
@@ -140,8 +140,8 @@ simp::scenario_map:
     - simp::sysctl
     - ssh
     - sudosh
-    # These classes are only in 'standalone'
-    - simp::standalone
+    # These classes are only in 'one_shot'
+    - simp::one_shot
 
 simp::server::data:
   - simp::server::rsync_shares

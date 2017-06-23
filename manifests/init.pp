@@ -15,6 +15,7 @@
 #
 #   * The class list for each scenario is defined by the ``scenario_map`` which
 #     is pulled from the module data.
+#   * Please see the README for the list of scenarios
 #   * Please see the module data for the exact class list that is included in
 #     each scenario
 #
@@ -135,14 +136,7 @@
 class simp (
   # This parameter set from data in modules
   Hash                            $scenario_map,
-  Enum[
-    'simp',
-    'simp_lite',
-    'standalone',
-    'poss',
-    'none',
-    'remote_access'
-    ]                             $scenario                   = 'simp',
+  String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
   Optional[Array]                 $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = true,
