@@ -53,7 +53,7 @@ else
   echo "Executing in Dry Run Mode"
 fi
 
-if [ -z $dry_run ]; then
+if [ -n $dry_run ]; then
   echo "Update /etc/motd"
 else
   cat << EOF > /etc/motd
@@ -76,7 +76,7 @@ if [ $remove_puppet -eq 0 ]; then
   $dry_run puppet resource cron puppetagent ensure=absent
   $dry_run puppet resource service puppet ensure=stopped
 
-  if [ -n $dry_run ]; then
+  if [ -z $dry_run ]; then
     # Wait for puppet to stop running before we apply the rest of this script
     while [ `/bin/ps h -fC puppet | /bin/grep -ce "puppet \(agent\|apply\)"` -gt 0 ]; do
       /bin/sleep 5;
