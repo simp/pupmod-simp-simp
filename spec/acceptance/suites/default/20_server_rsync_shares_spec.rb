@@ -7,7 +7,11 @@ describe 'simp::server::rsync_shares class' do
     'simp_options::pki'          => true,
     'simp_options::pki::source'  => '/etc/pki/simp-testing/pki',
     'simp_options::stunnel'      => true,
-    'simp_options::trusted_nets' => ['ALL']
+    'simp_options::trusted_nets' => ['ALL'],
+    # Settings to make beaker happy
+    'ssh::server::conf::permitrootlogin'    => true,
+    'ssh::server::conf::authorizedkeysfile' => '.ssh/authorized_keys',
+    'useradd::securetty'                    => ['ANY_SHELL']
   }}
 
   let(:manifest) {

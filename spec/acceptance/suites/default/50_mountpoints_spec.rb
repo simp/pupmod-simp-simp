@@ -15,7 +15,11 @@ describe 'simplib::secure_mountpoints class' do
   #              which by default enables (pki $enable_pki)
   #                which requires pki setup
   let(:hieradata) {{
-    'auditd::enable_auditing' => false
+    'auditd::enable_auditing' => false,
+    # Settings to make beaker happy
+    'ssh::server::conf::permitrootlogin'    => true,
+    'ssh::server::conf::authorizedkeysfile' => '.ssh/authorized_keys',
+    'useradd::securetty'                    => ['ANY_SHELL']
   }}
 
   let(:manifest) {

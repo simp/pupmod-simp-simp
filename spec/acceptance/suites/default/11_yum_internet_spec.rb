@@ -20,7 +20,8 @@ describe 'simp yum configuration' do
 
   let(:manifest) {
     <<-EOS
-      include 'simp::version'
+      include 'simp'
+      include 'pupmod'
       include 'simp::yum::repo::internet_simp_server'
       include 'simp::yum::repo::internet_simp_dependencies'
 
@@ -31,34 +32,47 @@ describe 'simp yum configuration' do
   let(:hieradata) {
     <<-EOM
 ---
+# Mandatory Settings
+simp_options::dns::servers: ['8.8.8.8']
+simp_options::ntpd::servers: ['time.nist.gov']
+simp_options::ldap: false
 simp_apache::rsync_server : '127.0.0.1'
 simp_apache::rsync_web_root : false
 simp_options::trusted_nets:
   - ALL
+sssd::domains:
+  - LOCAL
 
+simp_options::clamav: false
 simp_options::rsync: false
 simp_options::pki: true
-simp_options::pki::source : '/etc/pki/simp-testing/pki'
+simp_options::pki::source: '/etc/pki/simp-testing/pki'
 
-simp_apache::rsync_server : '127.0.0.1'
-simp_apache::rsync_web_root : false
-simp_apache::ssl::sslverifyclient: none
+# Settings to make beaker happy
+ssh::server::conf::permitrootlogin: true
+ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+useradd::securetty:
+  - ANY_SHELL
     EOM
   }
 
   context 'add repos to system' do
     hosts.each do |host|
+      it 'should set the SIMP version' do
+        on(host, 'echo 6.0.0-0.el7 > /etc/simp/simp.version')
+      end
       it 'should work with no errors' do
         set_hieradata_on(host, hieradata)
+        apply_manifest_on(host, manifest, :catch_failures => true)
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
       it 'should be idempotent' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
-      describe file('/etc/yum.repos.d/simp-project_6.X.repo') do
+      describe file('/etc/yum.repos.d/simp-project_6_X.repo') do
         its(:content) { should match %r{https://packagecloud.io/simp-project/6.X/el/[67]/x86_64/} }
       end
-      describe file('/etc/yum.repos.d/simp-project_6.X_Dependencies.repo') do
+      describe file('/etc/yum.repos.d/simp-project_6_X_Dependencies.repo') do
         its(:content) { should match %r{https://packagecloud.io/simp-project/6.X_Dependencies/el/[67]/x86_64/} }
       end
     end
@@ -68,7 +82,7 @@ simp_apache::ssl::sslverifyclient: none
     it 'should contain some simp server packages' do
       packages = [
         'simp-adapter-pe',
-        'simp-adapter-foss',
+        'simp-adapter',
         'simp',
         'pupmod-simp-simp',
         'pupmod-simp-simplib',
@@ -76,7 +90,7 @@ simp_apache::ssl::sslverifyclient: none
       hosts.each do |host|
         on(host, 'yum clean all')
         packages.each do |package|
-          on(host, "yum --disablerepo=* --enablerepo='simp-project_6.X' list available | grep #{package} ")
+          on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X' list | grep #{package} ")
         end
       end
     end
@@ -94,7 +108,7 @@ simp_apache::ssl::sslverifyclient: none
       hosts.each do |host|
         on(host, 'yum clean all')
         packages.each do |package|
-          on(host, "yum --disablerepo=* --enablerepo='simp-project_6.X_Dependencies' list available | grep #{package} ")
+          on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X_Dependencies' list | grep #{package} ")
         end
       end
     end
