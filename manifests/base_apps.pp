@@ -82,7 +82,7 @@ class simp::base_apps (
         svckill::ignore { 'messagebus': }
       }
       else {
-        package { ['hal','portreserve','quota']: ensure => $ensure }
+        package { ['hal', 'quota']: ensure => $ensure }
         service { 'haldaemon':
           ensure     => 'running',
           enable     => true,
@@ -92,20 +92,17 @@ class simp::base_apps (
         }
 
         # portreserve will only start if there is a file in the conf directory
-        # such as: cups ipp dhcpd named slapd ldaps
-        file { '/etc/portreserve/sshd':
-          owner   => 'root',
-          group   => 'root',
-          content => "ssh/tcp\n",
-          require => Package['portreserve']
-        }
+        if $facts['portreserve_configured'] {
+          package { 'portreserve':
+            ensure => $ensure
+          }
 
-        service { 'portreserve':
-          ensure     => 'running',
-          enable     => true,
-          hasrestart => true,
-          hasstatus  => false,
-          require    => File['/etc/portreserve/sshd']
+          service { 'portreserve':
+            ensure     => 'running',
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => false
+          }
         }
 
         service { 'quota_nld':

@@ -7,6 +7,32 @@ describe 'simp "one_shot" scenario' do
     on(host, 'test -f /opt/puppetlabs/bin/puppet', :accept_all_exit_codes => true).exit_code == 0
   end
 
+  def finalize_running?(host)
+
+    puppet_running = on(host, 'ps --no-header -f -C puppet', :accept_all_exit_codes => true).exit_code == 0
+
+    return puppet_running if puppet_running
+
+    finalize_running = on(host, 'ps --no-header -f -C simp_one_host_finalize.sh', :accept_all_exit_codes => true).exit_code == 0
+
+    return finalize_running
+  end
+
+  def wait_for_finalize(host, timeout=500)
+    begin
+      Timeout.timeout(timeout) do
+        while finalize_running?(host) do
+          sleep(5)
+        end
+      end
+    rescue Timeout::Error
+      fail("Error: finalize did not finish within #{timeout} seconds")
+    end
+
+    # Allow a little more time before hitting the system again
+    sleep(5)
+  end
+
   let(:manifest) {
     <<-EOS
       # This would be in site.pp, or an ENC or classifier
@@ -53,6 +79,18 @@ simp_options::trusted_nets: ['ALL']
 # Settings to make beaker happy
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+
+pam::access::users:
+  vagrant:
+    origins:
+      - ALL
+    permission: '+'
+
+sudo::user_specifications:
+  vagrant_sudo:
+    user_list: ['vagrant']
+    cmnd: ['/bin/su']
+
 useradd::securetty:
   - ANY_SHELL
     EOF
@@ -77,16 +115,15 @@ useradd::securetty:
     it 'should bootstrap in a few runs' do
       if has_puppet(host)
         apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
-        sleep(10)
+        wait_for_finalize(host)
       end
+
+      # Handle items that require a reboot
+      host.reboot
+
       if has_puppet(host)
         apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
-        sleep(10)
-        host.reboot
-      end
-      if has_puppet(host)
-        apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
-        sleep(10)
+        wait_for_finalize(host)
       end
     end
 
