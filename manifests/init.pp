@@ -7,16 +7,33 @@
 # If you're planning to use SIMP capabilities, you should always include this
 # class.
 #
+# @param scenario_map
+#   An **internal use** parameter for configuring pre-defined maps
+#
 # @param scenario
 #   The SIMP 'scenario' that you wish to apply to your system
 #
-#   * See the classes under ``simp::scenario`` for details of each supported
-#     option
+#   * The class list for each scenario is defined by the ``scenario_map`` which
+#     is pulled from the module data.
+#   * Please see the README for the list of scenarios
+#   * Please see the module data for the exact class list that is included in
+#     each scenario
+#
+# @param enable_data_includes
+#   **Deprecated** - Has no effect
+#
+#   * Will be removed in the next major release
 #
 # @param classes
-#   A list of classes that you wish to include in your SIMP stack
+#   A list of classes that you wish to include in your SIMP stack in addition
+#   to the ``scenario`` selected above.
+#
+#   * For a completely stock Puppet experience on your clients, select the
+#     ``poss`` (Puppet Open Source Software) scenario configuration. This also
+#     works on Puppet Enterprise
 #
 #   * This Array has been enabled with the ``knockout_prefix`` of ``--``
+#
 #   * Any Array item in the lookup hierarchy that you prefix with ``--`` will
 #     be **removed** from the Array
 #
@@ -117,12 +134,9 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp (
+  # This parameter set from data in modules
   Hash                            $scenario_map,
-  Enum['simp',
-       'simp_lite',
-       'poss',
-       'none',
-       'remote_access']           $scenario                   = 'simp',
+  String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
   Optional[Array]                 $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = true,
@@ -141,14 +155,15 @@ class simp (
   Boolean                         $manage_root_metadata       = true,
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
-  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
-  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
-  Boolean                         $stock_sssd                 = true,
+  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value'   => false }),
+  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value'  => false }),
+  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
+  Boolean                         $stock_sssd                 = true
 ) {
   if $scenario_map.has_key($scenario) {
     include simp::knockout(union($scenario_map[$scenario], $classes))
-  } else {
+  }
+  else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
 
@@ -171,6 +186,4 @@ class simp (
   }
 
   if $version_info { include '::simp::version' }
-
 }
-# vim: set expandtab ts=2 sw=2:

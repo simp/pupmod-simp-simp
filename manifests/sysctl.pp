@@ -75,8 +75,10 @@
 # @param core_dumps If true, enable core dumps on the system.
 # @param core_dump_dir Directory to place core dumps
 # @param pam SIMP catalyst for enabling PAM management
-#
 #   As set, meets CCE-27033-0
+#
+# @param ipv6
+#   Set to ``false`` to disable IPv6 on your system via ``sysctl``
 #
 class simp::sysctl (
   Integer[0]           $net__netfilter__nf_conntrack_max               = 655360,
@@ -233,25 +235,28 @@ class simp::sysctl (
         sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
       }
 
-      unless $ipv6.is_a(Undef) {
+      if $ipv6.is_a(Undef) {
+        $_disable_ipv6 = 1
+      }
+      else {
         $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
         sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_disable_ipv6 }
-        if $ipv6 {
-          sysctl {
-            default                                      : require => Sysctl['net.ipv6.conf.all.disable_ipv6'];
-            'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
-            'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
-            'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
-            'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
-            'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
-            'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
-            'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
-            'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
-            'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
-            'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
-            'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
-            'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations;
-          }
+      }
+
+      if $facts['ipv6_enabled'] and ( $_disable_ipv6 == 0 ) {
+        sysctl {
+          'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
+          'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
+          'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
+          'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
+          'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
+          'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
+          'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
+          'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
+          'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
+          'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
+          'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
+          'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations;
         }
       }
     }
