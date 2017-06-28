@@ -70,10 +70,10 @@ useradd::securetty:
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
       describe file('/etc/yum.repos.d/simp-project_6_X.repo') do
-        its(:content) { should match %r{https://packagecloud.io/simp-project/6.X/el/[67]/x86_64/} }
+        its(:content) { should match /https:\/\/packagecloud.io\/simp-project\/6_X\/el\/[67]\/x86_64/ }
       end
       describe file('/etc/yum.repos.d/simp-project_6_X_Dependencies.repo') do
-        its(:content) { should match %r{https://packagecloud.io/simp-project/6.X_Dependencies/el/[67]/x86_64/} }
+        its(:content) { should match /https:\/\/packagecloud.io\/simp-project\/6_X_Dependencies\/el\/[67]\/x86_64/ }
       end
     end
   end
