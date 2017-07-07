@@ -19,8 +19,11 @@ class simp::yum::repo::internet_simp_dependencies (
     'https://getfedora.org/static/352C64E5.txt'
   ]
 
+  $_release = $facts['os']['release']['major']
+  $_arch = $facts['architecture']
+
   yumrepo { "simp-project_${_release_slug}_Dependencies":
-    baseurl         => "https://packagecloud.io/simp-project/${_release_slug}_Dependencies/el/\$releasever/\$basearch",
+    baseurl         => "https://packagecloud.io/simp-project/${_release_slug}_Dependencies/el/${_release}/${_arch}",
     descr           => 'Dependencies for the SIMP project',
     enabled         => 1,
     enablegroups    => 0,
