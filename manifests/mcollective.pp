@@ -2,8 +2,44 @@
 #
 # See the [MCollective README](modules/mcollective/README) for more information
 #
+# @param mco_server
+#   Set if the system is a MCollective Server
+#
+# @param mco_client
+#   Set if the system is a MCollective Client
+#
 # @param activemq_server_config
-#   The content for activemq
+#   The content for ActiveMQ
+#
+# @param activemq_ssl
+#   Enable SSL for ActiveMQ connections
+#
+# @param activemq_user
+#   The username to use for ActiveMQ connections
+#
+# @param activemq_password
+#   The password to use for ActiveMQ connections
+#
+# @param activemq_admin_user
+#   The admin username for ActiveMQ
+#
+# @param activemq_admin_password
+#   The admin password for ActiveMQ
+#
+# @param activemq_console
+#   Activate the built-in ActdiveMQ console
+#
+# @param activemq_memory_usage
+#   The default memory use limits for ActiveMQ
+#
+# @param activemq_store_usage
+#   The disk storage limit for ActiveMQ
+#
+# @param activemq_temp_usage
+#   The temp space usage for ActiveMQ
+#
+# @param activemq_brokers
+#   The full list of ActiveMQ brokers in the environment
 #
 # @param trusted_nets
 #   The IP range on which the ``activemq_port`` variable will be open

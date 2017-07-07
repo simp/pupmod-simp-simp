@@ -17,6 +17,30 @@
 #
 # All other parameters are taken directly from ``puppetdb::server``
 #
+# @param listen_address
+# @param listen_port
+# @param open_listen_port
+# @param ssl_deploy_certs
+# @param ssl_set_cert_paths
+# @param ssl_listen_address
+# @param ssl_listen_port
+# @param use_puppet_ssl_certs
+# @param disable_ssl
+# @param manage_package_repo
+# @param database_password
+# @param read_database_username
+# @param read_database_password
+# @param read_database_name
+# @param read_database_ssl
+# @param manage_firewall
+# @param manage_puppetserver
+# @param java_max_memory
+# @param java_start_memory
+# @param java_tmpdir
+# @param java_heapdump_on_oom
+# @param java_prefer_ipv4
+# @param firewall
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::puppetdb (

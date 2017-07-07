@@ -10,6 +10,12 @@
 # @param log_users
 #   Record all logged in users in the log message
 #
+# @param facility
+#   The ``syslog`` facility to use for the log message
+#
+# @param severity
+#   The ``syslog`` severity to use for the log message
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::ctrl_alt_del (

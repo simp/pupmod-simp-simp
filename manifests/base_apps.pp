@@ -8,7 +8,7 @@
 #     * haldaemon   (enabled by defauly by vendor)
 #     * portreserve (disabled by default by vendor)
 #     * quota_nld   (stopped by deafult by vendor)
-
+#
 # @param ensure
 #   The ``$ensure`` status of all of the included packages
 #
@@ -82,7 +82,7 @@ class simp::base_apps (
         svckill::ignore { 'messagebus': }
       }
       else {
-        package { ['hal','portreserve','quota']: ensure => $ensure }
+        package { ['hal', 'quota']: ensure => $ensure }
         service { 'haldaemon':
           ensure     => 'running',
           enable     => true,
@@ -92,13 +92,17 @@ class simp::base_apps (
         }
 
         # portreserve will only start if there is a file in the conf directory
-        # such as: cups ipp dhcpd named slapd ldaps
-        service { 'portreserve':
-          ensure     => 'running',
-          enable     => true,
-          hasrestart => true,
-          hasstatus  => false,
-          require    => Package['portreserve']
+        if $facts['portreserve_configured'] {
+          package { 'portreserve':
+            ensure => $ensure
+          }
+
+          service { 'portreserve':
+            ensure     => 'running',
+            enable     => true,
+            hasrestart => true,
+            hasstatus  => false
+          }
         }
 
         service { 'quota_nld':

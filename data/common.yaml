@@ -39,6 +39,7 @@ simp::scenario_map:
     - simp::admin
     - simp::sssd::client
     - ssh
+    - simp::scenario::poss
 
   simp_lite:
     # Shared with 'poss'
@@ -108,6 +109,39 @@ simp::scenario_map:
     - selinux
     - svckill
     - fips
+
+  one_shot:
+    # Shared with 'simp'
+    - pupmod
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - nsswitch
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum::schedule
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::sysctl
+    - ssh
+    - sudosh
+    # These classes are only in 'one_shot'
+    - simp::one_shot
 
 simp::server::data:
   - simp::server::rsync_shares

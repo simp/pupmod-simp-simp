@@ -63,9 +63,6 @@
 # @param sssd
 #   Enable management of SSSD resources via SIMP modules
 #
-# @param fips
-#   Enable FIPS mode for this system
-#
 # @param ldap
 #   Enable management of LDAP resources via SIMP modules
 #

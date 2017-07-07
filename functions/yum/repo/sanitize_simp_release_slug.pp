@@ -1,4 +1,10 @@
+# Sanitize the release slug in the SIMP repo URLs
+#
+# @param simp_release_slug
+#   The ``slug`` to sanitize
+#
 # @return String
+#
 function simp::yum::repo::sanitize_simp_release_slug(
   Variant[String,Undef] $simp_release_slug = undef
 ) {
