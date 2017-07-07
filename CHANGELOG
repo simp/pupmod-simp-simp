@@ -1,4 +1,4 @@
-* Thu Jum 15 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
+* Thu Jun 15 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
 - simp::yum::internet_simp* repos now use facts in Yum repo baseurls in place
   of yum macros, who's output is not reliable.
 
