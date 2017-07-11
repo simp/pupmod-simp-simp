@@ -85,7 +85,7 @@ describe 'remote_access scenario' do
     end
     # Copy in the password-less key
     it 'should copy the test.user private key' do
-      scp_to(ldap_server, './spec/acceptance/suites/scenarios/files/id_rsa.example', '/tmp/testkey')
+      scp_to(ldap_server, './spec/acceptance/suites/scenario_remote_access/files/id_rsa.example', '/tmp/testkey')
       on(ldap_server, 'chmod 600 /tmp/testkey')
     end
   end
