@@ -31,7 +31,6 @@ simp::scenario_map:
     - incron
     - useradd
     - resolv
-    - nsswitch
     - issue
     - tuned
     - swap
@@ -45,6 +44,7 @@ simp::scenario_map:
     - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
+    - simp::nsswitch
     - simp::sysctl
     - ssh
     - sudosh
@@ -63,7 +63,6 @@ simp::scenario_map:
     - incron
     - useradd
     - resolv
-    - nsswitch
     - issue
     - tuned
     - swap
@@ -77,6 +76,7 @@ simp::scenario_map:
     - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
+    - simp::nsswitch
     - simp::sysctl
     - ssh
     - sudosh
@@ -99,7 +99,6 @@ simp::scenario_map:
     - incron
     - useradd
     - resolv
-    - nsswitch
     - issue
     - tuned
     - swap
@@ -113,6 +112,7 @@ simp::scenario_map:
     - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
+    - simp::nsswitch
     - simp::sysctl
     - ssh
     - sudosh
@@ -130,7 +130,6 @@ simp::server::data:
   - cron
   - incron
   - issue
-  - nsswitch
   - ntpd
   - pam::access
   - resolv
@@ -145,6 +144,7 @@ simp::server::data:
   - simp::base_services
   - simp::kmod_blacklist
   - simp::mountpoints
+  - simp::nsswitch
   - simp::sysctl
   - '--simp::scenario::base'
   - '--auditd'

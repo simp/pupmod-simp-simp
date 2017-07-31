@@ -1,3 +1,7 @@
+* Mon Jul 31 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.1.1-0
+- call simp::nsswitch in simp and simp-lite scenario instead of just nsswitch
+  to set nsswitch according to simp_options instead of just the nsswitch defaults.
+
 * Thu Jul 20 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.1-0
 - Refactor classification lists to be RedHat specific to support other target
   platforms

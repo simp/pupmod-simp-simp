@@ -5,7 +5,7 @@ lookup_options:
       strategy: deep
       # Disable this for now.
       #knockout_prefix: --
-      sort_merge_arrays: true
+      sort_merged_arrays: true
   simp::classes:
     merge:
       strategy: unique
@@ -16,13 +16,13 @@ lookup_options:
       strategy: deep
       # Disable this for now.
       #knockout_prefix: --
-      sort_merge_arrays: true
+      sort_merged_arrays: true
   simp::server::classes:
     merge:
       strategy: deep
       # Disable this for now.
       #knockout_prefix: --
-      sort_merge_arrays: true
+      sort_merged_arrays: true
 
 simp::server::scenario_map:
   none: []
