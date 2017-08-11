@@ -33,5 +33,7 @@ class simp::server::yum (
     }
   }
 
-  package { 'createrepo': ensure => 'latest' }
+  package { 'createrepo':
+    ensure => 'latest',
+  }
 }

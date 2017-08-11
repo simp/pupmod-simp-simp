@@ -74,7 +74,7 @@ class simp::server::kickstart::runpuppet (
   }
 
   file { $location:
-    ensure  => 'present',
+    ensure  => 'file',
     owner   => 'root',
     group   => 'apache',
     mode    => '0640',

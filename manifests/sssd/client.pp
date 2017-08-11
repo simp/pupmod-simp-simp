@@ -51,7 +51,6 @@ class simp::sssd::client (
 ){
   if $ldap_domain or $local_domain {
     include '::sssd'
-
     include '::sssd::service::nss'
     include '::sssd::service::pam'
 
