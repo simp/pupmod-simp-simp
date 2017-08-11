@@ -7,7 +7,7 @@
 #   * Defaults to the version of the **puppet server**
 #
 class simp::yum::repo::internet_simp_dependencies (
-  Variant[String,Undef] $simp_release_slug = undef,
+  Optional[String] $simp_release_slug = undef,
 ){
   $_release_slug = simp::yum::repo::sanitize_simp_release_slug( $simp_release_slug )
 
