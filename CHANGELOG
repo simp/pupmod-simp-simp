@@ -2,6 +2,9 @@
 - Update concat version in metadata.json
 - Add concat dependency to build/rpm_metadata/requires
 
+* Thu Aug 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.1-0
+- Add camptocamp/kmod to list of dependencies
+
 * Mon Jul 31 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.1.1-0
 - call simp::nsswitch in simp and simp-lite scenario instead of just nsswitch
   to set nsswitch according to simp_options instead of just the nsswitch defaults.
