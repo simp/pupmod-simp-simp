@@ -1,4 +1,6 @@
 Obsoletes: pupmod-simp-test >= 0.0.1
+Requires: pupmod-camptocamp-kmod < 3.0.0-0
+Requires: pupmod-camptocamp-kmod >= 2.1.0-0
 Requires: pupmod-herculesteam-augeasproviders_puppet < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_puppet >= 2.1.0-0
 Requires: pupmod-herculesteam-augeasproviders_sysctl < 3.0.0-0

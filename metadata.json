@@ -14,6 +14,10 @@
   ],
   "dependencies": [
     {
+      "name": "camptocamp/kmod",
+      "version_requirement": ">= 2.1.0 < 3.0.0"
+    },
+    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 2.2.0 < 4.0.0"
     },
