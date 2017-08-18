@@ -3,6 +3,8 @@ Requires: pupmod-herculesteam-augeasproviders_puppet < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_puppet >= 2.1.0-0
 Requires: pupmod-herculesteam-augeasproviders_sysctl < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.2.0-0
+Requires: pupmod-puppetlabs-concat < 4.0.0-0
+Requires: pupmod-puppetlabs-concat >= 2.2.0-0
 Requires: pupmod-puppetlabs-inifile < 2.0.0-0
 Requires: pupmod-puppetlabs-inifile >= 1.6.0-0
 Requires: pupmod-puppetlabs-postgresql < 5.0.0-0
