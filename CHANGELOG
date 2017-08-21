@@ -1,3 +1,8 @@
+
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.1-0
+- Update concat version in metadata.json
+- Add concat dependency to build/rpm_metadata/requires
+
 * Thu Aug 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.1-0
 - Add camptocamp/kmod to list of dependencies
 
