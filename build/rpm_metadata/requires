@@ -9,9 +9,9 @@ Requires: pupmod-puppetlabs-concat < 4.0.0-0
 Requires: pupmod-puppetlabs-concat >= 2.2.0-0
 Requires: pupmod-puppetlabs-inifile < 2.0.0-0
 Requires: pupmod-puppetlabs-inifile >= 1.6.0-0
-Requires: pupmod-puppetlabs-postgresql < 5.0.0-0
+Requires: pupmod-puppetlabs-postgresql < 6.0.0-0
 Requires: pupmod-puppetlabs-postgresql >= 4.8.0-0
-Requires: pupmod-puppetlabs-puppetdb < 6.0.0-0
+Requires: pupmod-puppetlabs-puppetdb < 7.0.0-0
 Requires: pupmod-puppetlabs-puppetdb >= 5.1.2-0
 Requires: pupmod-puppetlabs-stdlib < 5.0.0-0
 Requires: pupmod-puppetlabs-stdlib >= 4.13.1-0
