@@ -25,7 +25,10 @@ fixtures:
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
-    concat: https://github.com/simp/puppetlabs-concat
+    concat:
+      # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
+      repo: https://github.com/simp/puppetlabs-concat
+      ref: 3.0.0
     cron: https://github.com/simp/pupmod-simp-cron
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
