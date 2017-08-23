@@ -17,7 +17,7 @@ lookup_options:
       #knockout_prefix: --
   simp::server::classes:
     merge:
-      strategy: deep
+      strategy: unique
       # Disable this for now.
       #knockout_prefix: --
 
