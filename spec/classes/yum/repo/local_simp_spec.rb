@@ -17,7 +17,8 @@ describe 'simp::yum::repo::local_simp' do
           'RPM-GPG-KEY-elasticsearch',
           'RPM-GPG-KEY-grafana-legacy',
           'RPM-GPG-KEY-grafana',
-          'RPM-GPG-KEY-PGDG-94'
+          'RPM-GPG-KEY-PGDG-94',
+          'RPM-GPG-KEY-PGDG-96'
         ]
       }
       let(:other_gpgkeys){

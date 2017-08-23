@@ -12,7 +12,8 @@ function simp::yum::repo::gpgkeys::simp() {
     'RPM-GPG-KEY-elasticsearch',
     'RPM-GPG-KEY-grafana-legacy',
     'RPM-GPG-KEY-grafana',
-    'RPM-GPG-KEY-PGDG-94'
+    'RPM-GPG-KEY-PGDG-94',
+    'RPM-GPG-KEY-PGDG-96'
   ]
 
   # keys needed by specific OSes
