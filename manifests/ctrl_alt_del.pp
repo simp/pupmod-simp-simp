@@ -26,6 +26,8 @@ class simp::ctrl_alt_del (
   Simplib::Syslog::Severity $severity  = 'warning'
 ) {
 
+  simplib::assert_metadata( $module_name )
+
   if 'systemd' in $facts['init_systems'] {
     $_logger = '/bin/echo -n'
   }

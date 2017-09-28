@@ -55,6 +55,8 @@ class simp::kmod_blacklist (
   Boolean         $notify_if_reboot_required = true
 ) {
 
+  simplib::assert_metadata( $module_name )
+
   if $enable_defaults {
     $_blacklist = $custom_blacklist + $blacklist
     $_unblacklist = []

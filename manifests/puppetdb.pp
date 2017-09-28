@@ -69,6 +69,9 @@ class simp::puppetdb (
   Boolean              $java_prefer_ipv4       = true,
   Boolean              $firewall               = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
+
+  simplib::assert_metadata( $module_name )
+
   $_simp_manage_firewall = ($manage_firewall and $firewall)
 
   $_java_max_memory = inline_template('<% if @java_max_memory[-1].chr == "%" %><%= (@memorysize_mb.to_f * (@java_max_memory[0..-2].to_f/100.0)).round.to_s + "m" %><% else %><%= @java_max_memory %><% end %>')

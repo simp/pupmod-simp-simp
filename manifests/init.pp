@@ -160,6 +160,13 @@ class simp (
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
   Boolean                         $stock_sssd                 = true
 ) {
+
+  # NOTE: this class intentionally does not make use of the function:
+  #
+  # simplib::assert_metadata( $module_name )
+  #
+  # in order to permit-non-SIMP OSes to use the `poss` scenario
+
   if $scenario_map.has_key($scenario) {
     include simp::knockout(union($scenario_map[$scenario], $classes))
   }
