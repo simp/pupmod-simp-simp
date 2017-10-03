@@ -15,9 +15,6 @@ class simp::root_user (
   Boolean $manage_user  = true,
   Boolean $manage_group = true
 ){
-
-  simplib::assert_metadata( $module_name )
-
   if $manage_perms {
     file { '/root':
       ensure => 'directory',

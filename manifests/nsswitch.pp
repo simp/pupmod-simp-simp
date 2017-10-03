@@ -8,8 +8,6 @@ class simp::nsswitch (
   Boolean $sssd = simplib::lookup('simp_options::sssd', { 'default_value' => false })
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   $_hosts = $facts['os']['release']['major'] ? {
     6       => ['files','myhostname','dns'],
     default => ['files','dns']

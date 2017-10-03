@@ -12,9 +12,6 @@ class simp::server::yum (
   Stdlib::Absolutepath $data_dir     = '/var/www',
   Simplib::Netlist     $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
 ){
-
-  simplib::assert_metadata( $module_name )
-
   $_trusted_nets = nets2cidr($trusted_nets)
 
   include '::simp_apache'

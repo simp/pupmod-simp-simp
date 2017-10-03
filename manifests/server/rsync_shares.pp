@@ -41,9 +41,6 @@ class simp::server::rsync_shares (
   Boolean              $stunnel            = simplib::lookup('simp_options::stunnel', { 'default_value' => false }),
   Simplib::Netlist     $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
 ){
-
-  simplib::assert_metadata( $module_name )
-
   include '::rsync::server'
 
   if $rsync_environments and !empty($rsync_environments) {

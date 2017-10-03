@@ -40,8 +40,6 @@ class simp::server::ldap (
   Boolean    $enable_lastbind = false
 ){
 
-  simplib::assert_metadata( $module_name )
-
   # Order matters with these top two!
   include '::simp_openldap'
   include '::simp_openldap::server'

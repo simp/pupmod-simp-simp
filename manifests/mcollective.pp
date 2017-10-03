@@ -98,9 +98,6 @@ class simp::mcollective (
   Simplib::Netlist                 $activemq_brokers        = [$facts['fqdn']],
   Boolean                          $installplugins          = true
 ) {
-
-  simplib::assert_metadata( $module_name )
-
   if $activemq_port {
     $_activemq_port = $activemq_port
   }

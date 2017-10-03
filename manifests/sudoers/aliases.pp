@@ -112,8 +112,6 @@ class simp::sudoers::aliases (
   Array[Stdlib::AbsolutePath] $su_alias = [ '/bin/su' ]
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   sudo::alias::cmnd {
     'audit':
       comment => 'System Audit Related Commands',

@@ -42,8 +42,6 @@ class simp::server (
   Hash[String, Array]   $scenario_map,
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   if $scenario_map.has_key($scenario) {
     include simp::knockout(
       union(

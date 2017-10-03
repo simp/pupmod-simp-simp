@@ -51,9 +51,6 @@ class simp::yum::repo::local_os_updates (
   Boolean                  $enable_repo       = true,
   Simp::Urls               $extra_gpgkey_urls = [],
 ){
-
-  simplib::assert_metadata( $module_name )
-
   $_repo_base = "${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}"
 
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }

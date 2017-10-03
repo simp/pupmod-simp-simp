@@ -87,8 +87,6 @@ class simp::one_shot (
   Boolean             $finalize_remove_script       = true
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   include 'simplib::stages'
 
   if $enable_user {

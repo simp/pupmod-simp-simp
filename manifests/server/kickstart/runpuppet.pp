@@ -53,8 +53,6 @@ class simp::server::kickstart::runpuppet (
   Variant[Integer[0],Boolean] $runpuppet_wait_for_cert = 10
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   if $puppet_server {
     $_puppet_server = $puppet_server
   }

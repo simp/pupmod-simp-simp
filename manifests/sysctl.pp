@@ -145,8 +145,6 @@ class simp::sysctl (
   Optional[Boolean]    $ipv6                                           = undef
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
 
   case $::operatingsystem {

@@ -49,9 +49,6 @@ class simp::sssd::client (
   Boolean $cache_credentials = true,
   Integer $min_id            = 1000
 ){
-
-  simplib::assert_metadata( $module_name )
-
   if $ldap_domain or $local_domain {
     include '::sssd'
     include '::sssd::service::nss'

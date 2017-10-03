@@ -3,9 +3,6 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_services {
-
-  simplib::assert_metadata( $module_name )
-
   # to ensure api compatbility
   include 'simp::base_apps'
 

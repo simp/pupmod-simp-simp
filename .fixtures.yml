@@ -75,9 +75,7 @@ fixtures:
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
     simpcat: https://github.com/simp/pupmod-simp-concat
-    simplib:
-      repo: https://github.com/simp/pupmod-simp-simplib
-      branch: master
+    simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
@@ -91,7 +89,7 @@ fixtures:
     svckill: https://github.com/simp/pupmod-simp-svckill
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
-    timezone:
+    timezone: 
       repo: https://github.com/simp/pupmod-simp-timezone
       branch: simp-master
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot

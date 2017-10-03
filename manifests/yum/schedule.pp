@@ -40,9 +40,6 @@ class simp::yum::schedule (
   Integer                       $randomize    = 5,
   Boolean                       $quiet        = true
 ) {
-
-  simplib::assert_metadata( $module_name )
-
   $_ensure = $enable ? {
     true    => 'present',
     default => 'absent'

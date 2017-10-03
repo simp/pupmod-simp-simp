@@ -35,8 +35,6 @@ class simp::mountpoints::tmp (
   Array[String] $dev_shm_opts = ['noexec','nodev','nosuid']
 ) {
 
-  simplib::assert_metadata( $module_name )
-
   file { '/tmp':
     ensure => 'directory',
     owner  => 'root',
