@@ -12,7 +12,9 @@ fixtures:
     augeasproviders: https://github.com/simp/augeasproviders
     augeasproviders_base: https://github.com/simp/augeasproviders_base
     augeasproviders_core: https://github.com/simp/augeasproviders_core
-    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
+    augeasproviders_grub:
+      repo: https://github.com/simp/augeasproviders_grub
+      ref: simp6.0.0-2.4.0
     augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
     augeasproviders_apache: https://github.com/simp/augeasproviders_apache
     augeasproviders_mounttab: https://github.com/simp/augeasproviders_mounttab
@@ -22,27 +24,40 @@ fixtures:
     augeasproviders_shellvar: https://github.com/simp/augeasproviders_shellvar
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
+    augeasproviders_syslog:
+      repo: https://github.com/hercules-team/augeasproviders_syslog
+      ref: 2.1.1
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat:
       # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
       repo: https://github.com/simp/puppetlabs-concat
-      ref: 3.0.0
+      ref: 2.2.1
     cron: https://github.com/simp/pupmod-simp-cron
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     file_concat: https://github.com/simp/puppet-lib-file_concat
     fips: https://github.com/simp/pupmod-simp-fips
+    firewall:
+      repo: https://github.com/puppetlabs/puppetlabs-firewall
+      ref: 1.9.0
     freeradius: https://github.com/simp/pupmod-simp-freeradius
     haveged:
       repo: https://github.com/simp/puppet-haveged
       branch: simp-master
+    hocon:
+      repo: https://github.com/simp/pupmod-puppetlabs-hocon
+      branch: 0.9.4
     incron: https://github.com/simp/pupmod-simp-incron
-    inifile: https://github.com/simp/puppetlabs-inifile
+    inifile:
+      repo: https://github.com/simp/puppetlabs-inifile
+      ref: simp6.0.0-1.6.0
     iptables: https://github.com/simp/pupmod-simp-iptables
     issue: https://github.com/simp/pupmod-simp-issue
-    java: https://github.com/simp/puppetlabs-java
+    java:
+      repo: https://github.com/simp/puppetlabs-java
+      ref: simp-1.6.0-post1
     java_ks: https://github.com/simp/puppetlabs-java_ks
     kmod: https://github.com/simp/puppet-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5
@@ -70,6 +85,9 @@ fixtures:
       ref: 6.0.1
     pupmod: https://github.com/simp/pupmod-simp-pupmod
     puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization
+    registry:
+      repo: https://github.com/puppetlabs/puppetlabs-registry
+      ref:  1.1.4
     resolv: https://github.com/simp/pupmod-simp-resolv
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
