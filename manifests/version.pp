@@ -1,6 +1,8 @@
 # Places SIMP version related information on the filesystem
 class simp::version {
 
+  simplib::assert_metadata( $module_name )
+
   file { '/etc/simp':
     ensure => 'directory',
     owner  => 'root',

@@ -1,2 +1,0 @@
----
-simp::scenario_map: "%{alias('simp::scenario_map__')}"

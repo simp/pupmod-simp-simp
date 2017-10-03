@@ -1,6 +1,11 @@
-# NOTE: Keys ending with `__` only apply to fully-supported OSes
+#
 ---
-simp::scenario_map__:
+simp::scenario_map:
+  none: []
+  poss:
+    - pupmod
+    - simp::scenario::poss
+
   remote_access:
     - simp::nsswitch
     - pam::access
@@ -114,10 +119,7 @@ simp::scenario_map__:
     # These classes are only in 'one_shot'
     - simp::one_shot
 
-# NOTE: this key is referenced in common.yaml, and therefore gets added to
-# every scenario in `simp::server::scenario_map__:` except for `none` (even
-# `poss:` gets them!).  If this was intentional, I don't know why.
-simp::server::scenario::common::classes:
+simp::server::data:
   - simp::server::rsync_shares
   # Shared with 'poss'
   - pupmod
@@ -152,3 +154,4 @@ simp::server::scenario::common::classes:
   - selinux
   - svckill
   - fips
+
