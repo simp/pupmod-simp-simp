@@ -11,7 +11,8 @@ describe 'simp' do
     facterdb_queries.each do |facterdb_query|
 
       os_facts = FacterDB.get_facts(facterdb_query).first
-      os     = "#{os_facts[:operatingsystem].downcase}-#{os_facts[:operatingsystemmajrelease]}-#{os_facts[:hardwaremodel]}"
+      _os    = os_facts[:os]
+      os     = "#{_os['name'].downcase}-#{_os['release']['major']}-#{_os['hardware']}"
 
       context "on #{os}" do
         let:facts do
