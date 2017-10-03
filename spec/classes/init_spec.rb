@@ -1,8 +1,69 @@
-# vim: set expandtab ts=2 sw=2:
 require 'spec_helper'
+require 'facterdb'
 
 describe 'simp' do
-  context 'supported operating systems' do
+  context 'on unsupported operating systems' do
+    facterdb_queries = [
+      {:operatingsystem => 'OracleLinux',:operatingsystemmajrelease => '7'},
+      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04', :hardwaremodel => 'x86_64'},
+    ]
+
+    facterdb_queries.each do |facterdb_query|
+
+      os_facts = FacterDB.get_facts(facterdb_query).first
+      os     = "#{os_facts[:operatingsystem].downcase}-#{os_facts[:operatingsystemmajrelease]}-#{os_facts[:hardwaremodel]}"
+
+      context "on #{os}" do
+        let:facts do
+            os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+            os_facts[:puppet_settings] = {
+              'ssldir' => '/opt/puppetlabs/puppet/vardir',
+              'agent' => {
+                'server' => 'puppet.bar.baz'
+              }
+            }
+            os_facts[:server_facts] = {
+              :servername => 'puppet.bar.baz',
+              :serverip   => '1.2.3.4'
+            }
+            os_facts
+        end
+
+        context 'with default parameters' do
+          it { is_expected.to compile.and_raise_error(/Invalid scenario 'simp' for the given scenario map/) }
+        end
+
+        context 'with scenario "poss"' do
+          let :params do
+            { :scenario => 'poss' }
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_class('simp') }
+          it { is_expected.to create_class('pupmod') }
+          it { is_expected.to create_class('pupmod::agent::cron') }
+          it { is_expected.to_not create_class('sudosh') }
+          it { is_expected.to_not create_class('ssh') }
+        end
+
+        context 'with scenario "poss"' do
+          let :params do
+            { :scenario => 'none' }
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_class('simp') }
+          it { is_expected.not_to create_class('pupmod') }
+          it { is_expected.not_to create_class('pupmod::agent::cron') }
+          it { is_expected.to_not create_class('sudosh') }
+          it { is_expected.to_not create_class('ssh') }
+        end
+      end
+    end
+  end
+
+
+  context 'on supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts) do
@@ -187,3 +248,5 @@ describe 'simp' do
     end
   end
 end
+
+# vim: set expandtab ts=2 sw=2:

@@ -28,6 +28,7 @@ group :development do
   gem 'guard-rake'
   gem 'pry'
   gem 'pry-doc'
+  gem 'facterdb'
 
   # `listen` is a dependency of `guard`
   # from `listen` 3.1+, `ruby_dep` requires Ruby version >= 2.2.3, ~> 2.2
