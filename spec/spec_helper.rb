@@ -4,7 +4,6 @@ require 'simp/rspec-puppet-facts'
 include Simp::RspecPuppetFacts
 
 require 'pathname'
-
 # RSpec Material
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 module_name = File.basename(File.expand_path(File.join(__FILE__,'../..')))
@@ -135,6 +134,12 @@ RSpec.configure do |c|
       set_hieradata(hieradata.gsub(':','_'))
     elsif defined?(class_name)
       set_hieradata(class_name.gsub(':','_'))
+    end
+
+    if ENV.fetch('DEBUG','no') == 'yes'
+      Puppet.debug=true
+      Puppet::Util::Log.level = :debug
+      Puppet::Util::Log.newdestination(:console)
     end
   end
 
