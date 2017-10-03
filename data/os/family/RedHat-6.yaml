@@ -1,11 +1,14 @@
+# NOTE: Keys ending with `__` will only apply to fully-supported OSes
 ---
-simp::scenario::data::rhel6:
+simp::scenario::common_classes::rhel6__:
   - acpid
   - upstart
-simp::scenario_map:
-  simp: "%{alias('simp::scenario::data::rhel6')}"
-  simp_lite: "%{alias('simp::scenario::data::rhel6')}"
-simp::server::scenario_map:
-  poss: "%{alias('simp::scenario::data::rhel6')}"
-  simp: "%{alias('simp::scenario::data::rhel6')}"
-  simp_lite: "%{alias('simp::scenario::data::rhel6')}"
+
+simp::scenario_map__:
+  simp: "%{alias('simp::scenario::common_classes::rhel6__')}"
+  simp_lite: "%{alias('simp::scenario::common_classes::rhel6__')}"
+
+simp::server::scenario_map__:
+  poss: "%{alias('simp::scenario::common_classes::rhel6__')}"
+  simp: "%{alias('simp::scenario::common_classes::rhel6__')}"
+  simp_lite: "%{alias('simp::scenario::common_classes::rhel6__')}"
