@@ -1,3 +1,6 @@
+* Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.2-0
+- Refactor internals to enable `poss` and `none` scenarios
+
 * Wed Aug 23 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.1-0
 - change simp::server::classes's lookup_options to be 'unique'
 
