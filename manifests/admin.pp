@@ -62,6 +62,8 @@ class simp::admin (
   Boolean          $set_polkit_admin_group    = true
 ){
 
+  simplib::assert_metadata( $module_name )
+
   include 'simp::sudoers'
 
   if $pam {

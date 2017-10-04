@@ -24,6 +24,9 @@ class simp::kmod_blacklist::lock_modules (
   $notify_if_reboot_required = true,
   $persist                   = false
 ) {
+
+  simplib::assert_metadata( $module_name )
+
   if $enable {
     sysctl { 'kernel.modules_disabled':
       apply   => true,

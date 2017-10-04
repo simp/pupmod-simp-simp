@@ -32,6 +32,9 @@ class simp::sudoers (
       _XKB_CHARSET XAUTHORITY"'
   ]
 ) {
+
+  simplib::assert_metadata( $module_name )
+
   include '::sudo'
 
   sudo::default_entry { '00_main':

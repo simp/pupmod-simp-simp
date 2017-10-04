@@ -21,6 +21,9 @@ class simp::mountpoints::proc (
   Integer[0,2]      $proc_hidepid = 2,
   Optional[Integer] $proc_gid     = undef
 ) {
+
+  simplib::assert_metadata( $module_name )
+
   if $proc_gid {
     $_proc_options = "hidepid=${proc_hidepid},gid=${proc_gid}"
   }

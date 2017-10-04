@@ -22,6 +22,9 @@ class simp::rc_local (
   Boolean              $management_comment = true
 ) {
 
+  simplib::assert_metadata( $module_name )
+
+
   $_default_header = "#!${shell}\n"
   $_managed_header = "${_default_header}#\n# This file managed by Puppet, manual changes will be erased!\n"
 

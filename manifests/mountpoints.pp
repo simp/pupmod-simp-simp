@@ -26,6 +26,8 @@ class simp::mountpoints (
   Boolean       $manage_proc      = true
 ) {
 
+  simplib::assert_metadata( $module_name )
+
   if $manage_tmp_perms { include '::simp::mountpoints::tmp' }
   if $manage_proc { include '::simp::mountpoints::proc' }
 
