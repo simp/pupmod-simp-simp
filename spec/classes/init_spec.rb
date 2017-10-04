@@ -4,14 +4,16 @@ require 'facterdb'
 describe 'simp' do
   context 'on unsupported operating systems' do
     facterdb_queries = [
-      {:operatingsystem => 'OracleLinux',:operatingsystemmajrelease => '7'},
-      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04', :hardwaremodel => 'x86_64'},
+      {:operatingsystem => 'OracleLinux',:operatingsystemmajrelease => '7', :hardwaremodel => 'x86_64', :facterversion => '3.5.1'},
+      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04', :hardwaremodel => 'x86_64',  :facterversion => '3.5.1'},
     ]
 
     facterdb_queries.each do |facterdb_query|
 
       os_facts = FacterDB.get_facts(facterdb_query).first
-      os     = "#{os_facts[:operatingsystem].downcase}-#{os_facts[:operatingsystemmajrelease]}-#{os_facts[:hardwaremodel]}"
+      os     = "#{os_facts[:os]['name'].downcase}-" +
+               "#{os_facts[:os]['release']['major']}-" +
+               "#{os_facts[:os]['hardware']}"
 
       context "on #{os}" do
         let:facts do
@@ -248,5 +250,3 @@ describe 'simp' do
     end
   end
 end
-
-# vim: set expandtab ts=2 sw=2:
