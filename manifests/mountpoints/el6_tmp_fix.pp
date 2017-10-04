@@ -5,6 +5,9 @@
 # We have not been able to repeat the issue reliably enough in a controlled
 # environment to determine the root cause.
 class simp::mountpoints::el6_tmp_fix {
+
+  simplib::assert_metadata( $module_name )
+
   include '::upstart'
 
   upstart::job { 'fix_tmp_perms':
