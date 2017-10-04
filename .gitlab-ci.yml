@@ -129,7 +129,7 @@ unit-test-puppet5-ruby-2.4:
   <<: *setup_bundler_env
   <<: *spec_tests
 
-compliance-test:
+acceptance-test:
   stage: acceptance
   tags:
     - beaker
