@@ -18,6 +18,7 @@ group :test do
   gem 'puppet-lint-trailing_comma-check', :require => false
   gem 'simp-rspec-puppet-facts', ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 2.0')
   gem 'simp-rake-helpers', ENV.fetch('SIMP_RAKE_HELPERS_VERSION', '~> 4.0')
+  gem 'facterdb'
 end
 
 group :development do
@@ -28,7 +29,6 @@ group :development do
   gem 'guard-rake'
   gem 'pry'
   gem 'pry-doc'
-  gem 'facterdb'
 
   # `listen` is a dependency of `guard`
   # from `listen` 3.1+, `ruby_dep` requires Ruby version >= 2.2.3, ~> 2.2
