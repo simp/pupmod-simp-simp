@@ -1,3 +1,10 @@
+* Wed Oct 04 2017 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.0-0
+- Fail compilation for a subset of SIMP capabilities, if they are
+  used on unsupported operating systems.
+
+* Wed Oct 04 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Add an acceptance test for the 'poss' scenario using Oracle EL6
+
 * Wed Aug 23 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.1-0
 - change simp::server::classes's lookup_options to be 'unique'
 
