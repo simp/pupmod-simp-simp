@@ -18,7 +18,7 @@ describe 'simp' do
                "#{os_facts[:os]['hardware']}"
 
       context "on #{os}" do
-        let:facts do
+        let(:facts) do
             os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
             os_facts[:puppet_settings] = {
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
