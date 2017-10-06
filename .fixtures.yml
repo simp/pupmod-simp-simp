@@ -89,7 +89,7 @@ fixtures:
     svckill: https://github.com/simp/pupmod-simp-svckill
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
-    timezone: 
+    timezone:
       repo: https://github.com/simp/pupmod-simp-timezone
       branch: simp-master
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
