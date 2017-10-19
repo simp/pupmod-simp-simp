@@ -47,7 +47,7 @@ class simp::sssd::client (
   Boolean $ssh               = true,
   Boolean $enumerate_users   = false,
   Boolean $cache_credentials = true,
-  Integer $min_id            = 1000
+  Integer $min_id            = 500
 ){
 
   simplib::assert_metadata( $module_name )
