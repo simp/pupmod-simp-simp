@@ -1,3 +1,6 @@
+* Thu Oct 19 2017  Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.2-0
+- Lowered default value of parameter simp::sssd::client::min_id to 500
+
 * Fri Oct 06 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.1-0
 - Added simp/timezone to the module dependency list
 
