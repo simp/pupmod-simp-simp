@@ -34,7 +34,7 @@ simp::scenario: poss
     # These boxes have no root password by default...
     it 'should set the root password' do
       on(host, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
-      on(host, 'echo "root:password" | chpasswd')
+      on(host, 'echo "root:password" | chpasswd --crypt-method SHA256')
     end
 
     it 'should run puppet' do
