@@ -1,4 +1,7 @@
-* Tue Nov 07 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.2.3-0
+* Mon Nov 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.3.0-0
+- In simp::sysctl, add parameters for net.ipv6.conf.all.accept_source_route
+  and net.ipv6.conf.default.accept_source_route and set them to 0 by
+  default.  This satisfies STIG CCI-0000366.
 - Small test fixes to allow acceptance tests to run on servers in FIPS mode
 
 * Thu Oct 19 2017  Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.2-0
