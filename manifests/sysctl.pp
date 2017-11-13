@@ -60,6 +60,7 @@
 # @param net__ipv4__tcp_max_syn_backlog
 # @param net__ipv4__tcp_syncookies
 # @param net__ipv6__conf__all__accept_redirects
+# @param net__ipv6__conf__all__accept_source_route
 # @param net__ipv6__conf__all__autoconf
 # @param net__ipv6__conf__all__forwarding
 # @param net__ipv6__conf__default__accept_ra
@@ -67,6 +68,7 @@
 # @param net__ipv6__conf__default__accept_ra_pinfo
 # @param net__ipv6__conf__default__accept_ra_rtr_pref
 # @param net__ipv6__conf__default__accept_redirects
+# @param net__ipv6__conf__default__accept_source_route
 # @param net__ipv6__conf__default__autoconf
 # @param net__ipv6__conf__default__dad_transmits
 # @param net__ipv6__conf__default__max_addresses
@@ -127,6 +129,7 @@ class simp::sysctl (
   Integer[1]           $net__ipv4__tcp_max_syn_backlog                 = 4096,
   Integer[0,1]         $net__ipv4__tcp_syncookies                      = 1,          # CCE-27053-8
   Integer[0,1]         $net__ipv6__conf__all__accept_redirects         = 0,
+  Integer[0,1]         $net__ipv6__conf__all__accept_source_route      = 0,          # CCI-000366 (STIG)
   Integer[0,1]         $net__ipv6__conf__all__autoconf                 = 0,
   Integer[0,1]         $net__ipv6__conf__all__forwarding               = 0,
   Integer[0,1]         $net__ipv6__conf__default__accept_ra            = 0,          # CCE-27164-3
@@ -134,6 +137,7 @@ class simp::sysctl (
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_pinfo      = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_rtr_pref   = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0,1]         $net__ipv6__conf__default__accept_redirects     = 0,          # CCE-27166-8
+  Integer[0,1]         $net__ipv6__conf__default__accept_source_route  = 0,
   Integer[0,1]         $net__ipv6__conf__default__autoconf             = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0,1]         $net__ipv6__conf__default__dad_transmits        = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0]           $net__ipv6__conf__default__max_addresses        = 1,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
@@ -248,6 +252,7 @@ class simp::sysctl (
       if $facts['ipv6_enabled'] and ( $_disable_ipv6 == 0 ) {
         sysctl {
           'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
+          'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
           'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
           'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
           'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
@@ -255,6 +260,7 @@ class simp::sysctl (
           'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
           'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
           'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
+          'net.ipv6.conf.default.accept_source_route'  : value => $net__ipv6__conf__default__accept_source_route;
           'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
           'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
           'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
