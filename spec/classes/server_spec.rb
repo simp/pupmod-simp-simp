@@ -53,6 +53,7 @@ describe 'simp::server' do
             'simp::base_services',
             'simp::kmod_blacklist',
             'simp::mountpoints',
+            'simp::prelink',
             'simp::sysctl',
             'ssh',
             'sudosh',

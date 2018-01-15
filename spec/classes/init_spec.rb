@@ -253,6 +253,7 @@ describe 'simp' do
             'simp::yum::schedule',
             'simp::kmod_blacklist',
             'simp::mountpoints',
+            'simp::prelink',
             'simp::sysctl',
             'ssh',
             'sudosh',
