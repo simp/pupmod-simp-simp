@@ -18,8 +18,8 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::prelink (
-  Boolean $enable             = false,
-  Simp::PackageEnsure $ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Boolean $enable = false,
+  String  $ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 
 ) {
   simplib::assert_metadata( $module_name )
