@@ -19,8 +19,7 @@
 #
 class simp::prelink (
   Boolean $enable = false,
-  String  $ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-
+  String  $ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
   simplib::assert_metadata( $module_name )
 
@@ -31,7 +30,7 @@ class simp::prelink (
       ensure   => present,
       target   => '/etc/sysconfig/prelink',
       variable => 'PRELINKING',
-      value    => 'yes',
+      value    => 'yes'
     }
 
     Package['prelink'] ~> Shellvar['enable prelink']
@@ -53,9 +52,9 @@ class simp::prelink (
       }
 
       exec { 'remove prelinking':
-        command     => '/etc/cron.daily/prelink',
+        command => '/etc/cron.daily/prelink',
         # before is the resource that *removes* the prelink package
-        before      => Package['prelink']
+        before  => Package['prelink']
       }
 
       package { 'prelink': ensure => 'absent' }
