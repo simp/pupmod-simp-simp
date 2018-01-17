@@ -45,6 +45,7 @@ simp::scenario_map:
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
+    - simp::prelink
     - simp::sysctl
     - ssh
     - sudosh
@@ -77,6 +78,7 @@ simp::scenario_map:
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
+    - simp::prelink
     - simp::sysctl
     - ssh
     - sudosh
@@ -113,6 +115,7 @@ simp::scenario_map:
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
+    - simp::prelink
     - simp::sysctl
     - ssh
     - sudosh
@@ -145,6 +148,7 @@ simp::server::data:
   - simp::kmod_blacklist
   - simp::mountpoints
   - simp::nsswitch
+  - simp::prelink
   - simp::sysctl
   - '--simp::scenario::base'
   - '--auditd'
