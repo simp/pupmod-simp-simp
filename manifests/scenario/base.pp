@@ -117,7 +117,7 @@ class simp::scenario::base (
   # Even if $ldap is true, if the host is on an IPA domain, do not include
   # simp_openldap::client
   # @see simp/simplib lib/facter/ipa.rb
-  if $ldap or !$facts['ipa'] {
+  if $ldap and !$facts['ipa'] {
     include '::simp_openldap::client'
   }
 
