@@ -114,7 +114,10 @@ class simp::scenario::base (
     include '::postfix'
   }
 
-  if $ldap {
+  # Even if $ldap is true, if the host is on an IPA domain, do not include
+  # simp_openldap::client
+  # @see simp/simplib lib/facter/ipa.rb
+  if $ldap and !$facts['ipa'] {
     include '::simp_openldap::client'
   }
 

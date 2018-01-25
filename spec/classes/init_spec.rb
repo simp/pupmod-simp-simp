@@ -309,6 +309,27 @@ describe 'simp' do
             end
           end
         end
+
+        context 'when the host is a member of an IPA domain' do
+          let(:facts) {
+            super().merge!(
+              ipa: {
+                domain: 'test.local',
+                server: 'ipaserver.test.local'
+              }
+            )
+          }
+          context 'ldap => true' do
+            let(:params) {{ ldap: true }}
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.not_to contain_class('simp_openldap::client') }
+          end
+          context 'ldap => false' do
+            let(:params) {{ ldap: false }}
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.not_to contain_class('simp_openldap::client') }
+          end
+        end
       end
     end
   end
