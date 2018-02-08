@@ -64,12 +64,14 @@ fixtures:
     postfix: https://github.com/simp/pupmod-simp-postfix
     postgresql:
       repo: https://github.com/simp/puppetlabs-postgresql
-      ref: 5.1.0
+      ref: 5.2.1
     puppetdb:
       repo: https://github.com/simp/puppetlabs-puppetdb
-      ref: 6.0.1
+      ref: 6.0.2
     pupmod: https://github.com/simp/pupmod-simp-pupmod
-    puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization
+    puppet_authorization:
+      repo: https://github.com/simp/puppetlabs-puppet_authorization
+      ref: 0.4.0
     resolv: https://github.com/simp/pupmod-simp-resolv
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
