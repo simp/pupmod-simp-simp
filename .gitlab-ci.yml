@@ -201,6 +201,16 @@ default:
   script:
     - bundle exec rake beaker:suites[default]
 
+default-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  script:
+    - bundle exec rake beaker:suites[default,puppet5]
+  allow_failure: true
+
 no_simp_server:
   stage: acceptance
   tags:
