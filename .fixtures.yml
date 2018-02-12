@@ -26,7 +26,8 @@ fixtures:
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat:
-      # master has changes that break fragment ordering
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
       repo: https://github.com/simp/puppetlabs-concat
       ref: 4.1.1
     cron: https://github.com/simp/pupmod-simp-cron
@@ -35,9 +36,7 @@ fixtures:
     file_concat: https://github.com/simp/puppet-lib-file_concat
     fips: https://github.com/simp/pupmod-simp-fips
     freeradius: https://github.com/simp/pupmod-simp-freeradius
-    haveged:
-      repo: https://github.com/simp/puppet-haveged
-      branch: simp-master
+    haveged: https://github.com/simp/pupmod-simp-haveged
     incron: https://github.com/simp/pupmod-simp-incron
     inifile: https://github.com/simp/puppetlabs-inifile
     iptables: https://github.com/simp/pupmod-simp-iptables
