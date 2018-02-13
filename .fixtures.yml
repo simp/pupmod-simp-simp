@@ -5,7 +5,6 @@ fixtures:
     simp_environment: https://github.com/simp/simp-environment-skeleton
     # End Kluge
     acpid: https://github.com/simp/pupmod-simp-acpid
-    activemq: https://github.com/simp/pupmod-simp-activemq
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
@@ -26,18 +25,17 @@ fixtures:
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat:
-      # master is at 4.0.1, but we are bound to < 4.0.0 in our metadata.json
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
       repo: https://github.com/simp/puppetlabs-concat
-      ref: 3.0.0
+      ref: 4.1.1
     cron: https://github.com/simp/pupmod-simp-cron
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     file_concat: https://github.com/simp/puppet-lib-file_concat
     fips: https://github.com/simp/pupmod-simp-fips
     freeradius: https://github.com/simp/pupmod-simp-freeradius
-    haveged:
-      repo: https://github.com/simp/puppet-haveged
-      branch: simp-master
+    haveged: https://github.com/simp/pupmod-simp-haveged
     incron: https://github.com/simp/pupmod-simp-incron
     inifile: https://github.com/simp/puppetlabs-inifile
     iptables: https://github.com/simp/pupmod-simp-iptables
@@ -47,9 +45,6 @@ fixtures:
     kmod: https://github.com/simp/puppet-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5
     logrotate: https://github.com/simp/pupmod-simp-logrotate
-    mcollective:
-      repo: https://github.com/simp/pupmod-simp-mcollective
-      branch: simp-master
     motd: https://github.com/simp/puppetlabs-motd
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
@@ -64,12 +59,14 @@ fixtures:
     postfix: https://github.com/simp/pupmod-simp-postfix
     postgresql:
       repo: https://github.com/simp/puppetlabs-postgresql
-      ref: 5.1.0
+      ref: 5.2.1
     puppetdb:
       repo: https://github.com/simp/puppetlabs-puppetdb
-      ref: 6.0.1
+      ref: 6.0.2
     pupmod: https://github.com/simp/pupmod-simp-pupmod
-    puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization
+    puppet_authorization:
+      repo: https://github.com/simp/puppetlabs-puppet_authorization
+      ref: 0.4.0
     resolv: https://github.com/simp/pupmod-simp-resolv
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog

@@ -1,9 +1,11 @@
-* Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+* Mon Feb 12 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Remove non-working mcollective remnants
 - Remove unnecessary dependency on puppetlabs/inifile.
 
 * Mon Jan 22 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
 - When the host is a member of an IPA domain, do not include the
   `simp_openldap::client` class.
+- Update upper bound for concat dependency
 
 * Tue Jan 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
 - Add simp::prelink to the class lists for both the SIMP server and
