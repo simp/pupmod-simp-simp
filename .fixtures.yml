@@ -32,7 +32,6 @@ fixtures:
     cron: https://github.com/simp/pupmod-simp-cron
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
-    file_concat: https://github.com/simp/puppet-lib-file_concat
     fips: https://github.com/simp/pupmod-simp-fips
     freeradius: https://github.com/simp/pupmod-simp-freeradius
     haveged: https://github.com/simp/pupmod-simp-haveged
