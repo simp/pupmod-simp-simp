@@ -35,7 +35,6 @@ class simp::root_user (
       allowdupe  => false,
       home       => '/root',
       shell      => '/bin/bash',
-      groups     => [ 'bin', 'daemon', 'sys', 'adm', 'disk', 'wheel' ],
       membership => 'minimum',
       forcelocal => true
     }
