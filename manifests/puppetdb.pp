@@ -55,9 +55,9 @@ class simp::puppetdb (
   Boolean              $use_puppet_ssl_certs   = true,
   Boolean              $disable_ssl            = false,
   Boolean              $manage_package_repo    = false,
-  String               $database_password      = passgen('simp_puppetdb'),
+  String               $database_password      = simplib::passgen('simp_puppetdb'),
   String               $read_database_username = 'simp_puppetdb',
-  String               $read_database_password = passgen('simp_read_puppetdb'),
+  String               $read_database_password = simplib::passgen('simp_read_puppetdb'),
   String               $read_database_name     = 'simp_puppetdb',
   Boolean              $read_database_ssl      = true,
   Boolean              $manage_firewall        = true,
@@ -125,6 +125,21 @@ class simp::puppetdb (
 
   include 'puppetdb::master::config'
 
+  if defined(Class['puppetdb::master::puppetdb_conf']) {
+    # When puppetdb::master::config::manage_config is true (the default),
+    # puppetdb.conf is managed using the inifile module, which creates
+    # the file if it doesn't exist without explicitly setting ownership
+    # and permissions.  To ensure the file is usable, no matter what the
+    # umask of is of the process creating it, set the ownership and
+    # permissions here.
+    file { "${::puppetdb::master::puppetdb_conf::puppet_confdir}/puppetdb.conf":
+      ensure  => present,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644'
+    }
+  }
+
   file { $java_tmpdir:
     ensure => 'directory',
     owner  => 'puppetdb',
@@ -133,11 +148,11 @@ class simp::puppetdb (
     before => Service[$::puppetdb::puppetdb_service]
   }
 
-  if $manage_puppetserver {
+  if $manage_puppetserver and defined(Class['puppetdb::master::puppetdb_conf']) {
     # We will need to restart the puppet master service if certain config
     # files are changed, so here we make sure it's in the catalog.
     include 'pupmod::master::base'
-    Class['puppetdb::master::puppetdb_conf'] ~> Class['::pupmod::master::base']
+    Class['puppetdb::master::puppetdb_conf'] ~> Class['pupmod::master::base']
   }
 
   # We need to do this to make PuppetDB use the system puppet certificates

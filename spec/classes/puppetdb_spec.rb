@@ -8,6 +8,7 @@ describe 'simp::puppetdb' do
           facts.merge(:puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } })
         end
         context 'with default parameters' do
+          let(:hieradata) { 'simp__puppetdb' }
           # Overriding the file definition for puppetdb::ssl_cert/key/ca to use
           # undef for content results in:
           # Could not understand source file://: bad URI(absolute but no path)
@@ -15,6 +16,7 @@ describe 'simp::puppetdb' do
         end
 
         context 'with use_puppet_ssl_certs => false' do
+          let(:hieradata) { 'simp__puppetdb' }
           let(:params) do
           {
             :use_puppet_ssl_certs => false
@@ -25,11 +27,18 @@ describe 'simp::puppetdb' do
           it { is_expected.to contain_class('puppetdb::master::config') }
           it { is_expected.to contain_class('pupmod::master::base') }
           it { is_expected.to contain_class('puppetdb::master::puppetdb_conf') }
-          # This won't work for some reason.
-          pending("it { is_expected.to contain_class('puppetdb::master::puppetdb_conf').that_comes_before('Class[::pupmod::master::base]') }")
+          it {
+            is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with( {
+              :owner => 'root',
+              :group => 'root',
+              :mode  => '0644'
+            } )
+          }
+          it { is_expected.to contain_class('puppetdb::master::puppetdb_conf').that_notifies('Class[pupmod::master::base]') }
         end
 
         context 'with use_puppet_ssl_certs => false and manage_puppetserver => false' do
+          let(:hieradata) { 'simp__puppetdb' }
           let(:params) do
           {
             :use_puppet_ssl_certs => false,
@@ -37,8 +46,21 @@ describe 'simp::puppetdb' do
           }
           end
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('puppetdb::master::puppetdb_conf') }
+          it { is_expected.to_not contain_class('puppetdb::master::puppetdb_conf').that_notifies('Class[pupmod::master::base]') }
           it { is_expected.to_not contain_class('pupmod::master::base') }
-          it { is_expected.to_not contain_class('puppetdb::master::puppetdb_conf').that_comes_before('Class[::pupmod::master::base]') }
+        end
+
+        context 'with puppetdb::master::config::manage_config: false' do
+          let(:hieradata) { 'simp_puppetdb_manage_config_false' }
+          let(:params) do
+          {
+            :use_puppet_ssl_certs => false
+          }
+          end
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to_not contain_file("#{Puppet[:confdir]}/puppetdb.conf") }
+          it { is_expected.to_not contain_class('pupmod::master::base') }
         end
       end
     end
