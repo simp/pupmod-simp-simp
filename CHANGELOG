@@ -1,3 +1,10 @@
+* Fri Mar 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Set the ownership and permissions of puppet/puppetdb.conf in
+  simp::puppetdb, instead of allowing them to be set to those of
+  the process running puppet, if the file needs to be created.
+  This is part of the fix to the failure of SIMP to bootstrap on a
+  system on which root's umask has already been restricted to 077.
+
 * Mon Feb 26 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
 - Remove management of the 'root' user's groups in the User resource
   - Works around https://tickets.puppetlabs.com/browse/PUP-8470

@@ -139,6 +139,7 @@ pup5.3-validation:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *validation_checks
+  allow_failure: true
 
 pup5.3-unit:
   stage: unit

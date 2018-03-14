@@ -4,3 +4,7 @@
 # management of the puppet service by pupmod::master::base and
 # puppetdb::master::config.
 puppetdb::master::config::restart_puppet: false
+
+# This setting means the user has decided to manage puppetdb config
+# outside of puppetdb::master::config.
+puppetdb::master::config::manage_config: false
