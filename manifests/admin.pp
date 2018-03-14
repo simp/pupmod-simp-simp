@@ -104,7 +104,7 @@ class simp::admin (
     $_shell_cmd = ['ALL']
   }
 
-  sudo::user_specification { 'admin_global':
+  sudo::user_specification { 'admin global':
     user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'ALL',
@@ -122,7 +122,7 @@ class simp::admin (
 
   # The following two are especially important if you're using sudosh.
   # They allow you to recover from destroying the certs in your environment.
-  sudo::user_specification { 'admin_run_puppet':
+  sudo::user_specification { 'admin run puppet':
     user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'root',
@@ -130,13 +130,20 @@ class simp::admin (
     passwd    => !$passwordless_admin_sudo
   }
 
-  sudo::user_specification { 'admin_clean_puppet_certs':
+  # This logic is to avoid allowing admins to run `rm -rf` when the fact
+  # doesn't exist
+  case $facts['puppet_settings'] {
+    Hash:    { $_ssldir = $facts['puppet_settings']['main']['ssldir'] }
+    default: { $_ssldir = '/etc/puppetlabs/puppet/ssl' }
+  }
+  sudo::user_specification { 'admin clean puppet certs':
     user_list => ["%${admin_group}"],
     host_list => [$facts['fqdn']],
     runas     => 'root',
-    cmnd      => ["/bin/rm -rf ${facts['puppet_settings']['ssldir']}"],
+    cmnd      => ["/bin/rm -rf ${$_ssldir}"],
     passwd    => !$passwordless_admin_sudo
   }
+
 
   $_polkit_ensure = ($set_polkit_admin_group and $facts['os']['release']['major'] >= '7') ? {
     true    => 'present',

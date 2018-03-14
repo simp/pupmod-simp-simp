@@ -152,3 +152,8 @@ Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|
     fail "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
   end
 end
+
+if ENV['PUPPET_DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
+end

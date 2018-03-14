@@ -19,18 +19,20 @@ describe 'simp' do
 
       context "on #{os}" do
         let(:facts) do
-            os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-            os_facts[:puppet_settings] = {
+          os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+          os_facts[:puppet_settings] = {
+            'main' => {
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
-              'agent' => {
-                'server' => 'puppet.bar.baz'
-              }
+            },
+            'agent' => {
+              'server' => 'puppet.bar.baz'
             }
-            os_facts[:server_facts] = {
-              :servername => 'puppet.bar.baz',
-              :serverip   => '1.2.3.4'
-            }
-            os_facts
+          }
+          os_facts[:server_facts] = {
+            :servername => 'puppet.bar.baz',
+            :serverip   => '1.2.3.4'
+          }
+          os_facts
         end
 
         context 'with default parameters (scenario defaults to simp)' do
@@ -135,7 +137,9 @@ describe 'simp' do
           facts[:augeasversion] = '1.2.3'
           facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
           facts[:puppet_settings] = {
-            'ssldir' => '/opt/puppetlabs/puppet/vardir',
+            'main' => {
+              'ssldir' => '/opt/puppetlabs/puppet/vardir',
+            },
             'agent' => {
               'server' => 'puppet.bar.baz'
             }

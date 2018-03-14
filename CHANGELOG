@@ -1,3 +1,9 @@
+* Wed Mar 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
+- Fixed a bug where if the `puppet_settings` fact did not exist, users in the
+  `%administrators` group could `rm -rf` any path
+- The value in the hash was also corrected to
+  `$facts['puppet_settings']['main']['ssldir']`
+
 * Fri Mar 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
 - Set the ownership and permissions of puppet/puppetdb.conf in
   simp::puppetdb, instead of allowing them to be set to those of
