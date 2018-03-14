@@ -132,6 +132,11 @@ class simp::puppetdb (
     # and permissions.  To ensure the file is usable, no matter what the
     # umask of is of the process creating it, set the ownership and
     # permissions here.
+    #
+    # This smells like an upstream issue, and other have agreed
+    # https://tickets.puppetlabs.com/browse/MODULES-5391
+    # If puppetlabs/puppetdb gets updated, watch out for duplicate
+    # declaration errors for this file resource.
     file { "${::puppetdb::master::puppetdb_conf::puppet_confdir}/puppetdb.conf":
       ensure  => present,
       owner  => 'root',
