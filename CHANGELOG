@@ -1,5 +1,5 @@
 * Fri Mar 16 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.4.0-0
-- updated metadata.json to include trinklin/nsswitch
+- updated metadata.json to include trlinkin/nsswitch
 
 * Wed Mar 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
 - Fixed a bug where if the `puppet_settings` fact did not exist, users in the
