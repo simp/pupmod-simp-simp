@@ -43,24 +43,38 @@ simp::prelink::enable: true
           apply_manifest_on(host, manifest, :catch_changes => true)
         end
 
-        it 'should install prelink package' do
-          expect( check_for_package(host, 'prelink') ).to be true
-        end
-
-        it 'should enable prelink' do
+        it 'should install prelink package only if not in FIPS mode' do
           facts = JSON.load(on(host, 'puppet facts').stdout)
-          expect( facts['values']['prelink'] ).to_not be nil
-          expect( facts['values']['prelink']['enabled'] ).to be true
+          if facts['values']['fips_enabled']
+            expect( check_for_package(host, 'prelink') ).to be false
+          else
+            expect( check_for_package(host, 'prelink') ).to be true
+          end
         end
 
-        it 'should run prelink' do
-          # first see if prelink cron job has already run 
-          result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [0,2])
+        it 'should enable prelink only if not in FIPS mode' do
+          facts = JSON.load(on(host, 'puppet facts').stdout)
+          if facts['values']['fips_enabled']
+            expect( facts['values']['prelink'] ).to be nil
+          else
+            expect( facts['values']['prelink'] ).to_not be nil
+            expect( facts['values']['prelink']['enabled'] ).to be true
+          end
+        end
 
-          if result.exit_code == 2
-            # prelink cron job has not yet been run, so try to run it
-            on(host, '/etc/cron.daily/prelink')
-            on(host, 'ls /etc/prelink.cache')
+        it 'should run prelink only if not in FIPS mode' do
+          facts = JSON.load(on(host, 'puppet facts').stdout)
+          if facts['values']['fips_enabled']
+            result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [2])
+          else
+            # first see if prelink cron job has already run 
+            result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [0,2])
+
+            if result.exit_code == 2
+              # prelink cron job has not yet been run, so try to run it
+              on(host, '/etc/cron.daily/prelink')
+              on(host, 'ls /etc/prelink.cache')
+            end
           end
         end
       end

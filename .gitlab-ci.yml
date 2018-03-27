@@ -211,6 +211,18 @@ default:
   script:
     - bundle exec rake beaker:suites[default]
 
+default-fips:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '4.10'
+    BEAKER_fips: 'yes'
+  script:
+    - bundle exec rake beaker:suites[default]
+
 default-puppet5:
   stage: acceptance
   tags:
