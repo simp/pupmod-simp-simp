@@ -69,6 +69,7 @@ describe 'simp::base_apps' do
             it { is_expected.to_not create_service('portreserve') }
           else
             it { is_expected.to create_package('portreserve') }
+            it { is_expected.to create_file('/etc/portreserve/discard').with_content(/^discard$/).that_notifies('Service[portreserve]') }
             it { is_expected.to create_service('portreserve') }
           end
         end

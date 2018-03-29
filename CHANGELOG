@@ -1,3 +1,7 @@
+* Thu Mar 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+- Ensure that a file exists on EL 6 if portreserve is enabled so that the
+  portreserve service does not flap
+
 * Tue Mar 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
 - In simp::prelink, ensure prelinking is disabled when the server is
   in FIPS mode, as FIPS is incompatible with prelinking.
