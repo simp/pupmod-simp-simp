@@ -97,6 +97,19 @@ class simp::base_apps (
             ensure => $ensure
           }
 
+          # This file is required to ensure that the portreserve service starts
+          # if something has bound to all of the other defined ports
+          #
+          # If this is not defined, the service will attempt to restart on
+          # every puppet run.
+          file { '/etc/portreserve/discard':
+            owner   => 'root',
+            group   => 'root',
+            mode    => '644',
+            content => "discard\n",
+            notify  => Service['portreserve']
+          }
+
           service { 'portreserve':
             ensure     => 'running',
             enable     => true,
