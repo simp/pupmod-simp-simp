@@ -1,24 +1,10 @@
-* Thu Mar 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
-- Remove management of the 'root' user's groups in the User resource
-  - Works around https://tickets.puppetlabs.com/browse/PUP-8470
+* Thu Mar 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
 - Ensure that a file exists on EL 6 if portreserve is enabled so that the
   portreserve service does not flap
 
 * Tue Mar 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
-- Set the ownership and permissions of puppet/puppetdb.conf in
-  simp::puppetdb, instead of allowing them to be set to those of
-  the process running puppet, if the file needs to be created.
-  This is part of the fix to the failure of SIMP to bootstrap on a
-  system on which root's umask has already been restricted to 077.
-- Remove non-working mcollective remnants
-- Remove unnecessary dependency on puppetlabs/inifile.
 - In simp::prelink, ensure prelinking is disabled when the server is
   in FIPS mode, as FIPS is incompatible with prelinking.
-- Add simp::prelink to the class lists for both the SIMP server and
-  SIMP clients. By default, simp::prelink ensures any prelinking has
-  been removed and that the prelink package is not installed. This
-  satisfies the SCAP Security Guide's OVAL check
-  xccdf_org.ssgproject.content_rule_disable_prelink.
 
 * Fri Mar 16 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.4.0-0
 - Updated metadata.json to include trlinkin/nsswitch
@@ -28,9 +14,33 @@
   `%administrators` group could `rm -rf` any path
 - The value in the hash was also corrected to
   `$facts['puppet_settings']['main']['ssldir']`
+
+* Fri Mar 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Set the ownership and permissions of puppet/puppetdb.conf in
+  simp::puppetdb, instead of allowing them to be set to those of
+  the process running puppet, if the file needs to be created.
+  This is part of the fix to the failure of SIMP to bootstrap on a
+  system on which root's umask has already been restricted to 077.
+
+* Mon Feb 26 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
+- Remove management of the 'root' user's groups in the User resource
+  - Works around https://tickets.puppetlabs.com/browse/PUP-8470
+
+* Mon Feb 12 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Remove non-working mcollective remnants
+- Remove unnecessary dependency on puppetlabs/inifile.
+
+* Mon Jan 22 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
 - When the host is a member of an IPA domain, do not include the
   `simp_openldap::client` class.
 - Update upper bound for concat dependency
+
+* Tue Jan 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Add simp::prelink to the class lists for both the SIMP server and
+  SIMP clients. By default, simp::prelink ensures any prelinking has
+  been removed and that the prelink package is not installed. This
+  satisfies the SCAP Security Guide's OVAL check
+  xccdf_org.ssgproject.content_rule_disable_prelink.
 
 * Mon Nov 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.3.0-0
 - In simp::sysctl, add parameters for net.ipv6.conf.all.accept_source_route
