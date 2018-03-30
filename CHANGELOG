@@ -1,3 +1,7 @@
+* Mon Apr 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.4.2-0
+- changed permission on ctrl-alt-del-capture.service to prevent "no effect"
+  errors in system logs.
+
 * Thu Mar 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
 - Ensure that a file exists on EL 6 if portreserve is enabled so that the
   portreserve service does not flap

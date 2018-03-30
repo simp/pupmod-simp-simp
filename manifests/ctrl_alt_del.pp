@@ -62,7 +62,7 @@ class simp::ctrl_alt_del (
           ensure  => 'file',
           owner   => 'root',
           group   => 'root',
-          mode    => '0640',
+          mode    => '0644',
           content => template("${module_name}/etc/systemd/system/ctrl-alt-del-capture.service.erb")
         }
       }
