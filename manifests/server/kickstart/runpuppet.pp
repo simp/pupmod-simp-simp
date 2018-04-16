@@ -40,7 +40,9 @@
 #   certificate is not presented.
 #
 # @param fips
-#   If true, set puppet keylength to 2048, else 4096.
+#   If true, set puppet keylength to 2048, else 4096.  This non-compliant
+#   setting is to work around problems with older versions of Ruby.  It
+#   will be fixed, when Puppet fully supports FIPS mode.
 #
 class simp::server::kickstart::runpuppet (
   Boolean                     $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false }),
