@@ -1,3 +1,9 @@
+* Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
+- In the runpuppet init script used to bootstrap kickstarted clients,
+  for EL7, persist the hostname retrieved by DHCP as a static hostname.
+  This prevents problems that can arise on EL7 when the DHCP lease
+  expires in the middle of the client bootstrap puppet runs.
+
 * Mon Apr 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.4.2-0
 - changed permission on ctrl-alt-del-capture.service to prevent "no effect"
   errors in system logs.

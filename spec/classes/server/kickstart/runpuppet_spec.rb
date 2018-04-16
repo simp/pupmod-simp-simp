@@ -10,6 +10,24 @@ describe 'simp::server::kickstart::runpuppet' do
           facts
         end
 
+        context 'default parameters (using fixtures/hieradata/default.yaml)' do
+          it { is_expected.to compile.with_all_deps }
+          it {
+          expected_content = File.read(File.join(File.dirname(__FILE__), 'files',
+            'default_runpuppet'))
+            is_expected.to create_file('/var/www/ks/runpuppet').with_content(expected_content)
+          }
+        end
+
+        context 'with fips=true' do
+          let(:params) {{
+            :fips => true
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/keylength         = 2048/) }
+        end
+
         context 'specify_ntp_servers_array' do
           let(:params) {{
             :ntp_servers => ['1.2.3.4','5.6.7.8']
