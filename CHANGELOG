@@ -1,3 +1,10 @@
+* Tue Apr 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.2-0
+- Narrow the focus of the internal hieradata to ensure correct runs on
+  unsupported OSs
+- Update unsupported OS tests
+- Add a test to ensure that an error is throw if an invalid scenario is
+  specified
+
 * Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
 - In the runpuppet init script used to bootstrap kickstarted clients,
   for EL7, persist the hostname retrieved by DHCP as a static hostname.
