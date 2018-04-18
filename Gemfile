@@ -11,7 +11,7 @@ group :test do
   gem 'rspec'
   gem 'rspec-puppet', ['>= 2.6.11', '< 3.0.0']
   gem 'hiera-puppet-helper'
-  gem 'puppetlabs_spec_helper'
+  gem 'puppetlabs_spec_helper', '~> 2.7.0'
   gem 'metadata-json-lint'
   gem 'puppet-strings'
   gem 'puppet-lint-empty_string-check',   :require => false
