@@ -6,7 +6,6 @@ describe 'simp' do
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
     facterdb_queries = [
-      {:operatingsystem => 'OracleLinux',:operatingsystemmajrelease => '7'},
       {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04'},
     ].map{|q| q.merge({:hardwaremodel => 'x86_64', :facterversion => '3.5.1'})}
 

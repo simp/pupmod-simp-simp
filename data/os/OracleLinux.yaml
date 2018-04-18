@@ -1,0 +1,7 @@
+#
+---
+simp::scenario_map:
+  none: []
+  poss:
+    - pupmod
+    - simp::scenario::poss

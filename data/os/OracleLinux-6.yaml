@@ -1,0 +1,6 @@
+---
+simp::scenario::data::el6:
+  - acpid
+  - upstart
+simp::server::scenario_map:
+  poss: "%{alias('simp::scenario::data::el6')}"
