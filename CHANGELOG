@@ -1,3 +1,7 @@
+* Fri Apr 20 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.2-0
+- Add simp::netconsole class to manage the netconsole kernel feature
+- Fix a few puppet-lint warnings
+
 * Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
 - In the runpuppet init script used to bootstrap kickstarted clients,
   for EL7, persist the hostname retrieved by DHCP as a static hostname.

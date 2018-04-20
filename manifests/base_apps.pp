@@ -105,7 +105,7 @@ class simp::base_apps (
           file { '/etc/portreserve/discard':
             owner   => 'root',
             group   => 'root',
-            mode    => '644',
+            mode    => '0644',
             content => "discard\n",
             notify  => Service['portreserve']
           }
