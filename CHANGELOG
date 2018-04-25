@@ -1,11 +1,11 @@
 * Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.4.2-0
-- Simp_options::selinux was suppose to determine if the selinux module
+- Simp_options::selinux was supposed to determine if the selinux module
   was included.  This was getting overridden by the class lists and selinux
   module was included. This change removes the simp_options::selinux setting
   to stop this confussion.  See the scenario maps in the data section to see what
   scenarios include the selinux module.  See the selinux module to see how to
   use puppet to enable/disable selinux.  This may change the defaults for selinux in
-  the simp_lite scenario.
+  the `simp_lite` scenario.
 
 * Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
 - In the runpuppet init script used to bootstrap kickstarted clients,
