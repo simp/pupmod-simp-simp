@@ -9,7 +9,6 @@ describe 'simp class' do
       include 'simp_options'
       include 'simp'
       include 'simp::yum::repo::local_os_updates'
-      include 'simp::netconsole'
     EOS
   }
 
@@ -48,8 +47,6 @@ ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
 useradd::securetty:
   - ANY_SHELL
-simp::netconsole::ensure: present
-simp::netconsole::target_ip: '10.0.2.3'
         EOF
       }
 

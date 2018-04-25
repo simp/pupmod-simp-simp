@@ -39,15 +39,14 @@ simp_apache::conf::allowroot:
     it 'should provide a correctly-configured `runpuppet` file over HTTP' do
 
       hosts.each do |host|
-          _clients=(hosts-[host])
-          skip('There are no remote hosts to act as clients') if _clients.size == 0
-          client = _clients.first
-          on client, 'puppet resource package curl ensure=present'
-          set_hieradata_on(host, hieradata.gsub('ALLOW_IP',client.ip))
-          apply_manifest_on host, manifest
-          on client, "curl http://server-el7/ks/runpuppet -f | grep '^ *server *= *puppet\.test\.test'"
+        _clients=(hosts-[host])
+        skip('There are no remote hosts to act as clients') if _clients.size == 0
+        client = _clients.first
+        on client, 'puppet resource package curl ensure=present'
+        set_hieradata_on(host, hieradata.gsub('ALLOW_IP',client.ip))
+        apply_manifest_on host, manifest
+        on client, "curl http://server-el7/ks/runpuppet -f | grep '^ *server *= *puppet\.test\.test'"
       end
     end
   end
 end
-
