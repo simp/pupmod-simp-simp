@@ -1,7 +1,7 @@
-# Manage the netconsole kernel parameter
+# Configure ``/etc/sysconfig/netconsole`` and the netconsole service
 #
-# @see https://www.kernel.org/doc/Documentation/networking/netconsole.txt
-# @see https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/sec-configuring_netconsole
+# @see https://www.kernel.org/doc/Documentation/networking/netconsole.txt and
+#   https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/sec-configuring_netconsole
 #
 # @param ensure
 #   Ensure 'present' or 'absent' on the kernel parameter

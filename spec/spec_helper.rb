@@ -88,7 +88,6 @@ RSpec.configure do |c|
     }
   }
 
-  c.raise_errors_for_deprecations!
   c.mock_framework = :rspec
   c.mock_with :mocha
 

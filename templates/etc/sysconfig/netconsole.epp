@@ -1,9 +1,12 @@
-<%- | Optional[String] $syslogaddr,
-      Optional[Integer] $localport,
+<%- | Optional[Simplib::IP] $syslogaddr,
+      Optional[Simplib::Port] $localport,
       Optional[String] $dev,
-      Optional[Integer] $syslogport,
-      Optional[String] $syslogmacaddr
+      Optional[Simplib::Port] $syslogport,
+      Optional[Simplib::MacAddress] $syslogmacaddr
 | -%>
+# ####################################################################
+# # This file is managed by Puppet. Any changes will be overwritten. #
+# ####################################################################
 
 # This is the configuration file for the netconsole service.  By starting
 # this service you allow a remote syslog daemon to record console output
