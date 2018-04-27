@@ -10,9 +10,6 @@
 # @param clamav
 #   Enable SIMP management of Antivirus
 #
-# @param selinux
-#   Enable SIMP management of SELinux
-#
 # @param auditd
 #   Enable SIMP management of auditing
 #
