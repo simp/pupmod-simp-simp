@@ -66,7 +66,6 @@ simp_options::firewall: true
 simp_options::haveged: true
 simp_options::logrotate: true
 simp_options::pam: true
-simp_options::selinux: true
 simp_options::sssd: true
 simp_options::syslog: true
 simp_options::tcpwrappers: true
