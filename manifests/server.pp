@@ -10,9 +10,6 @@
 # @param clamav
 #   Enable SIMP management of Antivirus
 #
-# @param selinux
-#   Enable SIMP management of SELinux
-#
 # @param auditd
 #   Enable SIMP management of auditing
 #
@@ -35,7 +32,6 @@ class simp::server (
   Boolean $allow_simp_user = false,
   Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value'     => false }),
   Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
-  Boolean $selinux         = simplib::lookup('simp_options::selinux', { 'default_value' => false }),
   Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
   String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
   Array[String] $classes   = [],
@@ -56,7 +52,6 @@ class simp::server (
   }
 
   if $clamav  { include '::clamav' }
-  if $selinux { include '::selinux' }
   if $auditd  { include '::auditd' }
 
   if $allow_simp_user {

@@ -1,6 +1,19 @@
-* Fri Apr 20 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.2-0
+* Fri Apr 27 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.2-0
 - Add simp::netconsole class to manage the netconsole kernel feature
 - Fix a few puppet-lint warnings
+
+* Fri Apr 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
+- Set permissions of /etc/rc.d/rc.local to 0750, instead of 0770,
+
+* Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.4.2-0
+- simp_options::selinux was supposed to determine if the selinux module was
+  included.  However, this value was getting overridden by the class lists
+  which independently included the selinux module. This change removes the
+  unused simp_options::selinux setting to eliminate the confusion.  See the
+  scenario maps in the data section to see what scenarios include the selinux
+  module.  See the selinux module to see how to use puppet to enable/disable
+  selinux.  This may change the defaults for selinux in the `simp_lite`
+  scenario.
 
 * Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
 - In the runpuppet init script used to bootstrap kickstarted clients,
