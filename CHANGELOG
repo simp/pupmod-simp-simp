@@ -1,3 +1,6 @@
+* Fri Apr 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
+- Set permissions of /etc/rc.d/rc.local to 0750, instead of 0770,
+
 * Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.4.2-0
 - simp_options::selinux was supposed to determine if the selinux module was
   included.  However, this value was getting overridden by the class lists
