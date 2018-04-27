@@ -50,7 +50,7 @@ class simp::rc_local (
   }
 
   file { '/etc/rc.local':
-    ensure => 'symlink',
+    ensure => 'link',
     target => '/etc/rc.d/rc.local'
   }
 
@@ -58,7 +58,7 @@ class simp::rc_local (
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
-    mode    => '0770',
+    mode    => '0750',
     content => $_content
   }
 }
