@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.4.2",
+  "version": "4.5.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -157,6 +157,19 @@
       "operatingsystemrelease": [
         "6",
         "7"
+      ]
+    },
+    {
+      "operatingsystem": "Windows",
+      "operatingsystemrelease": [
+	"Server 2008",
+        "Server 2008 R2",
+        "Server 2012",
+        "Server 2012 R2",
+        "Server 2016",
+        "7",
+        "8",
+        "10"
       ]
     }
   ]

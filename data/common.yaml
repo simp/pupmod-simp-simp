@@ -20,11 +20,12 @@ lookup_options:
       strategy: unique
       # Disable this for now.
       #knockout_prefix: --
-
-# This is all that we support on unknown operating systems
 simp::scenario_map:
   none: []
-
+  remote_access: []
+  poss: []
+  simp_lite: []
+  simp: []
 simp::server::scenario_map:
   none: []
   remote_access: "%{alias('simp::server::data')}"

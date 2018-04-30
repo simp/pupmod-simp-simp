@@ -1,6 +1,6 @@
 # Places SIMP version related information on the filesystem
 class simp::version {
-
+  if (downcase($facts['kernel']) == 'linuc') {
   file { '/etc/simp':
     ensure => 'directory',
     owner  => 'root',
@@ -21,5 +21,6 @@ class simp::version {
     owner  => 'root',
     group  => 'root',
     mode   => '0640'
+  }
   }
 }

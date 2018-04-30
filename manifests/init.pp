@@ -173,12 +173,13 @@ class simp (
   else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
-
+  if (downcase($facts['kernel']) == 'linux') {
   file { "${facts['puppet_vardir']}/simp":
     ensure => 'directory',
     mode   => '0750',
     owner  => 'root',
     group  => 'root'
+  }
   }
 
   if $enable_filebucketing {
