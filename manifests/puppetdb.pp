@@ -138,7 +138,7 @@ class simp::puppetdb (
     # If puppetlabs/puppetdb gets updated, watch out for duplicate
     # declaration errors for this file resource.
     file { "${::puppetdb::master::puppetdb_conf::puppet_confdir}/puppetdb.conf":
-      ensure  => present,
+      ensure => present,
       owner  => 'root',
       group  => 'root',
       mode   => '0644'
