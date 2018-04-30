@@ -1,0 +1,38 @@
+<%- | Optional[Simplib::IP] $syslogaddr,
+      Optional[Simplib::Port] $localport,
+      Optional[String] $dev,
+      Optional[Simplib::Port] $syslogport,
+      Optional[Simplib::MacAddress] $syslogmacaddr
+| -%>
+# ####################################################################
+# # This file is managed by Puppet. Any changes will be overwritten. #
+# ####################################################################
+
+# This is the configuration file for the netconsole service.  By starting
+# this service you allow a remote syslog daemon to record console output
+# from this system.
+
+# The local port number that the netconsole module will use
+<% unless $localport =~ Undef { -%>
+LOCALPORT=<%= $localport %>
+<% } -%>
+
+# The ethernet device to send console messages out of (only set this if it
+# can't be automatically determined)
+<% unless $dev =~ Undef { -%>
+DEV=<%= $dev %>
+<% } -%>
+
+# The IP address of the remote syslog server to send messages to
+SYSLOGADDR=<%= $syslogaddr %>
+
+# The listening port of the remote syslog daemon
+<% unless $syslogport =~ Undef { -%>
+SYSLOGPORT=<%= $syslogport %>
+<% } -%>
+
+# The MAC address of the remote syslog server (only set this if it can't
+# be automatically determined)
+<% unless $syslogmacaddr =~ Undef { -%>
+SYSLOGMACADDR=<%= $syslogmacaddr %>
+<% } -%>

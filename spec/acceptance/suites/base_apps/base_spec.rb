@@ -24,10 +24,6 @@ include 'simp::base_services'
       it "should prepare #{host}" do
         # Set up base modules and hieradata
         set_hieradata_on( node, hieradata )
-
-        # the portreserve service will fail unless something is configured
-        on( node, 'mkdir -p /etc/portreserve')
-        on( node, 'echo rndc/tcp > /etc/portreserve/named')
       end
 
       it 'should apply with no errors' do

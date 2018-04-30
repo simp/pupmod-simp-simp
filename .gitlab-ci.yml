@@ -246,6 +246,17 @@ no_simp_server:
   script:
     - bundle exec rake beaker:suites[no_simp_server]
 
+netconsole:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '4.10'
+  script:
+    - bundle exec rake beaker:suites[netconsole]
+
 one_shot_scenario:
   stage: acceptance
   tags:
