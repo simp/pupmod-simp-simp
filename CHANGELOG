@@ -1,3 +1,6 @@
+* Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.2-0
+- Create standalone SIMP client bootstrap script, bootstrap_simp_client.
+
 * Fri Apr 27 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.2-0
 - Add simp::netconsole class to manage the netconsole kernel feature
 - Fix a few puppet-lint warnings
