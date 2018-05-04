@@ -71,7 +71,9 @@ fixtures:
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
     simpcat: https://github.com/simp/pupmod-simp-concat
-    simplib: https://github.com/simp/pupmod-simp-simplib
+    simplib:
+      repo: https://github.com/jeefberkey/pupmod-simp-simplib
+      branch: SIMP-4885-hash-to-opts
     simp_apache: https://github.com/simp/pupmod-simp-apache
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
