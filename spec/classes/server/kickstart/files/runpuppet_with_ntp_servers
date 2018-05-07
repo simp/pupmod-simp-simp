@@ -1,37 +1,3 @@
-<%
-  _bootstrap_cmd =<<EOM
-    /opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client \\
-      --puppet-server #{@_puppet_server} \\
-      --puppet-ca #{@_puppet_ca} \\
-      --digest-algorithm #{@puppet_digest_algorithm} \\
-      --puppet-keylength #{@_puppet_keylength} \\
-      --num-puppet-runs #{@num_puppet_runs} \\
-      --initial-retry-interval #{@initial_retry_interval} \\
-      --retry-factor #{@retry_factor} \\
-      --max-seconds #{@max_seconds}
-EOM
-
-  _bootstrap_cmd.strip!
-  if @runpuppet_wait_for_cert
-    _bootstrap_cmd << " \\\n#{' '*6}--puppet-wait-for-cert #{@runpuppet_wait_for_cert}"
-  else
-    _bootstrap_cmd << " \\\n#{' '*6}--puppet-wait-for-cert 0"
-  end
-
-  if @runpuppet_print_stats
-    _bootstrap_cmd << " \\\n#{' '*6}--print-stats"
-  else
-    _bootstrap_cmd << " \\\n#{' '*6}--no-print-stats"
-  end
-
-  unless @ntp_servers.empty?
-    _ntp_servers = @ntp_servers.dup
-    if _ntp_servers.kind_of?(Hash)
-      _ntp_servers = _ntp_servers.keys.sort
-    end
-    _bootstrap_cmd << " \\\n#{' '*6}--ntp-servers #{_ntp_servers.join(',')}"
-  end
--%>
 #!/bin/sh
 #
 # runpuppet:    Runs puppet agent in 'test' mode to bootstrap the system
@@ -77,7 +43,18 @@ case "$1" in
 
     # use Puppet's Ruby, so that we can use the Facter library
     # and a more recent version of Ruby
-    <%= _bootstrap_cmd %>
+    /opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client \
+      --puppet-server puppet.bar.baz \
+      --puppet-ca puppet.bar.baz \
+      --digest-algorithm sha256 \
+      --puppet-keylength 4096 \
+      --num-puppet-runs 2 \
+      --initial-retry-interval 10 \
+      --retry-factor 1.5 \
+      --max-seconds 1800 \
+      --puppet-wait-for-cert 10 \
+      --print-stats \
+      --ntp-servers 1.2.3.4,5.6.7.8
 
     result=$?
     if [ $result -eq 0 ]; then
@@ -97,16 +74,12 @@ case "$1" in
       echo -n "Bootstrapping $servername"
       failure ; echo
       RETVAL=1
-<%
-   if @reboot_on_failure
--%>
 
       echo "Rebooting to retry."
       reboot;
       # This is here to keep this script from interfering with upstart
       # parallelism.
       sleep 999999999;
-<% end -%>
     fi
     ;;
 esac

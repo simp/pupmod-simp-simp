@@ -8,200 +8,78 @@
 # description:  A script to bootstrap the initial puppet configuration.
 #
 
-export PATH="$PATH:/opt/puppetlabs/bin"
-ssldir="$(puppet config print ssldir)"
-
-function ensure_running {
-  ca_port="$(puppet config print ca_port)"
-  running="false"
-  timeout=0
-  while [ $timeout -lt 300 ] && [ "$running" == "false" ]; do
-    if [[ "$(/usr/bin/curl -sS --cert $ssldir/ssl/certs/puppet.bar.baz.pem --key $ssldir/puppet/ssl/private_keys/puppet.bar.baz.pem -k -H 'Accept: s' https://puppet.bar.baz:$ca_port/puppet-ca/v1/certificate_revocation_list/ca 2> /dev/null)" =~ "CRL" ]]; then
-      running="true"
-    fi
-    timeout=$[$timeout+1]
-    sleep 1
-  done
-
-  if [ "$running" == "false" ]; then
-    echo "Error: Puppetserver could not start. Please check logs."
-    exit 1
-  fi
-
-}
-
-# Persist the hostname retrieved by DHCP as a static hostname for EL7.
-# This prevents problems that can arise in EL7 when the DHCP lease
-# expires in the middle of bootstrap puppet runs.
-function persist_hostname {
-  if [ -e "/usr/bin/hostnamectl" ]; then
-    /usr/bin/hostnamectl set-hostname `hostname -f`
-  fi
-}
-
-
 unset LC_MESSAGES
 [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
 [ -z "${CONSOLETYPE:-}" ] && CONSOLETYPE="`/sbin/consoletype`"
 export LANG
 
 # Source function library
-
 . /etc/init.d/functions
-[ -f /etc/sysconfig/runpuppet ] && . /etc/sysconfig/runpuppet
+
+[ -f /etc/sysconfig/runpuppet ] && . /etc/sysconfig/runpuppet && export LOCKED
 
 [ -z "$HOME" ] && export HOME=/
 
-if [ "$LOCKED" == 'true' ]; then
-  echo "Script Locked, set 'LOCKED' to 'false' in /etc/sysconfig/runpuppet to run again."
-  exit 1
-fi
-
-# Change me to meet the needs of your domain!
-puppet_server="puppet.bar.baz";
-
-logfile="/root/puppet.bootstrap.log";
-delim="--------------------------------------------------------------------------------";
-server=1;
-puppet="puppet agent --onetime --no-daemonize --no-show_diff --no-splay --waitforcert 10 --evaltrace --summarize --verbose";
-quiet_puppet="puppet agent --onetime --no-daemonize --no-show_diff --no-splay --waitforcert 10 --evaltrace --summarize";
-puppetca="puppet ca";
-
-if [ -x "$(command -v puppetserver)" ]; then
-    server=0;
-fi
-
 case "$1" in
   status)
-    # This script isn't a service, it just executes once.
-    exit 1;
+    if [ "$LOCKED" == 'true' ]; then
+      echo "The server has already been successfully bootstrapped for Puppet."
+      echo "To re-run bootstrap, unlock the service per the instructions in"
+      echo "/etc/sysconfig/runpuppet"
+      RETVAL=0
+    else
+      echo "The server has **not** been bootstrapped for Puppet."
+      echo "Start the runpuppet service in order to bootstrap the server."
+      RETVAL=1
+    fi
     ;;
 
   start)
+    # Make sure puppet is in the PATH, as is used by bootstrap_simp_client
     export PATH="$PATH:/opt/puppetlabs/bin"
-    ssldir="$(puppet config print ssldir)"
 
-    persist_hostname
+    servername=`hostname -f`
+    echo "runpuppet: Bootstrapping $servername"
 
-    ps -C httpd >& /dev/null;
-    restarthttpd=$?;
+    # use Puppet's Ruby, so that we can use the Facter library
+    # and a more recent version of Ruby
+    /opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client \
+      --puppet-server puppet.bar.baz \
+      --puppet-ca puppet.bar.baz \
+      --digest-algorithm sha256 \
+      --puppet-keylength 4096 \
+      --num-puppet-runs 2 \
+      --initial-retry-interval 10 \
+      --retry-factor 1.5 \
+      --max-seconds 1800 \
+      --puppet-wait-for-cert 10 \
+      --print-stats
 
-    # Do some pre-cleanup if we're a server
-    if [ $server -eq 0 ]; then
-        for file in `$puppetca --list --all`; do
-            [ X"$file" = X"+" ] && continue
-            $puppetca --clean $file >& /dev/null;
-        done
+    result=$?
+    if [ $result -eq 0 ]; then
+      echo -n "Bootstrapping $servername"
+      success ; echo
 
-        /bin/rm -rf $ssldir;
-        service puppetserver restart;
-        ensure_running;
+      echo "Rebooting to complete the bootstrap."
+      reboot;
+      # This is here to keep this script from interfering with upstart
+      # parallelism.
+      sleep 999999999;
+    elif [ $result -eq 2 ]; then
+      echo -n "$servername bootstrapping has already completed."
+      success ; echo
+      RETVAL=0
+    else
+      echo -n "Bootstrapping $servername"
+      failure ; echo
+      RETVAL=1
 
-        if [ $restarthttpd -eq 0 ]; then
-          service httpd restart;
-        fi
+      echo "Rebooting to retry."
+      reboot;
+      # This is here to keep this script from interfering with upstart
+      # parallelism.
+      sleep 999999999;
     fi
-
-    read -r -d '' puppet_conf <<'EOM'
-[main]
-    vardir            = /opt/puppetlabs/puppet/cache
-    classfile         = $vardir/classes.txt
-    localconfig       = $vardir/localconfig
-    logdir            = /var/log/puppetlabs/puppet
-    report            = false
-    rundir            = /var/run/puppetlabs
-    server            = puppet.bar.baz
-    ssldir            = /etc/puppetlabs/puppet/ssl
-    trusted_node_data = true
-    stringify_facts   = false
-    digest_algorithm  = sha256
-    keylength         = 4096
-EOM
-
-    echo "$puppet_conf" > /etc/puppetlabs/puppet/puppet.conf;
-    echo "ca_server = puppet.bar.baz" >> /etc/puppetlabs/puppet/puppet.conf;
-    echo "ca_port = 8141" >> /etc/puppetlabs/puppet/puppet.conf;
-
-
-    echo "Running Puppet Bootstrap (This may take some time)";
-    touch /root/.fullrun;
-    rm -f $logfile
-
-    echo -n 'Just the Certs';
-    $quiet_puppet --tags just_the_certs;
-
-    echo -n 'firstrun,concat...'
-    echo "=== $puppet --tags firstrun,concat ===" >> $logfile;
-    $puppet --tags firstrun,concat >> $logfile 2>&1;
-    success ; echo
-
-    if [ $server -eq 0 ]; then
-      service puppetserver restart;
-      ensure_running;
-
-      if [ $restarthttpd -eq 0 ]; then
-        service httpd restart;
-      fi
-    fi
-
-    echo -n 'stunnel,pki,concat...'
-    echo $delim >> $logfile;
-    echo "=== $puppet --tags stunnel,pki,concat ===" >> $logfile
-    yum clean all >> $logfile 2>&1;
-    $puppet --tags stunnel,pki,concat >> $logfile 2>&1;
-    success ; echo
-
-    echo -n "rsync,apache,concat,iptables..."
-    echo $delim >> $logfile;
-    echo "=== $puppet --tags rsync,apache,concat,iptables ===" >> $logfile 2>&1;
-    $puppet --tags rsync,apache,concat,iptables >> $logfile 2>&1;
-    success ; echo
-
-    if [[ `facter selinux` && -n $(facter selinux_current_mode) && "`facter selinux_current_mode`" != "disabled" ]]; then
-      echo -n "running fixfiles"
-      echo $delim >> $logfile;
-      echo "=== fixfiles ===" >> $logfile;
-      fixfiles -f relabel >> $logfile 2>&1;
-    fi
-
-    echo -n "pass 1 of 2..."
-    echo $delim >> $logfile;
-    echo "=== 1 of 2 ===" >> $logfile;
-    $puppet >> $logfile 2>&1;
-    success ; echo
-    if [ $server -eq 0 ]; then
-        wait;
-        service puppetserver restart;
-        ensure_running;
-
-        if [ $restarthttpd -eq 0 ]; then
-          service httpd restart;
-        fi
-    fi
-
-    echo -n "pass 2 of 2..."
-    echo $delim >> $logfile;
-    echo "=== 2 of 2 ===" >> $logfile;
-    yum clean all >> $logfile 2>&1;
-    $puppet >> $logfile 2>&1;
-    success ; echo
-
-    echo -n "cleanup..."
-    chkconfig puppet on;
-    chkconfig --del runpuppet;
-    cat <<HERE > /etc/sysconfig/runpuppet
-#
-# Set LOCKED to anything besides 'true' to be able to run the
-# runpuppet init script again.
-#
-LOCKED='true'
-HERE
-    success ; echo
-
-    reboot;
-    # This is here to keep this script from interfering with upstart
-    # parallelism.
-    sleep 999999999;
     ;;
 esac
 
