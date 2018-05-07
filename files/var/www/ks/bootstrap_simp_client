@@ -11,7 +11,7 @@ class BootstrapSimpClient
   class ConfigurationError < RuntimeError; end
 
   # puppet config
-  DEFAULT_PUPPET_CONF_FILE      = '/etc/puppetlabs/puppet/puppet.conf'
+  DEFAULT_PUPPET_CONF_FILE      = `puppet config print config`.strip
   DEFAULT_PUPPET_CA_PORT        = 8141
   DEFAULT_DIGEST_ALGORITHM      = 'sha256'
   DEFAULT_PUPPET_KEYLENGTH      = 4096
@@ -52,6 +52,10 @@ class BootstrapSimpClient
     }
     @retry_interval = nil
   end
+
+  #####################################################################
+  # Helper methods, nominally used internally
+  #####################################################################
 
   def configure_puppet
     info(title('Setting puppet configuration', 2))
@@ -334,69 +338,6 @@ EOM
     @retry_interval = nil
   end
 
-  def run(args)
-    parse_command_line(args)
-    return 0 if @options[:help_requested] # already have logged help
-
-    set_up_log
-
-    info('Starting Puppet bootstrap')
-    info(DELIM)
-    Timeout::timeout(@options[:max_seconds]) do
-      info(title('Setting up system for Puppet bootstrap', 1))
-      info("    Detailed log written to #{@options[:log_file]}.")
-      debug("#{File.basename(__FILE__)} options: #{@options}")
-      configure_puppet
-      set_system_time
-
-      info(title('Running Puppet bootstrap (This may take some time)', 1))
-      info()
-      info(">>> Be sure to sign this client's Puppet cert request when it comes in! <<<")
-      info()
-
-      run_puppet_agent('--tags pupmod,simp',
-        title('Initial puppet agent run with pupmod,simp tags', 2))
-
-      fix_file_contexts
-
-      # SIMP is not single-run idempotent
-      (1..@options[:num_puppet_runs]).each do |run|
-        run_puppet_agent(nil,
-          title("#{run} of #{@options[:num_puppet_runs]} puppet agent runs", 2))
-      end
-
-      info(DELIM)
-      info('Puppet bootstrap successfully completed.')
-      return 0
-    end
-  rescue SignalException =>e
-    info(DELIM)
-    if e.inspect == 'Interrupt'
-      error("Processing interrupted! Exiting.")
-    else
-      error("Process received signal #{e.message}. Exiting!")
-      error(e.backtrace.first(10))
-    end
-    return 1
-  rescue ConfigurationError => e
-    # don't have a log file yet so just send to stderr
-    $stderr.puts "ERROR: #{e.message}"
-    return 1
-  rescue Timeout::Error
-    info(DELIM)
-    error("ERROR: Failed to complete Puppet bootstrap within #{@options[:max_seconds]} seconds")
-    return 1
-  rescue RuntimeError =>e
-    info(DELIM)
-    error("ERROR: #{e.message}")
-    return 1
-  rescue => e
-    info(DELIM)
-    error("ERROR: #{e.message}")
-    error(e.backtrace.first(10))
-    return 1
-  end
-
   # Run a puppet agent command until it succeeds, where success
   # is defined to be any exit code that is not 1.
   def run_puppet_agent(extra_args=nil, title='puppet agent run')
@@ -489,7 +430,10 @@ EOM
     end
   end
 
-  ############# logging methods #############
+  #####################################################################
+  # Logging methods
+  #####################################################################
+
   def title(msg, level)
     case level
     when 1
@@ -552,6 +496,73 @@ EOM
         $stdout.puts(message) if @options[:debug]
       end
     end
+  end
+
+  #####################################################################
+  # The main method: run()
+  #####################################################################
+
+  def run(args)
+    parse_command_line(args)
+    return 0 if @options[:help_requested] # already have logged help
+
+    set_up_log
+
+    info('Starting Puppet bootstrap')
+    info(DELIM)
+    Timeout::timeout(@options[:max_seconds]) do
+      info(title('Setting up system for Puppet bootstrap', 1))
+      info("    Detailed log written to #{@options[:log_file]}.")
+      debug("#{File.basename(__FILE__)} options: #{@options}")
+      configure_puppet
+      set_system_time
+
+      info(title('Running Puppet bootstrap (This may take some time)', 1))
+      info()
+      info(">>> Be sure to sign this client's Puppet cert request when it comes in! <<<")
+      info()
+
+      run_puppet_agent('--tags pupmod,simp',
+        title('Initial puppet agent run with pupmod,simp tags', 2))
+
+      fix_file_contexts
+
+      # SIMP is not single-run idempotent
+      (1..@options[:num_puppet_runs]).each do |run|
+        run_puppet_agent(nil,
+          title("#{run} of #{@options[:num_puppet_runs]} puppet agent runs", 2))
+      end
+
+      info(DELIM)
+      info('Puppet bootstrap successfully completed.')
+      return 0
+    end
+  rescue SignalException =>e
+    info(DELIM)
+    if e.inspect == 'Interrupt'
+      error("Processing interrupted! Exiting.")
+    else
+      error("Process received signal #{e.message}. Exiting!")
+      error(e.backtrace.first(10))
+    end
+    return 1
+  rescue ConfigurationError => e
+    # don't have a log file yet so just send to stderr
+    $stderr.puts "ERROR: #{e.message}"
+    return 1
+  rescue Timeout::Error
+    info(DELIM)
+    error("ERROR: Failed to complete Puppet bootstrap within #{@options[:max_seconds]} seconds")
+    return 1
+  rescue RuntimeError =>e
+    info(DELIM)
+    error("ERROR: #{e.message}")
+    return 1
+  rescue => e
+    info(DELIM)
+    error("ERROR: #{e.message}")
+    error(e.backtrace.first(10))
+    return 1
   end
 
 end
