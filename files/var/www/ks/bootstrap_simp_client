@@ -158,7 +158,7 @@ EOM
       opts.separator ''
       opts.separator 'OPTIONAL:'
       opts.on(
-        '-a', '--digest_algorithm DIGEST',
+        '-a', '--digest-algorithm DIGEST',
         'The digest algorithm Puppet uses for file',
         'resources and the filebucket (e.g. sha256,',
         "sha384, sha512). Defaults to #{DEFAULT_DIGEST_ALGORITHM}."
@@ -196,7 +196,7 @@ EOM
       end
 
       opts.on(
-        '-r', '--num_puppet-runs NUMRUNS',
+        '-r', '--num-puppet-runs NUMRUNS',
         Integer,
         'Number of puppet agent runs (after the',
         'initial tagged run) to execute, in order to',
@@ -229,7 +229,7 @@ EOM
         'attempt, the second retry would occur',
         '10*1.5 seconds after that, the third',
         'retry would occur 10*1.5*1.5 seconds',
-        "after that, etc. Defaults to #{DEFAULT_INITIAL_RETRY_SECONDS}."
+        "after that, etc. Defaults to #{DEFAULT_RETRY_FACTOR}."
       ) do |retry_factor|
         @options[:retry_factor] = retry_factor
       end
