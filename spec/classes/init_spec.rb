@@ -17,6 +17,14 @@ describe 'simp' do
                "#{os_facts[:os]['hardware']}"
 
       context "on #{os}" do
+
+        def server_facts_hash
+          return {
+            :servername => 'puppet.bar.baz',
+            :serverip   => '1.2.3.4',
+          }
+        end
+
         let(:facts) do
           os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
           os_facts[:puppet_settings] = {
@@ -27,10 +35,7 @@ describe 'simp' do
               'server' => 'puppet.bar.baz'
             }
           }
-          os_facts[:server_facts] = {
-            :servername => 'puppet.bar.baz',
-            :serverip   => '1.2.3.4'
-          }
+          os_facts[:server_facts] = server_facts_hash unless (Gem::Version.new(Puppet.version) >= Gem::Version.new('5.0.0'))
           os_facts
         end
 
@@ -64,6 +69,13 @@ describe 'simp' do
   context 'on supported operating systems' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
+        def server_facts_hash
+          return {
+            :servername => 'puppet.bar.baz',
+            :serverip   => '1.2.3.4',
+          }
+        end
+
         let(:facts) do
           facts[:openssh_version] = '5.8'
           facts[:augeasversion] = '1.2.3'
@@ -76,10 +88,7 @@ describe 'simp' do
               'server' => 'puppet.bar.baz'
             }
           }
-          facts[:server_facts] = {
-            :servername => 'puppet.bar.baz',
-            :serverip   => '1.2.3.4'
-          }
+          facts[:server_facts] = server_facts_hash unless (Gem::Version.new(Puppet.version) >= Gem::Version.new('5.0.0'))
           facts
         end
         let(:hieradata) { "sssd::domains: ['LDAP']" }
