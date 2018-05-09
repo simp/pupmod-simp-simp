@@ -11,7 +11,11 @@ class BootstrapSimpClient
   class ConfigurationError < RuntimeError; end
 
   # puppet config
-  DEFAULT_PUPPET_CONF_FILE      = `puppet config print config`.strip
+  if File.exist?('/opt/puppetlabs/bin/puppet')
+    DEFAULT_PUPPET_CONF_FILE    = `/opt/puppetlabs/bin/puppet config print config`.strip
+  else
+    DEFAULT_PUPPET_CONF_FILE    = '/etc/puppetlabs/puppet/puppet.conf'
+  end
   DEFAULT_PUPPET_CA_PORT        = 8141
   DEFAULT_DIGEST_ALGORITHM      = 'sha256'
   DEFAULT_PUPPET_KEYLENGTH      = 4096
@@ -59,6 +63,11 @@ class BootstrapSimpClient
 
   def configure_puppet
     info(title('Setting puppet configuration', 2))
+    
+    unless File.exist?(@options[:puppet_conf_file])
+      raise ConfigurationError.new("Could not find puppet.conf at '#{@options[:puppet_conf_file]}'. Please check your puppet installation and try again.")
+    end
+      
     puppet_config = <<EOM
 [main]
 vardir            = /opt/puppetlabs/puppet/cache
