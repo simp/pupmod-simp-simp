@@ -30,6 +30,9 @@ describe 'BootstrapSimpClient' do
     ]
     @non_quiet_test_args = @test_args.dup
     @non_quiet_test_args.delete_if { |x| x == '-q' }
+
+    # Need to make sure we have something to find
+    FileUtils.touch(@puppet_conf_file)
   end
 
   after :each do
@@ -66,7 +69,7 @@ EOM
         x == @puppet_conf_file ? "#{@puppet_conf_file}.d/#{@puppet_conf_file}" : x
       end
       bootstrap.parse_command_line(bad_test_args)
-      expect { bootstrap.configure_puppet }.to raise_error(Errno::ENOENT)
+      expect { bootstrap.configure_puppet }.to raise_error(/Could not find puppet\.conf/)
     end
   end
 

@@ -30,7 +30,6 @@ class BootstrapSimpClient
 
   # general program config
   DEFAULT_LOG_FILE              = '/root/puppet.bootstrap.log'
-#  DEFAULT_DRY_RUN               = false
   DEFAULT_QUIET                 = false
   DEFAULT_DEBUG                 = false
 
@@ -63,11 +62,11 @@ class BootstrapSimpClient
 
   def configure_puppet
     info(title('Setting puppet configuration', 2))
-    
+
     unless File.exist?(@options[:puppet_conf_file])
       raise ConfigurationError.new("Could not find puppet.conf at '#{@options[:puppet_conf_file]}'. Please check your puppet installation and try again.")
     end
-      
+
     puppet_config = <<EOM
 [main]
 vardir            = /opt/puppetlabs/puppet/cache
