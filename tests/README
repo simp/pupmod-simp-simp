@@ -1,0 +1,2 @@
+This directory is for links to files that need to have the '.rb' suffix, in
+order to be included via 'require' in a unit test.

@@ -1,0 +1,583 @@
+#!/usr/bin/env ruby
+#
+require 'facter'
+require 'fileutils'
+require 'optparse'
+require 'timeout'
+
+class BootstrapSimpClient
+  attr_reader :options
+
+  class ConfigurationError < RuntimeError; end
+
+  # puppet config
+  if File.exist?('/opt/puppetlabs/bin/puppet')
+    DEFAULT_PUPPET_CONF_FILE    = `/opt/puppetlabs/bin/puppet config print config`.strip
+  else
+    DEFAULT_PUPPET_CONF_FILE    = '/etc/puppetlabs/puppet/puppet.conf'
+  end
+  DEFAULT_PUPPET_CA_PORT        = 8141
+  DEFAULT_DIGEST_ALGORITHM      = 'sha256'
+  DEFAULT_PUPPET_KEYLENGTH      = 4096
+  DEFAULT_PUPPET_WAIT_FOR_CERT  = 10
+  DEFAULT_PRINT_STATS           = true
+
+  # parameters affecting puppet agent runs
+  DEFAULT_NUM_PUPPET_RUNS       = 2
+  DEFAULT_INITIAL_RETRY_SECONDS = 10
+  DEFAULT_RETRY_FACTOR          = 1.5
+  DEFAULT_MAX_SECONDS           = 30*60 # 30 minutes
+
+  # general program config
+  DEFAULT_LOG_FILE              = '/root/puppet.bootstrap.log'
+  DEFAULT_QUIET                 = false
+  DEFAULT_DEBUG                 = false
+
+  DELIM = '='*80
+
+  def initialize
+    @options = {
+      :ntp_servers            => [],
+      :puppet_conf_file       => DEFAULT_PUPPET_CONF_FILE,
+      :puppet_ca_port         => DEFAULT_PUPPET_CA_PORT,
+      :digest_algorithm       => DEFAULT_DIGEST_ALGORITHM,
+      :puppet_keylength       => DEFAULT_PUPPET_KEYLENGTH,
+      :puppet_wait_for_cert   => DEFAULT_PUPPET_WAIT_FOR_CERT,
+      :print_stats            => DEFAULT_PRINT_STATS,
+      :num_puppet_runs        => DEFAULT_NUM_PUPPET_RUNS,
+      :initial_retry_interval => DEFAULT_INITIAL_RETRY_SECONDS,
+      :retry_factor           => DEFAULT_RETRY_FACTOR,
+      :max_seconds            => DEFAULT_MAX_SECONDS,
+      :log_file               => DEFAULT_LOG_FILE,
+      :quiet                  => DEFAULT_QUIET,
+      :debug                  => DEFAULT_DEBUG,
+      :help_requested         => false
+    }
+    @retry_interval = nil
+  end
+
+  #####################################################################
+  # Helper methods, nominally used internally
+  #####################################################################
+
+  def configure_puppet
+    info(title('Setting puppet configuration', 2))
+
+    unless File.exist?(@options[:puppet_conf_file])
+      raise ConfigurationError.new("Could not find puppet.conf at '#{@options[:puppet_conf_file]}'. Please check your puppet installation and try again.")
+    end
+
+    puppet_config = <<EOM
+[main]
+vardir            = /opt/puppetlabs/puppet/cache
+classfile         = $vardir/classes.txt
+localconfig       = $vardir/localconfig
+logdir            = /var/log/puppetlabs/puppet
+report            = false
+rundir            = /var/run/puppetlabs
+server            = #{@options[:puppet_server]}
+ssldir            = /etc/puppetlabs/puppet/ssl
+trusted_node_data = true
+stringify_facts   = false
+digest_algorithm  = #{@options[:digest_algorithm]}
+keylength         = #{@options[:puppet_keylength]}
+ca_server         = #{@options[:puppet_ca]}
+ca_port           = #{@options[:puppet_ca_port]}
+EOM
+    debug("Configuration:\n#{puppet_config}")
+    File.open(@options[:puppet_conf_file], 'w') do |file|
+      file.puts(puppet_config)
+    end
+  end
+
+  # Run a command in a child process and return a Hash containing the
+  # process exit status, stdout, stderr
+  def execute(command)
+    debug("Executing: #{command}")
+    out_pipe_r, out_pipe_w = IO.pipe
+    err_pipe_r, err_pipe_w = IO.pipe
+    pid = spawn(command, :out => out_pipe_w, :err => err_pipe_w)
+    out_pipe_w.close
+    err_pipe_w.close
+
+    Process.wait(pid)
+    exitstatus = $?.nil? ? 1 : $?.exitstatus
+    stdout = out_pipe_r.read
+    out_pipe_r.close
+    stderr = err_pipe_r.read
+    err_pipe_r.close
+
+    return {:exitstatus => exitstatus, :stdout => stdout, :stderr => stderr}
+  end
+
+  # If selinux is enabled, relabel the filesystem.
+  # raises RuntimeError if fixfiles fails
+  def fix_file_contexts
+    if Facter.value(:selinux) && !Facter.value(:selinux_current_mode).nil? &&
+        (Facter.value(:selinux_current_mode) != 'disabled')
+      info(title('Relabeling filesystem for selinux', 2))
+
+      # fixfiles will append to the specified log file
+      result = execute("fixfiles -l #{@options[:log_file]} -f relabel")
+
+      if result[:exitstatus] != 0
+        raise "fixfiles failed with #{result[:exitstatus]} exit status"
+      end
+    end
+  end
+
+  def get_retry_interval
+    if @retry_interval.nil?
+      @retry_interval = @options[:initial_retry_interval]
+    else
+      @retry_interval = (@retry_interval * @options[:retry_factor]).round
+    end
+    @retry_interval
+  end
+
+  def not_nil_or_empty?(x)
+    return false if x.nil?
+    if x.respond_to?(:empty?) and x.empty?
+      return false
+    end
+    return true
+  end
+
+  def parse_command_line(args)
+    opt_parser = OptionParser.new do |opts|
+      opts.banner = "Usage: #{File.basename(__FILE__)} -s PUPPETSRV -c PUPPETCA [options]"
+
+      opts.separator ''
+      opts.separator 'REQUIRED:'
+      opts.on(
+        '-s', '--puppet-server PUPPETSRV',
+        'The FQDN of your Puppet server'
+      ) do |puppet_server|
+        @options[:puppet_server] = puppet_server.strip
+      end
+
+      opts.on(
+        '-c', '--puppet-ca PUPPETCA',
+        'The FQDN of your Puppet CA'
+      ) do |puppet_ca|
+        @options[:puppet_ca] = puppet_ca.strip
+      end
+
+      opts.separator ''
+      opts.separator 'OPTIONAL:'
+      opts.on(
+        '-a', '--digest-algorithm DIGEST',
+        'The digest algorithm Puppet uses for file',
+        'resources and the filebucket (e.g. sha256,',
+        "sha384, sha512). Defaults to #{DEFAULT_DIGEST_ALGORITHM}."
+      ) do |digest_algorithm|
+        @options[:digest_algorithm] = digest_algorithm
+      end
+
+      opts.on(
+        '-k', '--puppet-keylength KEYLENGTH',
+        Integer,
+        'Puppet certificate keylength.',
+        "Defaults to #{DEFAULT_PUPPET_KEYLENGTH}."
+      ) do |puppet_keylength|
+        @options[:puppet_keylength] = puppet_keylength
+      end
+
+      opts.on(
+        '-n', '--ntp-servers NTPSRV1,NTPSRV2',
+        Array,
+        'List of ntp servers that should be used',
+        'during client kickstarts to slew the local',
+        'time correctly, prior to PKI key',
+        'distribution.'
+      ) do |ntp_servers|
+        @options[:ntp_servers] = ntp_servers
+      end
+
+      opts.on(
+        '-p', '--puppet-ca-port PORT',
+        Integer,
+        'The port upon which the Puppet CA is',
+        "listening. Defaults to #{DEFAULT_PUPPET_CA_PORT}."
+      ) do |puppet_ca_port|
+        @options[:puppet_ca_port] = puppet_ca_port
+      end
+
+      opts.on(
+        '-r', '--num-puppet-runs NUMRUNS',
+        Integer,
+        'Number of puppet agent runs (after the',
+        'initial tagged run) to execute, in order to',
+        'converge to a stable system configuration.',
+        "Defaults to #{DEFAULT_NUM_PUPPET_RUNS}."
+      ) do |num_puppet_runs|
+        @options[:num_puppet_runs] = num_puppet_runs
+      end
+
+      opts.on(
+        '-i', '--initial-retry-interval INTERVALSECS',
+        Integer,
+        'Initial retry interval in seconds for',
+        'reattempting a failed puppet agent run.',
+        "Defaults to #{DEFAULT_INITIAL_RETRY_SECONDS}."
+      ) do |initial_retry_interval|
+        @options[:initial_retry_interval] = initial_retry_interval
+      end
+
+      opts.on(
+        '-f', '--retry-factor FACTOR',
+        Float,
+        'The factor to be applied to the retry',
+        'interval for a puppet run. The retry',
+        'interval is multiplied by this factor',
+        'for each retry.  For example, if the',
+        'initial retry interval was 10 and the',
+        'retry factor was 1.5, the first retry',
+        'would occur 10 seconds after the initial',
+        'attempt, the second retry would occur',
+        '10*1.5 seconds after that, the third',
+        'retry would occur 10*1.5*1.5 seconds',
+        "after that, etc. Defaults to #{DEFAULT_RETRY_FACTOR}."
+      ) do |retry_factor|
+        @options[:retry_factor] = retry_factor
+      end
+
+      opts.on(
+        '-m', '--max-seconds MAXSECONDS',
+        Integer,
+        'Maximum number of seconds this bootstrap',
+        'script is allowed to run.  Script will',
+        'abort if it does not complete within',
+        "this allotted time. Defaults to #{DEFAULT_MAX_SECONDS}."
+      ) do |max_seconds|
+        @options[:max_seconds] = max_seconds
+      end
+
+      opts.on(
+        '-S', '--[no-]print-stats',
+        'Print statistics for each puppet run',
+        "during bootstrap. Defaults to #{DEFAULT_PRINT_STATS}."
+      ) do |print_stats|
+        @options[:print_stats] = print_stats
+      end
+
+      opts.on(
+        '-w', '--puppet-wait-for-cert WAITSECONDS',
+        Integer,
+        'The wait interval in seconds for checking',
+        'into the puppet master for a signed',
+        'certificate. This checking will only',
+        'continue until a signed certificate is',
+        'presented.  If set to 0, each puppet agent',
+        'run will fail if a signed certificate is',
+        "not presented. Defaults to #{DEFAULT_PUPPET_WAIT_FOR_CERT}."
+      ) do |puppet_wait_for_cert|
+        @options[:puppet_wait_for_cert] = puppet_wait_for_cert
+      end
+
+      opts.on(
+        '-C', '--puppet-config-file CONFIGFILE',
+        'Puppet configuration file. Defaults to',
+        DEFAULT_PUPPET_CONF_FILE
+      ) do |puppet_conf_file|
+        @options[:puppet_conf_file] = puppet_conf_file
+      end
+
+      opts.on(
+        '-l', '--log-file LOGFILE',
+        'Log file. Defaults to',
+        DEFAULT_LOG_FILE
+      ) do |log_file|
+        @options[:log_file] = log_file
+      end
+
+      opts.on(
+        '-q', '--quiet',
+        'Quiet console output. When enabled,',
+        'console messages indicating progress are',
+        "suppressed. Defaults to #{DEFAULT_QUIET}."
+      ) do
+        @options[:quiet] = true
+      end
+
+      opts.on(
+        '-d', '--debug',
+        'Log processing details to the console.',
+        'These details are always written to the',
+        "log file. Defaults to #{DEFAULT_DEBUG}."
+      ) do
+        @options[:debug] = true
+      end
+
+      opts.on( '-h', '--help', 'Print this help message') do
+        @options[:help_requested] = true
+        puts opts
+      end
+    end
+
+    begin
+      opt_parser.parse!(args)
+      return if @options[:help_requested]
+
+      validate_options
+
+      cmd = [
+        '/opt/puppetlabs/bin/puppet',
+        'agent',
+        '--onetime',
+        '--no-daemonize',
+        '--no-show_diff',
+        '--no-splay',
+        '--verbose',
+        '--logdest', @options[:log_file],
+        '--waitforcert', @options[:puppet_wait_for_cert]
+      ]
+
+      cmd += [ '--evaltrace', '--summarize' ] if @options[:print_stats]
+      @options[:puppet_cmd] = cmd.join(' ')
+      reset_retry_interval
+
+    rescue OptionParser::ParseError => e
+      raise ConfigurationError.new("#{e.message}\n#{opt_parser.banner}")
+    end
+  end
+
+  def reset_retry_interval
+    @retry_interval = nil
+  end
+
+  # Run a puppet agent command until it succeeds, where success
+  # is defined to be any exit code that is not 1.
+  def run_puppet_agent(extra_args=nil, title='puppet agent run')
+    reset_retry_interval
+    info(title)
+    cmd = "#{@options[:puppet_cmd]} #{extra_args}"
+    result = { :exitstatus => 1 }
+    while result[:exitstatus] == 1
+      result = execute(cmd)
+      if result[:exitstatus] == 1
+        error(result[:stderr])
+        retry_interval = get_retry_interval
+        debug(">>>>>> Command failed.  Retrying in #{retry_interval} seconds")
+        sleep(retry_interval)
+      end
+    end
+  end
+
+  def set_system_time
+    return if @options[:ntp_servers].nil? or @options[:ntp_servers].empty?
+    info(title("Setting the system time against #{@options[:ntp_servers].join(' ')}", 2))
+    # this can fail if ntpd is up and running, so only log any failures
+    result = execute("/usr/sbin/ntpdate -b #{@options[:ntp_servers].join(' ')}")
+    warn(result[:stderr]) if result[:exitstatus] != 0
+  end
+
+  def set_up_log
+    log_file = @options[:log_file]
+    if File.exist?(log_file)
+      timestamp = File.stat(log_file).mtime.strftime("%Y-%m-%dT%H%M%S")
+      log_backup = "#{log_file}.#{timestamp}"
+      debug("Backing up #{log_file} to #{log_backup}")
+      FileUtils.mv(log_file, log_backup)
+    end
+
+    # Note: If the ownership of this file is root:root, puppet agent
+    # will complain in an 'err'-level message, but not fail, when it
+    # writes to the file. However, since there is no puppet user
+    # on the client, this can't be fixed...
+    FileUtils.touch(log_file)
+  end
+
+  # raises ConfigurationError upon validation failure
+  def validate_options
+    unless not_nil_or_empty?(@options[:puppet_server])
+      raise ConfigurationError.new('No Puppet server specified')
+    end
+
+    unless not_nil_or_empty?(@options[:puppet_ca])
+      raise ConfigurationError.new('No Puppet CA specified')
+    end
+
+    if (@options[:puppet_ca_port] < 1) or (@options[:puppet_ca_port] > 65535)
+      msg = "Invalid Puppet CA port '#{@options[:puppet_ca_port]}': must be in [0,65535]"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:num_puppet_runs] > 0
+      msg = "Invalid number of puppet agent runs '#{@options[:num_puppet_runs]}': must be > 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:puppet_keylength] > 0
+      msg = "Invalid Puppet keylength '#{@options[:puppet_keylength]}': must be > 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:puppet_wait_for_cert] >= 0
+      msg = "Invalid Puppet wait for cert '#{@options[:puppet_wait_for_cert]}': must be >= 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:initial_retry_interval] > 0
+      msg = "Invalid initial retry interval '#{@options[:initial_retry_interval]}': must be > 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:retry_factor] > 0
+      msg = "Invalid retry factor '#{@options[:retry_factor]}': must be > 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    unless @options[:max_seconds] > 0
+      msg = "Invalid max seconds '#{@options[:max_seconds]}': must be > 0"
+      raise ConfigurationError.new(msg)
+    end
+
+    if @options[:quiet] and @options[:debug]
+      raise ConfigurationError.new('--quiet and --debug cannot be used together')
+    end
+  end
+
+  #####################################################################
+  # Logging methods
+  #####################################################################
+
+  def title(msg, level)
+    case level
+    when 1
+       "*** #{msg} ***"
+    when 2
+       "------ #{msg} ------"
+    when 3
+       "......... #{msg} ........."
+    else
+       msg
+    end
+  end
+
+  def error(msg)
+   log(:err, msg, true)
+  end
+
+  def warn(msg)
+   log(:warning, msg, true)
+  end
+
+  def info(msg='')
+   log(:info, msg, false)
+  end
+
+  def debug(msg='')
+   log(:debug, msg, false)
+  end
+
+  def log(level, msg, suppress_empty_msgs)
+    if msg.is_a?(Array)
+      message = msg.join("\n")
+    else
+      message = msg
+    end
+
+    if suppress_empty_msgs and (message.nil? or message.strip.empty?)
+      return
+    end
+
+    # This executable, 'puppet agent', and, optionally, fixfiles are
+    # writing to the log file, although never at the same time.  So,
+    # we can't keep the log file open. Instead, we append to it with
+    # each log message.
+    prefix = "#{Time.now} #{File.basename(__FILE__)} (#{level.to_s}):"
+    File.open(@options[:log_file], 'a') do |file|
+      file.puts "#{prefix} #{message}"
+    end
+
+    unless @options[:quiet]
+      case level
+      when :err
+        # insert newline to help error message stand out, especially when
+        # the error has left the cursor at the end of the line
+        $stderr.puts
+        $stderr.puts(message)
+      when :warning, :info
+        $stdout.puts(message)
+      when :debug
+        $stdout.puts(message) if @options[:debug]
+      end
+    end
+  end
+
+  #####################################################################
+  # The main method: run()
+  #####################################################################
+
+  def run(args)
+    parse_command_line(args)
+    return 0 if @options[:help_requested] # already have logged help
+
+    set_up_log
+
+    info('Starting Puppet bootstrap')
+    info(DELIM)
+    Timeout::timeout(@options[:max_seconds]) do
+      info(title('Setting up system for Puppet bootstrap', 1))
+      info("    Detailed log written to #{@options[:log_file]}.")
+      debug("#{File.basename(__FILE__)} options: #{@options}")
+      configure_puppet
+      set_system_time
+
+      info(title('Running Puppet bootstrap (This may take some time)', 1))
+      info()
+      info(">>> Be sure to sign this client's Puppet cert request when it comes in! <<<")
+      info()
+
+      run_puppet_agent('--tags pupmod,simp',
+        title('Initial puppet agent run with pupmod,simp tags', 2))
+
+      fix_file_contexts
+
+      # SIMP is not single-run idempotent
+      (1..@options[:num_puppet_runs]).each do |run|
+        run_puppet_agent(nil,
+          title("#{run} of #{@options[:num_puppet_runs]} puppet agent runs", 2))
+      end
+
+      info(DELIM)
+      info('Puppet bootstrap successfully completed.')
+      return 0
+    end
+  rescue SignalException =>e
+    info(DELIM)
+    if e.inspect == 'Interrupt'
+      error("Processing interrupted! Exiting.")
+    else
+      error("Process received signal #{e.message}. Exiting!")
+      error(e.backtrace.first(10))
+    end
+    return 1
+  rescue ConfigurationError => e
+    # don't have a log file yet so just send to stderr
+    $stderr.puts "ERROR: #{e.message}"
+    return 1
+  rescue Timeout::Error
+    info(DELIM)
+    error("ERROR: Failed to complete Puppet bootstrap within #{@options[:max_seconds]} seconds")
+    return 1
+  rescue RuntimeError =>e
+    info(DELIM)
+    error("ERROR: #{e.message}")
+    return 1
+  rescue => e
+    info(DELIM)
+    error("ERROR: #{e.message}")
+    error(e.backtrace.first(10))
+    return 1
+  end
+
+end
+
+########################################################################
+if __FILE__ == $0
+  bootstrap = BootstrapSimpClient.new
+  exit bootstrap.run(ARGV)
+end
+
