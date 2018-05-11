@@ -200,7 +200,8 @@ EOM
 
       expected = {
         :bootstrap_service      => BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE,
-        :service_env_file       => BootstrapSimpClient::DEFAULT_SERVICE_ENV_FILE,
+        :service_env_file       => File.join(BootstrapSimpClient::DEFAULT_SERVICE_CONFIG_DIR,
+                                   BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE),
         :set_static_hostname    => false,
         :ntp_servers            => [],
         :puppet_conf_file       => BootstrapSimpClient::DEFAULT_PUPPET_CONF_FILE,
@@ -241,7 +242,8 @@ EOM
         '--no-print-stats',
         '-w', '20',
         '-C', @puppet_conf_file,
-        '-e', 'myrunpuppet',
+        '-N', 'my_bootstrap',
+        '-e', '/opt/sysconfig/my_bootstrap',
         '-l', 'mylog.txt',
         '-d'
       ]
@@ -252,8 +254,8 @@ EOM
             ' mylog.txt --waitforcert 20'
 
       expected = {
-        :bootstrap_service      => BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE,
-        :service_env_file       => 'myrunpuppet',
+        :bootstrap_service      => 'my_bootstrap',
+        :service_env_file       => '/opt/sysconfig/my_bootstrap',
         :set_static_hostname    => true,
         :ntp_servers            => [ 'ntp1.test.local', 'ntp2.test.local'],
         :puppet_conf_file       => @puppet_conf_file,
@@ -326,7 +328,7 @@ EOM
       Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
       bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns(success_result)
 
-      bootstrap.stubs(:execute).with('puppet resource service runpuppet enable=false').returns(success_result)
+      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
       bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
 
       expect( bootstrap.run(@test_args + [ '-n', 'ntpserver1,ntpserver2' ]) ).to eq 0
@@ -358,7 +360,7 @@ EOM
       bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
       Facter.stubs(:value).with(:selinux).returns(false)
 
-      bootstrap.stubs(:execute).with('puppet resource service runpuppet enable=false').returns(success_result)
+      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
       bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
 
       expect( bootstrap.run(@test_args + [ '-r', '4' ]) ).to eq 0

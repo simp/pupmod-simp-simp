@@ -1,5 +1,6 @@
 <%
-  _options = "--puppet-server #{@_puppet_server}"
+  _options = "--bootstrap-service #{@service_root_name}"
+  _options << " --puppet-server #{@_puppet_server}"
   _options << " --puppet-ca #{@_puppet_ca}"
   _options << " --digest-algorithm #{@puppet_digest_algorithm}"
   _options << " --puppet-keylength #{@_puppet_keylength}"
@@ -8,13 +9,13 @@
   _options << " --retry-factor #{@retry_factor}"
   _options << " --max-seconds #{@max_seconds}"
 
-  if @runpuppet_wait_for_cert
-    _options << " --puppet-wait-for-cert #{@runpuppet_wait_for_cert}"
+  if @puppet_wait_for_cert
+    _options << " --puppet-wait-for-cert #{@puppet_wait_for_cert}"
   else
     _options << ' --puppet-wait-for-cert 0'
   end
 
-  if @runpuppet_print_stats
+  if @puppet_print_stats
     _options << ' --print-stats'
   else
     _options << ' --no-print-stats'
@@ -49,7 +50,7 @@ TimeoutSec=<%= @max_seconds %>
 Environment=PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin
 Environment=HOME=/
 Environment='OPTIONS=<%= _options %>'
-EnvironmentFile=-/etc/sysconfig/runpuppet
+EnvironmentFile=-/etc/sysconfig/<%= @service_root_name %>
 
 # Reboot completes the bootstrap, but can't be put in a ExecStartPost
 # or it will reboot while bootstrap is running

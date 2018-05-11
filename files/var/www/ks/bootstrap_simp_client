@@ -10,9 +10,8 @@ class BootstrapSimpClient
 
   class ConfigurationError < RuntimeError; end
 
-  DEFAULT_BOOTSTRAP_SERVICE     = 'runpuppet'
+  DEFAULT_BOOTSTRAP_SERVICE     = 'simp_client_bootstrap'
   DEFAULT_SERVICE_CONFIG_DIR    = '/etc/sysconfig'
-  DEFAULT_SERVICE_ENV_FILE      = File.join(DEFAULT_SERVICE_CONFIG_DIR, DEFAULT_BOOTSTRAP_SERVICE)
   DEFAULT_SET_STATIC_HOSTNAME   = false
 
   # puppet config
@@ -43,7 +42,6 @@ class BootstrapSimpClient
   def initialize
     @options = {
       :bootstrap_service      => DEFAULT_BOOTSTRAP_SERVICE,
-      :service_env_file       => DEFAULT_SERVICE_ENV_FILE,
       :set_static_hostname    => DEFAULT_SET_STATIC_HOSTNAME,
       :ntp_servers            => [],
       :puppet_conf_file       => DEFAULT_PUPPET_CONF_FILE,
@@ -344,9 +342,17 @@ EOM
       end
 
       opts.on(
+        '-N', '--bootstrap-service SERVICENAME',
+        'Bootstrap service name.',
+        "Defaults to #{DEFAULT_BOOTSTRAP_SERVICE}"
+      ) do |bootstrap_service|
+        @options[:bootstrap_service] = bootstrap_service
+      end
+
+       opts.on(
         '-e', '--bootstrap-env-file FILE',
-        'Bootstrap service environment file.',
-        "Defaults to #{DEFAULT_SERVICE_ENV_FILE}"
+        'Bootstrap service environment file. Defaults to',
+        "#{DEFAULT_SERVICE_CONFIG_DIR}/<bootstrap service name>"
       ) do |service_env_file|
         @options[:service_env_file] = service_env_file
       end
@@ -388,6 +394,11 @@ EOM
       return if @options[:help_requested]
 
       validate_options
+
+      if @options[:service_env_file].nil?
+        @options[:service_env_file] = File.join(DEFAULT_SERVICE_CONFIG_DIR,
+          @options[:bootstrap_service])
+      end
 
       cmd = [
         '/opt/puppetlabs/bin/puppet',

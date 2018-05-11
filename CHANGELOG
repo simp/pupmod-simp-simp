@@ -1,31 +1,27 @@
 * Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
 - Created standalone SIMP client bootstrap script, bootstrap_simp_client.
-- Modified runpuppet to support systemd and sysv service files
-  - Created systemd service file that allows the appropriate systemd timeout
-    mechanisms to be applied.  Previously, the sysv script was being
-    killed by systemd, when it ran longer than the default timeout for a
-    service start.  Now, the timeout for runpuppet can be set appropriately
-    for a site's needs.
-  - Used bootstrap_simp_client to provide the bulk of the bootstrap
-    processing in both versions of runpuppet.  The benefits of this
-    script include:
-    - More effective puppet agent processing.  The bootstrapping
-      takes fewer puppet agent runs.
-    - Finer grained control of the bootstrap algorithm.
-    - Exponential backoff of requests to the Puppet server, to minimize
-      Puppet server overload.
-    - Error handling
-      - Bootstrap operation errors are now detected and logged.
-      - Failed puppet agent runs are now retried, instead of blindly
-        continuing on.
-    - Timestamped log messages in the bootstrap log file.  This includes
-      messages from bootstrap_simp_client, puppet agent, and fixfiles.
-  - Added installation of bootstrap_simp_client in the same location
-    as runpuppet.
-  - Added parameters for most of the (numerous) bootstrap_simp_client
-    configuration parameters.
-  - Added the option to force a client reboot on client bootstrap failure.
-  - Removed OBE logic for bootstrapping a SIMP server
+- Created simp::server::kickstart::runpuppet replacement,
+  simp::server::kickstart::simp_client_bootstrap, that manages service
+  files for kickstarting a SIMP client, using bootstrap_simp_client
+  and either a sysv (simp_client_bootstrap) or a systemd
+  (simp_client_bootstrap.service) service script. This replacement
+  provides the following improvements:
+  - Exponential backoff of requests to the Puppet server, to minimize
+    Puppet server overload.
+  - Configurable bootstrap timeout.
+  - An option to force a client reboot on client bootstrap failure.
+  - More effective puppet agent processing.  The bootstrapping
+    takes fewer puppet agent runs.
+  - Finer grained control of the bootstrap algorithm.
+  - Error handling
+    - Bootstrap operation errors are now detected and logged.
+    - Failed puppet agent runs are now retried, instead of blindly
+      continuing on.
+  - Timestamped log messages in the bootstrap log file.  This includes
+    messages from bootstrap_simp_client, puppet agent, and fixfiles.
+    service start
+- simp::server::kickstart::runpuppet is deprecated and will be removed
+  in a future release
 
 * Fri Apr 27 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.5.0-0
 - Add simp::netconsole class to manage the netconsole kernel feature
@@ -43,7 +39,7 @@
   module.  See the selinux module to see how to use puppet to enable/disable
   selinux.  This may change the defaults for selinux in the `simp_lite`
   scenario.
-  
+
 * Tue Apr 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Narrow the focus of the internal hieradata to ensure correct runs on
   unsupported OSs
