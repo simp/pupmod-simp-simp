@@ -1,0 +1,29 @@
+[Unit]
+Description=System configuration bootstrap via puppet agent
+Wants=network-online.target
+After=network-online.target time-sync.target
+Before=puppet.service
+
+[Service]
+Type=simple
+RemainAfterExit=no
+TimeoutSec=1800
+
+# Make sure puppet is in the PATH, as is used by bootstrap_simp_client
+Environment=PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin
+Environment=HOME=/
+Environment='OPTIONS=--bootstrap-service simp_client_bootstrap --puppet-server puppet.bar.baz --puppet-ca puppet.bar.baz --digest-algorithm sha256 --puppet-keylength 4096 --num-puppet-runs 2 --initial-retry-interval 10 --retry-factor 1.5 --max-seconds 1800 --puppet-wait-for-cert 10 --print-stats --ntp-servers 1.2.3.4,5.6.7.8 --set-static-hostname'
+EnvironmentFile=-/etc/sysconfig/simp_client_bootstrap
+
+# Reboot completes the bootstrap, but can't be put in a ExecStartPost
+# or it will reboot while bootstrap is running
+# NOTE:  bootstrap_simp_client exit code of 2 means bootstrap has
+#        already successfully completed (including the reboot).
+ExecStart=/bin/sh -c '/opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client $OPTIONS ; result=$? ; if [ $result -eq 0 ] ; then /usr/bin/systemctl isolate reboot.target ; elif [ $result -eq 2 ] ; then exit 0 ; else exit 1 ; fi'
+
+ExecStop=/bin/true
+
+FailureAction=reboot
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# simp_client_bootstrap:  Runs puppet to bootstrap the system configuration.
+#
+# chkconfig: 35 99 99
+#
+# description:  A script to bootstrap the initial system configuration using Puppet.
+#
+
+unset LC_MESSAGES
+[ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+[ -z "${CONSOLETYPE:-}" ] && CONSOLETYPE="`/sbin/consoletype`"
+export LANG
+
+# Source function library
+. /etc/init.d/functions
+
+[ -f /etc/sysconfig/simp_client_bootstrap ] && . /etc/sysconfig/simp_client_bootstrap && export LOCKED
+
+[ -z "$HOME" ] && export HOME=/
+
+case "$1" in
+  status)
+    if [ "$LOCKED" == 'true' ]; then
+      echo "The server has already been successfully bootstrapped for Puppet."
+      echo "To re-run bootstrap, unlock the service per the instructions in"
+      echo "/etc/sysconfig/simp_client_bootstrap"
+      RETVAL=0
+    else
+      echo "The server has **not** been bootstrapped for Puppet."
+      echo "Start the simp_client_bootstrap service in order to bootstrap the server."
+      RETVAL=1
+    fi
+    ;;
+
+  start)
+    # Make sure puppet is in the PATH, as is used by bootstrap_simp_client
+    export PATH="$PATH:/opt/puppetlabs/bin"
+
+    servername=`hostname -f`
+    echo "simp_client_bootstrap: Bootstrapping $servername"
+
+    # use Puppet's Ruby, so that we can use the Facter library
+    # and a more recent version of Ruby
+    /opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client \
+      --bootstrap-service simp_client_bootstrap \
+      --puppet-server puppet.bar.baz \
+      --puppet-ca puppet.bar.baz \
+      --digest-algorithm sha256 \
+      --puppet-keylength 4096 \
+      --num-puppet-runs 2 \
+      --initial-retry-interval 10 \
+      --retry-factor 1.5 \
+      --max-seconds 1800 \
+      --puppet-wait-for-cert 10 \
+      --print-stats
+
+    result=$?
+    if [ $result -eq 0 ]; then
+      echo -n "Bootstrapping $servername"
+      success ; echo
+
+      echo "Rebooting to complete the bootstrap."
+      reboot;
+      # This is here to keep this script from interfering with upstart
+      # parallelism.
+      sleep 999999999;
+    elif [ $result -eq 2 ]; then
+      echo -n "$servername bootstrapping has already completed."
+      success ; echo
+      RETVAL=0
+    else
+      echo -n "Bootstrapping $servername"
+      failure ; echo
+      RETVAL=1
+    fi
+    ;;
+esac
+
+exit $RETVAL

@@ -27,11 +27,10 @@ describe 'simp::server::kickstart' do
         it { is_expected.to create_class('tftpboot') }
         it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.4\/24/) }
         it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
-        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet=.*--waitforcert 10.*--evaltrace --summarize/) }
-        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/puppet_server=\"puppet.bar.baz\"/) }
-        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ca_server = puppet.bar.baz/) }
-        it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ca_port = 8141/) }
-        it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/ntpdate/) }
+        it { is_expected.to create_file('/var/www/ks/runpuppet') }
+        it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap') }
+        it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap.service') }
+        it { is_expected.to create_file('/var/www/ks/bootstrap_simp_client') }
 
         context 'alternate_data_dir' do
           let(:params) {{ :data_dir => '/srv/www' }}

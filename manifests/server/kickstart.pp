@@ -24,25 +24,37 @@
 # @param manage_runpuppet
 #   If true, generate the runpuppet script in $data_dir/ks.
 #
+# @param manage_simp_client_bootstrap
+#   If true, generate the simp_client_bootstrap sysv init
+#   script and simp_clinet_bootstrap.service systemd
+#   service unit file in $data_dir/ks.
+#
 # @param sslverifyclient
 #   Verify the certificate of the kickstart client.  One of optional, require,
 #   none, optional_no_ca.
 #
-# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::server::kickstart (
-  Simplib::Netlist       $trusted_nets            = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
-  Stdlib::Absolutepath   $data_dir                = '/var/www',
-  Boolean                $manage_dhcp             = true,
-  Boolean                $manage_tftpboot         = true,
-  Boolean                $manage_runpuppet        = true,
-  Enum['require','none'] $sslverifyclient         = 'none'
+  Simplib::Netlist       $trusted_nets                 = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
+  Stdlib::Absolutepath   $data_dir                     = '/var/www',
+  Boolean                $manage_dhcp                  = true,
+  Boolean                $manage_tftpboot              = true,
+  Boolean                $manage_runpuppet             = true,
+  Boolean                $manage_simp_client_bootstrap = true,
+  Enum['require','none'] $sslverifyclient              = 'none'
 ) {
   if $manage_dhcp      { include '::dhcp::dhcpd' }
   if $manage_tftpboot  { include '::tftpboot' }
   if $manage_runpuppet {
     class { 'simp::server::kickstart::runpuppet':
       location => "${data_dir}/ks/runpuppet"
+    }
+  }
+
+  if $manage_simp_client_bootstrap {
+    class { 'simp::server::kickstart::simp_client_bootstrap':
+      directory => "${data_dir}/ks"
     }
   }
 

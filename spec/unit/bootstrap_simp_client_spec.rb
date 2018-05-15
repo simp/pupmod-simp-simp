@@ -21,11 +21,13 @@ describe 'BootstrapSimpClient' do
     @tmp_dir = Dir.mktmpdir( File.basename( __FILE__ ) )
     @puppet_conf_file = File.join(@tmp_dir, 'puppet.conf')
     @log_file = File.join(@tmp_dir, 'bootstrap.log')
+    @env_file = File.join(@tmp_dir, 'env')
     @test_args = [
       '-s', 'puppet.test.local',
       '-c', 'puppetca.test.local',
       '-C', @puppet_conf_file,
       '-l', @log_file,
+      '-e', @env_file,
       '-q'
     ]
     @non_quiet_test_args = @test_args.dup
@@ -33,10 +35,31 @@ describe 'BootstrapSimpClient' do
 
     # Need to make sure we have something to find
     FileUtils.touch(@puppet_conf_file)
+    ENV['LOCKED'] = nil
   end
 
   after :each do
     FileUtils.remove_entry_secure(@tmp_dir) if @tmp_dir
+  end
+
+  describe '#bootstrap_locked?' do
+
+    it 'returns false when LOCKED environment variable does not exist' do
+      bootstrap.parse_command_line(@test_args)
+      expect( bootstrap.bootstrap_locked? ).to be false
+    end
+
+    it "returns false when LOCKED environment variable is 'false'" do
+      bootstrap.parse_command_line(@test_args)
+      ENV['LOCKED'] = 'false'
+      expect( bootstrap.bootstrap_locked? ).to be false
+    end
+
+    it "returns true when LOCKED environment variable is 'true'" do
+      bootstrap.parse_command_line(@test_args)
+      ENV['LOCKED'] = 'true'
+      expect( bootstrap.bootstrap_locked? ).to be true
+    end
   end
 
   describe '#configure_puppet' do
@@ -62,14 +85,6 @@ ca_port           = 8141
 EOM
       expect( File.exist?(@puppet_conf_file) ).to be true
       expect( File.read(@puppet_conf_file) ).to eq expected
-    end
-
-    it 'fails if it cannot create puppet config file' do
-      bad_test_args = @test_args.map do |x|
-        x == @puppet_conf_file ? "#{@puppet_conf_file}.d/#{@puppet_conf_file}" : x
-      end
-      bootstrap.parse_command_line(bad_test_args)
-      expect { bootstrap.configure_puppet }.to raise_error(/Could not find puppet\.conf/)
     end
   end
 
@@ -174,6 +189,7 @@ EOM
   # will also test validate_options here
   describe '#parse_command_line' do
     it 'uses defaults when only required options are specified' do
+      File.stubs(:exist?).returns(true)
       test_args = [ '-s', 'puppet.test.local', '-c', 'puppetca.test.local']
       bootstrap.parse_command_line(test_args)
 
@@ -183,6 +199,10 @@ EOM
             ' --summarize'
 
       expected = {
+        :bootstrap_service      => BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE,
+        :service_env_file       => File.join(BootstrapSimpClient::DEFAULT_SERVICE_CONFIG_DIR,
+                                   BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE),
+        :set_static_hostname    => false,
         :ntp_servers            => [],
         :puppet_conf_file       => BootstrapSimpClient::DEFAULT_PUPPET_CONF_FILE,
         :digest_algorithm       => BootstrapSimpClient::DEFAULT_DIGEST_ALGORITHM,
@@ -206,11 +226,13 @@ EOM
     end
 
     it 'uses configured options when non-conflicting options are specified' do
+      File.stubs(:exist?).returns(true)
       test_args = [
         '-s', 'puppet.test.local',
         '-c', 'puppetca.test.local',
         '-a', 'sha512',
         '-k', '2048',
+        '-H',
         '-n', 'ntp1.test.local,ntp2.test.local',
         '-p', '8240',
         '-r', '3',
@@ -219,7 +241,9 @@ EOM
         '-m', '3600',
         '--no-print-stats',
         '-w', '20',
-        '-C', 'mypuppet.conf',
+        '-C', @puppet_conf_file,
+        '-N', 'my_bootstrap',
+        '-e', '/opt/sysconfig/my_bootstrap',
         '-l', 'mylog.txt',
         '-d'
       ]
@@ -230,8 +254,11 @@ EOM
             ' mylog.txt --waitforcert 20'
 
       expected = {
+        :bootstrap_service      => 'my_bootstrap',
+        :service_env_file       => '/opt/sysconfig/my_bootstrap',
+        :set_static_hostname    => true,
         :ntp_servers            => [ 'ntp1.test.local', 'ntp2.test.local'],
-        :puppet_conf_file       => 'mypuppet.conf',
+        :puppet_conf_file       => @puppet_conf_file,
         :digest_algorithm       => 'sha512',
         :puppet_keylength       => 2048,
         :puppet_ca_port         => 8240,
@@ -301,6 +328,9 @@ EOM
       Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
       bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns(success_result)
 
+      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
+      bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
+
       expect( bootstrap.run(@test_args + [ '-n', 'ntpserver1,ntpserver2' ]) ).to eq 0
 
       # detailed actions are unit tested in other examples, so here only
@@ -329,6 +359,9 @@ EOM
             ' --waitforcert 10 --evaltrace --summarize '
       bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
       Facter.stubs(:value).with(:selinux).returns(false)
+
+      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
+      bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
 
       expect( bootstrap.run(@test_args + [ '-r', '4' ]) ).to eq 0
 
@@ -433,6 +466,46 @@ EOM
     end
   end
 
+  describe '#set_static_hostname' do
+    it 'when enabled and valid hostname is set it runs hostnamectl' do
+      File.stubs(:exist?).returns(true)
+      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+        :exitstatus => 0,
+        :stdout => 'client1.test.local',
+        :stderr => ''})
+
+      bootstrap.stubs(:execute).with('/usr/bin/hostnamectl set-hostname --static client1.test.local').returns({
+        :exitstatus => 1,
+        :stdout => '',
+        :stderr => 'Could not set property: Connection timed out'})
+
+      bootstrap.parse_command_line(@test_args + [ '-H' ])
+      bootstrap.set_static_hostname
+    end
+
+    it "fails if 'hostname -f' returns an empty string" do
+      File.stubs(:exist?).returns(true)
+      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+        :exitstatus => 1,
+        :stdout => '',
+        :stderr => ''})
+
+      bootstrap.parse_command_line(@test_args + [ '-H' ])
+      expect { bootstrap.set_static_hostname }.to raise_error(/Cannot set static hostname: '' is not a valid hostname/)
+    end
+
+    it "fails if 'hostname -f' returns 'localhost.localdomain'" do
+      File.stubs(:exist?).returns(true)
+      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+        :exitstatus => 0,
+        :stdout => 'localhost.localdomain',
+        :stderr => ''})
+
+      bootstrap.parse_command_line(@test_args + [ '-H' ])
+      expect { bootstrap.set_static_hostname }.to raise_error(/Cannot set static hostname: 'localhost.localdomain' is not a valid hostname/)
+    end
+  end
+
   describe '#set_system_time' do
     it 'does nothing if no ntp servers are configured' do
       bootstrap.stubs(:execute).returns({
@@ -481,52 +554,70 @@ EOM
 
   # test using parse_command_line
   describe '#validate_options' do
+    it 'fails if the puppet config file does not already exist' do
+      bad_test_args = @test_args.map do |x|
+        x == @puppet_conf_file ? "#{@puppet_conf_file}.d/#{@puppet_conf_file}" : x
+      end
+      expect { bootstrap.parse_command_line(bad_test_args) }.to raise_error(
+        BootstrapSimpClient::ConfigurationError, /Could not find puppet\.conf/)
+    end
+
     it 'fails when puppet server is not specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line([]) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /No Puppet server specified/)
     end
 
     it 'fails when puppet CA is not specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(['-s', 'puppet.test.local']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /No Puppet CA specified/)
     end
 
     it 'fails when invalid puppet CA port is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-p', '65536']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet CA port '65536': /)
     end
 
     it 'fails when invalid number of puppet agent runs is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-r', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid number of puppet agent runs '0': /)
     end
 
     it 'fails when invalid puppet keylength is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-k', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet keylength '0': /)
     end
 
     it 'fails when invalid puppet wait for cert is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-w', '-10']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet wait for cert '-10': /)
     end
 
     it 'fails when invalid initial retry interval is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-i', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid initial retry interval '0': /)
     end
 
     it 'fails when invalid retry factor is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-f', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid retry factor '0.0': /)
     end
 
     it 'fails when invalid max seconds is specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['-m', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid max seconds '0': /)
     end
 
     it 'fails when both --quiet and --debug are specified' do
+      File.stubs(:exist?).returns(true)
       expect { bootstrap.parse_command_line(@test_args + ['--quiet', '--debug']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /--quiet and --debug cannot be used together/)
     end
