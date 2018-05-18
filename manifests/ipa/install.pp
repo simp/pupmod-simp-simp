@@ -97,7 +97,8 @@ class simp::ipa::install (
     if $_run_install {
       exec { 'ipa-client-install install':
         command   => "/sbin/ipa-client-install --unattended ${expanded_options}",
-        logoutput => true
+        logoutput => true,
+        require   => Package['ipa-client']
       }
     }
   }
@@ -105,6 +106,7 @@ class simp::ipa::install (
     exec { 'ipa-client-install uninstall':
       command   => '/sbin/ipa-client-install --uninstall --unattended',
       logoutput => true,
+      require   => Package['ipa-client'],
       notify    => Reboot_notify['ipa-client-unstall uninstall']
     }
     # you might not have to do this
