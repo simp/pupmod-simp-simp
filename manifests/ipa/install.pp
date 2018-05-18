@@ -57,7 +57,7 @@ class simp::ipa::install (
   case $enroll {
     'auto': {
       if $facts['ipa'] {
-        $_run_install = ($facts['ipa']['domain'] != $domain) or ($facts['ipa']['realm'] != $realm)
+        $_run_install = ($facts['ipa']['domain'] != $domain)
       }
       else {
         $_run_install = true
