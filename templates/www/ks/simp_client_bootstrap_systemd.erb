@@ -1,0 +1,70 @@
+<%
+  _options = "--bootstrap-service #{@service_root_name}"
+  _options << " --puppet-server #{@_puppet_server}"
+  _options << " --puppet-ca #{@_puppet_ca}"
+  _options << " --digest-algorithm #{@puppet_digest_algorithm}"
+  _options << " --puppet-keylength #{@_puppet_keylength}"
+  _options << " --num-puppet-runs #{@num_puppet_runs}"
+  _options << " --initial-retry-interval #{@initial_retry_interval}"
+  _options << " --retry-factor #{@retry_factor}"
+  _options << " --max-seconds #{@max_seconds}"
+
+  if @puppet_wait_for_cert
+    _options << " --puppet-wait-for-cert #{@puppet_wait_for_cert}"
+  else
+    _options << ' --puppet-wait-for-cert 0'
+  end
+
+  if @puppet_print_stats
+    _options << ' --print-stats'
+  else
+    _options << ' --no-print-stats'
+  end
+
+  unless @ntp_servers.empty?
+    _ntp_servers = @ntp_servers.dup
+    if _ntp_servers.kind_of?(Hash)
+      _ntp_servers = _ntp_servers.keys.sort
+    end
+    _options << " --ntp-servers #{_ntp_servers.join(',')}"
+  end
+
+  if @set_static_hostname
+    _options << ' --set-static-hostname'
+  else
+    _options << ' --no-set-static-hostname'
+  end
+-%>
+[Unit]
+Description=System configuration bootstrap via puppet agent
+Wants=network-online.target
+After=network-online.target time-sync.target
+Before=puppet.service
+
+[Service]
+Type=simple
+RemainAfterExit=no
+TimeoutSec=<%= @max_seconds %>
+
+# Make sure puppet is in the PATH, as is used by bootstrap_simp_client
+Environment=PATH=/usr/local/sbin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin
+Environment=HOME=/
+Environment='OPTIONS=<%= _options %>'
+EnvironmentFile=-/etc/sysconfig/<%= @service_root_name %>
+
+# Reboot completes the bootstrap, but can't be put in a ExecStartPost
+# or it will reboot while bootstrap is running
+# NOTE:  bootstrap_simp_client exit code of 2 means bootstrap has
+#        already successfully completed (including the reboot).
+ExecStart=/bin/sh -c '/opt/puppetlabs/puppet/bin/ruby /usr/local/sbin/bootstrap_simp_client $OPTIONS ; result=$? ; if [ $result -eq 0 ] ; then /usr/bin/systemctl isolate reboot.target ; elif [ $result -eq 2 ] ; then exit 0 ; else exit 1 ; fi'
+
+ExecStop=/bin/true
+
+<%
+   if @reboot_on_failure
+-%>
+FailureAction=reboot
+
+<% end -%>
+[Install]
+WantedBy=multi-user.target
