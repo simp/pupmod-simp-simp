@@ -20,7 +20,10 @@ describe 'simp::ipa::install' do
           it { is_expected.to create_class('simp::ipa::install') }
           it { is_expected.to create_package('ipa-client') }
           it { is_expected.to create_exec('ipa-client-install install') \
-            .with_command('/sbin/ipa-client-install --unattended --noac') }
+            .with_command('ipa-client-install --unattended --noac') }
+          if os_facts[:os][:release][:major].to_i < 7
+            it { is_expected.to create_package('ipa-admintools') }
+          end
         end
 
         context 'with all explicit parameters' do
@@ -37,7 +40,7 @@ describe 'simp::ipa::install' do
           }}
           it { is_expected.to compile.with_all_deps }
           expected = [
-            '/sbin/ipa-client-install --unattended',
+            'ipa-client-install --unattended',
             '--force',
             '--password=password',
             '--server=ipa.domain.example.local',
@@ -100,7 +103,7 @@ describe 'simp::ipa::install' do
           it { is_expected.to create_class('simp::ipa::install') }
           it { is_expected.to create_package('ipa-client') }
           expected = [
-            '/sbin/ipa-client-install --unattended',
+            'ipa-client-install --unattended',
             '--mkhomedir',
             '--keytab=/etc/krb5.keytab',
             '--noac',
@@ -121,7 +124,7 @@ describe 'simp::ipa::install' do
         it { is_expected.to create_package('ipa-client') }
         it { is_expected.not_to create_exec('ipa-client-install install') }
         it { is_expected.to create_exec('ipa-client-install uninstall') \
-          .with_command('/sbin/ipa-client-install --uninstall --unattended') }
+          .with_command('ipa-client-install --uninstall --unattended') }
         it { is_expected.to create_reboot_notify('ipa-client-unstall uninstall') }
       end
     end

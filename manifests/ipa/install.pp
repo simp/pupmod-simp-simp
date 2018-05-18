@@ -50,8 +50,10 @@ class simp::ipa::install (
   Boolean                     $no_ac      = true,
   Boolean                     $force      = false,
   Hash                        $install_options = {},
-  String $package_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  String $ipa_client_ensure  = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  String $admin_tools_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ){
+  contain 'simp::ipa::packages'
 
   # Determine whether or not to run the join command
   case $enroll {
@@ -96,26 +98,24 @@ class simp::ipa::install (
   if $ensure == 'present' {
     if $_run_install {
       exec { 'ipa-client-install install':
-        command   => "/sbin/ipa-client-install --unattended ${expanded_options}",
+        command   => "ipa-client-install --unattended ${expanded_options}",
         logoutput => true,
-        require   => Package['ipa-client']
+        path      => ['/sbin','/usr/sbin'],
+        require   => Class['simp::ipa::packages']
       }
     }
   }
   else {
     exec { 'ipa-client-install uninstall':
-      command   => '/sbin/ipa-client-install --uninstall --unattended',
+      command   => 'ipa-client-install --uninstall --unattended',
       logoutput => true,
-      require   => Package['ipa-client'],
+      path      => ['/sbin','/usr/sbin'],
+      require   => Class['simp::ipa::packages'],
       notify    => Reboot_notify['ipa-client-unstall uninstall']
     }
     # you might not have to do this
     reboot_notify { 'ipa-client-unstall uninstall':
       reason => 'simp::ipa::install: removing host from IPA domain'
     }
-  }
-
-  package { 'ipa-client':
-    ensure => $package_ensure,
   }
 }
