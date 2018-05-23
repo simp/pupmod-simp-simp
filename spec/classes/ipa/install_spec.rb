@@ -30,6 +30,7 @@ describe 'simp::ipa::install' do
           let(:params) {{
             ensure: 'present',
             password: 'password',
+            principal: 'admin@DOMAIN.EXAMPLE.LOCAL',
             server: 'ipa.domain.example.local',
             ip_address: '192.168.1.5',
             domain: 'domain.example.local',
@@ -43,6 +44,7 @@ describe 'simp::ipa::install' do
             'ipa-client-install --unattended',
             '--force',
             '--password=password',
+            '--principal=admin@DOMAIN.EXAMPLE.LOCAL',
             '--server=ipa.domain.example.local',
             '--ip-address=192.168.1.5',
             '--domain=domain.example.local',
@@ -63,10 +65,10 @@ describe 'simp::ipa::install' do
             it { is_expected.not_to create_exec('ipa-client-install install') }
             it { is_expected.not_to create_exec('ipa-client-install uninstall') }
           end
-          context '$enroll => force' do
+          context '$enroll => always' do
             let(:params) {{
               ensure: 'present',
-              enroll: 'force',
+              enroll: 'always',
               domain: 'domain.example.local',
               realm: 'DOMAIN.EXAMPLE.LOCAL',
             }}
@@ -74,10 +76,10 @@ describe 'simp::ipa::install' do
             it { is_expected.to create_exec('ipa-client-install install') }
             it { is_expected.not_to create_exec('ipa-client-install uninstall') }
           end
-          context '$enroll => no' do
+          context '$enroll => never' do
             let(:params) {{
               ensure: 'present',
-              enroll: 'no',
+              enroll: 'never',
               domain: 'domain.example.local',
               realm: 'DOMAIN.EXAMPLE.LOCAL',
             }}
@@ -124,7 +126,7 @@ describe 'simp::ipa::install' do
         it { is_expected.to create_package('ipa-client') }
         it { is_expected.not_to create_exec('ipa-client-install install') }
         it { is_expected.to create_exec('ipa-client-install uninstall') \
-          .with_command('ipa-client-install --uninstall --unattended') }
+          .with_command('ipa-client-install --unattended --uninstall') }
         it { is_expected.to create_reboot_notify('ipa-client-unstall uninstall') }
       end
     end
