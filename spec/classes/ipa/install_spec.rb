@@ -79,8 +79,8 @@ describe 'simp::ipa::install' do
           }
         )}
 
-        it { is_expected.to create_notify('different IPA domain present') }
         it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to create_exec('ipa-client-install install') }
 
         context 'with $enroll => always' do
           let(:params) { super().merge(

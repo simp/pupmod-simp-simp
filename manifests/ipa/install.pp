@@ -80,11 +80,6 @@ class simp::ipa::install (
       if $facts['ipa']['domain'] != $domain {
         fail("simp::ipa::install: This host is already a member of domain ${facts['ipa']['domain']}, cannot join domain ${domain}")
       }
-      else {
-        notify { 'different IPA domain present':
-          message => "simp::ipa::install: This host is already a member of domain ${facts['ipa']['domain']}, cannot join domain ${domain}"
-        }
-      }
     }
   }
 
