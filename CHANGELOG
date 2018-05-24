@@ -1,3 +1,7 @@
+* Thu May 24 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.5.0-0
+- Added simp::ipa::install to manage host's membership of IPA domains using
+  the ipa-client-install command
+
 * Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
 - Created standalone SIMP client bootstrap script, bootstrap_simp_client.
 - Created simp::server::kickstart::runpuppet replacement,

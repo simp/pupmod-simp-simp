@@ -1,4 +1,11 @@
-# Run ipa-client-install on puppet clients
+# @summary Run ipa-client-install on puppet clients
+#
+# @note Not all parameters here are required. If the DNS is properly configured
+#   on the host, nothing needs to be set besides $password. Be sure to read the
+#   man page in ipa-client-install or the help for guidance
+#
+# @note This class supports adding a host to a domain and removing it, but not
+#   changing it
 #
 # @param ensure
 #   'present' to add host to an IPA domain, 'absent' to remove
@@ -7,7 +14,7 @@
 #   Try to determine when to run the ``ipa-client-install`` command. There are
 #   a few different joining options:
 #
-#     * ``auto`` - Use the ``ipa`` fact to determine if the command needs to be run
+#     * ``auto`` - If the ``ipa`` fact is not present, join the domain
 #     * ``always`` - Run the command at every Puppet run
 #     * ``never`` - Never runthe command
 #
@@ -65,28 +72,28 @@ class simp::ipa::install (
   Hash                          $install_options = {},
   String $ipa_client_ensure  = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   String $admin_tools_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-){
+) {
   contain 'simp::ipa::packages'
+
+  if $domain and $enroll == 'auto' {
+    if $facts['ipa'] {
+      if $facts['ipa']['domain'] != $domain {
+        fail("simp::ipa::install: This host is already a member of domain ${facts['ipa']['domain']}, cannot join domain ${domain}")
+      }
+      else {
+        notify { 'different IPA domain present':
+          message => "simp::ipa::install: This host is already a member of domain ${facts['ipa']['domain']}, cannot join domain ${domain}"
+        }
+      }
+    }
+  }
 
   # Determine whether or not to run the join command
   case $enroll {
-    'auto': {
-      if $facts['ipa'] {
-        $_run_install = ($facts['ipa']['domain'] != $domain)
-      }
-      else {
-        $_run_install = true
-      }
-    }
-    'always': {
-      $_run_install = true
-    }
-    'never': {
-      $_run_install = false
-    }
-    default: {
-      fail('simp::ipa::install: $enroll must be either `auto`, `force`, or `no`.')
-    }
+    'always': { $_run_install = true  }
+    'never':  { $_run_install = false }
+    'auto':   { $_run_install = $facts['ipa'] ? { Undef => true, default => false } }
+    default:  { fail('simp::ipa::install: $enroll must be either `auto`, `always`, or `never`.') }
   }
 
 
@@ -129,7 +136,7 @@ class simp::ipa::install (
     }
     # you might not have to do this
     reboot_notify { 'ipa-client-unstall uninstall':
-      reason => 'simp::ipa::install: removing host from IPA domain'
+      reason => 'simp::ipa::install: removed host from IPA domain'
     }
   }
 }
