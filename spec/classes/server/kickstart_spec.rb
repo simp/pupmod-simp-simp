@@ -2,21 +2,26 @@
 require 'spec_helper'
 
 describe 'simp::server::kickstart' do
+  def server_facts_hash
+    return {
+      'serverversion' => Puppet.version,
+      'servername'    => 'puppet.bar.baz',
+      'serverip'      => '1.2.3.4'
+    }
+  end
+
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          facts[:puppet_settings] = {
+          os_facts[:puppet_settings] = {
             :agent => {
-              :server    => 'my.happy.server',
-              :ca_server => 'my.happy.server'
+              :server    => server_facts_hash['servername'],
+              :ca_server => server_facts_hash['servername']
             }
           }
-          # This is to replace the Puppet server provided $::servername variable.
-          # In the future, this should move to using the $server_facts hash.
-          facts[:servername] = 'my.happy.server'
-          facts[:server_facts] = { :servername => 'my.happy.server' }
-          facts
+
+          os_facts
         end
 
         let(:params) {{ :data_dir => '/var/www' }}
@@ -34,6 +39,7 @@ describe 'simp::server::kickstart' do
 
         context 'alternate_data_dir' do
           let(:params) {{ :data_dir => '/srv/www' }}
+
           it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
         end
       end

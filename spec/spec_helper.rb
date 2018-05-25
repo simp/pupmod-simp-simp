@@ -9,27 +9,22 @@ require 'pathname'
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 module_name = File.basename(File.expand_path(File.join(__FILE__,'../..')))
 
-# Add fixture lib dirs to LOAD_PATH. Work-around for PUP-3336
-if Puppet.version < "4.0.0"
-  Dir["#{fixture_path}/modules/*/lib"].entries.each do |lib_dir|
-    $LOAD_PATH << lib_dir
-  end
+if ENV['PUPPET_DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
 end
 
-
-if !ENV.key?( 'TRUSTED_NODE_DATA' )
-  warn '== WARNING: TRUSTED_NODE_DATA is unset, using TRUSTED_NODE_DATA=yes'
-  ENV['TRUSTED_NODE_DATA']='yes'
-end
 
 default_hiera_config =<<-EOM
 ---
 :backends:
+  - "rspec"
   - "yaml"
 :yaml:
   :datadir: "stub"
 :hierarchy:
   - "%{custom_hiera}"
+  - "%{spec_title}"
   - "%{module_name}"
   - "default"
 EOM
@@ -45,7 +40,7 @@ EOM
 # end
 #
 def set_environment(environment = :production)
-  RSpec.configure { |c| c.default_facts['environment'] = environment.to_s }
+    RSpec.configure { |c| c.default_facts['environment'] = environment.to_s }
 end
 
 # This can be used from inside your spec tests to load custom hieradata within
@@ -67,7 +62,7 @@ end
 #
 # Note: Any colons (:) are replaced with underscores (_) in the class name.
 def set_hieradata(hieradata)
-  RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
+    RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
 end
 
 if not File.directory?(File.join(fixture_path,'hieradata')) then
@@ -84,9 +79,11 @@ RSpec.configure do |c|
     :production => {
       #:fqdn           => 'production.rspec.test.localdomain',
       :path           => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
-      :concat_basedir => '/tmp',
+      :concat_basedir => '/tmp'
     }
   }
+
+  c.trusted_server_facts = true
 
   c.mock_framework = :rspec
   c.mock_with :mocha
@@ -151,9 +148,4 @@ Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|
   rescue
     fail "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
   end
-end
-
-if ENV['PUPPET_DEBUG']
-  Puppet::Util::Log.level = :debug
-  Puppet::Util::Log.newdestination(:console)
 end
