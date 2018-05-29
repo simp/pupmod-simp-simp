@@ -86,7 +86,7 @@ describe 'simp' do
         end
         let(:hieradata) { "sssd::domains: ['LDAP']" }
 
-        context 'with default paramters' do
+        context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
           it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
