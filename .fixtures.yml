@@ -80,7 +80,9 @@ fixtures:
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
     sssd: https://github.com/simp/pupmod-simp-sssd
-    systemd: https://github.com/simp/puppet-systemd
+    systemd:
+      repo: https://github.com/simp/puppet-systemd
+      branch: simp-master
     sudo: https://github.com/simp/pupmod-simp-sudo
     sudosh: https://github.com/simp/pupmod-simp-sudosh
     svckill: https://github.com/simp/pupmod-simp-svckill

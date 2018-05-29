@@ -1,13 +1,19 @@
 require 'spec_helper'
 
 describe 'simp::server::kickstart::runpuppet' do
+  def server_facts_hash
+    return {
+      'serverversion' => Puppet.version,
+      'servername'    => 'puppet.bar.baz',
+      'serverip'      => '1.2.3.4'
+    }
+  end
+
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          facts[:servername] = 'my.happy.server'
-          facts[:server_facts] = { :servername => 'my.happy.server' }
-          facts
+          os_facts
         end
 
         context 'default parameters (using fixtures/hieradata/default.yaml)' do
@@ -25,7 +31,7 @@ describe 'simp::server::kickstart::runpuppet' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/keylength         = 2048/) }
+          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/keylength\s+=\s+2048/) }
         end
 
         context 'specify_ntp_servers_array' do
@@ -34,7 +40,7 @@ describe 'simp::server::kickstart::runpuppet' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate -b 1.2.3.4 5.6.7.8/) }
+          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate\s+-b\s+1\.2\.3\.4\s+5\.6\.7\.8/) }
         end
 
         context 'specify_ntp_servers_hash' do
@@ -46,7 +52,7 @@ describe 'simp::server::kickstart::runpuppet' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate -b 1.2.3.4 5.6.7.8/) }
+          it { is_expected.to create_file('/var/www/ks/runpuppet').with_content(/ntpdate\s+-b\s+1\.2\.3\.4\s+5\.6\.7\.8/) }
         end
 
         context 'no_print_stats' do
@@ -66,8 +72,6 @@ describe 'simp::server::kickstart::runpuppet' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to create_file('/var/www/ks/runpuppet').with_content(/--waitforcert/) }
         end
-
-
       end
     end
   end
