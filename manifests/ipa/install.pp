@@ -41,7 +41,7 @@
 #   using ``simp/pam``
 #
 # @param force
-#   Force joining, ignoring errors
+#   Force the settings, ignoring errors
 #
 # @param install_options
 #   Hash of other options for the ``ipa-client-install`` command
