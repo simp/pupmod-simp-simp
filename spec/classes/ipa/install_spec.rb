@@ -26,26 +26,24 @@ describe 'simp::ipa::install' do
           let(:params) {{
             ensure: 'present',
             password: 'password',
-            principal: 'admin@DOMAIN.EXAMPLE.LOCAL',
-            server: 'ipa.ipa.example.local',
-            ip_address: '192.168.1.5',
+            principal: 'admin',
+            server: ['ipa.ipa.example.local','ipa2.ipa.example.local'],
+            ntp_server: ['192.168.1.1','192.168.1.2'],
             domain: 'ipa.example.local',
             realm: 'IPA.EXAMPLE.LOCAL',
             hostname: 'client.ipa.example.local',
             no_ac: false,
-            force: true,
           }}
           it { is_expected.to compile.with_all_deps }
           expected = [
             'ipa-client-install --unattended',
-            '--force',
             '--password=password',
-            '--principal=admin@DOMAIN.EXAMPLE.LOCAL',
+            '--principal=admin',
             '--server=ipa.ipa.example.local',
-            '--ip-address=192.168.1.5',
+            '--server=ipa2.ipa.example.local',
             '--domain=ipa.example.local',
             '--realm=IPA.EXAMPLE.LOCAL',
-            '--hostname=client.ipa.example.local'
+            '--hostname=client.ipa.example.local',
           ].join(' ')
           it { is_expected.to create_exec('ipa-client-install install').with_command(expected) }
         end
@@ -79,7 +77,7 @@ describe 'simp::ipa::install' do
         let(:params) {{
           ensure: 'present',
           password: 'password',
-          server: 'ipa.domain.example.local',
+          server: ['ipa.domain.example.local'],
           domain: 'domain.example.local',
           realm: 'DOMAIN.EXAMPLE.LOCAL',
           install_options: {

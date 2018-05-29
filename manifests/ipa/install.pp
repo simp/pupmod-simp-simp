@@ -7,6 +7,8 @@
 # @note This class supports adding a host to a domain and removing it, but not
 #   changing it
 #
+# @see ipa-client-install(1)
+#
 # @param ensure
 #   'present' to add host to an IPA domain, 'absent' to remove
 #
@@ -40,11 +42,11 @@
 #   Run without authconfig, defaults to true, appropriate on systems
 #   using ``simp/pam``
 #
-# @param force
-#   Force the settings, ignoring errors
-#
 # @param install_options
-#   Hash of other options for the ``ipa-client-install`` command
+#   Hash of other options for the ``ipa-client-install`` command. Keys here
+#   that are also class parameters will be overwritten with the value that
+#   comes from the parameter. If the option doesn't need a value, just set the
+#   value of the setting to Undef or nil in Hiera.
 #
 #   @see ``ipa-client-install --help``
 #
@@ -56,17 +58,17 @@
 #   package. Only applicable on EL6.
 #
 class simp::ipa::install (
-  Enum['present','absent']      $ensure,
-  Optional[Simplib::IP]         $ip_address = undef,
-  Optional[Simplib::Hostname]   $hostname   = undef,
-  Optional[String]              $password   = undef,
-  Optional[String]              $principal  = undef,
-  Optional[Simplib::Hostname]   $server     = undef,
-  Optional[Simplib::Hostname]   $domain     = undef,
-  Optional[String]              $realm      = undef,
-  Boolean                       $no_ac      = true,
-  Boolean                       $force      = false,
-  Hash                          $install_options = {},
+  Enum['present','absent']           $ensure,
+  Optional[Simplib::Hostname]        $hostname   = undef,
+  Optional[String]                   $password   = undef,
+  Optional[String]                   $principal  = undef,
+  Optional[Simplib::Hostname]        $domain     = undef,
+  Optional[String]                   $realm      = undef,
+  Optional[Array[Simplib::Hostname]] $server     = undef,
+  Optional[Array[Simplib::Host]]     $ntp_server = undef,
+  Optional[Array[Simplib::IP]]       $ip_address = undef,
+  Boolean                            $no_ac      = true,
+  Hash                               $install_options = {},
   String $ipa_client_ensure  = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   String $admin_tools_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
@@ -91,19 +93,21 @@ class simp::ipa::install (
     'domain'     => $domain,
     'realm'      => $realm,
     'hostname'   => $hostname,
-  }.filter |$opt| { $opt[1] !~ Undef }
+  }.delete_undef_values
 
   $_no_ac = $no_ac ? { true => { 'noac'  => undef }, default => {} }
-  $_force = $force ? { true => { 'force' => undef }, default => {} }
 
   # convert the hash into a string
-  $expanded_options = simplib::hash_to_opts($install_options + $_no_ac + $_force + $opts)
+  $expanded_options = simplib::hash_to_opts(
+    ($install_options + $_no_ac + $opts),
+    { 'array_style' => 'repeat' }
+  )
 
 
   if $ensure == 'present' {
     unless $facts['ipa'] {
       exec { 'ipa-client-install install':
-        command   => "ipa-client-install --unattended ${expanded_options}",
+        command   => strip("ipa-client-install --unattended ${expanded_options}"),
         logoutput => true,
         path      => ['/sbin','/usr/sbin'],
         require   => Class['simp::ipa::packages']
