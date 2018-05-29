@@ -1,5 +1,7 @@
 # Class to contain packages required for simp::ipa::install
 #
+# @api private
+#
 class simp::ipa::packages {
   assert_private()
 
