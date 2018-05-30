@@ -100,7 +100,7 @@ class simp::ipa::install (
   # convert the hash into a string
   $expanded_options = simplib::hash_to_opts(
     ($install_options + $_no_ac + $opts),
-    { 'array_style' => 'repeat' }
+    { 'repeat' => 'repeat' }
   )
 
 
