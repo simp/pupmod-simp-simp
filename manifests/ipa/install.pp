@@ -43,10 +43,11 @@
 #   using ``simp/pam``
 #
 # @param install_options
-#   Hash of other options for the ``ipa-client-install`` command. Keys here
-#   that are also class parameters will be overwritten with the value that
-#   comes from the parameter. If the option doesn't need a value, just set the
-#   value of the setting to Undef or nil in Hiera.
+#   Hash of other options for the ``ipa-client-install`` command.  Any keys
+#   here that is also a class parameters will be overwritten with the value
+#   of the corresponding class parameter. If the option doesn't need a value,
+#   (e.g., the `debug` option), just set the value of the setting to Undef or
+#   nil in Hiera.
 #
 #   @see ``ipa-client-install --help``
 #
