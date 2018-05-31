@@ -2,9 +2,17 @@ require 'spec_helper'
 require 'facterdb'
 
 describe 'simp' do
+  def server_facts_hash
+    return {
+      'serverversion' => Puppet.version,
+      'servername'    => 'puppet.bar.baz',
+      'serverip'      => '1.2.3.4'
+    }
+  end
 
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
+
     facterdb_queries = [
       {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04'},
     ].map{|q| q.merge({:hardwaremodel => 'x86_64', :facterversion => '3.5.1'})}
@@ -27,10 +35,7 @@ describe 'simp' do
               'server' => 'puppet.bar.baz'
             }
           }
-          os_facts[:server_facts] = {
-            :servername => 'puppet.bar.baz',
-            :serverip   => '1.2.3.4'
-          }
+
           os_facts
         end
 
@@ -60,15 +65,15 @@ describe 'simp' do
     end
   end
 
-
   context 'on supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       context "on #{os}" do
+
         let(:facts) do
-          facts[:openssh_version] = '5.8'
-          facts[:augeasversion] = '1.2.3'
-          facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-          facts[:puppet_settings] = {
+          os_facts[:openssh_version] = '5.8'
+          os_facts[:augeasversion] = '1.2.3'
+          os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+          os_facts[:puppet_settings] = {
             'main' => {
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
             },
@@ -76,19 +81,18 @@ describe 'simp' do
               'server' => 'puppet.bar.baz'
             }
           }
-          facts[:server_facts] = {
-            :servername => 'puppet.bar.baz',
-            :serverip   => '1.2.3.4'
-          }
-          facts
+
+          os_facts
         end
         let(:hieradata) { "sssd::domains: ['LDAP']" }
 
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
-        it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
-        it { is_expected.to create_stunnel__connection('rsync') }
-        it { is_expected.to_not create_filebucket('simp') }
+        context 'with default parameters' do
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
+          it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
+          it { is_expected.to create_stunnel__connection('rsync') }
+          it { is_expected.to_not create_filebucket('simp') }
+        end
 
         context 'with an invalid scenario' do
           let :params do
@@ -100,8 +104,6 @@ describe 'simp' do
           end
         end
 
-        # For use with the next test
-        it { is_expected.to create_class('aide') }
         context 'when removing classes using a knockout in simp::classes' do
           {
             "when classes are just added" => {
@@ -117,6 +119,7 @@ describe 'simp' do
                 hash[:params]
               end
               it { is_expected.to compile.with_all_deps }
+
               hash[:contains].each do |klass|
                 it { is_expected.to create_class(klass) }
               end
@@ -128,6 +131,7 @@ describe 'simp' do
           context 'with local path' do
             let(:params) {{ :enable_filebucketing => true }}
 
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
             it { is_expected.to create_filebucket('simp').with_path("#{facts[:puppet_vardir]}/simp/filebucket") }
           end
@@ -138,6 +142,7 @@ describe 'simp' do
               :filebucket_server    => 'my.puppet.server'
             }}
 
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
             it { is_expected.to create_filebucket('simp').with_server(params[:filebucket_server]) }
           end
@@ -146,25 +151,47 @@ describe 'simp' do
         context 'rsync_stunnel logic' do
           context 'with rsync_stunnel => false' do
             let(:params) {{ :rsync_stunnel => false }}
+
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.not_to create_stunnel__connection('rsync') }
-          end
-          context 'with rsync_stunnel => Simplib::Host' do
-            let(:params) {{ :rsync_stunnel => 'other.test.host' }}
-            it { is_expected.to create_stunnel__connection('rsync').with({
-              :connect => ['other.test.host:8730'],
-              :accept  => '127.0.0.1:873'
-            }) }
           end
           context 'with rsync_stunnel => true' do
             let(:params) {{ :rsync_stunnel => true }}
+
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['1.2.3.4:8730'],
               :accept  => '127.0.0.1:873'
             }) }
           end
-          context 'without $server_facts' do
-            let(:facts) {facts.merge({ :server_facts => nil })}
+          context 'with rsync_stunnel => Simplib::Host' do
+            let(:params) {{ :rsync_stunnel => 'other.test.host' }}
+
+            it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_stunnel__connection('rsync').with({
+              :connect => ['other.test.host:8730'],
+              :accept  => '127.0.0.1:873'
+            }) }
+          end
+
+          context 'without $server_facts' do
+            # We can't return nil or rspec-puppet dies
+            def server_facts_hash
+              return {}
+            end
+
+            let(:facts) { os_facts }
+
+            # We have to switch something away from the defaults so that the
+            # catalog will recompile
+            let(:params) {{
+              :rsync_stunnel => true,
+              :stock_sssd => false
+            }}
+
+            it { is_expected.to compile.with_all_deps }
+            it {
+              is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['puppet.bar.baz:8730'],
               :accept  => '127.0.0.1:873'
             }) }

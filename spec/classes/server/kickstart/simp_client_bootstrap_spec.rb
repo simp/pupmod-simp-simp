@@ -1,13 +1,18 @@
 require 'spec_helper'
 
 describe 'simp::server::kickstart::simp_client_bootstrap' do
+  def server_facts_hash
+    return {
+      'serverversion' => Puppet.version,
+      'servername'    => 'puppet.bar.baz',
+      'serverip'      => '1.2.3.4'
+    }
+  end
+
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) do
-        facts = os_facts.dup
-        facts[:servername] = 'my.happy.server'
-        facts[:server_facts] = { :servername => 'my.happy.server' }
-        facts
+        os_facts
       end
 
       context 'default parameters (using fixtures/hieradata/default.yaml)' do

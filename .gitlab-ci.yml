@@ -144,7 +144,6 @@ pup5_3-validation:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *validation_checks
-  allow_failure: true
 
 pup5_3-unit:
   stage: unit
@@ -156,7 +155,6 @@ pup5_3-unit:
   <<: *cache_bundler
   <<: *setup_bundler_env
   <<: *spec_tests
-  allow_failure: true
 
 
 # Keep an eye on the latest puppet 5
@@ -184,8 +182,6 @@ pup5_latest-unit:
   <<: *setup_bundler_env
   <<: *spec_tests
   allow_failure: true
-
-
 
 # Acceptance tests
 # ==============================================================================
@@ -289,4 +285,3 @@ remote_access_scenario:
     PUPPET_VERSION: '4.10'
   script:
     - bundle exec rake beaker:suites[scenario_remote_access]
-  allow_failure: true
