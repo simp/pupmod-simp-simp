@@ -192,7 +192,7 @@ base_apps:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[base_apps]
 
@@ -203,7 +203,7 @@ default:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[default]
 
@@ -214,7 +214,7 @@ default-fips:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
     BEAKER_fips: 'yes'
   script:
     - bundle exec rake beaker:suites[default]
@@ -226,7 +226,7 @@ default-puppet5:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 5.3.0'
   script:
     - bundle exec rake beaker:suites[default,puppet5]
   allow_failure: true
@@ -238,7 +238,7 @@ no_simp_server:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[no_simp_server]
 
@@ -249,7 +249,7 @@ netconsole:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[netconsole]
 
@@ -260,7 +260,7 @@ one_shot_scenario:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[scenario_one_shot]
 
@@ -271,7 +271,7 @@ poss_scenario:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[scenario_poss]
 
@@ -282,6 +282,6 @@ remote_access_scenario:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '4.10'
+    PUPPET_VERSION: '~> 4.10.0'
   script:
     - bundle exec rake beaker:suites[scenario_remote_access]
