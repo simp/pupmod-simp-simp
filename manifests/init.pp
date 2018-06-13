@@ -131,6 +131,20 @@
 #
 #   * Has no effect if ``$sssd`` is ``false``
 #
+# @param classification_warning
+#   Create a warning notification if 'include simp' will not auto-classify a node.
+#
+# @param vardir_owner
+#   Owner for ${facts['puppet_vardir']}/simp directory
+#   Defaults to 'root' if a platform doesn't specify
+# @param vardir_group
+#   Group for ${facts['puppet_vardir]}/simp diorectory
+#   Defaults to 'root' if a platform doesn't specify
+# @param vardir_mode
+#   Mode for ${facts['puppet_vardir])/simp directory
+#   Defaults to '0750' if a platform doesn't specify
+#
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp (
@@ -158,7 +172,11 @@ class simp (
   Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value'   => false }),
   Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value'  => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
-  Boolean                         $stock_sssd                 = true
+  Boolean                         $stock_sssd                 = true,
+  Boolean                         $classification_warning     = true,
+  String                          $vardir_owner,
+  String                          $vardir_group,
+  String                          $vardir_mode,
 ) {
 
   # NOTE: this class intentionally does not make use of the function:
@@ -167,11 +185,23 @@ class simp (
   #
   # in order to permit-non-SIMP OSes to use the `poss` scenario
 
+  if $scenario_map.has_key($scenario) {
+    $_classlist = simp::knockout(union($scenario_map[$scenario], $classes))
+    if ($_classlist.empty) {
+      if ($classification_warning) {
+        notify { "simp: auto-classification will be disabled due to an empty class list, check '${scenario}' or your specified compliance profile": }
+      }
+    } else {
+      include $_classlist
+    }
+  } else {
+    fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
+  }
   file { "${facts['puppet_vardir']}/simp":
     ensure => 'directory',
-    mode   => '0750',
-    owner  => 'root',
-    group  => 'root'
+    mode   => $vardir_mode,
+    owner  => $vardir_owner,
+    group  => $vardir_group,
   }
 
   if $enable_filebucketing {

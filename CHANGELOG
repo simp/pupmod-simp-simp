@@ -1,3 +1,6 @@
+* Fri Jun 08 2018 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.5.0-0
+- Add Windows support
+
 * Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
 - Created standalone SIMP client bootstrap script, bootstrap_simp_client.
 - Created simp::server::kickstart::runpuppet replacement,

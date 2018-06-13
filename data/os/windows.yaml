@@ -1,0 +1,3 @@
+simp::vardir_owner: 'Administrators'
+simp::vardir_group: 'Administrators'
+simp::vardir_mode: '0770'

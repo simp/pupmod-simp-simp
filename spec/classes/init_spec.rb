@@ -40,7 +40,7 @@ describe 'simp' do
         end
 
         context 'with default parameters (scenario defaults to simp)' do
-          it { is_expected.to compile.and_raise_error(/Invalid scenario 'simp' for the given scenario map/) }
+          it { is_expected.to compile }
         end
 
         context 'with scenario "poss"' do
@@ -48,7 +48,7 @@ describe 'simp' do
             { :scenario => 'poss' }
           end
 
-          it { is_expected.to compile.and_raise_error(/Invalid scenario 'poss' for the given scenario map/) }
+          it { is_expected.to compile }
         end
 
         context 'with scenario "none"' do
