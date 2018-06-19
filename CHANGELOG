@@ -1,5 +1,7 @@
 * Fri Jun 08 2018 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.5.0-0
 - Add Windows support
+- Change /root perms to RPM default of 0550
+- Change /etc/rc.d/rc.local perms to RPM default of 0755
 
 * Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
 - Created standalone SIMP client bootstrap script, bootstrap_simp_client.
