@@ -106,7 +106,6 @@ class simp::admin (
 
   sudo::user_specification { 'admin global':
     user_list => ["%${admin_group}"],
-    host_list => [$facts['fqdn']],
     runas     => 'ALL',
     cmnd      => $_shell_cmd,
     passwd    => !$passwordless_admin_sudo
@@ -114,7 +113,6 @@ class simp::admin (
 
   sudo::user_specification { 'auditors':
     user_list => ["%${auditor_group}"],
-    host_list => [$facts['fqdn']],
     runas     => 'root',
     cmnd      => ['AUDIT'],
     passwd    => !$passwordless_auditor_sudo
@@ -124,7 +122,6 @@ class simp::admin (
   # They allow you to recover from destroying the certs in your environment.
   sudo::user_specification { 'admin run puppet':
     user_list => ["%${admin_group}"],
-    host_list => [$facts['fqdn']],
     runas     => 'root',
     cmnd      => ['/usr/sbin/puppet', '/opt/puppetlabs/bin/puppet'],
     passwd    => !$passwordless_admin_sudo
@@ -138,7 +135,6 @@ class simp::admin (
   }
   sudo::user_specification { 'admin clean puppet certs':
     user_list => ["%${admin_group}"],
-    host_list => [$facts['fqdn']],
     runas     => 'root',
     cmnd      => ["/bin/rm -rf ${$_ssldir}"],
     passwd    => !$passwordless_admin_sudo
@@ -160,5 +156,4 @@ class simp::admin (
     priority => 10,
     content  => $_content,
   }
-
 }
