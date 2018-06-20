@@ -23,7 +23,7 @@ class simp::root_user (
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',
-      mode   => '0700'
+      mode   => '0550'
     }
   }
 

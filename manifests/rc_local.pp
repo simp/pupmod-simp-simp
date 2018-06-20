@@ -58,7 +58,7 @@ class simp::rc_local (
     ensure  => 'file',
     owner   => 'root',
     group   => 'root',
-    mode    => '0750',
+    mode    => '0755',
     content => $_content
   }
 }
