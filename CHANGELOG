@@ -1,6 +1,7 @@
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Use the sudo::user_specification default host list which is correct for
   almost all cases
+- Update version range of auditd dependency in metadata.json
 
 * Fri Jun 08 2018 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.5.0-0
 - Add Windows support
