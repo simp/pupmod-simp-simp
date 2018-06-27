@@ -118,6 +118,10 @@
 # @param pam
 #   Enable management of PAM resources via SIMP modules
 #
+# @param stig_pkg_enforce
+#   This will force the installation and removal of packages specified in the stig.
+#   This is not on by default because often these packages are replaced by something different.
+#
 # @param sssd
 #   Enable management of SSSD resources via SIMP modules
 #
@@ -172,6 +176,7 @@ class simp (
   Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value'   => false }),
   Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value'  => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
+  Boolean                         $stig_pkg_enforce           = false,
   Boolean                         $stock_sssd                 = true,
   Boolean                         $classification_warning     = true,
   String                          $vardir_owner,
@@ -222,5 +227,9 @@ class simp (
   }
   else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
+  }
+
+  if $stig_pkg_enforce {
+    include simp::stig_packages
   }
 }

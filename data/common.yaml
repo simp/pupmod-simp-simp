@@ -20,6 +20,15 @@ lookup_options:
       strategy: unique
       # Disable this for now.
       #knockout_prefix: --
+  simp::stig::pkg_install:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+  simp::stig::pkg_absent:
+    merge:
+      strategy: deep
+      knockout_prefix: --
+
 simp::vardir_owner: 'root'
 simp::vardir_group: 'root'
 simp::vardir_mode: '0750'
