@@ -1,0 +1,16 @@
+---
+simp::stig_packages::ensure_installed_packages:
+  screen: ~
+  firewalld: ~
+  openssh-clients: ~
+  openssh-server: ~
+  esc: ~
+  pam_pkcs11: ~
+  authconfig-gtk: ~
+
+simp::stig_packages::ensure_absent_packages:
+  rsh-server: ~
+  ypserv: ~
+  telnet-server: ~
+  vsftpd: ~
+  tftp-server: ~
