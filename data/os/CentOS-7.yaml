@@ -1,5 +1,5 @@
 ---
-simp::stig_packages::ensure_installed_packages:
+simp::stig_packages::install_packages:
   screen: ~
   firewalld: ~
   openssh-clients: ~
@@ -8,7 +8,7 @@ simp::stig_packages::ensure_installed_packages:
   pam_pkcs11: ~
   authconfig-gtk: ~
 
-simp::stig_packages::ensure_absent_packages:
+simp::stig_packages::absent_packages:
   rsh-server: ~
   ypserv: ~
   telnet-server: ~

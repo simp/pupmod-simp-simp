@@ -120,7 +120,6 @@
 #
 # @param stig_pkg_enforce
 #   This will force the installation and removal of packages specified in the stig.
-#   This is not on by default because often these packages are replaced by something different.
 #
 # @param sssd
 #   Enable management of SSSD resources via SIMP modules
