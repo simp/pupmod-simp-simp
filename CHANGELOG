@@ -1,3 +1,10 @@
+* Fri Jun 29 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.5.1-0
+- Added ability, which is turned off by default, to supply a list
+  of packages that must be installed (to meet STIG requirements).
+  The list is processed after the catalog compile to check for
+  existing resources to prevent conflicts with other manifests that
+  users might include.
+
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Use the sudo::user_specification default host list which is correct for
   almost all cases
