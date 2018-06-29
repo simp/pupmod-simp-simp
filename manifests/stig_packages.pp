@@ -23,7 +23,7 @@
 #   is display for each resource that would have
 #   been created.
 #
-# @param warning
+# @param $enable_warnings
 #   If set to false then no warnings are displayed if a package
 #   resource exists in the catalog that differs from the setting
 #   in the list.
