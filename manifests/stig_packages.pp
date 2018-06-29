@@ -28,8 +28,8 @@
 #   resource exists in the catalog that differs from the setting
 #   in the list.
 class simp::stig_packages(
-  Hash                        $absent_packages,
-  Hash                        $install_packages,
+  Hash                        $absent_packages    = {},
+  Hash                        $install_packages   = {},
   Enum['warning','enforcing'] $mode               = 'warning',
   Boolean                     $enable_warnings    = true
 ) {

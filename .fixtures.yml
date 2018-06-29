@@ -22,6 +22,7 @@ fixtures:
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
     autofs: https://github.com/simp/pupmod-simp-autofs
+    autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat:
@@ -73,6 +74,7 @@ fixtures:
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
+    simp_banners: https://github.com/simp/pupmod-simp-simp_banners
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
