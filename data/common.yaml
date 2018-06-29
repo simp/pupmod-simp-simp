@@ -20,11 +20,11 @@ lookup_options:
       strategy: unique
       # Disable this for now.
       #knockout_prefix: --
-  simp::stig::pkg_install:
+  simp::stig_packages::absent_packages:
     merge:
       strategy: deep
       knockout_prefix: --
-  simp::stig::pkg_absent:
+  simp::stig_packages::install_packages:
     merge:
       strategy: deep
       knockout_prefix: --

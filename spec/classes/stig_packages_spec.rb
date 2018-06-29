@@ -12,8 +12,7 @@ describe 'simp::stig_packages' do
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::stig_packages') }
-          it { is_expected.to create_class('simp::stig_packages::ensure_installed').with_stage('simp_finalize') }
-          it { is_expected.to create_class('simp::stig_packages::ensure_absent').with_stage('simp_finalize') }
+          it { is_expected.to create_stig__packages('stig_packages') }
         end
 
       end

@@ -30,7 +30,7 @@
 class simp::stig_packages(
   Hash                        $absent_packages,
   Hash                        $install_packages,
-  Enum['warning','enforcing'] $mode               = 'enforcing',
+  Enum['warning','enforcing'] $mode               = 'warning',
   Boolean                     $enable_warnings    = true
 ) {
 

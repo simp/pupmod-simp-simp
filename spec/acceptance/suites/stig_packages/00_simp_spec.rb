@@ -9,7 +9,15 @@ describe 'simp class' do
       include 'simp_options'
       include 'simp'
       include 'simp::yum::repo::local_os_updates'
-      include 'tftpboot'
+      package { 'screen':
+        ensure => 'absent'
+        }
+      package { 'rsh-server':
+        ensure => 'installed'
+        }
+      package { 'esc':
+        ensure => 'latest'
+        }
     EOS
   }
 
@@ -47,13 +55,19 @@ simp_options::trusted_nets: ['ALL']
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
 simp::stig_pkg_enforce: true
-simp::stig_packages::ensure_absent::enable_warning: true
-simp::stig_packages::ensure_installed::enable_warning: true
 useradd::securetty:
   - ANY_SHELL
         EOF
+
       }
 
+      let(:moreoptions) {
+      <<-EOH
+simp::stig_pkg_enforce: true
+simp::stig_packages::mode: 'enforcing'
+simp::stig_packages::warning: false
+      EOH
+      }
       it 'should set up simp_options through hiera' do
         set_hieradata_on(host, options)
       end
@@ -86,7 +100,7 @@ useradd::securetty:
       end
 
       it 'should display warning' do
-        expect(apply_manifest_on(host, manifest, :catch_failures => true).stderr).to match(/The STIG recommends package tftp-server not be installed/)
+        expect(apply_manifest_on(host, manifest, :catch_failures => true).stderr).to match(/A Package resource for tftp-server exists in the catalog and is set to: present.  stig_packages resource expects it to be: absent It is likely this needs to be documented for STIG compliance./)
       end
 
       ['rsh-server', 'rsh', 'vsftpd'].each do |pkg|
