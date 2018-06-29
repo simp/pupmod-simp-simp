@@ -61,7 +61,7 @@ Puppet::Type.newtype(:stig_packages) do
     defaultto :true
   end
 
-  newproperty(:mode) do
+  newparam(:mode) do
     desc <<-EOM
        If set to enforcing, it will remove or add the packages in the lists if
        they are not already defined in a puppet manifest.
@@ -77,9 +77,6 @@ Puppet::Type.newtype(:stig_packages) do
 
     defaultto 'warning'
 
-    def insync?(is)
-      return true
-    end
   end
 
   def merge_settings(pkgs,setting)
