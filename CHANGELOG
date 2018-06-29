@@ -1,4 +1,4 @@
-* Fri Jun 29 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.5.1-0
+* Fri Jun 29 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.0-0
 - Added ability, which is turned off by default, to supply a list
   of packages that must be installed (to meet STIG requirements).
   The list is processed after the catalog compile to check for
