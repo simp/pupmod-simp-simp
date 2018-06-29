@@ -22,7 +22,6 @@ fixtures:
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
     autofs: https://github.com/simp/pupmod-simp-autofs
-    autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
     concat:
