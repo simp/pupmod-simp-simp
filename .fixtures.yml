@@ -2,14 +2,15 @@
 fixtures:
   repositories:
     # Kluge for testing the automatic cert generation
+    # Note: Ideally, would like to name this 'environment', to match
+    # the name of the component in a simp-core Puppetfile.  However,
+    # pluginsync on the VMs barfs with a module named 'environment'
     simp_environment: https://github.com/simp/simp-environment-skeleton
     # End Kluge
     acpid: https://github.com/simp/pupmod-simp-acpid
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
-    augeasproviders: https://github.com/simp/augeasproviders
-    augeasproviders_base: https://github.com/simp/augeasproviders_base
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
     augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
@@ -40,7 +41,6 @@ fixtures:
     iptables: https://github.com/simp/pupmod-simp-iptables
     issue: https://github.com/simp/pupmod-simp-issue
     java: https://github.com/simp/puppetlabs-java
-    java_ks: https://github.com/simp/puppetlabs-java_ks
     kmod: https://github.com/simp/puppet-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5
     logrotate: https://github.com/simp/pupmod-simp-logrotate
@@ -73,6 +73,7 @@ fixtures:
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
+    simp_banners: https://github.com/simp/pupmod-simp-simp_banners
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
@@ -95,7 +96,11 @@ fixtures:
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart
     useradd: https://github.com/simp/pupmod-simp-useradd
+    vox_selinux:
+      repo: https://github.com/simp/pupmod-voxpupuli-selinux
+      branch: simp-master
     xinetd: https://github.com/simp/pupmod-simp-xinetd
-    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync.git
+    # Kluge for rsync data
+    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton
   symlinks:
     simp: "#{source_dir}"
