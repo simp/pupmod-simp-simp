@@ -10,9 +10,8 @@ describe 'simp::prelink class' do
     EOS
   }
 
-
   hosts.each do |host|
-    context 'on #{host}' do
+    context "on #{host}" do
       context 'with default parameters' do
         it 'should apply manifest' do
           apply_manifest_on(host, manifest, :catch_failures => true)
@@ -28,14 +27,15 @@ describe 'simp::prelink class' do
       end
 
       context 'with prelink enabled' do
-        let(:prelink_enabled_hiera) {
-          <<-EOS
-simp::prelink::enable: true
-         EOS
-         }
+        it 'should enable prelink via hiera' do
+          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+          default_yaml = yaml.merge(
+            'simp::prelink::enable' => true
+          ).to_yaml
+          set_hieradata_on(host, default_yaml)
+        end
 
         it 'should apply manifest' do
-          set_hieradata_on(host, prelink_enabled_hiera)
           apply_manifest_on(host, manifest, :catch_failures => true)
         end
 
@@ -67,7 +67,7 @@ simp::prelink::enable: true
           if facts['values']['fips_enabled']
             result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [2])
           else
-            # first see if prelink cron job has already run 
+            # first see if prelink cron job has already run
             result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [0,2])
 
             if result.exit_code == 2
@@ -80,14 +80,15 @@ simp::prelink::enable: true
       end
 
       context 'with prelink disabled after being enabled' do
-        let(:prelink_disabled_hiera) {
-          <<-EOS
-simp::prelink::enable: false
-         EOS
-         }
+        it 'should disable prelink via hiera' do
+          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+          default_yaml = yaml.merge(
+            'simp::prelink::enable' => false
+          ).to_yaml
+          set_hieradata_on(host, default_yaml)
+        end
 
         it 'should apply manifest' do
-          set_hieradata_on(host, prelink_disabled_hiera)
           apply_manifest_on(host, manifest, :catch_failures => true)
         end
 

@@ -3,13 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'simp::sysctl class'
 
 describe 'simp::sysctl class' do
-  let(:disable_ipv6_hieradata) {{
-    'simp::sysctl::ipv6' => false
-  }}
-  let(:enable_ipv6_hieradata) {{
-    'simp::sysctl::ipv6' => true
-  }}
-
   let(:manifest) {
     <<-EOS
       include 'simp::sysctl'
@@ -18,7 +11,6 @@ describe 'simp::sysctl class' do
 
   hosts.each do |host|
     context 'default parameters' do
-
       it 'should apply sysctl with no errors' do
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
@@ -26,17 +18,20 @@ describe 'simp::sysctl class' do
       it 'should be idempotent' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
-
     end
 
     context 'sysctl with enable ipv6 = true' do
-
       it 'set hieradata' do
-        set_hieradata_on(host, enable_ipv6_hieradata)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::sysctl::ipv6' => true,
+        ).to_yaml
+
+        set_hieradata_on(host, default_yaml)
       end
 
       it 'set ipv6 = true' do
-        on(host, "sysctl net.ipv6.conf.all.disable_ipv6=0")
+        on(host, 'sysctl net.ipv6.conf.all.disable_ipv6=0')
       end
 
       it 'should apply simp::sysctl with no errors' do
@@ -49,9 +44,13 @@ describe 'simp::sysctl class' do
     end
 
     context 'should disable ipv6 again' do
-
       it 'set hieradata' do
-        set_hieradata_on(host, disable_ipv6_hieradata)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::sysctl::ipv6' => false,
+        ).to_yaml
+
+        set_hieradata_on(host, default_yaml)
       end
 
       it 'should apply simp::sysctl with no errors' do
@@ -63,7 +62,7 @@ describe 'simp::sysctl class' do
       end
 
       it 'sysctl should disable ipv6' do
-        result = on(host,"sysctl -n net.ipv6.conf.all.disable_ipv6")
+        result = on(host, 'sysctl -n net.ipv6.conf.all.disable_ipv6')
         expect(result.output.strip).to eq('1')
       end
     end

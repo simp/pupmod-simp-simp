@@ -3,36 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'simp yum configuration'
 
 describe 'simp yum configuration' do
-  before(:context) do
-    hosts.each do |host|
-      interfaces = fact_on(host, 'interfaces').strip.split(',')
-      interfaces.delete_if do |x|
-        x =~ /^lo/
-      end
-
-      interfaces.each do |iface|
-        if fact_on(host, "ipaddress_#{iface}").strip.empty?
-          on(host, "ifup #{iface}", :accept_all_exit_codes => true)
-        end
-      end
-    end
-  end
-
-  ssh_allow = <<-EOM
-    include '::tcpwrappers'
-    include '::iptables'
-
-    tcpwrappers::allow { 'sshd':
-      pattern => 'ALL'
-    }
-
-    iptables::listen::tcp_stateful { 'i_love_testing':
-      order        => 8,
-      trusted_nets => ['ALL'],
-      dports       => 22
-    }
-  EOM
-
   let(:manifest) {
     <<-EOS
       include 'simp::server::yum'
@@ -41,41 +11,16 @@ describe 'simp yum configuration' do
 
       Class['simp::server::yum'] -> Class['simp::yum::repo::local_simp']
       Class['simp::server::yum'] -> Class['simp::yum::repo::local_os_updates']
-
-      #{ssh_allow}
     EOS
   }
 
-  let(:hieradata) {
-    <<-EOM
----
-simp_apache::rsync_server : '127.0.0.1'
-simp_apache::rsync_web_root : false
-simp_options::trusted_nets:
-  - ALL
-
-simp_options::rsync: false
-simp_options::pki: true
-simp_options::pki::source : '/etc/pki/simp-testing/pki'
-
-simp_apache::rsync_server : '127.0.0.1'
-simp_apache::rsync_web_root : false
-simp_apache::ssl::sslverifyclient: none
-
-simp::yum::repo::local_os_updates::servers:
-  - "%{::fqdn}"
-simp::yum::repo::local_simp::servers:
-  - "%{::fqdn}"
-    EOM
-  }
-
   context 'with reliable test host' do
-    # Using puppet_apply as a helper
     it 'should work with no errors' do
-
-      hosts.each do |host|
-
-        host.install_package('createrepo')
+      block_on(hosts, :run_in_parallel => true) do |host|
+        retry_on(host, 'yum install -y createrepo',
+          :max_retries    => 3,
+          :retry_interval => 10
+        )
 
         # Mock out the actual YUM repos
         repos = [
@@ -86,13 +31,20 @@ simp::yum::repo::local_simp::servers:
 
         repos.each do |repo|
           on(host, "mkdir -p #{repo}")
-          on(host, "cd #{repo}; createrepo .")
+          on(host, "cd #{repo}; createrepo -p .")
         end
 
         # Fix the SELinux contexts and permissions
         on(host, 'chmod -R go+rX /var/www')
 
-        set_hieradata_on(host, hieradata)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::yum::repo::simp::servers'             => nil,
+          'simp::yum::repo::local_os_updates::servers' => ["%{facts.hostname}"],
+          'simp::yum::repo::local_simp::servers'       => ["%{facts.hostname}"],
+        ).to_yaml
+        set_hieradata_on(host, default_yaml)
+
         apply_manifest_on(host, manifest, :catch_failures => true)
 
         # This isn't something that we would expect Puppet to do based on how
@@ -101,6 +53,31 @@ simp::yum::repo::local_simp::servers:
 
         on(host, 'yum clean all')
         on(host, 'yum --disablerepo="*" --enablerepo="simp" list available > /dev/null')
+      end
+    end
+  end
+  context 'reset the yum repo back to normal' do
+    it 'should set up hiera' do
+      block_on(hosts, :run_in_parallel => true) do |host|
+        os = JSON.load(on(host,'puppet facts').stdout)['values']['os']
+        yum_updates_url = case "#{os['name']}-#{os['release']['full']}"
+          when /OracleLinux-7/
+            'http://public-yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch/'
+          when /OracleLinux-6/
+            'http://public-yum.oracle.com/repo/OracleLinux/OL6/latest/$basearch/'
+          else
+            'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+          end
+
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::yum::repo::local_simp::enable_repo'   => false,
+          'simp::yum::repo::local_simp::servers'       => [],
+          'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
+        ).to_yaml
+
+        set_hieradata_on(host, default_yaml)
+        apply_manifest_on(host, manifest, :catch_failures => true)
       end
     end
   end

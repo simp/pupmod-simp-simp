@@ -11,6 +11,12 @@
 - Ensure that the global filebucket setting occurs prior to class inclusion to
   match the new Puppet 5 method of setting resource defaults.
 
+* Tue Jul 17 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.6.0-0
+- Added tests and support for OEL and Puppet 5
+  - Setting the default filebucket in a module no longer works, so
+    ``simp::enable_filebucketing`` will do nothing in puppet version >= 5
+- Fixed some linting issues
+
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Use the sudo::user_specification default host list which is correct for
   almost all cases

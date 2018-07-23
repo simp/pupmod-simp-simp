@@ -14,9 +14,9 @@ class simp::version () {
     # also pulling in windows_acl
     $simp_root_dir_mode = '0770'
   } else {
-    $simp_root_dir = "/etc/simp"
-    $simp_root_dir_group = "root"
-    $simp_root_dir_user = "root"
+    $simp_root_dir = '/etc/simp'
+    $simp_root_dir_group = 'root'
+    $simp_root_dir_user = 'root'
     $simp_root_dir_mode = '0640'
     file { '/usr/local/sbin/simp':
       ensure => 'directory',

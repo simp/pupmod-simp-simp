@@ -11,14 +11,14 @@ fixtures:
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
+    augeasproviders_apache: https://github.com/simp/augeasproviders_apache
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
-    augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
-    augeasproviders_apache: https://github.com/simp/augeasproviders_apache
     augeasproviders_mounttab: https://github.com/simp/augeasproviders_mounttab
     augeasproviders_nagios: https://github.com/simp/augeasproviders_nagios
     augeasproviders_pam: https://github.com/simp/augeasproviders_pam
     augeasproviders_postgresql: https://github.com/simp/augeasproviders_postgresql
+    augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
     augeasproviders_shellvar: https://github.com/simp/augeasproviders_shellvar
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
@@ -78,9 +78,9 @@ fixtures:
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
     ssh: https://github.com/simp/pupmod-simp-ssh
+    sssd: https://github.com/simp/pupmod-simp-sssd
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
-    sssd: https://github.com/simp/pupmod-simp-sssd
     systemd:
       repo: https://github.com/simp/puppet-systemd
       branch: simp-master
@@ -89,10 +89,10 @@ fixtures:
     svckill: https://github.com/simp/pupmod-simp-svckill
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
+    tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     timezone:
       repo: https://github.com/simp/pupmod-simp-timezone
       branch: simp-master
-    tftpboot: https://github.com/simp/pupmod-simp-tftpboot
     tlog: https://github.com/simp/pupmod-simp-tlog
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart

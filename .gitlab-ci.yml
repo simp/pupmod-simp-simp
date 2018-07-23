@@ -48,6 +48,13 @@
   script:
     - bundle exec rake spec
 
+# To avoid running a prohibitive number of tests every commit,
+# don't set this env var in your gitlab instance
+.only_with_SIMP_FULL_MATRIX: &only_with_SIMP_FULL_MATRIX
+  only:
+    variables:
+      - $SIMP_FULL_MATRIX
+
 stages:
   - validation
   - unit
@@ -137,9 +144,11 @@ base_apps:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[base_apps]
 
 default:
@@ -151,6 +160,7 @@ default:
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
 
 default-fips:
@@ -159,11 +169,26 @@ default-fips:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 4.10.0'
     BEAKER_fips: 'yes'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default]
+
+default-oel:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 4.10.0'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default,oel]
 
 default-puppet5:
   stage: acceptance
@@ -172,9 +197,40 @@ default-puppet5:
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '~> 5.3.0'
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
-    - bundle exec rake beaker:suites[default,puppet5]
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default]
+
+default-fips-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    BEAKER_fips: 'yes'
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default]
+
+default-oel-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[default,oel]
 
 no_simp_server:
   stage: acceptance
@@ -182,9 +238,11 @@ no_simp_server:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[no_simp_server]
 
 netconsole:
@@ -196,6 +254,7 @@ netconsole:
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[netconsole]
 
 one_shot_scenario:
@@ -207,6 +266,7 @@ one_shot_scenario:
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_one_shot]
 
 poss_scenario:
@@ -218,6 +278,7 @@ poss_scenario:
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_poss]
 
 remote_access_scenario:
@@ -229,4 +290,5 @@ remote_access_scenario:
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:
+    - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_remote_access]

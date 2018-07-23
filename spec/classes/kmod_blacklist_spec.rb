@@ -16,7 +16,7 @@ describe 'simp::kmod_blacklist' do
            'squashfs', 'tipc', 'udf', 'usb-storage']
         }
 
-        if ['CentOS','RedHat'].include?(facts[:os][:name]) && facts[:os][:release][:major] == '6'
+        if facts[:os][:release][:major] == '6'
           let(:early_prefix){ 'zz' }
           let(:late_prefix){ '00' }
         else
@@ -107,6 +107,15 @@ describe 'simp::kmod_blacklist' do
           end
 
           context 'when unable to find kernel.modules_disabled' do
+            let(:facts) do
+              lfacts = facts.dup
+              lfacts['simplib_sysctl'] = {
+                'kernel.modules_disabled' => nil
+              }
+
+              lfacts
+            end
+
             it 'should warn that it cannot lock the modules' do
               is_expected.to_not create_stage('simp_modprobe_lock')
               is_expected.to_not create_class('simp::kmod_blacklist::lock_modules')

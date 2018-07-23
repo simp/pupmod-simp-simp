@@ -130,6 +130,7 @@ describe 'simp' do
         context 'with filebucketing' do
           context 'with local path' do
             let(:params) {{ :enable_filebucketing => true }}
+            let(:pre_condition) { "File { backup => 'simp' }" } if Puppet.version >= '5'
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
@@ -141,6 +142,7 @@ describe 'simp' do
               :enable_filebucketing => true,
               :filebucket_server    => 'my.puppet.server'
             }}
+            let(:pre_condition) { "File { backup => 'simp' }" } if Puppet.version >= '5'
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_file('/etc/rc.d/rc.local').with_backup('simp') }
