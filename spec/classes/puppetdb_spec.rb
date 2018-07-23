@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'simp::puppetdb' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          facts.merge(:puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } })
+          { :puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } }}.merge(os_facts)
         end
         context 'with default parameters' do
           let(:hieradata) { 'simp__puppetdb' }
