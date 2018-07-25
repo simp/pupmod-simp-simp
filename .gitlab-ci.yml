@@ -269,9 +269,6 @@ one_shot_scenario:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_one_shot]
 
-
-# This test fails because of the fragility of the one-shot finalization script
-# https://simp-project.atlassian.net/browse/SIMP-5090
 one_shot_scenario-puppet5:
   stage: acceptance
   tags:
@@ -285,7 +282,6 @@ one_shot_scenario-puppet5:
   script:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_one_shot]
-  allow_failure: true
 
 poss_scenario:
   stage: acceptance

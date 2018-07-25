@@ -15,7 +15,6 @@
 - Added tests and support for OEL and Puppet 5
   - Setting the default filebucket in a module no longer works, so
     ``simp::enable_filebucketing`` will do nothing in puppet version >= 5
-  - simp::one_shot::finalize doesn't work in Puppet 5 and will warn users
 - Fixed some linting issues
 
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
