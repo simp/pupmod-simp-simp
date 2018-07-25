@@ -79,6 +79,7 @@ if [ $remove_puppet -eq 0 ]; then
   if [ -z $dry_run ]; then
     # Wait for puppet to stop running before we apply the rest of this script
     while [ `/bin/ps h -fC puppet | /bin/grep -ce "puppet \(agent\|apply\)"` -gt 0 ]; do
+      logger "sleep 5"
       /bin/sleep 5;
     done
   fi
@@ -90,6 +91,7 @@ if [ $remove_puppet -eq 0 ]; then
   $dry_run yum remove -y puppet ||:
   $dry_run yum remove -y puppet-agent ||:
   $dry_run yum remove -y puppetlabs* ||:
+  $dry_run yum remove -y puppet* ||:
 
   $dry_run rm -f /usr/local/bin/puppet*
   $dry_run rm -rf /opt/puppetlabs
