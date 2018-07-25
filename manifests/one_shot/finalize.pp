@@ -23,8 +23,13 @@ class simp::one_shot::finalize (
 ){
   assert_private()
 
+
   $_finalize_script_name = 'simp_one_shot_finalize.sh'
   $_finalize_script = "/usr/local/sbin/${_finalize_script_name}"
+
+  if $clientversion >= '5' {
+    warning("simp::one_shot::finalize does not work on Puppet >= 5. Run ${_finalize_script} manually to finalize.")
+  }
 
   file { $_finalize_script:
     mode    => '0750',
@@ -33,8 +38,9 @@ class simp::one_shot::finalize (
 
   # Run this in the background so that we don't break the current Puppet run
   exec { 'one_shot finalize':
-    command   => "${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} &",
+    command   => "nohup ${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} &",
     logoutput => true,
+    provider  => 'shell',
     require   => File[$_finalize_script]
   }
 }

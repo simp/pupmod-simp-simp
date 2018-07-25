@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 usage="Usage: $0 -k (true|false*) -d (true|false*) -f (true*|false) -p (true*|false) [-h]"
 
 # Option Defaults
@@ -79,7 +81,6 @@ if [ $remove_puppet -eq 0 ]; then
   if [ -z $dry_run ]; then
     # Wait for puppet to stop running before we apply the rest of this script
     while [ `/bin/ps h -fC puppet | /bin/grep -ce "puppet \(agent\|apply\)"` -gt 0 ]; do
-      logger "sleep 5"
       /bin/sleep 5;
     done
   fi

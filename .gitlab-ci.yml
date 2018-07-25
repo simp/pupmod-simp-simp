@@ -269,6 +269,24 @@ one_shot_scenario:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_one_shot]
 
+
+# This test fails because of the fragility of the one-shot finalization script
+# https://simp-project.atlassian.net/browse/SIMP-5090
+one_shot_scenario-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[scenario_one_shot]
+  allow_failure: true
+
 poss_scenario:
   stage: acceptance
   tags:
@@ -281,6 +299,20 @@ poss_scenario:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_poss]
 
+poss_scenario-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[scenario_poss]
+
 remote_access_scenario:
   stage: acceptance
   tags:
@@ -289,6 +321,20 @@ remote_access_scenario:
   <<: *setup_bundler_env
   variables:
     PUPPET_VERSION: '~> 4.10.0'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites[scenario_remote_access]
+
+remote_access_scenario-puppet5:
+  stage: acceptance
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  <<: *only_with_SIMP_FULL_MATRIX
+  variables:
+    PUPPET_VERSION: '~> 5.3'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[scenario_remote_access]
