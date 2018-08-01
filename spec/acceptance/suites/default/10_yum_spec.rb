@@ -16,7 +16,7 @@ describe 'simp yum configuration' do
 
   context 'with reliable test host' do
     it 'should work with no errors' do
-      block_on(hosts, :run_in_parallel => true) do |host|
+      block_on(hosts, $parallel) do |host|
         retry_on(host, 'yum install -y createrepo',
           :max_retries    => 3,
           :retry_interval => 10
@@ -58,7 +58,7 @@ describe 'simp yum configuration' do
   end
   context 'reset the yum repo back to normal' do
     it 'should set up hiera' do
-      block_on(hosts, :run_in_parallel => true) do |host|
+      block_on(hosts, $parallel) do |host|
         os = JSON.load(on(host,'puppet facts').stdout)['values']['os']
         yum_updates_url = case "#{os['name']}-#{os['release']['full']}"
           when /OracleLinux-7/
