@@ -18,16 +18,9 @@ describe 'simp class' do
 
       it 'should set up hiera' do
         os = JSON.load(on(host,'puppet facts').stdout)['values']['os']
-        yum_updates_url = case "#{os['name']}-#{os['release']['full']}"
-          when /OracleLinux-7/
-            'http://public-yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch/'
-          when /OracleLinux-6/
-            'http://public-yum.oracle.com/repo/OracleLinux/OL6/latest/$basearch/'
-          else
-            'http://mirror.centos.org/centos/$releasever/os/$basearch/'
-          end
+        yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
-        yaml         = YAML.load(File.read('spec/acceptance/suites/default/files/default_hiera.yaml'))
+        yaml = YAML.load(File.read('spec/acceptance/suites/default/files/default_hiera.yaml'))
         default_yaml = yaml.merge(
           # 'simp_options::log_servers'    => [host_fqdn],
           # 'simp::yum::servers'           => [host_fqdn],

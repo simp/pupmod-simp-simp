@@ -17,6 +17,10 @@ HOSTS:
     box:        elastic/oel-7-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'https://public-yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch'
+        gpgkeys:
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
@@ -42,6 +46,10 @@ HOSTS:
     box:        elastic/oel-6-x86_64
     hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'https://public-yum.oracle.com/repo/OracleLinux/OL6/latest/$basearch'
+        gpgkeys:
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol6
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:

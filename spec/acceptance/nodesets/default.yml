@@ -17,6 +17,10 @@ HOSTS:
     box:        centos/7
     hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-7
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
@@ -42,6 +46,10 @@ HOSTS:
     box:        centos/6
     hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-6
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:
