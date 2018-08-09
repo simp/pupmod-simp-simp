@@ -15,7 +15,7 @@ unless ENV['BEAKER_provision'] == 'no'
   end
 end
 
-$parallel = { :run_in_parallel => ENV['BEAKER_SIMP_parallel'] =~ /y|true/ }
+parallel = { :run_in_parallel => ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }
 
 RSpec.configure do |c|
   # ensure that environment OS is ready on each host
@@ -32,7 +32,7 @@ RSpec.configure do |c|
 
       # Make sure that the SIMP default environment files are in place if they
       # exist
-      block_on(hosts, $parallel) do |sut|
+      block_on(hosts, parallel) do |sut|
         environment = on(sut, %q(puppet config print environment)).output.strip
 
         tgt_path = '/var/simp/environments'

@@ -1,5 +1,7 @@
 require 'spec_helper_acceptance'
 
+parallel = { :run_in_parallel => ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }
+
 test_name 'simp yum configuration'
 
 describe 'simp yum configuration' do
@@ -42,7 +44,7 @@ describe 'simp yum configuration' do
         'pupmod-simp-simp',
         'pupmod-simp-simplib',
       ]
-      block_on(hosts, $parallel) do |host|
+      block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')
         packages.each do |package|
           on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X' list | grep #{package} ")
@@ -59,7 +61,7 @@ describe 'simp yum configuration' do
         'logstash',
         'chkrootkit'
       ]
-      block_on(hosts, $parallel) do |host|
+      block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')
         packages.each do |package|
           on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X_Dependencies' list | grep #{package} ")
