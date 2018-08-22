@@ -50,16 +50,17 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
-  String           $admin_group               = 'administrators',
-  Boolean          $passwordless_admin_sudo   = true,
-  String           $auditor_group             = 'security',
-  Boolean          $passwordless_auditor_sudo = true,
-  Simplib::Netlist $admins_allowed_from       = ['ALL'],
-  Simplib::Netlist $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
-  Boolean          $force_logged_shell        = true,
-  Enum['sudosh']   $logged_shell              = 'sudosh',
-  Boolean          $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean          $set_polkit_admin_group    = true
+  String                $admin_group               = 'administrators',
+  Boolean               $passwordless_admin_sudo   = true,
+  String                $auditor_group             = 'security',
+  Boolean               $passwordless_auditor_sudo = true,
+  Simplib::Netlist      $admins_allowed_from       = ['ALL'],
+  Simplib::Netlist      $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
+  Boolean               $force_logged_shell        = true,
+  Enum['sudosh','tlog'] $logged_shell              = 'tlog',
+  Array[String[2]]      $default_admin_sudo_cmnds  = ['/bin/su - root'],
+  Boolean               $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean               $set_polkit_admin_group    = true
 ){
 
   simplib::assert_metadata( $module_name )
@@ -99,9 +100,34 @@ class simp::admin (
 
       $_shell_cmd = ['/usr/bin/sudosh']
     }
+    else {
+      # TODO: This should be removed when SIMP-5169 is resolved
+      file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
+    }
+
+    if $logged_shell == 'tlog' {
+      include '::tlog::rec_session'
+
+      $_shell_cmd = $default_admin_sudo_cmnds
+    }
+    else {
+      # TODO: This should be removed when SIMP-5169 is resolved
+      tidy { 'Tlog profile.d files':
+        path    => '/etc/profile.d',
+        matches => ['00-simp-tlog.*'],
+        recurse => 1
+      }
+    }
   }
   else {
-    $_shell_cmd = ['ALL']
+    $_shell_cmd = $default_admin_sudo_cmnds
+
+    # TODO: These should be removed when SIMP-5169 is resolved
+    tidy { 'Shell logging profile.d files':
+      path    => '/etc/profile.d',
+      matches => ['00-simp-tlog.*', 'sudosh2.*'],
+      recurse => 1
+    }
   }
 
   sudo::user_specification { 'admin global':
@@ -139,7 +165,6 @@ class simp::admin (
     cmnd      => ["/bin/rm -rf ${$_ssldir}"],
     passwd    => !$passwordless_admin_sudo
   }
-
 
   $_polkit_ensure = ($set_polkit_admin_group and $facts['os']['release']['major'] >= '7') ? {
     true    => 'present',

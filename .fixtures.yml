@@ -93,6 +93,7 @@ fixtures:
       repo: https://github.com/simp/pupmod-simp-timezone
       branch: simp-master
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
+    tlog: https://github.com/simp/pupmod-simp-tlog
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart
     useradd: https://github.com/simp/pupmod-simp-useradd

@@ -99,7 +99,6 @@ useradd::securetty:
   context 'the contents of the simp dependencies repo' do
     it 'should contain some simp server packages' do
       packages = [
-        'sudosh2',
         'haveged',
         'simp-ppolicy-check-password',
         'logstash',
