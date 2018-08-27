@@ -54,7 +54,7 @@ polkit.addAdminRule(function(action, subject) {
             :logged_shell => 'tlog'
           }}
 
-          it { is_expected.to create_class('tlog') }
+          it { is_expected.to create_class('tlog::rec_session') }
           it { is_expected.to_not create_class('sudosh') }
 
           it { is_expected.to create_sudo__user_specification('admin global').with({
@@ -70,7 +70,7 @@ polkit.addAdminRule(function(action, subject) {
           }}
 
           it { is_expected.to create_class('sudosh') }
-          it { is_expected.to_not create_class('tlog') }
+          it { is_expected.to_not create_class('tlog::rec_session') }
 
           it { is_expected.to create_sudo__user_specification('admin global').with({
             :user_list => ['%administrators'],

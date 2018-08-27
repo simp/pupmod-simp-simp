@@ -153,7 +153,7 @@ class simp::scenario::base (
     }
 
     unless host_is_me($_rsync_stunnel_svr) {
-      stunnel::instance { 'rsync':
+      stunnel::connection { 'rsync':
         connect => ["${_rsync_stunnel_svr}:8730"],
         accept  => '127.0.0.1:873'
       }

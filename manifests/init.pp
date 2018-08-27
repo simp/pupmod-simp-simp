@@ -145,7 +145,7 @@
 #   Defaults to '0750' if a platform doesn't specify
 #
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp (
   # This parameter set from data in modules

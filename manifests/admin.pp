@@ -37,6 +37,9 @@
 # @param logged_shell
 #   The name of the logged shell to use
 #
+# @param default_admin_sudo_cmnds
+#   The set of commands that ``$admin_group`` should be able to run by default
+#
 # @param pam
 #   Allow SIMP management of the PAM stack
 #

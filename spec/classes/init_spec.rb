@@ -90,7 +90,7 @@ describe 'simp' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/opt/puppetlabs/puppet/cache/simp') }
           it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
-          it { is_expected.to create_stunnel__instance('rsync') }
+          it { is_expected.to create_stunnel__connection('rsync') }
           it { is_expected.to_not create_filebucket('simp') }
         end
 
@@ -153,13 +153,13 @@ describe 'simp' do
             let(:params) {{ :rsync_stunnel => false }}
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.not_to create_stunnel__instance('rsync') }
+            it { is_expected.not_to create_stunnel__connection('rsync') }
           end
           context 'with rsync_stunnel => true' do
             let(:params) {{ :rsync_stunnel => true }}
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to create_stunnel__instance('rsync').with({
+            it { is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['1.2.3.4:8730'],
               :accept  => '127.0.0.1:873'
             }) }
@@ -168,7 +168,7 @@ describe 'simp' do
             let(:params) {{ :rsync_stunnel => 'other.test.host' }}
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to create_stunnel__instance('rsync').with({
+            it { is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['other.test.host:8730'],
               :accept  => '127.0.0.1:873'
             }) }
@@ -191,7 +191,7 @@ describe 'simp' do
 
             it { is_expected.to compile.with_all_deps }
             it {
-              is_expected.to create_stunnel__instance('rsync').with({
+              is_expected.to create_stunnel__connection('rsync').with({
               :connect => ['puppet.bar.baz:8730'],
               :accept  => '127.0.0.1:873'
             }) }
