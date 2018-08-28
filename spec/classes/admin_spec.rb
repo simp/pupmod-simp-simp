@@ -19,9 +19,11 @@ describe 'simp::admin' do
           it { is_expected.to create_class('simp::sudoers') }
           it { is_expected.to create_sudo__alias__user('admins') }
           it { is_expected.to create_sudo__alias__user('auditors') }
+          it { is_expected.to create_file('/etc/profile.d/sudosh2.sh').with_ensure('absent') }
+          it { is_expected.to create_class('tlog::rec_session') }
           it { is_expected.to create_sudo__user_specification('admin global').with({
             :user_list => ['%administrators'],
-            :cmnd      => ['/usr/bin/sudosh'],
+            :cmnd      => ['/bin/su - root'],
             :passwd    => false
           }) }
           it { is_expected.to create_sudo__user_specification('auditors').with({
@@ -47,6 +49,36 @@ polkit.addAdminRule(function(action, subject) {
           end
         end
 
+        context 'when setting tlog as the logged shell' do
+          let(:params) {{
+            :logged_shell => 'tlog'
+          }}
+
+          it { is_expected.to create_class('tlog::rec_session') }
+          it { is_expected.to_not create_class('sudosh') }
+
+          it { is_expected.to create_sudo__user_specification('admin global').with({
+            :user_list => ['%administrators'],
+            :cmnd      => ['/bin/su - root'],
+            :passwd    => false
+          }) }
+        end
+
+        context 'when setting sudosh as the logged shell' do
+          let(:params) {{
+            :logged_shell => 'sudosh'
+          }}
+
+          it { is_expected.to create_class('sudosh') }
+          it { is_expected.to_not create_class('tlog::rec_session') }
+
+          it { is_expected.to create_sudo__user_specification('admin global').with({
+            :user_list => ['%administrators'],
+            :cmnd      => ['/usr/bin/sudosh'],
+            :passwd    => false
+          }) }
+        end
+
         context 'with admin and auditor settings' do
           let(:params) {{
               :admin_group               => 'devs',
@@ -57,7 +89,7 @@ polkit.addAdminRule(function(action, subject) {
           }}
           it { is_expected.to create_sudo__user_specification('admin global').with({
             :user_list => ['%devs'],
-            :cmnd      => ['ALL'],
+            :cmnd      => ['/bin/su - root'],
             :passwd    => true
           }) }
           it { is_expected.to create_sudo__user_specification('auditors').with({

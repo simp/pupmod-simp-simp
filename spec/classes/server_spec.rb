@@ -62,8 +62,7 @@ describe 'simp::server' do
             'simp::mountpoints',
             'simp::prelink',
             'simp::sysctl',
-            'ssh',
-            'sudosh',
+            'ssh'
           ]
           simp = [
             'pam::wheel',

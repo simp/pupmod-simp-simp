@@ -82,6 +82,5 @@ useradd::securetty:
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
     end
-
   end
 end

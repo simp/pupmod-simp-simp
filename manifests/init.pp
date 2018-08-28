@@ -145,7 +145,7 @@
 #   Defaults to '0750' if a platform doesn't specify
 #
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp (
   # This parameter set from data in modules
@@ -179,6 +179,17 @@ class simp (
   String                          $vardir_mode,
 ) {
 
+  if $enable_filebucketing {
+    File { backup => $filebucket_name }
+
+    if $filebucket_server {
+      filebucket { $filebucket_name: server => $filebucket_server }
+    }
+    else {
+      filebucket { $filebucket_name: path => $filebucket_path }
+    }
+  }
+
   # NOTE: this class intentionally does not make use of the function:
   #
   # simplib::assert_metadata( $module_name )
@@ -202,17 +213,6 @@ class simp (
     mode   => $vardir_mode,
     owner  => $vardir_owner,
     group  => $vardir_group,
-  }
-
-  if $enable_filebucketing {
-    File { backup => $filebucket_name }
-
-    if $filebucket_server {
-      filebucket { $filebucket_name: server => $filebucket_server }
-    }
-    else {
-      filebucket { $filebucket_name: path => $filebucket_path }
-    }
   }
 
   if $version_info { include '::simp::version' }
