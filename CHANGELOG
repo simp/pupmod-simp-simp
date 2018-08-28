@@ -2,6 +2,8 @@
 - Switch from using 'sudosh' as the default logging shell to using 'tlog'
 - Add a 'simp::admin::default_admin_sudo_cmnds' option to allow users to easily
   change the default sudo-accessible commands from Hiera.
+- Ensure that the global filebucket setting occurs prior to class inclusion to
+  match the new Puppet 5 method of setting resource defaults.
 
 * Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Use the sudo::user_specification default host list which is correct for
