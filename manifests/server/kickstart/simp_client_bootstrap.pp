@@ -16,8 +16,13 @@
 #   uses `bootstrap_simp_client` to bootstrap the server and then
 #   reboots the client to complete the bootstrap operation
 #
+# @param data_dir
+#   The location of the web root in which the kickstart directory
+#   will reside.  Only used to compute the default for `directory`.
+#
 # @param directory
-#   The directory containing the three managed scripts.
+#   The directory containing the three managed scripts. By default
+#   is a subdirectory within `data_dir`.
 #
 # @param service_root_name
 #   The root name of the sysv/systemd service scripts.
@@ -104,7 +109,8 @@
 #   will be fixed, when Puppet fully supports FIPS mode.
 #
 class simp::server::kickstart::simp_client_bootstrap (
-  Stdlib::Absolutepath        $directory               = '/var/www/ks',
+  Stdlib::Absolutepath        $data_dir                = simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'}),
+  Stdlib::Absolutepath        $directory               = "${data_dir}/ks",
   String                      $service_root_name       = 'simp_client_bootstrap',
   Variant[Array, Hash]        $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
   Boolean                     $set_static_hostname     = true,

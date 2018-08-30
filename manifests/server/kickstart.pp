@@ -47,15 +47,11 @@ class simp::server::kickstart (
   if $manage_dhcp      { include '::dhcp::dhcpd' }
   if $manage_tftpboot  { include '::tftpboot' }
   if $manage_runpuppet {
-    class { 'simp::server::kickstart::runpuppet':
-      location => "${data_dir}/ks/runpuppet"
-    }
+    contain 'simp::server::kickstart::runpuppet'
   }
 
   if $manage_simp_client_bootstrap {
-    class { 'simp::server::kickstart::simp_client_bootstrap':
-      directory => "${data_dir}/ks"
-    }
+    contain 'simp::server::kickstart::simp_client_bootstrap'
   }
 
   $_trusted_nets = nets2cidr($trusted_nets)

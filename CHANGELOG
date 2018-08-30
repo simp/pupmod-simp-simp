@@ -1,3 +1,9 @@
+* Thu Aug 30 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
+- Fix a usability bug in which simp::server::kickstart did not allow
+  the bootstrap scripts provided by simp::server::kickstart::runpuppet
+  and simp::server::kickstart::simp_client_bootstrap to be configured
+  via hieradata, when those classes were managed by simp::server::kickstart.
+
 * Mon Aug 27 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.0-0
 - Switch from using 'sudosh' as the default logging shell to using 'tlog'
 - Add a 'simp::admin::default_admin_sudo_cmnds' option to allow users to easily
