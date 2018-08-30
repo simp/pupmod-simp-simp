@@ -2,8 +2,12 @@
 # to bootstrap provisioned clients, adding them to puppet and running it in a
 # fashion similar so `simp bootstrap`.
 #
-# @param location The location of the runpuppet file to be placed when
-#   generated.
+# @param data_dir
+#   The location of the web root in which the kickstart directory
+#   will reside.  Only used to compute the default for `location`.
+#
+# @param location
+#   The location of the runpuppet file to be placed when generated.
 #
 # @param ntp_servers
 #   An array of ntp servers or hash of server/value pairs that should
@@ -50,7 +54,8 @@ class simp::server::kickstart::runpuppet (
   Optional[Simplib::Host]     $puppet_server           = simplib::lookup('simp_options::puppet::server', { 'default_value' => undef }),
   Optional[Simplib::Host]     $puppet_ca               = simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef }),
   Simplib::Port               $puppet_ca_port          = simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 }),
-  Stdlib::Absolutepath        $location                = '/var/www/ks/runpuppet',
+  Stdlib::Absolutepath        $data_dir                = simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'}),
+  Stdlib::Absolutepath        $location                = "${data_dir}/ks/runpuppet",
   Boolean                     $runpuppet_print_stats   = true,
   Variant[Integer[0],Boolean] $runpuppet_wait_for_cert = 10
 ) {
