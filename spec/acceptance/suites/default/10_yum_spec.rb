@@ -41,6 +41,11 @@ describe 'simp yum configuration' do
 
         yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
         default_yaml = yaml.merge(
+          'simp_options::rsync'                        => false,
+          'simp_options::pki'                          => true,
+          'simp_options::pki::source'                  => '/etc/pki/simp-testing/pki',
+          'simp_apache::ssl::sslverifyclient'          => 'none',
+          'simp_apache::rsync_web_root'                => false,
           'simp::yum::repo::simp::servers'             => nil,
           'simp::yum::repo::local_os_updates::servers' => ["%{facts.hostname}"],
           'simp::yum::repo::local_simp::servers'       => ["%{facts.hostname}"],
@@ -66,6 +71,11 @@ describe 'simp yum configuration' do
 
         yaml = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
         default_yaml = yaml.merge(
+          'simp_options::rsync'                        => false,
+          'simp_options::pki'                          => true,
+          'simp_options::pki::source'                  => '/etc/pki/simp-testing/pki',
+          'simp_apache::ssl::sslverifyclient'          => 'none',
+          'simp_apache::rsync_web_root'                => false,
           'simp::yum::repo::local_simp::enable_repo'   => false,
           'simp::yum::repo::local_simp::servers'       => [],
           'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
