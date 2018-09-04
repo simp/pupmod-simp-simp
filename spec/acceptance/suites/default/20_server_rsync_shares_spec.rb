@@ -12,11 +12,11 @@ describe 'simp::server::rsync_shares class' do
   hosts.each do |host|
     context 'default parameters, no rsync data' do
       it 'should set simp_options via hiera' do
-        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
         default_yaml = yaml.merge(
           'simp_options::stunnel' => true
         ).to_yaml
-        set_hieradata_on(host, default_yaml)
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       it 'should apply with no errors' do

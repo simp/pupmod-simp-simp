@@ -15,7 +15,7 @@ simp_options::clamav: false
 simp_options::pki: true
 simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['0.0.0.0/0']
-# the below linw might fix issues on el6
+# the below line might fix issues on el6
 # auditd::enable_auditing: false
 
 # Settings to make beaker happy

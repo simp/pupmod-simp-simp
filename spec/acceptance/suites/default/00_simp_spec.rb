@@ -17,12 +17,11 @@ describe 'simp class' do
       let(:host_fqdn) { fact_on(host, 'fqdn') }
 
       it 'should set up hiera' do
-        os = JSON.load(on(host,'puppet facts').stdout)['values']['os']
         yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
         yaml = YAML.load(File.read('spec/acceptance/suites/default/files/default_hiera.yaml'))
         default_yaml = yaml.merge(
-          # 'simp_options::log_servers'    => [host_fqdn],
+          # 'simp_options::log_servers'    => [host _fqdn],
           # 'simp::yum::servers'           => [host_fqdn],
           'simp_options::puppet::server'   => host_fqdn,
           'simp_options::puppet::ca'       => host_fqdn,
@@ -30,7 +29,8 @@ describe 'simp class' do
           'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
         ).to_yaml
 
-        set_hieradata_on(host, default_yaml)
+        on(host, 'mkdir -p /etc/puppetlabs/code/hieradata/')
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       # These boxes have no root password by default...

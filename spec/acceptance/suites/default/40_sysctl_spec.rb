@@ -22,12 +22,12 @@ describe 'simp::sysctl class' do
 
     context 'sysctl with enable ipv6 = true' do
       it 'set hieradata' do
-        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
         default_yaml = yaml.merge(
           'simp::sysctl::ipv6' => true,
         ).to_yaml
 
-        set_hieradata_on(host, default_yaml)
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       it 'set ipv6 = true' do
@@ -45,12 +45,12 @@ describe 'simp::sysctl class' do
 
     context 'should disable ipv6 again' do
       it 'set hieradata' do
-        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
         default_yaml = yaml.merge(
           'simp::sysctl::ipv6' => false,
         ).to_yaml
 
-        set_hieradata_on(host, default_yaml)
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       it 'should apply simp::sysctl with no errors' do

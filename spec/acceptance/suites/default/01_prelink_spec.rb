@@ -28,11 +28,11 @@ describe 'simp::prelink class' do
 
       context 'with prelink enabled' do
         it 'should enable prelink via hiera' do
-          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
           default_yaml = yaml.merge(
             'simp::prelink::enable' => true
           ).to_yaml
-          set_hieradata_on(host, default_yaml)
+          create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
         end
 
         it 'should apply manifest' do
@@ -81,11 +81,11 @@ describe 'simp::prelink class' do
 
       context 'with prelink disabled after being enabled' do
         it 'should disable prelink via hiera' do
-          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/hieradata/default.yaml').stdout)
+          yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
           default_yaml = yaml.merge(
             'simp::prelink::enable' => false
           ).to_yaml
-          set_hieradata_on(host, default_yaml)
+          create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
         end
 
         it 'should apply manifest' do
