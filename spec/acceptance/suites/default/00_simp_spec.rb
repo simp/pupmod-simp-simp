@@ -29,7 +29,7 @@ describe 'simp class' do
           'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
         ).to_yaml
 
-        on(host, 'mkdir -p /etc/puppetlabs/code/hieradata/')
+        on(host, 'mkdir -p /etc/puppetlabs/code/environments/production/hieradata/')
         create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
