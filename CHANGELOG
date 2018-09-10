@@ -1,3 +1,6 @@
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
+- Update Hiera 4 to Hiera 5
+
 * Thu Aug 30 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
 - Fix a usability bug in which simp::server::kickstart did not allow
   the bootstrap scripts provided by simp::server::kickstart::runpuppet

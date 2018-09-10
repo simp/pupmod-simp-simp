@@ -47,9 +47,7 @@ fixtures:
     motd: https://github.com/simp/puppetlabs-motd
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
-    nsswitch:
-      repo: https://github.com/simp/puppet-nsswitch
-      branch: simp-master
+    nsswitch: https://github.com/simp/puppet-nsswitch
     ntpd: https://github.com/simp/pupmod-simp-ntpd
     oddjob: https://github.com/simp/pupmod-simp-oddjob
     pam: https://github.com/simp/pupmod-simp-pam
@@ -90,9 +88,7 @@ fixtures:
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
-    timezone:
-      repo: https://github.com/simp/pupmod-simp-timezone
-      branch: simp-master
+    timezone: https://github.com/simp/pupmod-simp-timezone
     tlog: https://github.com/simp/pupmod-simp-tlog
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart

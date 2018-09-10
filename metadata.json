@@ -7,7 +7,6 @@
   "source": "https://github.com/simp/pupmod-simp-simp",
   "project_page": "https://github.com/simp/pupmod-simp-simp",
   "issues_url": "https://simp-project.atlassian.net",
-  "data_provider": "hiera",
   "tags": [
     "simp",
     "profiles"
@@ -130,8 +129,8 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/timezone",
-      "version_requirement": ">= 4.0.0 < 5.0.0"
+      "name": "saz/timezone",
+      "version_requirement": ">= 4.1.0 < 6.0.0"
     },
     {
       "name": "trlinkin/nsswitch",
