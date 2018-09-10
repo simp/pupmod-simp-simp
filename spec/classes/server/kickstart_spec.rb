@@ -67,7 +67,6 @@ describe 'simp::server::kickstart' do
 
         context 'alternate_data_dir' do
           let(:params) {{ :data_dir => '/srv/www' }}
-
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
         end

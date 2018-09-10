@@ -153,123 +153,115 @@ class simp::sysctl (
 
   validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
 
-  case $::operatingsystem {
-    'RedHat','CentOS': {
-      # Performance Related Settings
-      sysctl {
-        'net.unix.max_dgram_qlen'           : value => $net__unix__max_dgram_qlen;
-        'net.ipv4.neigh.default.gc_thresh3' : value => $net__ipv4__neigh__default__gc_thresh3;
-        'net.ipv4.neigh.default.gc_thresh2' : value => $net__ipv4__neigh__default__gc_thresh2;
-        'net.ipv4.neigh.default.gc_thresh1' : value => $net__ipv4__neigh__default__gc_thresh1;
-        'net.ipv4.neigh.default.proxy_qlen' : value => $net__ipv4__neigh__default__proxy_qlen;
-        'net.ipv4.neigh.default.unres_qlen' : value => $net__ipv4__neigh__default__unres_qlen;
-        'net.ipv4.tcp_rmem'                 : value => join($net__ipv4__tcp_rmem,' ');
-        'net.ipv4.tcp_wmem'                 : value => join($net__ipv4__tcp_wmem,' ');
-        'net.ipv4.tcp_fin_timeout'          : value => $net__ipv4__tcp_fin_timeout;
-        'net.ipv4.tcp_rfc1337'              : value => $net__ipv4__tcp_rfc1337;
-        'net.ipv4.tcp_keepalive_time'       : value => $net__ipv4__tcp_keepalive_time;
-        'net.ipv4.tcp_mtu_probing'          : value => $net__ipv4__tcp_mtu_probing;
-        'net.ipv4.tcp_no_metrics_save'      : value => $net__ipv4__tcp_no_metrics_save;
-        'net.core.rmem_max'                 : value => $net__core__rmem_max;
-        'net.core.wmem_max'                 : value => $net__core__wmem_max;
-        'net.core.optmem_max'               : value => $net__core__optmem_max;
-        'net.core.netdev_max_backlog'       : value => $net__core__netdev_max_backlog;
-        'net.core.somaxconn'                : value => $net__core__somaxconn;
-        'net.ipv4.tcp_tw_reuse'             : value => $net__ipv4__tcp_tw_reuse
-      }
+  sysctl {
+    'net.unix.max_dgram_qlen'           : value => $net__unix__max_dgram_qlen;
+    'net.ipv4.neigh.default.gc_thresh3' : value => $net__ipv4__neigh__default__gc_thresh3;
+    'net.ipv4.neigh.default.gc_thresh2' : value => $net__ipv4__neigh__default__gc_thresh2;
+    'net.ipv4.neigh.default.gc_thresh1' : value => $net__ipv4__neigh__default__gc_thresh1;
+    'net.ipv4.neigh.default.proxy_qlen' : value => $net__ipv4__neigh__default__proxy_qlen;
+    'net.ipv4.neigh.default.unres_qlen' : value => $net__ipv4__neigh__default__unres_qlen;
+    'net.ipv4.tcp_rmem'                 : value => join($net__ipv4__tcp_rmem,' ');
+    'net.ipv4.tcp_wmem'                 : value => join($net__ipv4__tcp_wmem,' ');
+    'net.ipv4.tcp_fin_timeout'          : value => $net__ipv4__tcp_fin_timeout;
+    'net.ipv4.tcp_rfc1337'              : value => $net__ipv4__tcp_rfc1337;
+    'net.ipv4.tcp_keepalive_time'       : value => $net__ipv4__tcp_keepalive_time;
+    'net.ipv4.tcp_mtu_probing'          : value => $net__ipv4__tcp_mtu_probing;
+    'net.ipv4.tcp_no_metrics_save'      : value => $net__ipv4__tcp_no_metrics_save;
+    'net.core.rmem_max'                 : value => $net__core__rmem_max;
+    'net.core.wmem_max'                 : value => $net__core__wmem_max;
+    'net.core.optmem_max'               : value => $net__core__optmem_max;
+    'net.core.netdev_max_backlog'       : value => $net__core__netdev_max_backlog;
+    'net.core.somaxconn'                : value => $net__core__somaxconn;
+    'net.ipv4.tcp_tw_reuse'             : value => $net__ipv4__tcp_tw_reuse
+  }
 
-      # This may not exist until additional packages are present
-      sysctl { 'net.netfilter.nf_conntrack_max':
-        value  => $net__netfilter__nf_conntrack_max,
-        silent => true
-      }
+  # This may not exist until additional packages are present
+  sysctl { 'net.netfilter.nf_conntrack_max':
+    value  => $net__netfilter__nf_conntrack_max,
+    silent => true
+  }
 
-      # Security Related Settings
-      sysctl {
-        'fs.suid_dumpable'                                 : value => $fs__suid_dumpable;
-        'kernel.core_pattern'                              : value => $kernel__core_pattern;
-        'kernel.core_pipe_limit'                           : value => $kernel__core_pipe_limit;
-        'kernel.core_uses_pid'                             : value => $kernel__core_uses_pid;
-        'kernel.dmesg_restrict'                            : value => $kernel__dmesg_restrict;
-        'kernel.panic'                                     : value => $kernel__panic;
-        'kernel.randomize_va_space'                        : value => $kernel__randomize_va_space;
-        'kernel.sysrq'                                     : value => $kernel__sysrq;
-        'net.ipv4.conf.all.accept_redirects'               : value => $net__ipv4__conf__all__accept_redirects;
-        'net.ipv4.conf.all.accept_source_route'            : value => $net__ipv4__conf__all__accept_source_route;
-        'net.ipv4.conf.all.log_martians'                   : value => $net__ipv4__conf__all__log_martians;
-        'net.ipv4.conf.all.rp_filter'                      : value => $net__ipv4__conf__all__rp_filter;
-        'net.ipv4.conf.all.secure_redirects'               : value => $net__ipv4__conf__all__secure_redirects;
-        'net.ipv4.conf.all.send_redirects'                 : value => $net__ipv4__conf__all__send_redirects;
-        'net.ipv4.conf.default.accept_redirects'           : value => $net__ipv4__conf__default__accept_redirects;
-        'net.ipv4.conf.default.accept_source_route'        : value => $net__ipv4__conf__default__accept_source_route;
-        # Done since we're applying heavy IPTables rules.
-        'net.ipv4.conf.default.rp_filter'                  : value => $net__ipv4__conf__default__rp_filter;
-        'net.ipv4.conf.default.secure_redirects'           : value => $net__ipv4__conf__default__secure_redirects;
-        'net.ipv4.conf.default.send_redirects'             : value => $net__ipv4__conf__default__send_redirects;
-        'net.ipv4.icmp_echo_ignore_broadcasts'             : value => $net__ipv4__icmp_echo_ignore_broadcasts;
-        'net.ipv4.icmp_ignore_bogus_error_responses'       : value => $net__ipv4__icmp_ignore_bogus_error_responses;
-        'net.ipv4.tcp_challenge_ack_limit'                 : value => $net__ipv4__tcp_challenge_ack_limit;
-        'net.ipv4.tcp_max_syn_backlog'                     : value => $net__ipv4__tcp_max_syn_backlog;
-        'net.ipv4.tcp_syncookies'                          : value => $net__ipv4__tcp_syncookies;
-      }
+  # Security Related Settings
+  sysctl {
+    'fs.suid_dumpable'                                 : value => $fs__suid_dumpable;
+    'kernel.core_pattern'                              : value => $kernel__core_pattern;
+    'kernel.core_pipe_limit'                           : value => $kernel__core_pipe_limit;
+    'kernel.core_uses_pid'                             : value => $kernel__core_uses_pid;
+    'kernel.dmesg_restrict'                            : value => $kernel__dmesg_restrict;
+    'kernel.panic'                                     : value => $kernel__panic;
+    'kernel.randomize_va_space'                        : value => $kernel__randomize_va_space;
+    'kernel.sysrq'                                     : value => $kernel__sysrq;
+    'net.ipv4.conf.all.accept_redirects'               : value => $net__ipv4__conf__all__accept_redirects;
+    'net.ipv4.conf.all.accept_source_route'            : value => $net__ipv4__conf__all__accept_source_route;
+    'net.ipv4.conf.all.log_martians'                   : value => $net__ipv4__conf__all__log_martians;
+    'net.ipv4.conf.all.rp_filter'                      : value => $net__ipv4__conf__all__rp_filter;
+    'net.ipv4.conf.all.secure_redirects'               : value => $net__ipv4__conf__all__secure_redirects;
+    'net.ipv4.conf.all.send_redirects'                 : value => $net__ipv4__conf__all__send_redirects;
+    'net.ipv4.conf.default.accept_redirects'           : value => $net__ipv4__conf__default__accept_redirects;
+    'net.ipv4.conf.default.accept_source_route'        : value => $net__ipv4__conf__default__accept_source_route;
+    # Done since we're applying heavy IPTables rules.
+    'net.ipv4.conf.default.rp_filter'                  : value => $net__ipv4__conf__default__rp_filter;
+    'net.ipv4.conf.default.secure_redirects'           : value => $net__ipv4__conf__default__secure_redirects;
+    'net.ipv4.conf.default.send_redirects'             : value => $net__ipv4__conf__default__send_redirects;
+    'net.ipv4.icmp_echo_ignore_broadcasts'             : value => $net__ipv4__icmp_echo_ignore_broadcasts;
+    'net.ipv4.icmp_ignore_bogus_error_responses'       : value => $net__ipv4__icmp_ignore_bogus_error_responses;
+    'net.ipv4.tcp_challenge_ack_limit'                 : value => $net__ipv4__tcp_challenge_ack_limit;
+    'net.ipv4.tcp_max_syn_backlog'                     : value => $net__ipv4__tcp_max_syn_backlog;
+    'net.ipv4.tcp_syncookies'                          : value => $net__ipv4__tcp_syncookies;
+  }
 
-      if $core_dumps {
-        file { $core_dump_dir:
-          ensure => 'directory',
-          owner  => 'root',
-          group  => 'root',
-          mode   => '0640',
-          before => [
-          Sysctl['kernel.core_pattern'],
-          Sysctl['kernel.core_uses_pid'],
-          ]
-        }
-      }
-      if ($pam and !$core_dumps) {
-        include '::pam'
-
-        pam::limits::rule { 'prevent_core':
-          domains => ['*'],
-          type    => 'hard',
-          item    => 'core',
-          value   => 0,
-          order   => 100
-        }
-      }
-
-      if ( $::operatingsystem in ['RedHat','CentOS'] ) and ( $::operatingsystemmajrelease == '6' ) {
-        sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
-      }
-
-      if $ipv6.is_a(Undef) {
-        $_disable_ipv6 = 1
-      }
-      else {
-        $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
-        sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_disable_ipv6 }
-      }
-
-      if $facts['ipv6_enabled'] and ( $_disable_ipv6 == 0 ) {
-        sysctl {
-          'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
-          'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
-          'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
-          'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
-          'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
-          'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
-          'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
-          'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
-          'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
-          'net.ipv6.conf.default.accept_source_route'  : value => $net__ipv6__conf__default__accept_source_route;
-          'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
-          'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
-          'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
-          'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations;
-        }
-      }
+  if $core_dumps {
+    file { $core_dump_dir:
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0640',
+      before => [
+      Sysctl['kernel.core_pattern'],
+      Sysctl['kernel.core_uses_pid'],
+      ]
     }
-    default : {
-      fail('Only RedHat and CentOS are currently supported by "simp::sysctl"')
+  }
+  if ($pam and !$core_dumps) {
+    include '::pam'
+
+    pam::limits::rule { 'prevent_core':
+      domains => ['*'],
+      type    => 'hard',
+      item    => 'core',
+      value   => 0,
+      order   => 100
+    }
+  }
+
+  if $::operatingsystemmajrelease == '6' {
+    sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
+  }
+
+  if $ipv6.is_a(Undef) {
+    $_disable_ipv6 = 1
+  }
+  else {
+    $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
+    sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_disable_ipv6 }
+  }
+
+  if $facts['ipv6_enabled'] and ( $_disable_ipv6 == 0 ) {
+    sysctl {
+      'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
+      'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
+      'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
+      'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
+      'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
+      'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
+      'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
+      'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
+      'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
+      'net.ipv6.conf.default.accept_source_route'  : value => $net__ipv6__conf__default__accept_source_route;
+      'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
+      'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
+      'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
+      'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations;
     }
   }
 }

@@ -43,8 +43,10 @@ class simp::netconsole (
     )
   }
 
+  $_netconsole_ensure = $ensure ? { 'present' => running, 'absent' => stopped }
+  $_netconsole_enable = $ensure ? { 'present' => true,    'absent' => false }
   service { 'netconsole':
-    ensure => $ensure ? { 'present' => running, 'absent' => stopped },
-    enable => $ensure ? { 'present' => true,    'absent' => false }
+    ensure => $_netconsole_ensure,
+    enable => $_netconsole_enable
   }
 }

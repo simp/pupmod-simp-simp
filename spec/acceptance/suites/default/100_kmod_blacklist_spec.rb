@@ -11,7 +11,6 @@ describe 'simp::kmod_blacklist class' do
 
   hosts.each do |host|
     context 'default parameters' do
-
       it 'should apply with no errors' do
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
@@ -47,12 +46,12 @@ describe 'simp::kmod_blacklist class' do
     end
 
     context 'disabling the ability to override modules' do
-      let(:hieradata) {{
-        'simp::kmod_blacklist::allow_overrides' => false
-      }}
-
-      it 'sets hieradata' do
-        set_hieradata_on(host, hieradata)
+      it 'should disallow overrides via hiera' do
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::kmod_blacklist::allow_overrides' => false
+        ).to_yaml
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       it 'should apply with no errors' do
@@ -84,12 +83,13 @@ describe 'simp::kmod_blacklist class' do
         on(host, %(modprobe crypto_null))
       end
 
-      let(:hieradata) {{
-        'simp::kmod_blacklist::lock_modules' => true
-      }}
-
-      it 'sets hieradata' do
-        set_hieradata_on(host, hieradata)
+      it 'should lock via hiera' do
+        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
+        default_yaml = yaml.merge(
+          'simp::kmod_blacklist::allow_overrides' => nil,
+          'simp::kmod_blacklist::lock_modules'    => true
+        ).to_yaml
+        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
       end
 
       it 'should apply with no errors' do

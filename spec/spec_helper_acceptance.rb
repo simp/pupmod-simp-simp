@@ -15,6 +15,7 @@ unless ENV['BEAKER_provision'] == 'no'
   end
 end
 
+parallel = { :run_in_parallel => ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }
 
 RSpec.configure do |c|
   # ensure that environment OS is ready on each host
@@ -31,7 +32,7 @@ RSpec.configure do |c|
 
       # Make sure that the SIMP default environment files are in place if they
       # exist
-      hosts.each do |sut|
+      block_on(hosts, parallel) do |sut|
         environment = on(sut, %q(puppet config print environment)).output.strip
 
         tgt_path = '/var/simp/environments'
@@ -56,16 +57,14 @@ RSpec.configure do |c|
         end
       end
 
-      server = only_host_with_role(hosts, 'server')
-
       # Generate and install PKI certificates on each SUT
       Dir.mktmpdir do |cert_dir|
-        run_fake_pki_ca_on(server, hosts, cert_dir )
+        run_fake_pki_ca_on(default, hosts, cert_dir )
         hosts.each{ |sut| copy_pki_to( sut, cert_dir, '/etc/pki/simp-testing' )}
       end
 
       # add PKI keys
-      copy_keydist_to(server)
+      copy_keydist_to(default)
     rescue StandardError, ScriptError => e
       if ENV['PRY']
         require 'pry'; binding.pry

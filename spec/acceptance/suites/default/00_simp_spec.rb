@@ -15,60 +15,31 @@ describe 'simp class' do
   context 'on each host' do
     hosts.each do |host|
       let(:host_fqdn) { fact_on(host, 'fqdn') }
-      let(:options) {
-        <<-EOF
-# Mandatory Settings
-simp_options::dns::servers: ['8.8.8.8']
-simp_options::puppet::server: #{host_fqdn}
-simp_options::puppet::ca: #{host_fqdn}
-simp_options::ntpd::servers: ['time.nist.gov']
-simp_options::ldap::bind_pw: 's00per sekr3t!'
-simp_options::ldap::bind_hash: '{SSHA}foobarbaz!!!!'
-simp_options::ldap::sync_pw: 's00per sekr3t!'
-simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
-simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
-# simp_options::log_servers: ['#{host_fqdn}']
-sssd::domains: ['LOCAL']
-simp::yum::repo::simp::servers: ['#{host_fqdn}']
-simp::yum::repo::local_os_updates::servers:
-  - '#{host_fqdn}'
-  - http://mirror.centos.org/centos/$releasever/os/$basearch/
 
-# Settings required for acceptance test, some may be required
-simp::scenario: simp
-simp_options::rsync: false
-simp_options::clamav: false
-simp_options::pki: true
-simp_options::pki::source: '/etc/pki/simp-testing/pki'
-simp_options::trusted_nets: ['ALL']
+      it 'should set up hiera' do
+        yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
-# Settings to make beaker happy
-ssh::server::conf::permitrootlogin: true
-ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
-useradd::securetty:
-  - ANY_SHELL
-        EOF
-      }
+        yaml = YAML.load(File.read('spec/acceptance/suites/default/files/default_hiera.yaml'))
+        default_yaml = yaml.merge(
+          # 'simp_options::log_servers'    => [host _fqdn],
+          # 'simp::yum::servers'           => [host_fqdn],
+          'simp_options::puppet::server'   => host_fqdn,
+          'simp_options::puppet::ca'       => host_fqdn,
+          'simp::yum::repo::simp::servers' => [host_fqdn],
+          'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
+        ).to_yaml
 
-      it 'should set up simp_options through hiera' do
-        set_hieradata_on(host, options)
+        on(host, 'mkdir -p /etc/puppetlabs/code/{,hiera}data/ /etc/puppetlabs/code/environments/production/{,hiera}data')
+        create_remote_file(host, '/etc/puppetlabs/code/hieradata/common.yaml', default_yaml)
+        on(host, 'ln -s /etc/puppetlabs/code/hieradata/common.yaml /etc/puppetlabs/code/data/common.yaml')
+        on(host, 'ln -s /etc/puppetlabs/code/hieradata/common.yaml /etc/puppetlabs/code/environments/production/hieradata/common.yaml')
+        on(host, 'ln -s /etc/puppetlabs/code/hieradata/common.yaml /etc/puppetlabs/code/environments/production/data/common.yaml')
       end
 
       # These boxes have no root password by default...
       it 'should set the root password' do
         on(host, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
         on(host, 'echo "root:password" | chpasswd --crypt-method SHA256')
-      end
-
-      it 'should set up needed repositories' do
-        install_package host, 'epel-release'
-        on host, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash'
-      end
-
-      it 'should put something in portreserve so the service starts' do
-        # the portreserve service will fail unless something is configured
-        on host, 'mkdir -p /etc/portreserve'
-        on host, 'echo rndc/tcp > /etc/portreserve/named'
       end
 
       it 'should bootstrap in a few runs' do

@@ -69,66 +69,59 @@ class simp::base_apps (
     require    => Package['netlabel_tools']
   }
 
-  case $facts['os']['name'] {
-    'RedHat','CentOS': {
-      if $facts['os']['release']['major'] > '6' {
-        # For now, these will be commented out and ignored by svckill
-        # Puppet cannot enable these services because there is no
-        # init.d script or systemd script to do so.
+  if $facts['os']['release']['major'] > '6' {
+    # For now, these will be commented out and ignored by svckill
+    # Puppet cannot enable these services because there is no
+    # init.d script or systemd script to do so.
 
-        # service { 'quotaon': enable => true }
-        # service { 'messagebus': enable  => true }
-        svckill::ignore { 'quotaon': }
-        svckill::ignore { 'messagebus': }
+    # service { 'quotaon': enable => true }
+    # service { 'messagebus': enable  => true }
+    svckill::ignore { 'quotaon': }
+    svckill::ignore { 'messagebus': }
+  }
+  else {
+    package { ['hal', 'quota']: ensure => $ensure }
+    service { 'haldaemon':
+      ensure     => 'running',
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
+      require    => Package['hal']
+    }
+
+    # portreserve will only start if there is a file in the conf directory
+    if $facts['portreserve_configured'] {
+      package { 'portreserve':
+        ensure => $ensure
       }
-      else {
-        package { ['hal', 'quota']: ensure => $ensure }
-        service { 'haldaemon':
-          ensure     => 'running',
-          enable     => true,
-          hasrestart => true,
-          hasstatus  => true,
-          require    => Package['hal']
-        }
 
-        # portreserve will only start if there is a file in the conf directory
-        if $facts['portreserve_configured'] {
-          package { 'portreserve':
-            ensure => $ensure
-          }
+      # This file is required to ensure that the portreserve service starts
+      # if something has bound to all of the other defined ports
+      #
+      # If this is not defined, the service will attempt to restart on
+      # every puppet run.
+      file { '/etc/portreserve/discard':
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => "discard\n",
+        notify  => Service['portreserve']
+      }
 
-          # This file is required to ensure that the portreserve service starts
-          # if something has bound to all of the other defined ports
-          #
-          # If this is not defined, the service will attempt to restart on
-          # every puppet run.
-          file { '/etc/portreserve/discard':
-            owner   => 'root',
-            group   => 'root',
-            mode    => '0644',
-            content => "discard\n",
-            notify  => Service['portreserve']
-          }
-
-          service { 'portreserve':
-            ensure     => 'running',
-            enable     => true,
-            hasrestart => true,
-            hasstatus  => false
-          }
-        }
-
-        service { 'quota_nld':
-          ensure     => 'running',
-          enable     => true,
-          hasrestart => true,
-          hasstatus  => true,
-          require    => Package['quota']
-        }
+      service { 'portreserve':
+        ensure     => 'running',
+        enable     => true,
+        hasrestart => true,
+        hasstatus  => false
       }
     }
-    default: {
-      fail("${facts['os']['name']} is not yet supported by ${module_name}")
+
+    service { 'quota_nld':
+      ensure     => 'running',
+      enable     => true,
+      hasrestart => true,
+      hasstatus  => true,
+      require    => Package['quota']
     }
   }
 

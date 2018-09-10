@@ -1,3 +1,10 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
 HOSTS:
   server-el7:
     roles:
@@ -8,8 +15,12 @@ HOSTS:
       - el7
     platform:   el-7-x86_64
     box:        centos/7
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-7
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
@@ -33,8 +44,12 @@ HOSTS:
       - el6
     platform:   el-6-x86_64
     box:        centos/6
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-6
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:
@@ -53,7 +68,7 @@ HOSTS:
          - https://getfedora.org/static/0608B895.txt
 CONFIG:
   log_level: verbose
-  type:      aio
-  vagrant_memsize: 2048
-  synced_folder: disabled
-  # vb_gui: true
+  type: aio
+<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
+  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
+<% end -%>

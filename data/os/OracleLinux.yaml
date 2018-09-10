@@ -5,3 +5,156 @@ simp::scenario_map:
   poss:
     - pupmod
     - simp::scenario::poss
+
+  remote_access:
+    - simp::nsswitch
+    - pam::access
+    - pam::wheel
+    - pupmod
+    - resolv
+    - simp::admin
+    - simp::sssd::client
+    - ssh
+    - simp::scenario::poss
+
+  simp_lite:
+    # Shared with 'poss'
+    - pupmod
+    # Shared with 'simp'
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum::schedule
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::nsswitch
+    - simp::prelink
+    - simp::sysctl
+    - ssh
+    - sudosh
+
+  simp:
+    # Shared with 'poss'
+    - pupmod
+    # Shared with 'simp_lite'
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum::schedule
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::nsswitch
+    - simp::prelink
+    - simp::sysctl
+    - ssh
+    - sudosh
+    # These classes are only in 'simp'
+    - pam::wheel
+    - selinux
+    - svckill
+    - fips
+
+  one_shot:
+    # Shared with 'simp'
+    - pupmod
+    - simp::scenario::base
+    - aide
+    - auditd
+    - clamav
+    - chkrootkit
+    - at
+    - cron
+    - incron
+    - useradd
+    - resolv
+    - issue
+    - tuned
+    - swap
+    - timezone
+    - ntpd
+    - pam::access
+    - simp_rsyslog
+    - simp::admin
+    - simp::base_apps
+    - simp::base_services
+    - simp::yum::schedule
+    - simp::kmod_blacklist
+    - simp::mountpoints
+    - simp::nsswitch
+    - simp::prelink
+    - simp::sysctl
+    - ssh
+    - sudosh
+    # These classes are only in 'one_shot'
+    - simp::one_shot
+
+simp::server::data:
+  - simp::server::rsync_shares
+  # Shared with 'poss'
+  - pupmod
+  # Shared with 'simp_lite'
+  - aide
+  - at
+  - chkrootkit
+  - cron
+  - incron
+  - issue
+  - ntpd
+  - pam::access
+  - resolv
+  - ssh
+  - sudosh
+  - swap
+  - timezone
+  - tuned
+  - useradd
+  - simp::admin
+  - simp::base_apps
+  - simp::base_services
+  - simp::kmod_blacklist
+  - simp::mountpoints
+  - simp::nsswitch
+  - simp::prelink
+  - simp::sysctl
+  - '--simp::scenario::base'
+  - '--auditd'
+  - '--clamav'
+  # These classes are only in 'simp'
+  - pam::wheel
+  - selinux
+  - svckill
+  - fips

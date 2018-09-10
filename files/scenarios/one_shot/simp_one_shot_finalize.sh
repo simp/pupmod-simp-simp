@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e -o pipefail
+
 usage="Usage: $0 -k (true|false*) -d (true|false*) -f (true*|false) -p (true*|false) [-h]"
 
 # Option Defaults
@@ -90,6 +92,7 @@ if [ $remove_puppet -eq 0 ]; then
   $dry_run yum remove -y puppet ||:
   $dry_run yum remove -y puppet-agent ||:
   $dry_run yum remove -y puppetlabs* ||:
+  $dry_run yum remove -y puppet* ||:
 
   $dry_run rm -f /usr/local/bin/puppet*
   $dry_run rm -rf /opt/puppetlabs

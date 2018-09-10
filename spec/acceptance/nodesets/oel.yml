@@ -1,5 +1,12 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
 HOSTS:
-  server-el7:
+  server-oel7:
     roles:
       - server
       - default
@@ -7,9 +14,13 @@ HOSTS:
       - simp_server
       - el7
     platform:   el-7-x86_64
-    box:        centos/7
-    hypervisor: vagrant
+    box:        elastic/oel-7-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'https://public-yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch'
+        gpgkeys:
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
@@ -27,14 +38,18 @@ HOSTS:
           - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
           - https://getfedora.org/static/352C64E5.txt
 
-  server-el6:
+  server-oel6:
     roles:
       - simp_server
       - el6
     platform:   el-6-x86_64
-    box:        centos/6
-    hypervisor: vagrant
+    box:        elastic/oel-6-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'https://public-yum.oracle.com/repo/OracleLinux/OL6/latest/$basearch'
+        gpgkeys:
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol6
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:
@@ -50,11 +65,10 @@ HOSTS:
          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
          - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
-         - https://getfedora.org/static/352C64E5.txt
+         - https://getfedora.org/static/0608B895.txt
 CONFIG:
   log_level: verbose
-  type:      aio
-  puppet_collection: puppet5
-  vagrant_memsize: 2048
-  synced_folder: disabled
-  # vb_gui: true
+  type: aio
+<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
+  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
+<% end -%>

@@ -141,7 +141,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.10.4 < 5.0.0"
+      "version_requirement": ">= 4.10.4 < 6.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -154,6 +154,13 @@
     },
     {
       "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "6",
         "7"

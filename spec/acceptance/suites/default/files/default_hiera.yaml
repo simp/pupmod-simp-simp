@@ -1,0 +1,38 @@
+---
+# Mandatory Settings
+simp_options::dns::servers: ['8.8.8.8']
+simp_options::ntpd::servers: ['time.nist.gov']
+simp_options::ldap::bind_pw: 's00per sekr3t!'
+simp_options::ldap::bind_hash: '{SSHA}foobarbaz!!!!'
+simp_options::ldap::sync_pw: 's00per sekr3t!'
+simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
+simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
+sssd::domains: ['LOCAL']
+simp::scenario: simp
+simp_options::ldap: false
+simp_options::rsync: false
+simp_options::clamav: false
+simp_options::pki: true
+simp_options::pki::source: '/etc/pki/simp-testing/pki'
+simp_options::trusted_nets: ['0.0.0.0/0']
+# the below line might fix issues on el6
+# auditd::enable_auditing: false
+
+# Settings to make beaker happy
+sudo::user_specifications:
+  vagrant_all:
+    user_list: ['vagrant']
+    cmnd: ['ALL']
+    passwd: false
+pam::access::users:
+  vagrant:
+    origins: ['ALL']
+    permission: "+"
+ssh::server::conf::permitrootlogin: true
+ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+useradd::securetty: ['ANY_SHELL']
+
+# data needed for 10_yum_spec
+simp_apache::rsync_server: '127.0.0.1'
+simp_apache::rsync_web_root: false
+simp_apache::ssl::sslverifyclient: none

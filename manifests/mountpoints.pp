@@ -32,7 +32,7 @@ class simp::mountpoints (
   if $manage_proc { include '::simp::mountpoints::proc' }
 
 
-  if $facts['os']['name'] in ['RedHat','CentOS'] and (versioncmp($facts['os']['release']['major'],'6') == 0) {
+  if versioncmp($facts['os']['release']['major'],'6') == 0 {
     include '::simp::mountpoints::el6_tmp_fix'
   }
 

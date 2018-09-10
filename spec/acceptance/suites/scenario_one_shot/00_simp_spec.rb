@@ -8,7 +8,6 @@ describe 'simp "one_shot" scenario' do
   end
 
   def finalize_running?(host)
-
     puppet_running = on(host, 'ps --no-header -f -C puppet', :accept_all_exit_codes => true).exit_code == 0
 
     return puppet_running if puppet_running

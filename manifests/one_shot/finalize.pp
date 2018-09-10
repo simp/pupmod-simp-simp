@@ -33,8 +33,9 @@ class simp::one_shot::finalize (
 
   # Run this in the background so that we don't break the current Puppet run
   exec { 'one_shot finalize':
-    command   => "${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} &",
+    command   => "nohup ${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} > /dev/null 2>&1 &",
     logoutput => true,
+    provider  => 'shell',
     require   => File[$_finalize_script]
   }
 }

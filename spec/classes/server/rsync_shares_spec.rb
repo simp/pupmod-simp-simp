@@ -22,6 +22,12 @@ describe 'simp::server::rsync_shares' do
                   '6'      => { 'id' => '6',      'shares' => ['bind_dns'] },
                   '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
                   'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
+                },
+                'oraclelinux' => {
+                  'id'     => 'OracleLinux',
+                  '6'      => { 'id' => '6',      'shares' => ['bind_dns'] },
+                  '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
+                  'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
                 }
               }
             }
