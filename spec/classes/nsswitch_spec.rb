@@ -8,7 +8,7 @@ describe 'simp::nsswitch' do
           os_facts
         end
 
-        context 'with default parameters on EL 6' do
+        context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::nsswitch') }
           it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
