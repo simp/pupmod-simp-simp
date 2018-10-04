@@ -129,7 +129,7 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "saz/timezone",
+      "name": "simp/timezone",
       "version_requirement": ">= 4.1.0 < 6.0.0"
     },
     {
