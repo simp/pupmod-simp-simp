@@ -130,7 +130,7 @@
     },
     {
       "name": "simp/timezone",
-      "version_requirement": ">= 4.1.0 < 6.0.0"
+      "version_requirement": ">= 4.0.0 < 6.0.0"
     },
     {
       "name": "simp/tlog",
