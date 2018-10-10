@@ -34,7 +34,6 @@ fixtures:
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
-    freeradius: https://github.com/simp/pupmod-simp-freeradius
     haveged: https://github.com/simp/pupmod-simp-haveged
     incron: https://github.com/simp/pupmod-simp-incron
     inifile: https://github.com/simp/puppetlabs-inifile
