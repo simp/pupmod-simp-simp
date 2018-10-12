@@ -1,3 +1,10 @@
+* Fri Oct 12 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.0-0
+- Added ability to configure some kernel boot parameter,
+  specifically the spectre_v2 and kpti (meltdown) parameters.
+  Defaults are the OS settings but allows the users to override
+  the settings if needed.
+- Updated common assets for puppet 5.
+
 * Wed Oct 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
 - Remove unnecessary simp/freeradius dependency in metadata.json
 

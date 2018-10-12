@@ -4,6 +4,9 @@
 # There are also items in this list that are particularly useful for
 # general system security.
 #
+# This also includes module simp::kernel_params which is used to
+# configure boot command line parameters that are security related.
+#
 # See the kernel documentation for the functionality of each variable.
 #
 # Performance Related Settings
@@ -148,6 +151,9 @@ class simp::sysctl (
   Boolean              $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false }),
   Optional[Boolean]    $ipv6                                           = undef
 ) {
+
+  # include module to set boot time kernel parameters
+  include 'simp::kernel_param'
 
   simplib::assert_metadata( $module_name )
 
