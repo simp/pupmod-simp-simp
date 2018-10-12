@@ -65,10 +65,6 @@
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/freeradius",
-      "version_requirement": ">= 7.0.0 < 8.0.0"
-    },
-    {
       "name": "simp/iptables",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
