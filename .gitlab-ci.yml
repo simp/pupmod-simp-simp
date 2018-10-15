@@ -167,7 +167,6 @@ default-fips:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
-  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 4.10.0'
     BEAKER_fips: 'yes'
@@ -181,7 +180,6 @@ default-oel:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
-  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 4.10.0'
   script:

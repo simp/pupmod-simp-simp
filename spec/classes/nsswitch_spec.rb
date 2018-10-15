@@ -11,7 +11,7 @@ describe 'simp::nsswitch' do
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::nsswitch') }
-          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM) }
+          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files
@@ -35,7 +35,7 @@ EOM
 
         context 'with sssd => true' do
           let(:params) {{ :sssd => true }}
-          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM) }
+          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files [!NOTFOUND=return] sss
@@ -59,7 +59,7 @@ EOM
 
         context 'with ldap => true' do
           let(:params) {{ :ldap => true }}
-          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM) }
+          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files [!NOTFOUND=return] ldap
