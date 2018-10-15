@@ -27,7 +27,9 @@ class simp::prelink (
   simplib::assert_metadata( $module_name )
 
   if ( $enable and ! $facts['fips_enabled'] ) {
-    package { 'prelink': ensure => $ensure }
+    package { 'prelink':
+      ensure => $ensure
+    }
 
     shellvar { 'enable prelink':
       ensure   => present,
@@ -60,7 +62,9 @@ class simp::prelink (
         before  => Package['prelink']
       }
 
-      package { 'prelink': ensure => 'absent' }
+      package { 'prelink':
+        ensure => 'absent'
+      }
     }
   }
 }

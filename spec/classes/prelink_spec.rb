@@ -3,10 +3,13 @@ require 'spec_helper'
 describe 'simp::prelink' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
+
       context 'with default parameters' do
         context 'when prelink is not installed' do
           let(:facts) do
-            os_facts
+            os_facts.merge( {
+              :prelink => nil
+            } )
           end
 
           it { is_expected.to compile.with_all_deps }
@@ -16,7 +19,9 @@ describe 'simp::prelink' do
 
         context 'when prelink is installed and disabled' do
           let(:facts) do
-            os_facts.merge( { :prelink => { :enabled => false } } )
+            os_facts.merge( {
+              :prelink => { :enabled => false }
+            } )
           end
 
           it { is_expected.to compile.with_all_deps }
