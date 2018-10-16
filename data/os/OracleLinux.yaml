@@ -42,6 +42,7 @@ simp::scenario_map:
     - simp::base_apps
     - simp::base_services
     - simp::yum::schedule
+    - simp::kernel_param
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -75,6 +76,7 @@ simp::scenario_map:
     - simp::base_apps
     - simp::base_services
     - simp::yum::schedule
+    - simp::kernel_param
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -112,6 +114,7 @@ simp::scenario_map:
     - simp::base_apps
     - simp::base_services
     - simp::yum::schedule
+    - simp::kernel_param
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -145,6 +148,7 @@ simp::server::data:
   - simp::admin
   - simp::base_apps
   - simp::base_services
+  - simp::kernel_param
   - simp::kmod_blacklist
   - simp::mountpoints
   - simp::nsswitch

@@ -1,6 +1,4 @@
 # Allows configuration for some kernel boot params for general security.
-# This module is included by simp::sysctl, which also manages the
-# run time kernel parameters.
 #
 # See the kernel documentation for the functionality of each variable.
 #
