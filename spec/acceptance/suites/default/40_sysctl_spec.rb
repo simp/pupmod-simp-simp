@@ -18,6 +18,7 @@ describe 'simp::sysctl class' do
       it 'should be idempotent' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
+
     end
 
     context 'sysctl with enable ipv6 = true' do

@@ -58,6 +58,7 @@ describe 'simp::server' do
             'simp::admin',
             'simp::base_apps',
             'simp::base_services',
+            'simp::kernel_param',
             'simp::kmod_blacklist',
             'simp::mountpoints',
             'simp::prelink',
