@@ -87,7 +87,9 @@ fixtures:
     swap: https://github.com/simp/pupmod-simp-swap
     tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot
-    timezone: https://github.com/simp/pupmod-simp-timezone
+    timezone:
+      repo: https://github.com/simp/pupmod-simp-timezone
+      branch: simp-master
     tlog: https://github.com/simp/pupmod-simp-tlog
     tuned: https://github.com/simp/pupmod-simp-tuned
     upstart: https://github.com/simp/pupmod-simp-upstart
