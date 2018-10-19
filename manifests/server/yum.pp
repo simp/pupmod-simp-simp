@@ -9,9 +9,10 @@
 # @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::server::yum (
-  Stdlib::Absolutepath $data_dir     = '/var/www',
-  Simplib::Netlist     $trusted_nets = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
-){
+  Stdlib::Absolutepath $data_dir          = '/var/www',
+  Simplib::Netlist     $trusted_nets      = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] }),
+  String               $createrepo_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+) {
 
   simplib::assert_metadata( $module_name )
 
@@ -37,6 +38,6 @@ class simp::server::yum (
   }
 
   package { 'createrepo':
-    ensure => 'latest',
+    ensure => $createrepo_ensure,
   }
 }

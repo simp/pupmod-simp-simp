@@ -39,13 +39,13 @@ jobs:
       rvm: 2.4.4
       env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
       script:
-        - bundle exec rake spec
+        - bundle exec rake spec_parallel
 
     - stage: spec
       rvm: 2.1.9
       env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.10.0"
       script:
-        - bundle exec rake spec
+        - bundle exec rake spec_parallel
 
     - stage: deploy
       rvm: 2.4.4
