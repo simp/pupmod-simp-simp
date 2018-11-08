@@ -1,0 +1,11 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": true,
+  "description": "Performs a scan with OpenSCAP",
+  "parameters": {
+    "profile": {
+      "description": "Profile to evaluate",
+      "type": "Optional[String]"
+    }
+  }
+}

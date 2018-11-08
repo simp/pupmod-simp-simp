@@ -1,3 +1,6 @@
+* Fri Jul 05 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.9.0-0
+- Add v2 compliance_markup data
+
 * Tue Jun 25 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.9.0-0
 - Updated the URLs to the EPEL GPG keys. The URLs have changed.
 
