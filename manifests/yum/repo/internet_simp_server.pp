@@ -28,7 +28,7 @@ class simp::yum::repo::internet_simp_server (
     gpgcheck        => 1,
     gpgkey          => [
       'https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP',
-      'https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP-6'
+      'https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6'
     ],
     sslverify       => 0,
     keepalive       => 0,
