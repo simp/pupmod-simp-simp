@@ -16,6 +16,7 @@ class simp::yum::repo::internet_simp_dependencies (
 
   $_dependency_gpg_keys = [
     'https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP',
+    'https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6',
     'https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs',
     'https://yum.puppetlabs.com/RPM-GPG-KEY-puppet',
     'https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94',

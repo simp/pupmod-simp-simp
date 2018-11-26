@@ -9,6 +9,7 @@ function simp::yum::repo::gpgkeys::simp() {
     'RPM-GPG-KEY-puppet',
     'RPM-GPG-KEY-puppetlabs',
     'RPM-GPG-KEY-SIMP',
+    'RPM-GPG-KEY-SIMP-6',
     'RPM-GPG-KEY-elasticsearch',
     'RPM-GPG-KEY-grafana-legacy',
     'RPM-GPG-KEY-grafana',
