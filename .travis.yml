@@ -24,7 +24,7 @@ stages:
   - check
   - spec
   - name: deploy
-    if: 'fork = false AND tag = true'
+    if: 'tag IS present'
 
 bundler_args: --without development system_tests --path .vendor
 
@@ -117,5 +117,4 @@ jobs:
             secure: "NR5lPHTfp142XIW5nowolBMFitPaaXpLiO9IvNXU3u00cZCOQmdU8fKWZPqKcUf8izV8EK9p5KCOSd956XxwrCyuwNEq6Z26WAydU6MN8qMKW7ucfm+xcURWQPKQ19MX5pNSaLOXemFvva2kuZF1rkwCYoSHJeBXDfLusBau56b9cIbX8BxNfkqPVzbNu1LioQkXTJ8Qt0u/hmRZy4593E6O5I6Hblh2lPKugNv+LpsUqwCGll1hvnTu0SJJEPZBYlKuC34qfsnqErT+eSOjLNGhxkPy3JVfwP4GRQbw2rFWNMzaPC/i6LGuB9GMPuUNjJHpZyl2+k33f9vFwfZiWoqIwJTRQTnXsbSa/amgtlaFX//43n9NMMPrI9WryoiYHTWQGiDxNuzqN6qjtthUlNfPBovsaqSsmcW9XELhsMxoo/t1G6LQWqEiCq5FB/bsnEig24CJeRELHL42A3bii+VWiBl/kgMEd/ju3J0VIqbLKIJcPQWhcomW5YGMf8Q9+FNZPyA4i3ebwwehh+etfND6+d3DOeXE84ZGLtJppELRwbgvJO/JWE/qxCdNSO4Nh3No+rRqXal3IESQBkfawuQoLIMBod7MCrRzo5d4J1asyoFJU+FMLRYjCcgaMUudUNViux6g86Cfav9rTDmhs7zdIZxaCOSNgLv9gfNu6AY="
           on:
             tags: true
-            rvm: 2.4.4
             condition: '($SKIP_FORGE_PUBLISH != true)'
