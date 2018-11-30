@@ -1,3 +1,10 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
 HOSTS:
   oel7:
     roles:
@@ -7,8 +14,8 @@ HOSTS:
       - simp_server
       - el7
     platform:   el-7-x86_64
-    box:        elastic/oel-7-x86_64
-    hypervisor: vagrant
+    box:        onyxpoint/oel-7-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
@@ -33,8 +40,8 @@ HOSTS:
     roles:
       - simp_server
     platform:   el-6-x86_64
-    box:        elastic/oel-6-x86_64
-    hypervisor: vagrant
+    box:        onyxpoint/oel-6-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
@@ -60,4 +67,7 @@ CONFIG:
   type:      aio
   vagrant_memsize: 256
   synced_folder: disabled
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>
   # vb_gui: true
