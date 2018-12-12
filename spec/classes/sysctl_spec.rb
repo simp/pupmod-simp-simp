@@ -15,6 +15,7 @@ describe 'simp::sysctl' do
         it { is_expected.not_to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
         it { is_expected.not_to create_sysctl('net.ipv6.conf.all.accept_source_route').with(:value => 0 ) }
         it { is_expected.not_to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 0 ) }
+        it { is_expected.to create_sysctl('fs.inotify.max_user_watches').with(:value => 65535 ) }
       end
 
       context "with ipv6 => true" do

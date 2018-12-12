@@ -1,3 +1,11 @@
+* Tue Dec 11 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.1-0
+- Added sysctl value to increase  max  number of inotify user watchs.
+  Default = 8192, New Value 65535.
+  - If max number is reached systemctl fails with "Not enough Space on Disk"
+  even though there is plenty of space.
+  - See https://unix.stackexchange.com/questions/13751/kernel-inotify-watch-limit-reached
+  for some helpful information.
+
 * Thu Oct 18 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.6.0-0
 - Added $simp::server::yum::createrepo_ensure parameter
   - Changed the package from 'latest' to 'installed'
