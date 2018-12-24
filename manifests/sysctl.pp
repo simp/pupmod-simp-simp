@@ -27,6 +27,9 @@
 # @param net__core__netdev_max_backlog
 # @param net__core__somaxconn
 # @param net__ipv4__tcp_tw_reuse
+# @param fs__inotify__max_user_watch
+#     Increase the number of inotify watches allowed in order to prevent
+#     systemctl error: "Not Enough Disk Space" caused when it reaches limit.
 #
 # Security Related Settings:
 # @param fs__suid_dumpable
@@ -103,6 +106,7 @@ class simp::sysctl (
   Integer[0]           $net__core__netdev_max_backlog                  = 2048,
   Integer[0]           $net__core__somaxconn                           = 2048,
   Integer[0,1]         $net__ipv4__tcp_tw_reuse                        = 1,
+  Integer[8912]        $fs__inotify__max_user_watches                  = 102400,
   Integer[0,1]         $fs__suid_dumpable                              = 0,          # CCE-27044-7
   String               $kernel__core_pattern                           = '/var/core/%u_%g_%p_%t_%h_%e.core',
   Integer[0]           $kernel__core_pipe_limit                        = 0,
@@ -151,7 +155,8 @@ class simp::sysctl (
 
   simplib::assert_metadata( $module_name )
 
-  validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
+  simplib::validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
+  simplib::validate_sysctl_value('fs.inotify.max_user_watches', $fs__inotify__max_user_watches)
 
   sysctl {
     'net.unix.max_dgram_qlen'           : value => $net__unix__max_dgram_qlen;
@@ -172,7 +177,8 @@ class simp::sysctl (
     'net.core.optmem_max'               : value => $net__core__optmem_max;
     'net.core.netdev_max_backlog'       : value => $net__core__netdev_max_backlog;
     'net.core.somaxconn'                : value => $net__core__somaxconn;
-    'net.ipv4.tcp_tw_reuse'             : value => $net__ipv4__tcp_tw_reuse
+    'net.ipv4.tcp_tw_reuse'             : value => $net__ipv4__tcp_tw_reuse;
+    'fs.inotify.max_user_watches'       : value => $fs__inotify__max_user_watches
   }
 
   # This may not exist until additional packages are present
