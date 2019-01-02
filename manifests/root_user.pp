@@ -10,10 +10,14 @@
 # @param manage_group
 #  Ensure the root group has appropriate UIDs, etc
 #
+# @param password
+#  Set the root user's password using Puppet
+#
 class simp::root_user (
-  Boolean $manage_perms = true,
-  Boolean $manage_user  = true,
-  Boolean $manage_group = true
+  Boolean           $manage_perms = true,
+  Boolean           $manage_user  = true,
+  Boolean           $manage_group = true,
+  Optional[String]  $password     = undef,
 ){
 
   simplib::assert_metadata( $module_name )
@@ -28,6 +32,12 @@ class simp::root_user (
   }
 
   if $manage_user {
+    # use Sensitive data type for the password if set
+    $l_password = $password ? {
+      undef   => undef,
+      default => Sensitive($password),
+    }
+
     user { 'root':
       ensure     => 'present',
       uid        => '0',
@@ -36,7 +46,8 @@ class simp::root_user (
       home       => '/root',
       shell      => '/bin/bash',
       membership => 'minimum',
-      forcelocal => true
+      forcelocal => true,
+      password   => $l_password,
     }
   }
 

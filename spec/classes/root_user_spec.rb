@@ -10,7 +10,7 @@ describe 'simp::root_user' do
 
       it 'manages root user by default' do
         is_expected.to create_file('/root')
-        is_expected.to create_user('root')
+        is_expected.to create_user('root').without_password
         is_expected.to create_group('root')
       end
 
@@ -27,6 +27,16 @@ describe 'simp::root_user' do
         }
       end
 
+      context 'with password' do
+        let(:params) {{
+          :password => 'mysecretpassword'
+        }}
+        it {
+          is_expected.to create_file('/root')
+          is_expected.to create_user('root').with_password('mysecretpassword')
+          is_expected.to create_group('root')
+        }
+      end
     end
   end
 end
