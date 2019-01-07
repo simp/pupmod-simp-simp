@@ -14,10 +14,11 @@
 #  Set the root user's password using Puppet
 #
 class simp::root_user (
-  Boolean                                         $manage_perms = true,
-  Boolean                                         $manage_user  = true,
-  Boolean                                         $manage_group = true,
-  Variant[Undef, String, Pattern[/^\$\d[ay]?\$/]] $password     = undef,
+  Boolean          $manage_perms = true,
+  Boolean          $manage_user  = true,
+  Boolean          $manage_group = true,
+  Optional[String] $password      = undef,
+  Boolean          $hash_password = false,
 ){
 
   simplib::assert_metadata( $module_name )
@@ -33,12 +34,18 @@ class simp::root_user (
 
   if $manage_user {
     case $password {
-      undef:                { $_password = undef }
-      /^\$6\$/:             { $_password = Sensitive($password) }
-      /^\$[125]{1}[ay]?\$/: { fail('Error: You cannot use MD5, Blowfish, or SHA256 hashing algorithms for the user password. Please hash with SHA512.') }
-      default:              {
-        $_salt     = fqdn_rand_string(16)
-        $_password = Sensitive(pw_hash($password, 'SHA-512', $_salt))
+      undef:   { $_password = undef }
+      default: {
+        if $hash_password {
+          $_salt     = fqdn_rand_string(16, '', 'root_user')
+          $_password = Sensitive(pw_hash($password, 'SHA-512', $_salt))
+        } else {
+          if $password =~ Simplib::ShadowPass {
+            $_password = Sensitive($password)
+          } else {
+            fail('Error: You must either enable the hash_password boolean, or provide a hash value that meets Simplib::ShadowPass standards.')
+          }
+        }
       }
     }
 

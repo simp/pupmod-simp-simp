@@ -25,29 +25,32 @@ describe 'simp::root_user' do
         it { is_expected.not_to create_group('root') }
       end
 
-      context 'with cleartext password' do
+      context 'with clear-text password and hash_password => true' do
         let(:params) {{
-          :password => 'mysecretpassword'
+          :password      => 'mysecretpassword',
+          :hash_password => true,
         }}
         it { is_expected.to create_file('/root') }
         it { is_expected.to create_user('root').with_password(/\$6\$/) }
         it { is_expected.to create_group('root') }
       end
 
-      context 'with sha512 password' do
+      context 'with sha512 password and hash_password => false' do
         let(:params) {{
-          :password => '$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0'
+          :password      => '$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0',
+          :hash_password => false,
         }}
         it { is_expected.to create_file('/root') }
         it { is_expected.to create_user('root').with_password('$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0') }
         it { is_expected.to create_group('root') }
       end
 
-      context 'with md5 password' do
+      context 'with clear-text password and hash_password => false' do
         let(:params) {{
-          :password => '$1$saltsalt$Vm/VIGR4l.bgfCne7qDjN/'
+          :password      => 'mysecretpassword',
+          :hash_password => false,
         }}
-        it { is_expected.to compile.and_raise_error(/Error: You cannot use MD5, Blowfish, or SHA256 hashing algorithms for the user password. Please hash with SHA512./) }
+        it { is_expected.to compile.and_raise_error(/Error: You must either enable the hash_password boolean, or provide a hash value that meets Simplib::ShadowPass standards./) }
       end
     end
   end
