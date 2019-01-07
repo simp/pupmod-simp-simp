@@ -68,7 +68,7 @@ fixtures:
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
     simpcat: https://github.com/simp/pupmod-simp-concat
-    #simplib: https://github.com/simp/pupmod-simp-simplib
+    simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
     simp_banners: https://github.com/simp/pupmod-simp-simp_banners
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
@@ -102,4 +102,3 @@ fixtures:
     '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton
   symlinks:
     simp: "#{source_dir}"
-    simplib: "#{source_dir}/../simplib"
