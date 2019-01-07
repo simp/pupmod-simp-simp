@@ -1,4 +1,4 @@
-* Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.6.2-0
+* Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.6.1-0
 - Add the ability to set the root user password in `simp::root_user`
 
 * Tue Dec 11 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.1-0
