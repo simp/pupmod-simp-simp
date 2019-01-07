@@ -9,15 +9,23 @@
 # @param manage_group
 #  Ensure the `root` group has appropriate UIDs, etc
 #
+# @param hashed_password
+#   Validate the correctness of the password hash and then pass it through to
+#   the `User` resource for `root`
+#
 # @param password
-#  Set the `root` user's password to this value
+#  Pass this through untouched to the `User` resource for `root`
 #
-#  * If a recognized password hash, will pass along the value unoutched
-#  * If a `String`, will hash the password using the algorithm specified in
-#    `$password_hash`
+#  * Please use `$hashed_password` if possible
 #
-# @param password_hash
-#   The algorithm to use when hashing a plain text password
+# @param username
+#   The username of the `root` user
+#
+# @param uid
+#   The UID of the `root` user
+#
+# @param gid
+#   The GID of the `root` user
 #
 # @param shell
 #   The shell to use for the `root` user
@@ -26,13 +34,16 @@
 #   The home directory of the `root` user
 #
 class simp::root_user (
-  Boolean                           $manage_perms  = true,
-  Boolean                           $manage_user   = true,
-  Boolean                           $manage_group  = true,
-  Optional[String[1]]               $password      = undef,
-  Enum['MD5', 'SHA-256', 'SHA-512'] $password_hash = 'SHA-512',
-  Stdlib::Absolutepath              $shell         = '/bin/bash',
-  Stdlib::Absolutepath              $home          = '/root'
+  Boolean                       $manage_perms    = true,
+  Boolean                       $manage_user     = true,
+  Boolean                       $manage_group    = true,
+  Optional[Simplib::ShadowPass] $hashed_password = undef,
+  Optional[String[1]]           $password        = undef,
+  String[1]                     $username        = 'root',
+  Integer[0]                    $uid             = 0,
+  Integer[0]                    $gid             = 0,
+  Stdlib::Absolutepath          $shell           = '/bin/bash',
+  Stdlib::Absolutepath          $home            = "/${username}"
 ){
 
   simplib::assert_metadata( $module_name )
@@ -40,47 +51,49 @@ class simp::root_user (
   if $manage_perms {
     file { $home:
       ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
+      owner  => $username,
+      group  => $username,
       mode   => '0550'
     }
   }
 
   if $manage_user {
-    case $password {
-      undef:   { $_password = undef }
-      default: {
-        if $password =~ Simplib::ShadowPass {
-          $_password = Sensitive($password)
-        }
-        else {
-          $_salt     = fqdn_rand_string(16, '', 'root_user')
-          $_password = Sensitive(pw_hash($password, $password_hash, $_salt))
-        }
-      }
+
+    if $password and $hashed_password {
+      fail('Error: You cannot specify both "$password" and "$hashed_password"')
     }
 
-    user { 'root':
+    if $password {
+      $_password = $password
+    }
+    elsif $hashed_password {
+      $_password = $hashed_password
+    }
+    else {
+      $_password = undef
+    }
+
+    user { $username:
       ensure     => 'present',
-      uid        => '0',
-      gid        => '0',
+      uid        => $uid,
+      gid        => $gid,
       allowdupe  => false,
       home       => $home,
       shell      => $shell,
       membership => 'minimum',
       forcelocal => true,
-      password   => $_password,
+      password   => Sensitive($_password)
     }
   }
 
   if $manage_group {
-    group { 'root':
+    group { $username:
       ensure          => 'present',
-      gid             => '0',
+      gid             => $gid,
       allowdupe       => false,
       auth_membership => true,
       forcelocal      => true,
-      members         => ['root']
+      members         => [$username]
     }
   }
 }
