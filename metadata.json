@@ -17,16 +17,8 @@
       "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 5.0.0"
-    },
-    {
       "name": "puppetlabs/puppetdb",
       "version_requirement": ">= 5.1.2 < 7.0.0"
-    },
-    {
-      "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 4.8.0 < 6.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -45,51 +37,51 @@
       "version_requirement": ">= 7.0.0 < 9.0.0"
     },
     {
-      "name": "herculesteam/augeasproviders_puppet",
-      "version_requirement": ">= 2.1.0 < 3.0.0"
-    },
-    {
       "name": "herculesteam/augeasproviders_sysctl",
       "version_requirement": ">= 2.2.0 < 3.0.0"
     },
     {
-      "name": "simp/autofs",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "name": "simp/at",
+      "version_requirement": ">= 0.0.5 < 1.0.0"
     },
     {
       "name": "simp/clamav",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
+      "name": "simp/chkrootkit",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "simp/cron",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
       "name": "simp/dhcp",
       "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/fips",
+      "version_requirement": ">= 0.2.0 < 1.0.0"
+    },
+    {
+      "name": "simp/incron",
+      "version_requirement": ">= 0.4.0 < 1.0.0"
     },
     {
       "name": "simp/iptables",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/logrotate",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
-    },
-    {
-      "name": "simp/named",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "name": "simp/issue",
+      "version_requirement": ">= 0.0.3 < 1.0.0"
     },
     {
       "name": "simp/ntpd",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/simp_openldap",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
-    },
-    {
       "name": "simp/pam",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
-    },
-    {
-      "name": "simp/pki",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
@@ -105,20 +97,40 @@
       "version_requirement": ">= 7.1.0 < 8.0.0"
     },
     {
+      "name": "simp/resolv",
+      "version_requirement": ">= 0.1.1 < 1.0.0"
+    },
+    {
       "name": "simp/rsync",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
-      "name": "simp/rsyslog",
-      "version_requirement": ">= 7.0.0 < 8.0.0"
+      "name": "simp/selinux",
+      "version_requirement": ">= 2.3.0 < 3.0.0"
     },
     {
-      "name": "simp/simpcat",
+      "name": "simp/simp_openldap",
       "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/simp_rsyslog",
+      "version_requirement": ">= 0.3.0 < 1.0.0"
     },
     {
       "name": "simp/simplib",
       "version_requirement": ">= 3.12.0 < 4.0.0"
+    },
+    {
+      "name": "simp/ssh",
+      "version_requirement": ">= 6.5.1 < 7.0.0"
+    },
+    {
+      "name": "simp/svckill",
+      "version_requirement": ">= 3.3.1 < 4.0.0"
+    },
+    {
+      "name": "simp/swap",
+      "version_requirement": ">= 0.1.2 < 1.0.0"
     },
     {
       "name": "simp/tftpboot",
@@ -131,6 +143,14 @@
     {
       "name": "simp/tlog",
       "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "simp/tuned",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "simp/useradd",
+      "version_requirement": ">= 0.2.2 < 1.0.0"
     },
     {
       "name": "trlinkin/nsswitch",
