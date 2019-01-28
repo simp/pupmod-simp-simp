@@ -1,3 +1,6 @@
+* Mon Jan 21 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.1-0
+- Update the dependency list in metadata.json
+
 * Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.6.1-0
 - Add the ability to set the root user password in `simp::root_user`
 
