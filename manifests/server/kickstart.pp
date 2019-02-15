@@ -54,7 +54,7 @@ class simp::server::kickstart (
     contain 'simp::server::kickstart::simp_client_bootstrap'
   }
 
-  $_trusted_nets = nets2cidr($trusted_nets)
+  $_trusted_nets = simplib::nets2cidr($trusted_nets)
 
   include '::simp_apache'
   simp_apache::site { 'ks':

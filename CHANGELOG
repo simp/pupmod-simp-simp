@@ -1,10 +1,22 @@
-* Mon Jan 21 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.1-0
+* Fri Feb 15 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Use simplib::join_mount_opts() in lieu of join_mount_opts(), a
+  deprecated simplib Puppet 3 function.
+- Use simplib::nets2cidr() in lieu of nets2cidr(), a deprecated
+  simplib Puppet 3 function.
+- Use Puppet's String() in lieu of to_string(), a deprecated simplib
+  Puppet 3 function.
+- Use simp_apache::munge_httpd_networks() in lieu of
+  munge_httpd_networks(), a deprecated simp_apache Puppet 3 function.
+- Use ssh::global_known_hosts() in lieu of ssh_global_known_hosts(),
+  a deprecated ssh Puppet 3 function.
+
+* Mon Jan 21 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Update the dependency list in metadata.json
 
-* Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.6.1-0
+* Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.7.0-0
 - Add the ability to set the root user password in `simp::root_user`
 
-* Tue Dec 11 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.1-0
+* Tue Dec 11 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.7.0-0
 - Added sysctl value to increase max number of inotify user watches.
   Default = 8192, New Value 102400 which is roughly 100M on a 64 bit system.
   - If max number is reached systemctl fails with "Not enough Space on Disk"

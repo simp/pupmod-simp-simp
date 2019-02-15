@@ -1,7 +1,7 @@
 <%
   t_allowroot = nil
-  if @_trusted_nets
-    t_allowroot = scope.function_munge_httpd_networks(Array(@_trusted_nets)).map{ |x|
+  unless @_trusted_nets.empty?
+    t_allowroot = scope.call_function('simp_apache::munge_httpd_networks',[ @_trusted_nets ]).map{ |x|
       x = "    Allow from #{x}"
     }.join("\n")
   end

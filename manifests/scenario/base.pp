@@ -95,7 +95,7 @@ class simp::scenario::base (
 
   assert_private()
 
-  runlevel { to_string($runlevel): }
+  runlevel { String($runlevel): }
 
   if ($sssd and $stock_sssd) { include '::simp::sssd::client' }
 
@@ -136,7 +136,7 @@ class simp::scenario::base (
   }
 
   if $use_ssh_global_known_hosts {
-    ssh_global_known_hosts()
+    ssh::global_known_hosts()
 
     sshkey_prune { '/etc/ssh/ssh_known_hosts': }
   }
