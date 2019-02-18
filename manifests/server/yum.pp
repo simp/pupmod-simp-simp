@@ -16,7 +16,7 @@ class simp::server::yum (
 
   simplib::assert_metadata( $module_name )
 
-  $_trusted_nets = nets2cidr($trusted_nets)
+  $_trusted_nets = simplib::nets2cidr($trusted_nets)
 
   include '::simp_apache'
   simp_apache::site { 'yum':

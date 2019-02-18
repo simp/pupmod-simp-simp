@@ -49,7 +49,7 @@ class simp::server::ldap (
   include '::simp_openldap::slapo::syncprov'
   if $enable_lastbind { include '::simp_openldap::slapo::lastbind' }
 
-  $s_rid = to_string($rid)
+  $s_rid = String($rid)
   if $is_slave {
     simp_openldap::server::syncrepl { $s_rid: }
   }

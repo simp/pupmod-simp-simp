@@ -74,7 +74,7 @@ class simp::mountpoints::tmp (
           ensure   => 'mounted',
           target   => '/etc/fstab',
           fstype   => $facts['tmp_mount_fstype_tmp'],
-          options  => join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
+          options  => simplib::join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
           device   => $facts['tmp_mount_path_tmp'],
           pass     => '1',
           remounts => true
@@ -85,7 +85,7 @@ class simp::mountpoints::tmp (
           ensure   => 'mounted',
           target   => '/etc/fstab',
           fstype   => 'none',
-          options  => join_mount_opts(['bind'],$tmp_opts),
+          options  => simplib::join_mount_opts(['bind'],$tmp_opts),
           device   => $facts['tmp_mount_path_tmp'],
           remounts => true
         }
@@ -108,7 +108,7 @@ class simp::mountpoints::tmp (
         ensure   => 'mounted',
         target   => '/etc/fstab',
         fstype   => 'none',
-        options  => join_mount_opts(['bind'],$tmp_opts),
+        options  => simplib::join_mount_opts(['bind'],$tmp_opts),
         device   => '/tmp',
         remounts => true,
         notify   => Exec['remount /tmp']
@@ -133,7 +133,7 @@ class simp::mountpoints::tmp (
           ensure   => 'mounted',
           target   => '/etc/fstab',
           fstype   => $facts['tmp_mount_fstype_var_tmp'],
-          options  => join_mount_opts($_tmp_mount_var_tmp_opts,$var_tmp_opts),
+          options  => simplib::join_mount_opts($_tmp_mount_var_tmp_opts,$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
           pass     => '1',
           remounts => true
@@ -144,7 +144,7 @@ class simp::mountpoints::tmp (
           ensure   => 'mounted',
           target   => '/etc/fstab',
           fstype   => 'none',
-          options  => join_mount_opts(['bind'],$var_tmp_opts),
+          options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
           remounts => true
         }
@@ -165,7 +165,7 @@ class simp::mountpoints::tmp (
         ensure   => 'mounted',
         device   => '/tmp',
         fstype   => 'none',
-        options  => join_mount_opts(['bind'],$var_tmp_opts),
+        options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
         target   => '/etc/fstab',
         remounts => true,
         notify   => Exec['remount /var/tmp']
@@ -188,7 +188,7 @@ class simp::mountpoints::tmp (
       # properly.
       mount { '/dev/shm':
         ensure   => 'mounted',
-        options  => join_mount_opts($_tmp_mount_dev_shm_opts,$dev_shm_opts),
+        options  => simplib::join_mount_opts($_tmp_mount_dev_shm_opts,$dev_shm_opts),
         device   => $facts['tmp_mount_path_dev_shm'],
         fstype   => 'tmpfs',
         target   => '/etc/fstab',

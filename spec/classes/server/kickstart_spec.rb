@@ -1,4 +1,4 @@
-# Can't run this until lwe get access to server_facts
+# Can't run this until we get access to server_facts
 require 'spec_helper'
 
 describe 'simp::server::kickstart' do
@@ -31,7 +31,8 @@ describe 'simp::server::kickstart' do
           it { is_expected.to create_class('simp_apache') }
           it { is_expected.to create_class('dhcp::dhcpd') }
           it { is_expected.to create_class('tftpboot') }
-          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.4\/24/) }
+          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.0\/24/) }
+          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 5.6.0.0\/16/) }
           it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
           it { is_expected.to contain_class('simp::server::kickstart::runpuppet') }
           it { is_expected.to contain_class('simp::server::kickstart::simp_client_bootstrap') }
@@ -69,6 +70,19 @@ describe 'simp::server::kickstart' do
           let(:params) {{ :data_dir => '/srv/www' }}
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
+        end
+
+        context 'trusted_nets = [ 0.0.0.0/0 ]' do
+          # Apache needs 0.0.0.0/0 to be translated to ALL
+          let(:params) {{ :trusted_nets => [ '0.0.0.0/0' ] }}
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
+        end
+
+        context 'trusted_nets = ALL' do
+          let(:params) {{ :trusted_nets => [ 'ALL' ] }}
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
         end
       end
     end
