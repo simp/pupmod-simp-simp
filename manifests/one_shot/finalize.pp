@@ -19,7 +19,8 @@ class simp::one_shot::finalize (
   Boolean $dry_run       = $simp::one_shot::finalize_dry_run,
   Boolean $remove_pki    = $simp::one_shot::finalize_remove_pki,
   Boolean $remove_puppet = $simp::one_shot::finalize_remove_puppet,
-  Boolean $remove_script = $simp::one_shot::finalize_remove_script
+  Boolean $remove_script = $simp::one_shot::finalize_remove_script,
+  Boolean $enable_debug  = $simp::one_shot::finalize_debug
 ){
   assert_private()
 
@@ -33,7 +34,7 @@ class simp::one_shot::finalize (
 
   # Run this in the background so that we don't break the current Puppet run
   exec { 'one_shot finalize':
-    command   => "nohup ${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} > /dev/null 2>&1 &",
+    command   => "${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} -D ${enable_debug} > /dev/null 2>&1 &",
     logoutput => true,
     provider  => 'shell',
     require   => File[$_finalize_script]

@@ -2,27 +2,42 @@
 
 set -e -o pipefail
 
-usage="Usage: $0 -k (true|false*) -d (true|false*) -f (true*|false) -p (true*|false) [-h]"
+usage="Usage: $0 -k (true|false*) -d (true|false*) -f (true*|false) -p (true*|false) [-D (true|false*)] [-h]"
+
+puppet='/opt/puppetlabs/bin/puppet'
+
+if [ ! -f "${puppet}" ]; then
+  puppet=`which puppet`
+
+  if [ -z "${puppet}" ]; then
+    echo "Error: could not find 'puppet' command"
+    exit 1
+  fi
+fi
 
 # Option Defaults
 remove_pki=1
 remove_puppet=0
 remove_script=0
-dry_run=
+enable_debug=1
+dry_run=""
 
-while getopts "k:d:p:f:h" opt; do
+while getopts "k:d:p:f:D:h" opt; do
   case $opt in
     k)
       [[ $OPTARG = 'true' ]] && remove_pki=0 || remove_pki=1
       ;;
     d)
-      [[ $OPTARG = 'true' ]] && dry_run='echo' || dry_run=
+      [[ $OPTARG = 'true' ]] && dry_run='echo' || dry_run=""
       ;;
     p)
       [[ $OPTARG = 'true' ]] && remove_puppet=0 || remove_puppet=1
       ;;
     f)
       [[ $OPTARG = 'true' ]] && remove_script=0 || remove_script=1
+      ;;
+    D)
+      [[ $OPTARG = 'true' ]] && enable_debug=0 || enable_debug=1
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -49,6 +64,18 @@ EOM
   esac
 done
 
+function debug() {
+  if [ $enable_debug -eq 0 ]; then
+    logger "simp_one_shot_finalize.sh: ${1}"
+  fi
+}
+
+debug "Remove PKI: ${remove_pki}"
+debug "Remove Puppet: ${remove_puppet}"
+debug "Remove Script: ${remove_script}"
+debug "Debug: ${enable_debug}"
+debug "Dry Run: ${dry_run}"
+
 if [ -z $dry_run ]; then
   set -x
 else
@@ -58,6 +85,8 @@ fi
 if [ -n $dry_run ]; then
   echo "Update /etc/motd"
 else
+  debug "Updating MOTD"
+
   cat << EOF > /etc/motd
 This is a SIMP-based standalone image
 
@@ -72,51 +101,77 @@ PLEASE CHANGE YOUR PASSWORD
 
 You can remove this message by changing /etc/motd
 EOF
+
+  debug "MOTD Updated"
 fi
 
-if [ $remove_puppet -eq 0 ]; then
-  $dry_run puppet resource cron puppetagent ensure=absent
-  $dry_run puppet resource service puppet ensure=stopped
+if [ -z $dry_run ]; then
+  debug "Waiting for puppet to stop"
 
-  if [ -z $dry_run ]; then
-    # Wait for puppet to stop running before we apply the rest of this script
-    while [ `/bin/ps h -fC puppet | /bin/grep -ce "puppet \(agent\|apply\)"` -gt 0 ]; do
-      /bin/sleep 5;
-    done
-  fi
+  # Wait for puppet to stop running before we apply the rest of this script
+  while [ `/bin/ps h -fC puppet | /bin/grep -ce "puppet \(agent\|apply\)"` -gt 0 ]; do
+    /bin/sleep 5;
+  done
 
-  $dry_run puppet resource cron pe-mcollective-metadata ensure=absent
-  $dry_run puppet resource cron refresh-mcollective-metadata ensure=absent
-  $dry_run puppet resource cron yum_update ensure=absent
-
-  $dry_run yum remove -y puppet ||:
-  $dry_run yum remove -y puppet-agent ||:
-  $dry_run yum remove -y puppetlabs* ||:
-  $dry_run yum remove -y puppet* ||:
-
-  $dry_run rm -f /usr/local/bin/puppet*
-  $dry_run rm -rf /opt/puppetlabs
-  $dry_run rm -f /root/puppet*
-  $dry_run rm -f /root/runpuppet
+  debug "Puppet Stopped"
 fi
 
-$dry_run yum remove -y simp ||:
-$dry_run yum remove -y simp-adapter ||:
-$dry_run yum remove -y rubygem-simp-cli ||:
+debug "Removing SIMP packages"
+$dry_run $puppet resource package simp ensure=absent
+$dry_run $puppet resource package simp-adapter ensure=absent
+$dry_run $puppet resource package rubygem-simp-cli ensure=absent
+debug "SIMP packages removed"
 
-# Remove all SIMP repos
-$dry_run rm -f /etc/yum.repos.d/simp*.repo
-$dry_run rm -f /usr/local/sbin/update_aide
-$dry_run rm -rf /etc/simp
+debug "Disabling SIMP repos"
+for repo in `$puppet resource yumrepo --to_yaml | grep -o "simp.*:$" | cut -f1 -d':'`; do
+  debug "Disabling repo '${repo}'"
+  $dry_run $puppet resource yumrepo "${repo}" enabled=0
+  debug "Repo '${repo}' disabled"
+done
+debug "SIMP repos Disabled"
+
+debug "Removing SIMP artifacts"
+$dry_run $puppet resource file /usr/local/sbin/update_aide ensure=absent force=true
+$dry_run $puppet resource file /etc/simp ensure=absent force=true
 
 # Remove random SIMP apps
-$dry_run rm -rf /usr/local/sbin/simp
+$dry_run $puppet resource file /usr/local/sbin/simp ensure=absent force=true
+debug "SIMP artifacts removed"
 
 if [ $remove_pki -eq 0 ]; then
-  $dry_run rm -rf /etc/pki/simp
-  $dry_run rm -rf /etc/pki/simp_apps
+  debug "Removing SIMP PKI"
+  $dry_run $puppet resource file /etc/pki/simp ensure=absent force=true
+  $dry_run $puppet resource file /etc/pki/simp_apps ensure=absent force=true
+  debug "SIMP PKI removed"
 fi
 
 if [ $remove_script -eq 0 ]; then
-  $dry_run rm -f $0
+  $dry_run $puppet resource file "${0}" ensure=absent force=true
+fi
+
+if [ $remove_puppet -eq 0 ]; then
+  debug "Removing puppetagent cron job"
+  $dry_run $puppet resource cron puppetagent ensure=absent
+  debug "Puppetagent cron job removed"
+
+  debug "Stopping puppet service"
+  $dry_run $puppet resource service puppet ensure=stopped
+  debug "Puppet service stopped"
+
+  debug "Removing cron jobs"
+  $dry_run $puppet resource cron pe-mcollective-metadata ensure=absent
+  $dry_run $puppet resource cron refresh-mcollective-metadata ensure=absent
+  $dry_run $puppet resource cron yum_update ensure=absent
+  debug "Cron jobs removed"
+
+  debug "Removing puppet packages"
+  $dry_run $puppet resource package puppet ensure=absent
+  $dry_run yum remove -y puppet-agent
+  $dry_run yum remove -y puppetlabs*
+  debug "Puppet packages removed"
+
+  debug "Removing puppet system artifacts"
+  $dry_run rm -f /usr/local/bin/puppet*
+  $dry_run rm -rf /opt/puppetlabs
+  debug "Puppet system artifacts removed"
 fi
