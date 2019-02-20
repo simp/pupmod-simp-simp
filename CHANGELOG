@@ -2,6 +2,10 @@
 - Standardized cron datatypes to use the Simplib::Cron::### types.  This
   allows more flexibility in cron scheduling.
 
+* Mon Mar 25 2019 Nick Miller <nick.miller@onyxpoint.com> - 4.8.0-0
+- Add exceptions to the filebucket management and the vardir/simp management
+  to support running from Bolt
+
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
 - Replaced use of the simplib's Puppet 3 array_include function with
   stdlib's member function

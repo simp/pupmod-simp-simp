@@ -169,17 +169,19 @@ class simp (
   Boolean                         $manage_root_metadata       = true,
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
-  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value'   => false }),
-  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value'  => false }),
-  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value'  => true }),
+  Boolean                         $pam                        = simplib::lookup('simp_options::pam',  { 'default_value' => false }),
+  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true,
   Boolean                         $classification_warning     = true,
   String                          $vardir_owner,
   String                          $vardir_group,
   String                          $vardir_mode,
 ) {
+  # Bolt sets the environment to be 'bolt_catalog', and it behaves a differently than SIMP typically assumes
+  $running_in_bolt = $environment == 'bolt_catalog'
 
-  if $enable_filebucketing {
+  if $enable_filebucketing and !$running_in_bolt {
     File { backup => $filebucket_name }
 
     if $filebucket_server {
@@ -208,11 +210,15 @@ class simp (
   } else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
-  file { "${facts['puppet_vardir']}/simp":
-    ensure => 'directory',
-    mode   => $vardir_mode,
-    owner  => $vardir_owner,
-    group  => $vardir_group,
+
+  # When compiling catalogs via Bolt, the vardir will be in the host running Bolt, not the target
+  if !$running_in_bolt {
+    file { "${facts['puppet_vardir']}/simp":
+      ensure => 'directory',
+      mode   => $vardir_mode,
+      owner  => $vardir_owner,
+      group  => $vardir_group,
+    }
   }
 
   if $version_info { include '::simp::version' }

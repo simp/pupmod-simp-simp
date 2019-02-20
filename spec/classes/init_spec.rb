@@ -200,6 +200,25 @@ describe 'simp' do
           end
         end
 
+        context 'when running from Bolt' do
+          let(:environment) { 'bolt_catalog' }
+
+          context 'will not create a filebucket' do
+            let(:params) {{
+              :enable_filebucketing => true,
+              :filebucket_server    => 'my.puppet.server'
+            }}
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.not_to create_filebucket('simp') }
+          end
+
+          context 'will not create vardir/simp dir' do
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.not_to create_file('/opt/puppetlabs/puppet/cache/simp') }
+          end
+        end
+
         context 'when scenario is set to' do
           poss = [
             'pupmod',
