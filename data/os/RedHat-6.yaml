@@ -1,6 +1,7 @@
 ---
 simp::scenario::data::el6:
   - acpid
+  - chkrootkit
   - upstart
 simp::scenario_map:
   simp: "%{alias('simp::scenario::data::el6')}"

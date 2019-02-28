@@ -105,6 +105,10 @@
       "version_requirement": ">= 0.1.1 < 1.0.0"
     },
     {
+      "name": "simp/rkhunter",
+      "version_requirement": ">= 0.0.1 < 1.0.0"
+    },
+    {
       "name": "simp/rsync",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
