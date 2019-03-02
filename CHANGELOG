@@ -1,3 +1,9 @@
+* Fri Mar 01 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.7.0-0
+- Add kdump manifest to enable/disable kdump
+- By default this will disable kdump.  To enable kdump, set
+  simp::kdump::enabled to true in hiera.
+- Added simp::kdump to the scenario lists.
+
 * Mon Feb 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Update the dependency list in metadata.json
 - Fix the one_shot scenario tests

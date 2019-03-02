@@ -225,6 +225,7 @@ describe 'simp' do
             'simp::admin',
             'simp::base_apps',
             'simp::base_services',
+            'simp::kdump',
             'simp::yum::schedule',
             'simp::kmod_blacklist',
             'simp::mountpoints',
