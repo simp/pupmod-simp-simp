@@ -64,7 +64,7 @@ fixtures:
       repo: https://github.com/simp/puppetlabs-puppet_authorization
       ref: 0.4.0
     resolv: https://github.com/simp/pupmod-simp-resolv
-    rkhunter: https://github.com/simp/pupmod-simp-rkhunter
+    rkhunter: https://github.com/simp/pupmod-simp-rkhunter 
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
