@@ -1,4 +1,8 @@
-[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![Build Status](https://travis-ci.org/simp/pupmod-simp-simp.svg)](https://travis-ci.org/simp/pupmod-simp-dummy) [![SIMP compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)
+[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/73/badge)](https://bestpractices.coreinfrastructure.org/projects/73)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/simp/simp.svg)](https://forge.puppetlabs.com/simp/simp)
+[![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/simp/simp.svg)](https://forge.puppetlabs.com/simp/simp)
+[![Build Status](https://travis-ci.org/simp/pupmod-simp-simp.svg)](https://travis-ci.org/simp/pupmod-simp-simp)
 
 #### Table of Contents
 
@@ -23,7 +27,7 @@ This module is a component of the [System Integrity Management Platform](https:/
 
 If you find any issues, please submit them via [JIRA](https://simp-project.atlassian.net/).
 
-Please read our [Contribution Guide](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP) and visit our [developer wiki](https://simp-project.atlassian.net/wiki/display/SD/SIMP+Development+Home).
+Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 This module should be used within the SIMP ecosystem and will be of limited
 independent use
@@ -115,8 +119,7 @@ Linux-compatible distribution such as EL6 and EL7.
 
 ## Development
 
-Please see the [SIMP Contribution Guidelines](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP).
-
+Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 ### Unit tests
 
