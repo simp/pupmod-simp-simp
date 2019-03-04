@@ -9,17 +9,20 @@
 # use the knockout prefix to remove it from the class list.
 #
 # @param enabled
-#   Allow ``ctrl-alt-del`` to restart the system
+#  Enable kdump and install kexec-tools.
 #
 # @param  crashkernel
-#   The value for the crashdump boot parameter.
+#   The value for the crashkernel boot parameter.
+#   Note: if crashkernel is set to auto and < 1G of memry exists,
+#   no memory will be allocated for kdump and the kernel will not start
+#   kdump.  See the kdump documentation for more information.
 #
 # @param package_ensure
 #   The ensure value for installed packages.
 #
 class simp::kdump (
   Boolean   $enabled        = false,
-  String    $crashkernel    = auto,
+  String    $crashkernel    = 'auto',
   String    $package_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
 
@@ -34,15 +37,22 @@ class simp::kdump (
     ensure => $_package_ensure
   }
 
-  $_kernel_ensure = $enabled ? {
-    true  => 'present',
-    false => 'absent'
-  }
-
-  kernel_parameter { 'crashkernel':
-    ensure => $_kernel_ensure,
-    value  => $crashkernel,
-    notify => Reboot_notify['kdump_reboot']
+  if $enabled {
+    if $crashkernel == 'auto' and $facts['memorysize_mb'] < 1024 {
+      notify { 'kdump_memory_warning' :
+        message => 'kdump requires more then 1G of memory to make an automatic reservation.  Kdump may not be enabled.  See kdump documentation for more information'
+      }
+    }
+    kernel_parameter { 'crashkernel':
+      ensure => 'present',
+      value  => $crashkernel,
+      notify => Reboot_notify['kdump_reboot']
+    }
+  } else {
+    kernel_parameter { 'crashkernel':
+      ensure  => 'absent',
+      notify => Reboot_notify['kdump_reboot']
+    }
   }
 
   reboot_notify { 'kdump_reboot':
