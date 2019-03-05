@@ -1,4 +1,4 @@
-* Fri Mar 01 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.7.0-0
+* Tue Mar 05 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.7.0-0
 - Add kdump manifest to enable/disable kdump
 - By default this will disable kdump.  To enable kdump, set
   simp::kdump::enabled to true in hiera.

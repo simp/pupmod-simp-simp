@@ -58,23 +58,5 @@ describe 'simp::kdump class' do
       end
     end
 
-    context 'with enabled = true and crashkernel = auto and memory fact < 1G' do
-
-      it 'should apply manifest2' do
-        result = apply_manifest_on(host, manifest2, :catch_failures => true)
-        expect(result.output).to include('kdump_reboot => The status of the crashkernel kernel parameter (used for kdump) has changed.')
-      end
-
-      it 'should reboot and set kernel param' do
-        host.reboot
-        result = on(host, %(cat /proc/cmdline)).stdout
-        expect(result).to match(/crashkernel=128M/)
-        expect(check_for_package(host, 'kexec-tools')).to be true
-      end
-
-      it 'should be idempotent' do
-        apply_manifest_on(host, manifest2, :catch_changes => true)
-      end
-    end
   end
 end
