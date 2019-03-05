@@ -74,5 +74,7 @@ describe 'simp::kdump class' do
 
       it 'should be idempotent' do
         apply_manifest_on(host, manifest2, :catch_changes => true)
+      end
+    end
   end
 end
