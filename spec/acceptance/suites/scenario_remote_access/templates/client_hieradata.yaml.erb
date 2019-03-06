@@ -50,5 +50,11 @@ simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['ALL']
 
 # Settings to make beaker happy
+pam::access::default_deny: false
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+sudo::user_specifications:
+  test_users:
+    user_list: ['vagrant', 'test.user']
+    cmnd: ['ALL']
+    passwd: false
