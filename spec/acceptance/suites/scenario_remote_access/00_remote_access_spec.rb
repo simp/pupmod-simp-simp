@@ -14,21 +14,6 @@ test_name 'remote_access scenario'
 #   4. Attempt to ssh as 'test.user' to client-el7 and client-el6.
 
 describe 'remote_access scenario' do
-  before(:context) do
-    hosts.each do |host|
-      interfaces = fact_on(host, 'interfaces').strip.split(',')
-      interfaces.delete_if do |x|
-        x =~ /^lo/
-      end
-
-      interfaces.each do |iface|
-        if fact_on(host, "ipaddress_#{iface}").strip.empty?
-          on(host, "ifup #{iface}", :accept_all_exit_codes => true)
-        end
-      end
-    end
-  end
-
   let(:server_manifest) {
     <<-EOS
       include 'simp_openldap::server'

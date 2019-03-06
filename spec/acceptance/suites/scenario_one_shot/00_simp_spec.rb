@@ -8,13 +8,11 @@ describe 'simp "one_shot" scenario' do
   end
 
   def finalize_running?(host)
-    puppet_running = on(host, 'ps --no-header -f -C puppet', :accept_all_exit_codes => true).exit_code == 0
+    puppet_running = on(host, 'pgrep -x puppet', :accept_all_exit_codes => true).exit_code == 0
 
     return puppet_running if puppet_running
 
-    finalize_running = on(host, 'ps --no-header -f -C simp_one_host_finalize.sh', :accept_all_exit_codes => true).exit_code == 0
-
-    return finalize_running
+    return (on(host, 'pgrep simp_one_shot_finalize', :accept_all_exit_codes => true).exit_code == 0)
   end
 
   def wait_for_finalize(host, timeout=500)
@@ -53,6 +51,7 @@ simp::one_shot::user_ssh_authorized_key: #{ssh_authorized_key}
 
 # 'simp_one_shot'
 simp::one_shot::user_password: '$6$jQ3VdTtWGDnCyqI8$triqoAkFqI8nDR9jNJeawj9.kqVh0KPQLjjw35vfB3.33Gb76Di/C4dBmDSUbtsFnZnPwIVB4iKGYTyigDqlj/'
+simp::one_shot::finalize_debug: true
 
 # Disable network stuff
 simp_options::rsync: false
@@ -123,6 +122,10 @@ useradd::securetty:
         apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
         wait_for_finalize(host)
       end
+    end
+
+    it 'should wait for finalization' do
+        wait_for_finalize(host)
     end
 
     it 'should no longer have puppet installed' do

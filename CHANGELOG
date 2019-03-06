@@ -1,3 +1,12 @@
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Update URLs in the README.md
+- Expand the upper bound for the concat and stdlib Puppet modules
+  in the metadata.json
+
+* Mon Feb 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
+- Update the dependency list in metadata.json
+- Fix the one_shot scenario tests
+
 * Fri Feb 15 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
 - Use simplib::join_mount_opts() in lieu of join_mount_opts(), a
   deprecated simplib Puppet 3 function.
@@ -9,9 +18,6 @@
   munge_httpd_networks(), a deprecated simp_apache Puppet 3 function.
 - Use ssh::global_known_hosts() in lieu of ssh_global_known_hosts(),
   a deprecated ssh Puppet 3 function.
-
-* Mon Jan 21 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
-- Update the dependency list in metadata.json
 
 * Wed Jan 02 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 4.7.0-0
 - Add the ability to set the root user password in `simp::root_user`

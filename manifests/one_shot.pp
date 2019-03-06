@@ -66,6 +66,9 @@
 # @param finalize_remove_script
 #   Remove the finalization script itself from the system
 #
+# @param finalize_debug
+#   Enable syslog output debugging on the one_shot finalization script
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::one_shot (
@@ -84,7 +87,8 @@ class simp::one_shot (
   Boolean             $finalize_dry_run             = false,
   Boolean             $finalize_remove_pki          = false,
   Boolean             $finalize_remove_puppet       = true,
-  Boolean             $finalize_remove_script       = true
+  Boolean             $finalize_remove_script       = true,
+  Boolean             $finalize_debug               = false
 ) {
 
   simplib::assert_metadata( $module_name )
