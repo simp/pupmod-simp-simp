@@ -4,6 +4,11 @@
   simp::kdump::enabled to true in hiera.
 - Added simp::kdump to the scenario lists.
 
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Update URLs in the README.md
+- Expand the upper bound for the concat and stdlib Puppet modules
+  in the metadata.json
+
 * Mon Feb 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Update the dependency list in metadata.json
 - Fix the one_shot scenario tests
