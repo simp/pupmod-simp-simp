@@ -61,6 +61,10 @@
       "version_requirement": ">= 0.1.0 < 1.0.0"
     },
     {
+      "name": "simp/deferred_resources",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
       "name": "simp/dhcp",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
