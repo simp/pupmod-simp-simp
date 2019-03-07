@@ -203,6 +203,7 @@ describe 'simp' do
         context 'when scenario is set to' do
           poss = [
             'pupmod',
+            'deferred_resources'
           ]
           simp_lite = [
             'simp::scenario::base',
@@ -235,14 +236,14 @@ describe 'simp' do
           simp = [
             'pam::wheel',
             'selinux',
-            'svckill',
+            'svckill'
           ]
           scenarios = {
             'simp' => {
               'contains' => [
                 simp,
                 simp_lite,
-                poss,
+                poss
               ],
               'does_not_contain' => [
               ]
@@ -250,7 +251,7 @@ describe 'simp' do
             'simp_lite' => {
               'contains' => [
                 simp_lite,
-                poss,
+                poss
               ],
               'does_not_contain' => [
                 simp
@@ -258,11 +259,11 @@ describe 'simp' do
             },
             'poss' => {
               'contains' => [
-                poss,
+                poss
               ],
               'does_not_contain' => [
                 simp_lite,
-                simp,
+                simp
               ]
             }
           }
