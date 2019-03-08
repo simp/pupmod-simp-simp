@@ -57,7 +57,7 @@ fixtures:
       ref: 5.12.1
     puppetdb:
       repo: https://github.com/simp/puppetlabs-puppetdb
-      ref: 6.0.2
+      ref: 7.1.0
     pupmod: https://github.com/simp/pupmod-simp-pupmod
     puppet_authorization:
       repo: https://github.com/simp/puppetlabs-puppet_authorization
