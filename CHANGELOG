@@ -1,3 +1,19 @@
+* Wed Mar 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
+- Added the, inert by default, deferred_resources class to all class lists in
+  case the users want to use the functionality. This is particularly relevant
+  to various compliance profiles.
+
+* Mon Mar 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Deprecated simp::puppetdb::read_database_ssl.  Use
+  simp::puppetdb::read_database_jdbc_ssl_properties which maps
+  directly to puppetdb::server::read_database_jdbc_ssl_properties
+  (puppetdb version >= 7.0.0).
+- Updated to a minimum puppetdb module version 7.1.0 in the
+  metadata.json and expanded the upper bound accordingly
+- Expanded the upper bound for the concat and stdlib Puppet modules
+  in the metadata.json
+- Updated URLs in the README.md
+
 * Mon Feb 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Update the dependency list in metadata.json
 - Fix the one_shot scenario tests

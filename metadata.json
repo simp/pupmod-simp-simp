@@ -22,7 +22,7 @@
     },
     {
       "name": "puppetlabs/puppetdb",
-      "version_requirement": ">= 5.1.2 < 7.0.0"
+      "version_requirement": ">= 7.1.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -58,6 +58,10 @@
     },
     {
       "name": "simp/cron",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "simp/deferred_resources",
       "version_requirement": ">= 0.1.0 < 1.0.0"
     },
     {

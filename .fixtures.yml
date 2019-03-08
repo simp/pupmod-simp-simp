@@ -11,6 +11,8 @@ fixtures:
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
+    # For puppet 6
+    #augeas_core: https://github.com/simp/pupmod-puppetlabs-augeas_core
     augeasproviders_apache: https://github.com/simp/augeasproviders_apache
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
@@ -25,12 +27,9 @@ fixtures:
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
-    concat:
-      # master is beyond 4.1.1, but has breaking changes to
-      # how fragments are ordered (MODULES-6625)
-      repo: https://github.com/simp/puppetlabs-concat
-      ref: 4.1.1
+    concat: https://github.com/simp/puppetlabs-concat
     cron: https://github.com/simp/pupmod-simp-cron
+    deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
@@ -55,19 +54,21 @@ fixtures:
     postfix: https://github.com/simp/pupmod-simp-postfix
     postgresql:
       repo: https://github.com/simp/puppetlabs-postgresql
-      ref: 5.2.1
+      ref: 5.12.1
     puppetdb:
       repo: https://github.com/simp/puppetlabs-puppetdb
-      ref: 6.0.2
+      ref: 7.1.0
     pupmod: https://github.com/simp/pupmod-simp-pupmod
     puppet_authorization:
       repo: https://github.com/simp/puppetlabs-puppet_authorization
-      ref: 0.4.0
+      ref: 0.5.0
     resolv: https://github.com/simp/pupmod-simp-resolv
     rkhunter: https://github.com/simp/pupmod-simp-rkhunter 
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
+    # For puppet 6
+    #selinux_core: https://github.com/simp/pupmod-puppetlabs-selinux_core
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
