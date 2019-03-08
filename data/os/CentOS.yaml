@@ -4,6 +4,7 @@ simp::scenario_map:
   none: []
   poss:
     - pupmod
+    - deferred_resources
     - simp::scenario::poss
 
   remote_access:
@@ -15,6 +16,7 @@ simp::scenario_map:
     - simp::admin
     - simp::sssd::client
     - ssh
+    - deferred_resources
     - simp::scenario::poss
 
   simp_lite:
@@ -28,6 +30,7 @@ simp::scenario_map:
     - chkrootkit
     - at
     - cron
+    - deferred_resources
     - incron
     - useradd
     - resolv
@@ -60,6 +63,7 @@ simp::scenario_map:
     - chkrootkit
     - at
     - cron
+    - deferred_resources
     - incron
     - useradd
     - resolv
@@ -96,6 +100,7 @@ simp::scenario_map:
     - chkrootkit
     - at
     - cron
+    - deferred_resources
     - incron
     - useradd
     - resolv
@@ -128,6 +133,7 @@ simp::server::data:
   - at
   - chkrootkit
   - cron
+  - deferred_resources
   - incron
   - issue
   - ntpd
