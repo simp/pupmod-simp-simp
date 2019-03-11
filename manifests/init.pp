@@ -149,6 +149,9 @@
 #
 class simp (
   # This parameter set from data in modules
+  String[1]                       $vardir_owner,
+  String[1]                       $vardir_group,
+  Stdlib::Filemode                $vardir_mode,
   Hash                            $scenario_map,
   String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
@@ -159,7 +162,7 @@ class simp (
   Boolean                         $version_info               = true,
   Boolean                         $puppet_server_hosts_entry  = true,
   Boolean                         $enable_filebucketing       = false,
-  String                          $filebucket_name            = 'simp',
+  String[1]                       $filebucket_name            = 'simp',
   Optional[Simplib::Host]         $filebucket_server          = undef,
   Stdlib::Absolutepath            $filebucket_path            = "${facts['puppet_vardir']}/simp/filebucket",
   Boolean                         $use_sudoers_aliases        = true,
@@ -173,15 +176,9 @@ class simp (
   Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true,
-  Boolean                         $classification_warning     = true,
-  String                          $vardir_owner,
-  String                          $vardir_group,
-  String                          $vardir_mode,
+  Boolean                         $classification_warning     = true
 ) {
-  # Bolt sets the environment to be 'bolt_catalog', and it behaves a differently than SIMP typically assumes
-  $running_in_bolt = $environment == 'bolt_catalog'
-
-  if $enable_filebucketing and !$running_in_bolt {
+  if $enable_filebucketing and !simplib::in_bolt() {
     File { backup => $filebucket_name }
 
     if $filebucket_server {
@@ -212,7 +209,7 @@ class simp (
   }
 
   # When compiling catalogs via Bolt, the vardir will be in the host running Bolt, not the target
-  if !$running_in_bolt {
+  unless simplib::in_bolt() {
     file { "${facts['puppet_vardir']}/simp":
       ensure => 'directory',
       mode   => $vardir_mode,
