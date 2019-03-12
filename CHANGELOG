@@ -1,3 +1,7 @@
+* Mon Mar 11 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Replaced simp-timezone (temporary SIMP fork) with saz-timezone
+  and set the lower bound to 5.1.1 in the metadata.json
+
 * Wed Mar 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Added the, inert by default, deferred_resources class to all class lists in
   case the users want to use the functionality. This is particularly relevant
