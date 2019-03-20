@@ -17,6 +17,10 @@
       "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
+      "name": "herculesteam/augeasproviders_sysctl",
+      "version_requirement": ">= 2.2.0 < 3.0.0"
+    },
+    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 2.2.0 < 6.0.0"
     },
@@ -29,32 +33,28 @@
       "version_requirement": ">= 4.13.1 < 6.0.0"
     },
     {
+      "name": "saz/timezone",
+      "version_requirement": ">= 5.1.1 < 6.0.0"
+    },
+    {
       "name": "simp/aide",
       "version_requirement": ">= 6.0.0 < 7.0.0"
-    },
-    {
-      "name": "simp/simp_apache",
-      "version_requirement": ">= 6.0.1 < 7.0.0"
-    },
-    {
-      "name": "simp/auditd",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
-    },
-    {
-      "name": "herculesteam/augeasproviders_sysctl",
-      "version_requirement": ">= 2.2.0 < 3.0.0"
     },
     {
       "name": "simp/at",
       "version_requirement": ">= 0.0.5 < 1.0.0"
     },
     {
-      "name": "simp/clamav",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "name": "simp/auditd",
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     },
     {
       "name": "simp/chkrootkit",
       "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
+      "name": "simp/clamav",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
     },
     {
       "name": "simp/cron",
@@ -121,6 +121,10 @@
       "version_requirement": ">= 2.3.0 < 3.0.0"
     },
     {
+      "name": "simp/simp_apache",
+      "version_requirement": ">= 6.0.1 < 7.0.0"
+    },
+    {
       "name": "simp/simp_openldap",
       "version_requirement": ">= 6.0.0 < 7.0.0"
     },
@@ -159,10 +163,6 @@
     {
       "name": "simp/tftpboot",
       "version_requirement": ">= 6.0.0 < 7.0.0"
-    },
-    {
-      "name": "simp/timezone",
-      "version_requirement": ">= 4.0.0 < 6.0.0"
     },
     {
       "name": "simp/tlog",
