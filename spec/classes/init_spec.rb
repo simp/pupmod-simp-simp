@@ -210,7 +210,7 @@ describe 'simp' do
             'aide',
             'auditd',
             'clamav',
-            'chkrootkit',
+            'rkhunter',
             'at',
             'cron',
             'incron',

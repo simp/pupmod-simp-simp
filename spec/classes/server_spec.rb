@@ -41,30 +41,57 @@ describe 'simp::server' do
           poss = [
             'pupmod',
           ]
-          simp_lite = [
-            'aide',
-            'auditd',
-            #(fact('operatingsystemmajorrelease') = '6') ? 'chkrootkit' : 'rkhunter',
-            'at',
-            'cron',
-            'incron',
-            'useradd',
-            'resolv',
-            'nsswitch',
-            'issue',
-            'tuned',
-            'swap',
-            'timezone',
-            'ntpd',
-            'simp::admin',
-            'simp::base_apps',
-            'simp::base_services',
-            'simp::kmod_blacklist',
-            'simp::mountpoints',
-            'simp::prelink',
-            'simp::sysctl',
-            'ssh'
-          ]
+          if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] and os_facts[:os][:release][:major].to_s == '6' then 
+            simp_lite = [
+              'aide',
+              'auditd',
+              'chkrootkit',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'ntpd',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
+          else 
+            simp_lite = [
+              'aide',
+              'auditd',
+              'rkhunter',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'ntpd',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
+          end 
           simp = [
             'pam::wheel',
             'svckill',
