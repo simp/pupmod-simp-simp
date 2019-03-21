@@ -41,7 +41,7 @@ describe 'simp::server' do
           poss = [
             'pupmod',
           ]
-          if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] and os_facts[:os][:release][:major].to_s == '6' then 
+          if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] and os_facts[:os][:release][:major].to_s == '6' then
             simp_lite = [
               'aide',
               'auditd',
@@ -66,7 +66,7 @@ describe 'simp::server' do
               'simp::sysctl',
               'ssh'
             ]
-          else 
+          else
             simp_lite = [
               'aide',
               'auditd',
@@ -91,7 +91,7 @@ describe 'simp::server' do
               'simp::sysctl',
               'ssh'
             ]
-          end 
+          end
           simp = [
             'pam::wheel',
             'svckill',

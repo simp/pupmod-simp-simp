@@ -3,11 +3,12 @@
 simp::scenario_map:
   none: []
   poss:
-    - pupmod
     - deferred_resources
+    - pupmod
     - simp::scenario::poss
 
   remote_access:
+    - deferred_resources
     - pam::access
     - pam::wheel
     - pupmod
@@ -17,8 +18,6 @@ simp::scenario_map:
     - simp::scenario::poss
     - simp::sssd::client
     - ssh
-    - deferred_resources
-    - simp::scenario::poss
 
   simp_lite:
     # Shared with 'poss'
@@ -35,7 +34,6 @@ simp::scenario_map:
     - ntpd
     - pam::access
     - resolv
-    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -68,7 +66,6 @@ simp::scenario_map:
     - ntpd
     - pam::access
     - resolv
-    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -105,7 +102,6 @@ simp::scenario_map:
     - pam::access
     - pupmod
     - resolv
-    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -139,7 +135,6 @@ simp::server::data:
   - ntpd
   - pam::access
   - resolv
-  - rkhunter
   - simp::admin
   - simp::base_apps
   - simp::base_services
