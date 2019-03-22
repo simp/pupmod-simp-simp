@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.7.1",
+  "version": "4.8.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -107,6 +107,10 @@
     {
       "name": "simp/resolv",
       "version_requirement": ">= 0.1.1 < 1.0.0"
+    },
+    {
+      "name": "simp/rkhunter",
+      "version_requirement": ">= 0.0.1 < 1.0.0"
     },
     {
       "name": "simp/rsync",

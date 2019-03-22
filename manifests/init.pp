@@ -216,11 +216,4 @@ class simp (
   }
 
   if $version_info { include '::simp::version' }
-
-  if $scenario_map.has_key($scenario) {
-    include simp::knockout(union($scenario_map[$scenario], $classes))
-  }
-  else {
-    fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
-  }
 }

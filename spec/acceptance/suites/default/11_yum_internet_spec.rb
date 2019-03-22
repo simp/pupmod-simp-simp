@@ -59,7 +59,7 @@ describe 'simp yum configuration' do
         'haveged',
         'simp-ppolicy-check-password',
         'logstash',
-        'chkrootkit'
+        'rkhunter'
       ]
       block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')
