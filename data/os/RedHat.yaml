@@ -3,124 +3,121 @@
 simp::scenario_map:
   none: []
   poss:
-    - pupmod
     - deferred_resources
+    - pupmod
     - simp::scenario::poss
 
   remote_access:
-    - simp::nsswitch
+    - deferred_resources
     - pam::access
     - pam::wheel
     - pupmod
     - resolv
     - simp::admin
+    - simp::nsswitch
+    - simp::scenario::poss
     - simp::sssd::client
     - ssh
-    - deferred_resources
-    - simp::scenario::poss
 
   simp_lite:
     # Shared with 'poss'
     - pupmod
     # Shared with 'simp'
-    - simp::scenario::base
     - aide
+    - at
     - auditd
     - clamav
-    - chkrootkit
-    - at
     - cron
     - deferred_resources
     - incron
-    - useradd
-    - resolv
     - issue
-    - tuned
-    - swap
-    - timezone
     - ntpd
     - pam::access
-    - simp_rsyslog
+    - resolv
     - simp::admin
     - simp::base_apps
     - simp::base_services
-    - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
     - simp::prelink
+    - simp::scenario::base
     - simp::sysctl
+    - simp::yum::schedule
+    - simp_rsyslog
     - ssh
+    - swap
+    - timezone
+    - tuned
+    - useradd
 
   simp:
     # Shared with 'poss'
     - pupmod
     # Shared with 'simp_lite'
-    - simp::scenario::base
     - aide
+    - at
     - auditd
     - clamav
-    - chkrootkit
-    - at
     - cron
     - deferred_resources
     - incron
-    - useradd
-    - resolv
     - issue
-    - tuned
-    - swap
-    - timezone
     - ntpd
     - pam::access
-    - simp_rsyslog
+    - resolv
     - simp::admin
     - simp::base_apps
     - simp::base_services
-    - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
     - simp::prelink
+    - simp::scenario::base
     - simp::sysctl
+    - simp::yum::schedule
+    - simp_rsyslog
     - ssh
+    - swap
+    - timezone
+    - tuned
+    - useradd
     # These classes are only in 'simp'
+    - fips
     - pam::wheel
     - selinux
     - svckill
-    - fips
 
   one_shot:
     # Shared with 'simp'
-    - pupmod
-    - simp::scenario::base
     - aide
+    - at
     - auditd
     - clamav
-    - chkrootkit
-    - at
     - cron
     - deferred_resources
     - incron
-    - useradd
-    - resolv
     - issue
-    - tuned
-    - swap
-    - timezone
     - ntpd
     - pam::access
-    - simp_rsyslog
+    - pupmod
+    - resolv
     - simp::admin
     - simp::base_apps
     - simp::base_services
-    - simp::yum::schedule
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
     - simp::prelink
+    - simp::scenario::base
     - simp::sysctl
+    - simp::yum::schedule
+    - simp_rsyslog
     - ssh
+    - swap
+    - timezone
+    - tuned
+    - useradd
     # These classes are only in 'one_shot'
     - simp::one_shot
 
@@ -131,7 +128,6 @@ simp::server::data:
   # Shared with 'simp_lite'
   - aide
   - at
-  - chkrootkit
   - cron
   - deferred_resources
   - incron
@@ -139,11 +135,6 @@ simp::server::data:
   - ntpd
   - pam::access
   - resolv
-  - ssh
-  - swap
-  - timezone
-  - tuned
-  - useradd
   - simp::admin
   - simp::base_apps
   - simp::base_services
@@ -152,12 +143,16 @@ simp::server::data:
   - simp::nsswitch
   - simp::prelink
   - simp::sysctl
+  - ssh
+  - swap
+  - timezone
+  - tuned
+  - useradd
   - '--simp::scenario::base'
   - '--auditd'
   - '--clamav'
   # These classes are only in 'simp'
+  - fips
   - pam::wheel
   - selinux
   - svckill
-  - fips
-

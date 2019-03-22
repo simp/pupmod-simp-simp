@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe 'simp::server' do
   context 'supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          facts[:puppet_settings] = {
+          my_facts = os_facts.dup
+          my_facts[:puppet_settings] = {
             'main' => {
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
             },
@@ -13,9 +14,9 @@ describe 'simp::server' do
               'server' => 'puppet.bar.baz'
             }
           }
-          facts[:augeasversion] = '1.4.0'
-          facts[:openssh_version] = '5.7'
-          facts
+          my_facts[:augeasversion] = '1.4.0'
+          my_facts[:openssh_version] = '5.7'
+          my_facts
         end
 
         context 'with default parameters' do
@@ -40,30 +41,57 @@ describe 'simp::server' do
           poss = [
             'pupmod',
           ]
-          simp_lite = [
-            'aide',
-            'auditd',
-            'chkrootkit',
-            'at',
-            'cron',
-            'incron',
-            'useradd',
-            'resolv',
-            'nsswitch',
-            'issue',
-            'tuned',
-            'swap',
-            'timezone',
-            'ntpd',
-            'simp::admin',
-            'simp::base_apps',
-            'simp::base_services',
-            'simp::kmod_blacklist',
-            'simp::mountpoints',
-            'simp::prelink',
-            'simp::sysctl',
-            'ssh'
-          ]
+          if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] and os_facts[:os][:release][:major].to_s == '6' then
+            simp_lite = [
+              'aide',
+              'auditd',
+              'chkrootkit',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'ntpd',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
+          else
+            simp_lite = [
+              'aide',
+              'auditd',
+              'rkhunter',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'ntpd',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
+          end
           simp = [
             'pam::wheel',
             'svckill',

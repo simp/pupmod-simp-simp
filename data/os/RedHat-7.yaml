@@ -1,0 +1,11 @@
+---
+simp::scenario::data::el7:
+  - rkhunter
+simp::scenario_map:
+  one_shot: "%{alias('simp::scenario::data::el7')}"
+  simp: "%{alias('simp::scenario::data::el7')}"
+  simp_lite: "%{alias('simp::scenario::data::el7')}"
+simp::server::scenario_map:
+  poss: "%{alias('simp::scenario::data::el7')}"
+  simp: "%{alias('simp::scenario::data::el7')}"
+  simp_lite: "%{alias('simp::scenario::data::el7')}"
