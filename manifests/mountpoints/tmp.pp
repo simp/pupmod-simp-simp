@@ -69,7 +69,7 @@ class simp::mountpoints::tmp (
 
       # If /tmp is not a bind mount and doesn't contain the required options
       # then mount it properly.
-      if !array_include($_tmp_mount_tmp_opts,'bind') {
+      if !member($_tmp_mount_tmp_opts,'bind') {
         mount { '/tmp':
           ensure   => 'mounted',
           target   => '/etc/fstab',
@@ -128,7 +128,7 @@ class simp::mountpoints::tmp (
       $_tmp_mount_var_tmp_opts = split($facts['tmp_mount_var_tmp'],',')
 
       # If /var/tmp is not a bind mount then mount it properly.
-      if !array_include($_tmp_mount_var_tmp_opts,'bind') {
+      if !member($_tmp_mount_var_tmp_opts,'bind') {
         mount { '/var/tmp':
           ensure   => 'mounted',
           target   => '/etc/fstab',
