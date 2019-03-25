@@ -58,8 +58,7 @@ describe 'simp yum configuration' do
       packages = [
         'haveged',
         'simp-ppolicy-check-password',
-        'logstash',
-        'rkhunter'
+        'logstash'
       ]
       block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')

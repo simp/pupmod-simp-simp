@@ -11,8 +11,9 @@ fixtures:
     aide: https://github.com/simp/pupmod-simp-aide
     auditd: https://github.com/simp/pupmod-simp-auditd
     at: https://github.com/simp/pupmod-simp-at
-    # For puppet 6
-    #augeas_core: https://github.com/simp/pupmod-puppetlabs-augeas_core
+    augeas_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
+      puppet_version: ">= 6.0.0"
     augeasproviders_apache: https://github.com/simp/augeasproviders_apache
     augeasproviders_core: https://github.com/simp/augeasproviders_core
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub
@@ -67,8 +68,9 @@ fixtures:
     rsync: https://github.com/simp/pupmod-simp-rsync
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog
     selinux: https://github.com/simp/pupmod-simp-selinux
-    # For puppet 6
-    #selinux_core: https://github.com/simp/pupmod-puppetlabs-selinux_core
+    selinux_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-selinux_core.git
+      puppet_version: ">= 6.0.0"
     simpcat: https://github.com/simp/pupmod-simp-concat
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
