@@ -1,3 +1,6 @@
+* Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
+- Standardized cron datatypes to use the Simplib::Cron::### types
+
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
 - Replaced use of the simplib's Puppet 3 array_include function with
   stdlib's member function
