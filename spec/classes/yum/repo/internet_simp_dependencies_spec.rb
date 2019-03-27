@@ -1,5 +1,8 @@
 require 'spec_helper'
 
+metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', 'metadata.json'))
+metadata_json = File.read(metadata_file, {:encoding => "utf-8"} )
+
 describe 'simp::yum::repo::internet_simp_dependencies' do
 
   on_supported_os.each do |os, os_facts|
@@ -18,27 +21,28 @@ describe 'simp::yum::repo::internet_simp_dependencies' do
 
       context 'when `simp_release_slug` is undef' do
         ['4.0.0', ''].each do |_version|
-          context "when `simp_version() returns an unsupported value (#{_version})" do
+          context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
             let(:params) {{}}
+            it do
+              File.stubs(:read).with('/etc/simp/simp.version').returns(_version)
+              File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns(metadata_json)
+              File.stubs(:read).with(regexp_matches(/metadata.json/)).returns(metadata_json)
 
-            before(:each) do
-              Puppet::Parser::Functions.newfunction(:simp_version, :type => :rvalue) { |args|
-                _version
-              }
+              is_expected.to raise_error(/SIMP/)
             end
-            it { is_expected.to raise_error(/SIMP/)}
           end
         end
 
         ['6.0.0', '6.1.0-foo'].each do |_version|
-          describe "when `simp_version() is valid (#{_version})" do
+          describe "when `simplib::simp_version() is valid (#{_version})" do
             let(:params) {{}}
-            before(:each) do
-              Puppet::Parser::Functions.newfunction(:simp_version, :type => :rvalue) { |args|
-                _version
-              }
+            it do
+              File.stubs(:read).with('/etc/simp/simp.version').returns(_version)
+              File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns(metadata_json)
+              File.stubs(:read).with(regexp_matches(/metadata.json/)).returns(metadata_json)
+
+              is_expected.to compile.with_all_deps
             end
-            it { is_expected.to compile.with_all_deps }
           end
         end
 

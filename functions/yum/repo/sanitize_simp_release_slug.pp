@@ -13,7 +13,7 @@ function simp::yum::repo::sanitize_simp_release_slug(
     $_release_slug = $simp_release_slug
   }
   else {
-    $simp_version = simp_version()
+    $simp_version = simplib::simp_version()
     $_simp_maj_version = (split($simp_version,'\.'))[0]
 
     if $_simp_maj_version in ['6', '5'] {

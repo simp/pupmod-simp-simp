@@ -5,6 +5,8 @@
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
 - Replaced use of the simplib's Puppet 3 array_include function with
   stdlib's member function
+- Use simplib::host_is_me in lieu of simplib's Puppet 3 host_is_me
+- Use simplib::simp_version in lieu of simplib's Puppet 3 simp_version
 
 * Wed Mar 20 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
 - Added switched out chkrootkit for rkhunter on el7 instances
