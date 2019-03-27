@@ -86,7 +86,8 @@ class simp::puppetdb (
     }
     else {
       warning('$read_database_ssl is deprecated and will be removed in the next major release. Please use $read_database_jdbc_ssl_properties = "" instead.')
-      $_read_database_jdbc_ssl_properties = ''
+
+      $_read_database_jdbc_ssl_properties = '' # lint:ignore:empty_string_assignment
     }
   }
   else {
