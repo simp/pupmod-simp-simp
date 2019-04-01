@@ -64,10 +64,10 @@ class simp::root_user (
     }
 
     if $password {
-      $_password = $password
+      $_password = Sensitive($password)
     }
     elsif $hashed_password {
-      $_password = $hashed_password
+      $_password = Sensitive($hashed_password)
     }
     else {
       $_password = undef
@@ -82,7 +82,7 @@ class simp::root_user (
       shell      => $shell,
       membership => 'minimum',
       forcelocal => true,
-      password   => Sensitive($_password)
+      password   => $_password
     }
   }
 
