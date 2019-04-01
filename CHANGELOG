@@ -1,4 +1,6 @@
-* Mon Apr 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
+* Thu Apr 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
+- Refactor the simp::mountpoints::tmp to use systemd's tmp.mount target if
+  the system supports systemd.
 - Added net.ipv6.conf.all.accept_ra to simp::sysctl management
 - Fixed a bug where the root password field was attempting to set an 'undef'
   value as Sensitive.
@@ -8,6 +10,7 @@
 * Tue Apr 09 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
 - Remove Elasticsearch and Grafana GPG Keys
 - Added missing simp::sysctl value simp::sysctl::net__ipv4__conf__default__log_martians
+- Remove Elasticsearch and Grafana GPG Keys
 - Standardized cron datatypes to use the Simplib::Cron::### types.  This
   allows more flexibility in cron scheduling.
 

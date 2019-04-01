@@ -28,11 +28,15 @@
 # @param dev_shm_opts
 #   Works the same way as ``$tmp_opts``
 #
+# @param tmp_service
+#   If on systemd system, enable and activate the tmp.mount service
+#
 class simp::mountpoints::tmp (
   Boolean       $secure       = true,
   Array[String] $tmp_opts     = ['noexec','nodev','nosuid'],
   Array[String] $var_tmp_opts = ['noexec','nodev','nosuid'],
-  Array[String] $dev_shm_opts = ['noexec','nodev','nosuid']
+  Array[String] $dev_shm_opts = ['noexec','nodev','nosuid'],
+  Boolean       $tmp_service  = true
 ) {
 
   simplib::assert_metadata( $module_name )
@@ -63,21 +67,64 @@ class simp::mountpoints::tmp (
 
   # If we decide to secure the tmp mounts....
   if $secure {
-    # If /tmp is mounted
-    if $facts['tmp_mount_tmp'] and !empty($facts['tmp_mount_tmp']) {
-      $_tmp_mount_tmp_opts = split($facts['tmp_mount_tmp'],',')
+    if 'systemd' in $facts['init_systems'] {
+      # Systemd adds appropriate extra sets of options and is authoritative so
+      # everything should be set via $tmp_opts instead of reverse mapped like
+      # we do if it's a regular partition.
+      $_tmp_opts = simplib::join_mount_opts($tmp_opts, ['mode=1777'])
 
-      # If /tmp is not a bind mount and doesn't contain the required options
-      # then mount it properly.
-      if !member($_tmp_mount_tmp_opts,'bind') {
-        mount { '/tmp':
-          ensure   => 'mounted',
-          target   => '/etc/fstab',
-          fstype   => $facts['tmp_mount_fstype_tmp'],
-          options  => simplib::join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
-          device   => $facts['tmp_mount_path_tmp'],
-          pass     => '1',
-          remounts => true
+      $_unit_file_content = @("END")
+        [Mount]
+        What=tmpfs
+        Where=/tmp
+        Type=tmpfs
+        Options=${_tmp_opts}
+        | END
+
+      systemd::unit_file { 'tmp.mount':
+        enable  => true,
+        active  => true,
+        content => $_unit_file_content
+      }
+
+      File['/tmp'] -> Systemd::Unit_file['tmp.mount']
+    }
+    else {
+      # If /tmp is mounted
+      if $facts['tmp_mount_tmp'] and !empty($facts['tmp_mount_tmp']) {
+        $_tmp_mount_tmp_opts = split($facts['tmp_mount_tmp'],',')
+
+        # If /tmp is not a bind mount and doesn't contain the required options
+        # then mount it properly.
+        if !member($_tmp_mount_tmp_opts,'bind') {
+          mount { '/tmp':
+            ensure   => 'mounted',
+            target   => '/etc/fstab',
+            fstype   => $facts['tmp_mount_fstype_tmp'],
+            options  => simplib::join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
+            device   => $facts['tmp_mount_path_tmp'],
+            pass     => '1',
+            remounts => true
+          }
+        }
+        else {
+          mount { '/tmp':
+            ensure   => 'mounted',
+            target   => '/etc/fstab',
+            fstype   => 'none',
+            options  => simplib::join_mount_opts(['bind'],$tmp_opts),
+            device   => $facts['tmp_mount_path_tmp'],
+            remounts => true
+          }
+
+          if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
+            $_remount_tmp_opts = join($tmp_opts,',')
+
+            exec { 'remount /tmp':
+              command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
+              require => Mount['/tmp']
+            }
+          }
         }
       }
       else {
@@ -86,42 +133,20 @@ class simp::mountpoints::tmp (
           target   => '/etc/fstab',
           fstype   => 'none',
           options  => simplib::join_mount_opts(['bind'],$tmp_opts),
-          device   => $facts['tmp_mount_path_tmp'],
-          remounts => true
+          device   => '/tmp',
+          remounts => true,
+          notify   => Exec['remount /tmp']
         }
 
-        if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
-          $_remount_tmp_opts = join($tmp_opts,',')
-
-          exec { 'remount /tmp':
-            command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-            require => Mount['/tmp']
-          }
+        $_remount_tmp_opts = join($tmp_opts,',')
+        exec { 'remount /tmp':
+          command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
+          refreshonly => true
         }
       }
-    }
-    # Otherwise, bind mount it to itself with the correct options.
-    # We thought about mounting it to tmpfs but that was just too dangerous
-    # without knowing the target environment.
-    else {
-      mount { '/tmp':
-        ensure   => 'mounted',
-        target   => '/etc/fstab',
-        fstype   => 'none',
-        options  => simplib::join_mount_opts(['bind'],$tmp_opts),
-        device   => '/tmp',
-        remounts => true,
-        notify   => Exec['remount /tmp']
-      }
 
-      $_remount_tmp_opts = join($tmp_opts,',')
-      exec { 'remount /tmp':
-        command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-        refreshonly => true
-      }
+      File['/tmp'] -> Mount['/tmp']
     }
-
-    File['/tmp'] -> Mount['/tmp']
 
     # If /var/tmp is mounted
     if $facts['tmp_mount_var_tmp'] and !empty($facts['tmp_mount_var_tmp']) {
@@ -196,5 +221,4 @@ class simp::mountpoints::tmp (
       }
     }
   }
-
 }
