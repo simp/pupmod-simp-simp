@@ -4,11 +4,12 @@ metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', 'met
 metadata_json = File.read(metadata_file, {:encoding => "utf-8"} )
 
 describe 'simp::yum::repo::internet_simp_server' do
-
-
   on_supported_os.each do |os, os_facts|
-    context "on #{os}" do
+    before(:each) do
+      Puppet::Parser::Functions.newfunction(:load_module_metadata, :type => :rvalue) { |args| JSON.load(metadata_json) }
+    end
 
+    context "on #{os}" do
       let(:facts) do
         os_facts
       end
@@ -24,11 +25,11 @@ describe 'simp::yum::repo::internet_simp_server' do
         ['4.0.0', ''].each do |_version|
           context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
             let(:params) {{}}
-            it do
-              File.stubs(:read).with('/etc/simp/simp.version').returns(_version)
-              File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns(metadata_json)
-              File.stubs(:read).with(regexp_matches(/metadata.json/)).returns(metadata_json)
 
+            let(:pre_condition) do
+              "function simplib::simp_version() { '#{_version}' }"
+            end
+            it do
               is_expected.to raise_error(/SIMP/)
             end
           end
@@ -37,11 +38,11 @@ describe 'simp::yum::repo::internet_simp_server' do
         ['6.0.0', '6.1.0-foo'].each do |_version|
           describe "when `simplib::simp_version() is valid (#{_version})" do
             let(:params) {{}}
-            it do
-              File.stubs(:read).with('/etc/simp/simp.version').returns(_version)
-              File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns(metadata_json)
-              File.stubs(:read).with(regexp_matches(/metadata.json/)).returns(metadata_json)
 
+            let(:pre_condition) do
+              "function simplib::simp_version() { '#{_version}' }"
+            end
+            it do
               is_expected.to compile.with_all_deps
             end
           end

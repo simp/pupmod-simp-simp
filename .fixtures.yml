@@ -28,13 +28,20 @@ fixtures:
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
     clamav: https://github.com/simp/pupmod-simp-clamav
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
     concat: https://github.com/simp/puppetlabs-concat
     cron: https://github.com/simp/pupmod-simp-cron
+    cron_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-cron_core.git
+      puppet_version: ">= 6.0.0"
     deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
     haveged: https://github.com/simp/pupmod-simp-haveged
+    host_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-host_core.git
+      puppet_version: ">= 6.0.0"
     incron: https://github.com/simp/pupmod-simp-incron
     inifile: https://github.com/simp/puppetlabs-inifile
     iptables: https://github.com/simp/pupmod-simp-iptables
@@ -44,6 +51,9 @@ fixtures:
     krb5: https://github.com/simp/pupmod-simp-krb5
     logrotate: https://github.com/simp/pupmod-simp-logrotate
     motd: https://github.com/simp/puppetlabs-motd
+    mount_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-mount_core.git
+      puppet_version: ">= 6.0.0"
     named: https://github.com/simp/pupmod-simp-named
     nfs: https://github.com/simp/pupmod-simp-nfs
     nsswitch: https://github.com/simp/puppet-nsswitch
@@ -79,6 +89,9 @@ fixtures:
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
     ssh: https://github.com/simp/pupmod-simp-ssh
+    sshkeys_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-sshkeys_core.git
+      puppet_version: ">= 6.0.0"
     sssd: https://github.com/simp/pupmod-simp-sssd
     stdlib: https://github.com/simp/puppetlabs-stdlib
     stunnel: https://github.com/simp/pupmod-simp-stunnel
@@ -100,6 +113,9 @@ fixtures:
       repo: https://github.com/simp/pupmod-voxpupuli-selinux
       branch: simp-master
     xinetd: https://github.com/simp/pupmod-simp-xinetd
+    yumrepo_core:
+      repo: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
+      puppet_version: ">= 6.0.0"
     # Kluge for rsync data
     '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton
   symlinks:

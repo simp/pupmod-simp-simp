@@ -1,3 +1,9 @@
+* Mon Apr 01 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
+- Fixed a bug where the root password field was attempting to set an 'undef'
+  value as Sensitive.
+- Bumped the supported Puppet version to include Puppet 6
+- Removed Puppet 4 from the supported list
+
 * Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
 - Standardized cron datatypes to use the Simplib::Cron::### types.  This
   allows more flexibility in cron scheduling.
