@@ -1,4 +1,7 @@
 * Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
+- Added missing simp::sysctl value simp::sysctl::net__ipv4__conf__default__log_martians
+
+* Mon Mar 25 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
 - Standardized cron datatypes to use the Simplib::Cron::### types.  This
   allows more flexibility in cron scheduling.
 
