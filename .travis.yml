@@ -5,9 +5,9 @@
 # https://puppet.com/docs/pe/2018.1/overview/getting_support_for_pe.html
 # ------------------------------------------------------------------------------
 # Release       Puppet   Ruby   EOL
-# PE 2017.3     5.3      2.4.4  2018-12-31
-# SIMP 6.3      5.5      2.4.4  TBD***
-# PE 2018.1     5.5      2.4.4  2020-05 (LTS)***
+# PE 2017.3     5.3      2.4.5  2018-12-31
+# SIMP 6.3      5.5      2.4.5  TBD***
+# PE 2018.1     5.5      2.4.5  2020-05 (LTS)***
 # PE 2019.0     6.0      2.5.1  2019-08-31^^^
 #
 # *** = Modules created for SIMP 6.3+ are not required to support Puppet < 5.5
@@ -44,7 +44,7 @@ jobs:
   include:
     - stage: check
       name: 'Syntax, style, and validation checks'
-      rvm: 2.4.4
+      rvm: 2.4.5
       env: PUPPET_VERSION="~> 5"
       script:
         - bundle exec rake check:dot_underscore
@@ -58,13 +58,13 @@ jobs:
 
     - stage: spec
       name: 'Puppet 5.3 (PE 2017.3)'
-      rvm: 2.4.4
+      rvm: 2.4.5
       env: PUPPET_VERSION="~> 5.3.0"
       script:
         - bundle exec rake spec_parallel
 
     - stage: spec
-      rvm: 2.4.4
+      rvm: 2.4.5
       name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1)'
       env: PUPPET_VERSION="~> 5.5.0"
       script:
@@ -72,7 +72,7 @@ jobs:
 
     - stage: spec
       name: 'Latest Puppet 5.x'
-      rvm: 2.4.4
+      rvm: 2.4.5
       env: PUPPET_VERSION="~> 5.0"
       script:
         - bundle exec rake spec_parallel
@@ -85,7 +85,7 @@ jobs:
         - bundle exec rake spec_parallel
 
     - stage: deploy
-      rvm: 2.4.4
+      rvm: 2.4.5
       script:
         - true
       before_deploy:
