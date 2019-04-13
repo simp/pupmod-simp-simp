@@ -1,5 +1,6 @@
-* Mon Apr 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
+* Thu Apr 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
 - Added net.ipv6.conf.all.accept_ra to simp::sysctl management
+- Added a simp::grub class for managing GRUB administrative passwords
 - Fixed a bug where the root password field was attempting to set an 'undef'
   value as Sensitive.
 - Bumped the supported Puppet version to include Puppet 6
