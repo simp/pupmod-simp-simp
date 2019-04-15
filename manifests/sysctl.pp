@@ -138,6 +138,7 @@ class simp::sysctl (
   Integer[0,1]         $net__ipv6__conf__all__accept_source_route      = 0,          # CCI-000366 (STIG)
   Integer[0,1]         $net__ipv6__conf__all__autoconf                 = 0,
   Integer[0,1]         $net__ipv6__conf__all__forwarding               = 0,
+  Integer[0,1]         $net__ipv6__conf__all__accept_ra                = 0,          # CCE-27164-3
   Integer[0,1]         $net__ipv6__conf__default__accept_ra            = 0,          # CCE-27164-3
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_defrtr     = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_pinfo      = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
@@ -261,6 +262,7 @@ class simp::sysctl (
       'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
       'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
       'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
+      'net.ipv6.conf.all.accept_ra'                : value => $net__ipv6__conf__all__accept_ra;
       'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
       'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
       'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
