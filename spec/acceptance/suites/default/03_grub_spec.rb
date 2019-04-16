@@ -20,10 +20,14 @@ describe 'simp::grub class' do
       end
 
       context "with GRUB #{grub_version}" do
-        let(:hieradata){{
-          'simp::grub::password' => 'test password',
-          'simp::grub::admin'    => 'admin'
-        }}
+        let(:hieradata){
+          YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
+            {
+              'simp::grub::password' => 'test password',
+              'simp::grub::admin'    => 'admin'
+            }
+          )
+        }
 
         it 'should apply manifest' do
           set_hieradata_on(host, hieradata)
