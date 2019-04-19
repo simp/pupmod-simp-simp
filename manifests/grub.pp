@@ -35,35 +35,30 @@ class simp::grub (
   $_grub_version = $facts['augeasprovider_grub_version']
 
   if $_grub_version == 1 {
-    # MD5
-    if $password[0,3] == '$1$' {
-      grub_config { 'password':
-        value => $password
-      }
+    # MD5, SHA512, and SHA256
+    #
+    # Can't use `grub_config` for MD5 since it appears to overwrite the target
+    # file instead of following the symlink.
+    if $password[0,3] in ['$1$', '$5$', '$6$'] {
+      $_password = $password
     }
-    # SHA512 and SHA256
     else {
-      if $password[0,3] in ['$5$', '$6$'] {
-        $_password = $password
-      }
-      else {
-        $_password = pw_hash(
-          $password,
-          'SHA-512',
-          fqdn_rand_string(8, undef, $facts['fqdn'])
-        )
-      }
+      $_password = pw_hash(
+        $password,
+        'SHA-512',
+        fqdn_rand_string(8, undef, $facts['fqdn'])
+      )
+    }
 
-      # Passwords might have slashes in them and this doesn't work with sed
-      $_safe_hash = regsubst($_password, '/', '\/', 'G')
+    # Passwords might have slashes in them and this doesn't work with sed
+    $_safe_hash = regsubst($_password, '/', '\/', 'G')
 
-      # The grub_config native type doesn't handle new-style encrypted
-      # passwords properly
-      exec { 'Set Grub Password':
-        command => "true && ( grep -q '^password ' /etc/grub.conf && sed -i 's/^password .*/password --encrypted ${_safe_hash}/' /etc/grub.conf ) || sed -i '/^default=.*/a password --encrypted ${_safe_hash}' /etc/grub.conf",
-        unless  => "grep -qx 'password --encrypted ${_password}' /etc/grub.conf",
-        path    => ['/bin/', '/usr/bin']
-      }
+    # The grub_config native type doesn't handle new-style encrypted
+    # passwords properly
+    exec { 'Set Grub Password':
+      command => "true && ( grep -q '^password ' /etc/grub.conf && sed -i --follow-symlinks 's/^password .*/password --encrypted ${_safe_hash}/' /etc/grub.conf ) || sed -i --follow-symlinks '/^default=.*/a password --encrypted ${_safe_hash}' /etc/grub.conf",
+      unless  => "grep -qx 'password --encrypted ${_password}' /etc/grub.conf",
+      path    => ['/bin/', '/usr/bin']
     }
   }
   elsif $_grub_version == 2 {
