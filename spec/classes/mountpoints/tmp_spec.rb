@@ -8,49 +8,7 @@ describe 'simp::mountpoints::tmp' do
           os_facts
         end
 
-        if os_facts[:init_systems].include?('systemd')
-          context 'with default parameters' do
-            it { is_expected.to create_file('/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
-            it { is_expected.to create_file('/var/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
-            it { is_expected.to create_file('/usr/tmp').with_ensure('symlink') }
-            it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
-            it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
-            it {
-              is_expected.to contain_systemd__unit_file('tmp.mount').
-                with_content(
-                  <<-EOM
-[Mount]
-What=tmpfs
-Where=/tmp
-Type=tmpfs
-Options=mode=1777,nodev,noexec,nosuid
-                  EOM
-                )
-            }
-          end
-
-          context 'tmp_is_partition' do
-            let(:facts) do os_facts.merge({
-                :tmp_mount_tmp        => 'rw,seclabel,relatime,data=ordered',
-                :tmp_mount_fstype_tmp => 'ext4',
-                :tmp_mount_path_tmp   => '/dev/sda3',
-              })
-            end
-
-            it {
-              is_expected.to contain_systemd__unit_file('tmp.mount').
-                with_content(
-                  <<-EOM
-[Mount]
-What=tmpfs
-Where=/tmp
-Type=tmpfs
-Options=mode=1777,nodev,noexec,nosuid
-                  EOM
-                )
-            }
-          end
-        else
+        shared_examples_for 'a legacy system' do
           context 'with default parameters' do
             it { is_expected.to contain_mount('/tmp').with({
               :options => 'bind,nodev,noexec,nosuid',
@@ -89,6 +47,62 @@ Options=mode=1777,nodev,noexec,nosuid
               :device  => '/tmp'
             })}
           end
+        end
+
+        if os_facts[:init_systems].include?('systemd')
+          context 'with default parameters' do
+            it { is_expected.to_not create_file('/tmp') }
+            it { is_expected.to create_file('/var/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
+            it { is_expected.to create_file('/usr/tmp').with_ensure('symlink') }
+            it { is_expected.to create_service('tmp.mounts').with_ensure('running') }
+            it { is_expected.to create_service('tmp.mounts').with_enable(true) }
+            it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
+            it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
+            it {
+              is_expected.to contain_systemd__unit_file('tmp.mount').
+                with_content(
+                  <<-EOM
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,nodev,noexec,nosuid
+                  EOM
+                )
+            }
+          end
+
+          context 'tmp_is_partition' do
+            let(:facts) do os_facts.merge({
+                :tmp_mount_tmp        => 'rw,seclabel,relatime,data=ordered',
+                :tmp_mount_fstype_tmp => 'ext4',
+                :tmp_mount_path_tmp   => '/dev/sda3',
+              })
+            end
+
+            it {
+              is_expected.to contain_systemd__unit_file('tmp.mount').
+                with_content(
+                  <<-EOM
+[Mount]
+What=tmpfs
+Where=/tmp
+Type=tmpfs
+Options=mode=1777,nodev,noexec,nosuid
+                  EOM
+                )
+            }
+          end
+
+          context 'tmp_service == false' do
+            let(:params) {{
+              :tmp_service => false
+            }}
+
+            it_behaves_like 'a legacy system'
+          end
+        else
+          it_behaves_like 'a legacy system'
         end
 
         context 'var_tmp_is_partition' do

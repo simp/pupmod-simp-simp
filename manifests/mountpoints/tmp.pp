@@ -230,4 +230,14 @@ class simp::mountpoints::tmp (
       }
     }
   }
+
+  # This is a kludge at the end based on the fact that the 'if secure' code up
+  # above would be far too complex to understand easily if this were woven in.
+  #
+  # Specifically, this meets the requirement to start the tmp.mount service but
+  # understands that the ``systemd::unit_file`` resource above will also
+  # attempt to manage the tmp.mount service.
+  if $tmp_service and ('systemd' in $facts['init_systems']) {
+    ensure_resources('service', { 'tmp.mounts' => { 'ensure' => 'running', 'enable' => true }})
+  }
 }
