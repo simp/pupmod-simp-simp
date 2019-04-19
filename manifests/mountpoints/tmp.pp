@@ -41,20 +41,31 @@ class simp::mountpoints::tmp (
 
   simplib::assert_metadata( $module_name )
 
-  file { '/tmp':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => 'u+rwx,g+rwx,o+rwxt',
-    force  => true
+  unless $tmp_service and ('systemd' in $facts['init_systems']) {
+    # Do not manage this if systemd is supposed to manage it
+    file { '/tmp':
+      ensure => 'directory',
+      owner  => 'root',
+      group  => 'root',
+      mode   => 'u+rwx,g+rwx,o+rwxt',
+      force  => true
+    }
   }
 
   file { '/var/tmp':
-    ensure => 'directory',
-    owner  => 'root',
-    group  => 'root',
-    mode   => 'u+rwx,g+rwx,o+rwxt',
-    force  => true
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    mode    => 'u+rwx,g+rwx,o+rwxt',
+    seltype => 'tmp_t',
+    force   => true
+  }
+
+  if $tmp_service and ('systemd' in $facts['init_systems']) {
+    $_tmp_seltype = undef
+  }
+  else {
+    $_tmp_seltype = 'tmp_t'
   }
 
   file { '/usr/tmp':
@@ -67,7 +78,7 @@ class simp::mountpoints::tmp (
 
   # If we decide to secure the tmp mounts....
   if $secure {
-    if 'systemd' in $facts['init_systems'] {
+    if $tmp_service and ('systemd' in $facts['init_systems']) {
       # Systemd adds appropriate extra sets of options and is authoritative so
       # everything should be set via $tmp_opts instead of reverse mapped like
       # we do if it's a regular partition.
@@ -86,8 +97,6 @@ class simp::mountpoints::tmp (
         active  => true,
         content => $_unit_file_content
       }
-
-      File['/tmp'] -> Systemd::Unit_file['tmp.mount']
     }
     else {
       # If /tmp is mounted
