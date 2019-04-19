@@ -14,7 +14,6 @@ describe 'simp::mountpoints' do
           it { is_expected.to contain_mount('/sys').with_options('rw,nodev,noexec') }
           if os_facts[:init_systems].include?('systemd')
             it { is_expected.to contain_systemd__unit_file('tmp.mount') }
-            it { is_expected.to contain_file('/tmp').that_comes_before('Systemd::Unit_file[tmp.mount]') }
           else
             it { is_expected.to contain_file('/tmp').that_comes_before('Mount[/tmp]') }
           end
