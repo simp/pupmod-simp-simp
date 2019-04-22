@@ -54,8 +54,8 @@ describe 'simp::mountpoints::tmp' do
             it { is_expected.to_not create_file('/tmp') }
             it { is_expected.to create_file('/var/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
             it { is_expected.to create_file('/usr/tmp').with_ensure('symlink') }
-            it { is_expected.to create_service('tmp.mounts').with_ensure('running') }
-            it { is_expected.to create_service('tmp.mounts').with_enable(true) }
+            it { is_expected.to_not create_service('tmp.mounts').with_ensure('running') }
+            it { is_expected.to_not create_service('tmp.mounts').with_enable(true) }
             it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
             it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
             it {
