@@ -238,6 +238,8 @@ class simp::mountpoints::tmp (
   # understands that the ``systemd::unit_file`` resource above will also
   # attempt to manage the tmp.mount service.
   if $tmp_service and ('systemd' in $facts['init_systems']) {
-    ensure_resources('service', { 'tmp.mounts' => { 'ensure' => 'running', 'enable' => true }})
+    unless defined(Systemd::Unit_file['tmp.mount']) {
+      ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true }})
+    }
   }
 }
