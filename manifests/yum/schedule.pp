@@ -29,11 +29,11 @@
 #
 class simp::yum::schedule (
   Boolean                       $enable       = true,
-  Variant[String,Array[String]] $minute       = '12',
-  Variant[String,Array[String]] $hour         = '0',
-  Variant[String,Array[String]] $monthday     = '*',
-  Variant[String,Array[String]] $month        = '*',
-  Variant[String,Array[String]] $weekday      = '*',
+  Simplib::Cron::Minute         $minute       = '12',
+  Simplib::Cron::Hour           $hour         = '0',
+  Simplib::Cron::MonthDay       $monthday     = '*',
+  Simplib::Cron::Month          $month        = '*',
+  Simplib::Cron::Weekday        $weekday      = '*',
   Array[String]                 $repos        = ['all'],
   Array[String]                 $disable      = [],
   Array[String]                 $exclude_pkgs = [],

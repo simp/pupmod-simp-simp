@@ -1,3 +1,36 @@
+* Thu Apr 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
+- Refactor the simp::mountpoints::tmp to use systemd's tmp.mount target if
+  the system supports systemd.
+- Added net.ipv6.conf.all.accept_ra to simp::sysctl management
+- Fixed a bug where the root password field was attempting to set an 'undef'
+  value as Sensitive.
+- Bumped the supported Puppet version to include Puppet 6
+- Removed Puppet 4 from the supported list
+
+* Tue Apr 09 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
+- Remove Elasticsearch and Grafana GPG Keys
+- Added missing simp::sysctl value simp::sysctl::net__ipv4__conf__default__log_martians
+- Remove Elasticsearch and Grafana GPG Keys
+- Standardized cron datatypes to use the Simplib::Cron::### types.  This
+  allows more flexibility in cron scheduling.
+
+* Mon Mar 25 2019 Nick Miller <nick.miller@onyxpoint.com> - 4.8.0-0
+- Add exceptions to the filebucket management and the vardir/simp management
+  to support running from Bolt
+
+* Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
+- Replaced use of the simplib's Puppet 3 array_include function with
+  stdlib's member function
+- Use simplib::host_is_me in lieu of simplib's Puppet 3 host_is_me
+- Use simplib::simp_version in lieu of simplib's Puppet 3 simp_version
+
+* Wed Mar 20 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 4.8.0-0
+- Added switched out chkrootkit for rkhunter on el7 instances
+
+* Mon Mar 11 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.7.0-0
+- Replaced simp-timezone (temporary SIMP fork) with saz-timezone
+  and set the lower bound to 5.1.1 in the metadata.json
+
 * Wed Mar 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Added the, inert by default, deferred_resources class to all class lists in
   case the users want to use the functionality. This is particularly relevant

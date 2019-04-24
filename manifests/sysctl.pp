@@ -54,6 +54,7 @@
 # @param net__ipv4__conf__all__send_redirects
 # @param net__ipv4__conf__default__accept_redirects
 # @param net__ipv4__conf__default__accept_source_route
+# @param net__ipv4__conf__default__log_martians
 # @param net__ipv4__conf__default__rp_filter
 # @param net__ipv4__conf__default__secure_redirects
 # @param net__ipv4__conf__default__send_redirects
@@ -124,6 +125,7 @@ class simp::sysctl (
   Integer[0,1]         $net__ipv4__conf__all__send_redirects           = 0,          # CCE-27004-1
   Integer[0,1]         $net__ipv4__conf__default__accept_redirects     = 0,          # CCE-27015-7
   Integer[0,1]         $net__ipv4__conf__default__accept_source_route  = 0,          # CCE-26983-7
+  Integer[0,1]         $net__ipv4__conf__default__log_martians         = 1,
   Integer[0,2]         $net__ipv4__conf__default__rp_filter            = 1,          # CCE-26915-9
   Integer[0,1]         $net__ipv4__conf__default__secure_redirects     = 0,          # CCE-26831-8
   Integer[0,1]         $net__ipv4__conf__default__send_redirects       = 0,          # CCE-27001-7
@@ -136,6 +138,7 @@ class simp::sysctl (
   Integer[0,1]         $net__ipv6__conf__all__accept_source_route      = 0,          # CCI-000366 (STIG)
   Integer[0,1]         $net__ipv6__conf__all__autoconf                 = 0,
   Integer[0,1]         $net__ipv6__conf__all__forwarding               = 0,
+  Integer[0,1]         $net__ipv6__conf__all__accept_ra                = 0,          # CCE-27164-3
   Integer[0,1]         $net__ipv6__conf__default__accept_ra            = 0,          # CCE-27164-3
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_defrtr     = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
   Integer[0,1]         $net__ipv6__conf__default__accept_ra_pinfo      = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
@@ -205,6 +208,7 @@ class simp::sysctl (
     'net.ipv4.conf.all.send_redirects'                 : value => $net__ipv4__conf__all__send_redirects;
     'net.ipv4.conf.default.accept_redirects'           : value => $net__ipv4__conf__default__accept_redirects;
     'net.ipv4.conf.default.accept_source_route'        : value => $net__ipv4__conf__default__accept_source_route;
+    'net.ipv4.conf.default.log_martians'               : value => $net__ipv4__conf__default__log_martians;
     # Done since we're applying heavy IPTables rules.
     'net.ipv4.conf.default.rp_filter'                  : value => $net__ipv4__conf__default__rp_filter;
     'net.ipv4.conf.default.secure_redirects'           : value => $net__ipv4__conf__default__secure_redirects;
@@ -258,6 +262,7 @@ class simp::sysctl (
       'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
       'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
       'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
+      'net.ipv6.conf.all.accept_ra'                : value => $net__ipv6__conf__all__accept_ra;
       'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
       'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
       'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;

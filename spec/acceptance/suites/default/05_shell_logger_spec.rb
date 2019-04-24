@@ -28,12 +28,16 @@ describe 'simp_admin' do
         end
 
         context 'switching to sudosh' do
+          let(:hieradata){
+            YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
+              {
+                'simp::admin::logged_shell' => 'sudosh'
+              }
+            )
+          }
+
           it 'should switch to sudosh via hiera' do
-            yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
-            default_yaml = yaml.merge(
-              'simp::admin::logged_shell' => 'sudosh'
-            ).to_yaml
-            create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
+            set_hieradata_on(host, hieradata)
           end
 
           it 'should run puppet' do
@@ -54,12 +58,16 @@ describe 'simp_admin' do
         end
 
         context 'switching back to tlog' do
+          let(:hieradata){
+            YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
+              {
+                'simp::admin::logged_shell' => 'tlog'
+              }
+            )
+          }
+
           it 'should switch back to tlog via hiera' do
-            yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
-            default_yaml = yaml.merge(
-              'simp::admin::logged_shell' => 'tlog'
-            ).to_yaml
-            create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
+            set_hieradata_on(host, hieradata)
           end
 
           it 'should run puppet' do

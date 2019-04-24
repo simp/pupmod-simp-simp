@@ -37,6 +37,6 @@ class simp::version () {
     owner   => $simp_root_dir_user,
     group   => $simp_root_dir_group,
     mode    => $simp_root_dir_mode,
-    content => simp_version()
+    content => simplib::simp_version()
   }
 }

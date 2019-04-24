@@ -1,8 +1,10 @@
 ---
 simp::scenario::data::el6:
   - acpid
+  - chkrootkit
   - upstart
 simp::scenario_map:
+  one_shot: "%{alias('simp::scenario::data::el6')}"
   simp: "%{alias('simp::scenario::data::el6')}"
   simp_lite: "%{alias('simp::scenario::data::el6')}"
 simp::server::scenario_map:

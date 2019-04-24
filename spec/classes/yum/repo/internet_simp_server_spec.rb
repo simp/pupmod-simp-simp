@@ -1,10 +1,15 @@
 require 'spec_helper'
 
+metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', 'metadata.json'))
+metadata_json = File.read(metadata_file, {:encoding => "utf-8"} )
+
 describe 'simp::yum::repo::internet_simp_server' do
-
   on_supported_os.each do |os, os_facts|
-    context "on #{os}" do
+    before(:each) do
+      Puppet::Parser::Functions.newfunction(:load_module_metadata, :type => :rvalue) { |args| JSON.load(metadata_json) }
+    end
 
+    context "on #{os}" do
       let(:facts) do
         os_facts
       end
@@ -18,30 +23,30 @@ describe 'simp::yum::repo::internet_simp_server' do
 
       context 'when `simp_release_slug` is undef' do
         ['4.0.0', ''].each do |_version|
-          context "when `simp_version() returns an unsupported value (#{_version})" do
+          context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
             let(:params) {{}}
 
-            before(:each) do
-              Puppet::Parser::Functions.newfunction(:simp_version, :type => :rvalue) { |args|
-                _version
-              }
+            let(:pre_condition) do
+              "function simplib::simp_version() { '#{_version}' }"
             end
-            it { is_expected.to raise_error(/SIMP/)}
+            it do
+              is_expected.to raise_error(/SIMP/)
+            end
           end
         end
 
         ['6.0.0', '6.1.0-foo'].each do |_version|
-          describe "when `simp_version() is valid (#{_version})" do
+          describe "when `simplib::simp_version() is valid (#{_version})" do
             let(:params) {{}}
-            before(:each) do
-              Puppet::Parser::Functions.newfunction(:simp_version, :type => :rvalue) { |args|
-                _version
-              }
+
+            let(:pre_condition) do
+              "function simplib::simp_version() { '#{_version}' }"
             end
-            it { is_expected.to compile.with_all_deps }
+            it do
+              is_expected.to compile.with_all_deps
+            end
           end
         end
-
       end
     end
   end

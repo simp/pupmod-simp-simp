@@ -17,6 +17,16 @@ describe 'simp yum configuration' do
   }
 
   context 'with reliable test host' do
+    let(:hieradata){
+      YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
+        {
+          'simp::yum::repo::simp::servers'             => nil,
+          'simp::yum::repo::local_os_updates::servers' => ["%{facts.hostname}"],
+          'simp::yum::repo::local_simp::servers'       => ["%{facts.hostname}"]
+        }
+      )
+    }
+
     it 'should work with no errors' do
       block_on(hosts, parallel) do |host|
         retry_on(host, 'yum install -y createrepo',
@@ -39,14 +49,7 @@ describe 'simp yum configuration' do
         # Fix the SELinux contexts and permissions
         on(host, 'chmod -R go+rX /var/www')
 
-        yaml         = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
-        default_yaml = yaml.merge(
-          'simp::yum::repo::simp::servers'             => nil,
-          'simp::yum::repo::local_os_updates::servers' => ["%{facts.hostname}"],
-          'simp::yum::repo::local_simp::servers'       => ["%{facts.hostname}"],
-        ).to_yaml
-        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
-
+        set_hieradata_on(host, hieradata)
         apply_manifest_on(host, manifest, :catch_failures => true)
 
         # This isn't something that we would expect Puppet to do based on how
@@ -63,14 +66,15 @@ describe 'simp yum configuration' do
       block_on(hosts, parallel) do |host|
         yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
-        yaml = YAML.load(on(host,'cat /etc/puppetlabs/code/environments/production/hieradata/common.yaml').stdout)
-        default_yaml = yaml.merge(
-          'simp::yum::repo::local_simp::enable_repo'   => false,
-          'simp::yum::repo::local_simp::servers'       => [],
-          'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
-        ).to_yaml
+        hieradata = YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
+          {
+            'simp::yum::repo::local_simp::enable_repo'   => false,
+            'simp::yum::repo::local_simp::servers'       => [],
+            'simp::yum::repo::local_os_updates::servers' => [yum_updates_url]
+          }
+        )
 
-        create_remote_file(host, '/etc/puppetlabs/code/environments/production/hieradata/common.yaml', default_yaml)
+        set_hieradata_on(host, hieradata)
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
     end
