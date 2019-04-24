@@ -44,7 +44,7 @@ class simp::mountpoints::tmp (
   Array[String] $tmp_opts     = ['noexec','nodev','nosuid'],
   Array[String] $var_tmp_opts = ['noexec','nodev','nosuid'],
   Array[String] $dev_shm_opts = ['noexec','nodev','nosuid'],
-  Boolean       $tmp_service  = fact('tmp_mount_fstype_tmp') == 'tmpfs' ? { true => true, default => false }
+  Boolean       $tmp_service  = (fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false }
 ) {
 
   simplib::assert_metadata( $module_name )
