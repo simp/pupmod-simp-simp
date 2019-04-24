@@ -5,7 +5,14 @@ describe 'simp::mountpoints::tmp' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          os_facts
+          if os_facts[:init_systems].include?('systemd')
+            os_facts.merge({
+              # This replicates a normal EL7 default installation
+              :tmp_mount_fstype_tmp => 'tmpfs'
+            })
+          else
+            os_facts
+          end
         end
 
         shared_examples_for 'a legacy system' do
@@ -80,18 +87,12 @@ Options=mode=1777,nodev,noexec,nosuid
               })
             end
 
-            it {
-              is_expected.to contain_systemd__unit_file('tmp.mount').
-                with_content(
-                  <<-EOM
-[Mount]
-What=tmpfs
-Where=/tmp
-Type=tmpfs
-Options=mode=1777,nodev,noexec,nosuid
-                  EOM
-                )
-            }
+            it { is_expected.to contain_mount('/tmp').with({
+              :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
+              :device  => '/dev/sda3'
+            })}
+
+            it { is_expected.to_not contain_systemd__unit_file('tmp.mount') }
           end
 
           context 'tmp_service == false' do
