@@ -15,6 +15,8 @@
 # @param remove_script
 #   Remove the finalization script itself from the system
 #
+# @param enable_debug
+#
 class simp::one_shot::finalize (
   Boolean $dry_run       = $simp::one_shot::finalize_dry_run,
   Boolean $remove_pki    = $simp::one_shot::finalize_remove_pki,

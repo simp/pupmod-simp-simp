@@ -11,7 +11,6 @@
 * [`simp::base_services`](#simpbase_services): This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
 * [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP Security Guide
-* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules into the system until the system has been rebooted.  This will only take ef
 * [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
 * [`simp::mountpoints::el6_tmp_fix`](#simpmountpointsel6_tmp_fix): There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect permissions after the *second* reboot after bootstrapping SIMP. Th
 * [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
@@ -638,48 +637,6 @@ a reboot is required if necessary.
 
 Default value: `true`
 
-### simp::kmod_blacklist::lock_modules
-
-This class toggles the ability to load any further kernel modules into the
-system until the system has been rebooted.
-
-This will only take effect if the system has the ``kernel.modules_disabled``
-sysctl feature.
-
- * WARNING: It is *highly* likely that you will prevent important modules
-   from loading (such as networking) if you enable this. Test thoroughly
-   before enabling.
-
-#### Parameters
-
-The following parameters are available in the `simp::kmod_blacklist::lock_modules` class.
-
-##### `enable`
-
-Data type: `Any`
-
-Lock all module loading abilities
-
-Default value: `true`
-
-##### `notify_if_reboot_required`
-
-Data type: `Any`
-
-If the change requires the system to be rebooted to take effect, a
-notification will be printed during puppet runs until the system has been
-rebooted.
-
-Default value: `true`
-
-##### `persist`
-
-Data type: `Any`
-
-Lock all modules at boot time.
-
-Default value: `false`
-
 ### simp::mountpoints
 
 Add security settings to several mounts on the system.
@@ -843,7 +800,7 @@ If on systemd system, enable and activate the tmp.mount service
   will probably need to reboot your system to start with a properly clean
   `/tmp` mount.
 
-Default value: ==
+Default value: (
 
 ### simp::netconsole
 
@@ -1527,6 +1484,22 @@ Data type: `Boolean`
 
 
 Default value: `true`
+
+##### `automatic_dlo_cleanup`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### `dlo_max_age`
+
+Data type: `Integer`
+
+
+
+Default value: 90
 
 ##### `firewall`
 
@@ -2924,10 +2897,14 @@ Data type: `Integer[0,1]`
 
 Default value: 1
 
-##### `fs__inotify__max_user_watch`
+##### `fs__inotify__max_user_watches`
+
+Data type: `Integer[8912]`
 
 Increase the number of inotify watches allowed in order to prevent
 systemctl error: "Not Enough Disk Space" caused when it reaches limit.
+
+Default value: 102400
 
 ##### `fs__suid_dumpable`
 
@@ -3169,6 +3146,14 @@ Data type: `Integer[0,1]`
 
 Default value: 0
 
+##### `net__ipv6__conf__all__accept_ra`
+
+Data type: `Integer[0,1]`
+
+
+
+Default value: 0
+
 ##### `net__ipv6__conf__default__accept_ra`
 
 Data type: `Integer[0,1]`
@@ -3281,22 +3266,6 @@ Data type: `Optional[Boolean]`
 Set to ``false`` to disable IPv6 on your system via ``sysctl``
 
 Default value: `undef`
-
-##### `fs__inotify__max_user_watches`
-
-Data type: `Integer[8912]`
-
-
-
-Default value: 102400
-
-##### `net__ipv6__conf__all__accept_ra`
-
-Data type: `Integer[0,1]`
-
-
-
-Default value: 0
 
 ### simp::version
 

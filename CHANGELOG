@@ -1,3 +1,13 @@
+* Mon May 06 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
+- Fixed a bug on el6 systems in which the 'puppetdb-dlo-cleanup' cron
+  job from the puppetdb module could not be created. Cron rejected this
+  job because the puppetdb user did not have cron access.
+- Added 2 'dead letter office' cleanup configuration parameters to
+  `simp::puppetdb`
+  - simp::puppetdb::automatic_dlo_cleanup which maps directly to
+    puppetdb::automatic_dlo_cleanup
+  - simp::puppetdb::dlo_max_age which maps directly to puppetdb::dlo_max_age
+
 * Thu Apr 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
 - Refactor the simp::mountpoints::tmp to use systemd's tmp.mount target if
   the system supports systemd.
