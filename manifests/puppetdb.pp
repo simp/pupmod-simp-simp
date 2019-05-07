@@ -45,6 +45,8 @@
 # @param java_tmpdir
 # @param java_heapdump_on_oom
 # @param java_prefer_ipv4
+# @param automatic_dlo_cleanup
+# @param dlo_max_age
 # @param firewall
 #
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
@@ -74,6 +76,8 @@ class simp::puppetdb (
   Stdlib::Absolutepath $java_tmpdir                       = '/opt/puppetlabs/puppet/cache/pdb_tmp',
   Boolean              $java_heapdump_on_oom              = false,
   Boolean              $java_prefer_ipv4                  = true,
+  Boolean              $automatic_dlo_cleanup             = true,
+  Integer              $dlo_max_age                       = 90,
   Boolean              $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
 
@@ -140,10 +144,19 @@ class simp::puppetdb (
     'read_database_name'                => $read_database_name,
     'read_database_jdbc_ssl_properties' => $_read_database_jdbc_ssl_properties,
     'manage_firewall'                   => ($manage_firewall and !($_simp_manage_firewall)),
-    'java_args'                         => $_java_args
+    'java_args'                         => $_java_args,
+    'automatic_dlo_cleanup'             => $automatic_dlo_cleanup,
+    'dlo_max_age'                       => 90
   }
 
   class { 'puppetdb': * => $_my_defaults }
+
+  if $automatic_dlo_cleanup {
+    unless $facts['systemd'] {
+      cron::user { $::puppetdb::puppetdb_user: }
+      Cron::User[$::puppetdb::puppetdb_user] -> Cron['puppetdb-dlo-cleanup']
+    }
+  }
 
   include 'puppetdb::master::config'
 

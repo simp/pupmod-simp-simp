@@ -6,6 +6,8 @@
 # @param trusted_nets
 #   The networks to allow into the YUM server.
 #
+# @param createrepo_ensure
+#
 # @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #
 class simp::server::yum (

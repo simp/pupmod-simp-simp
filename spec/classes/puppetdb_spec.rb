@@ -30,7 +30,14 @@ describe 'simp::puppetdb' do
             :read_database_jdbc_ssl_properties => '?ssl=true',
             :manage_firewall                   => false,
 #            :java_args              => Xmx & Xms vary because of OS memory differences in facts
+            :automatic_dlo_cleanup             => true,
+            :dlo_max_age                       => 90
           ) }
+
+          unless os_facts[:systemd]
+            it { is_expected.to contain_cron__user('puppetdb') }
+          end
+
           it { is_expected.to contain_class('puppetdb::master::config') }
           it {
             is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with( {
