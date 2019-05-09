@@ -1,3 +1,7 @@
+* Thu May 09 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.8.1-0
+- Set permission on /etc/simp and /etc/simp/simp.version to world readable.
+  Puppet needs to be able to read it for simp_version fact.
+
 * Mon May 06 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
 - Fixed a bug on el6 systems in which the 'puppetdb-dlo-cleanup' cron
   job from the puppetdb module could not be created. Cron rejected this
