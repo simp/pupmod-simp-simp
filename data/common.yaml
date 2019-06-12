@@ -20,6 +20,9 @@ lookup_options:
       strategy: unique
       # Disable this for now.
       #knockout_prefix: --
+  simp::nsswitch::defaults:
+    merge:
+      strategy: hash
 simp::vardir_owner: 'root'
 simp::vardir_group: 'root'
 simp::vardir_mode: '0750'
@@ -35,3 +38,86 @@ simp::server::scenario_map:
   poss: "%{alias('simp::server::data')}"
   simp_lite: "%{alias('simp::server::data')}"
   simp: "%{alias('simp::server::data')}"
+
+simp::nsswitch::defaults:
+  passwd:
+    - 'files'
+  shadow:
+    - 'files'
+  group:
+    - 'files'
+  sudoers:
+    - 'files'
+  hosts:
+    - 'files'
+    - 'dns'
+  bootparams:
+    - 'nisplus'
+    - '[NOTFOUND=return]'
+    - 'files'
+  ethers:
+    - 'files'
+  netmasks:
+    - 'files'
+  networks:
+    - 'files'
+  protocols:
+    - 'files'
+  rpc:
+    - 'files'
+  services:
+    - 'files'
+  netgroup:
+    - 'files'
+  publickey:
+    - 'nisplus'
+  automount:
+    - 'files'
+    - 'nisplus'
+  aliases:
+    - 'files'
+    - 'nisplus'
+
+simp::nsswitch::sssd_options:
+  group:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'sss'
+  netgroup:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'sss'
+  passwd:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'sss'
+  shadow:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'sss'
+  sudoers:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'sss'
+
+simp::nsswitch::ldap_options:
+  group:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'ldap'
+  netgroup:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'ldap'
+  passwd:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'ldap'
+  shadow:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'ldap'
+  sudoers:
+    - 'files'
+    - '[!NOTFOUND=return]'
+    - 'ldap'
