@@ -1,5 +1,5 @@
-# Set up a host of common administrative functions including administrator
-# group system access, auditor access, and default ``sudo`` rules
+# @summary Set up a host of common administrative functions including
+# administrator group system access, auditor access, and default ``sudo`` rules
 #
 # @param admin_group
 #   The group name of the Administrators for the system
@@ -50,6 +50,22 @@
 #   If the system has PolicyKit support, will register ``$admin_group`` as a
 #   valid administrative group on the system
 #
+# @param set_selinux_login
+#   Ensure that the SELinux login for ``$admin_group`` is set
+#
+#   * This is recommended if you set the __default__ selogin profile to
+#   ``user_u``
+#
+# @param selinux_user_context
+#   The selinux user context to assign to ``$admin_group``
+#
+#   * Has no effect if ``$set_selinux_login`` is not set
+#
+# @param selinux_user_mls_range
+#   The selinux MLS range to assign to ``$admin_group``
+#
+#   * Has no effect if ``$set_selinux_login`` is not set
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::admin (
@@ -63,7 +79,10 @@ class simp::admin (
   Enum['sudosh','tlog'] $logged_shell              = 'tlog',
   Array[String[2]]      $default_admin_sudo_cmnds  = ['/bin/su - root'],
   Boolean               $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean               $set_polkit_admin_group    = true
+  Boolean               $set_polkit_admin_group    = true,
+  Boolean               $set_selinux_login         = false,
+  String[1]             $selinux_user_context      = 'staff_u',
+  String[1]             $selinux_user_mls_range    = 's0-s0:c0.c1023'
 ){
 
   simplib::assert_metadata( $module_name )
@@ -183,5 +202,14 @@ class simp::admin (
     ensure   => $_polkit_ensure,
     priority => 10,
     content  => $_content,
+  }
+
+  if $set_selinux_login {
+    if $facts['selinux_current_mode'] and ($facts['selinux_current_mode'] != 'disabled') {
+      selinux_login { "%${admin_group}":
+        seuser    => $selinux_user_context,
+        mls_range => $selinux_user_mls_range
+      }
+    }
   }
 }

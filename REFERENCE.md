@@ -6,11 +6,12 @@
 **Classes**
 
 * [`simp`](#simp): This class provides an entry point to configuring your systems to take full advantage of SIMP capabilities.  This is primarily done through t
-* [`simp::admin`](#simpadmin): Set up a host of common administrative functions including administrator group system access, auditor access, and default ``sudo`` rules
-* [`simp::base_apps`](#simpbase_apps): This is a set of applications that you will want on most systems  Services this class manages:   * irqbalance (enabled by default by vendor) 
+* [`simp::admin`](#simpadmin): Set up a host of common administrative functions including
+* [`simp::base_apps`](#simpbase_apps): This is a set of applications that you will want on most systems  Services this class manages:   * irqbalance (enabled by default by vendor)
 * [`simp::base_services`](#simpbase_services): This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
 * [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP Security Guide
+* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules into the system until the system has been rebooted.  This will only take ef
 * [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
 * [`simp::mountpoints::el6_tmp_fix`](#simpmountpointsel6_tmp_fix): There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect permissions after the *second* reboot after bootstrapping SIMP. Th
 * [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
@@ -18,14 +19,14 @@
 * [`simp::netconsole`](#simpnetconsole): Configure ``/etc/sysconfig/netconsole`` and the netconsole service
 * [`simp::nsswitch`](#simpnsswitch): A SIMP profile for using the nsswitch module to manage /etc/nsswitch
 * [`simp::one_shot`](#simpone_shot): Configure the system to disconnect from the Puppet server once it has successfully run  This should *not* be used as part of the standard SIM
-* [`simp::one_shot::finalize`](#simpone_shotfinalize): NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  A 'last effort' script to clean up all of 
+* [`simp::one_shot::finalize`](#simpone_shotfinalize): NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  A 'last effort' script to clean up all of
 * [`simp::one_shot::user`](#simpone_shotuser): NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  Configure a 'stand alone' system user
 * [`simp::pam_limits::max_logins`](#simppam_limitsmax_logins): Restrict the max logins on a system via PAM
 * [`simp::prelink`](#simpprelink): Manage prelinking
 * [`simp::puppetdb`](#simppuppetdb): This class enables a PuppetDB server with defaults set for SIMP compatibility.  **NOTE:** Hiera variables **must** be set appropriately under
 * [`simp::rc_local`](#simprc_local): Manage the content of ``/etc/rc.d/rc.local``  By default, this class will disable the file altogether
 * [`simp::root_user`](#simproot_user): Manage resources related to the `root` user
-* [`simp::scenario::base`](#simpscenariobase): **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  This class provides the basis of what a 
+* [`simp::scenario::base`](#simpscenariobase): **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  This class provides the basis of what a
 * [`simp::scenario::poss`](#simpscenarioposs): **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  The 'Puppet Open Source Software' Scenar
 * [`simp::server`](#simpserver): Set up a SIMP server in such a way that it will be ready to serve configuration data appropriately to your clients.
 * [`simp::server::kickstart`](#simpserverkickstart): This class provides a working framework for providing a kickstart server for your client hosts.
@@ -34,21 +35,21 @@
 * [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a slave LDAP server.  If you are setting up a slave LDAP server, remember that the three digit RID mu
 * [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients  If you don't have these provided somewhere, many of the modules will not f
 * [`simp::server::yum`](#simpserveryum): This class sets up a YUM site at `${data_dir}/yum` and is used by the default SIMP server.
-* [`simp::sssd::client`](#simpsssdclient): This class sets up an SSSD client based on the normal SIMP parameters  This should work for most out-of-the-box installations. Otherwise, it 
+* [`simp::sssd::client`](#simpsssdclient): This class sets up an SSSD client based on the normal SIMP parameters  This should work for most out-of-the-box installations. Otherwise, it
 * [`simp::sudoers`](#simpsudoers): Provide useful aliases that many people have wanted to use over time.  None of this is mandatory and all can be changed via the different par
 * [`simp::sudoers::aliases`](#simpsudoersaliases): A set of default sudoers aliases  Take care not to add anything that can access a root shell
 * [`simp::sysctl`](#simpsysctl): Sets sysctl settings that are useful from a general 'modern system' point of view.  There are also items in this list that are particularly u
 * [`simp::version`](#simpversion): Places SIMP version related information on the filesystem
 * [`simp::yum::repo::internet_simp_dependencies`](#simpyumrepointernet_simp_dependencies): Configure yum to use the internet public repository for SIMP dependencies
 * [`simp::yum::repo::internet_simp_server`](#simpyumrepointernet_simp_server): Configure yum to use the internet public repository for SIMP servers
-* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (simp-managed) OS Updates repository  Generally, this is used by the ISO installation.  * By default, baseurl and GPG 
+* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (simp-managed) OS Updates repository  Generally, this is used by the ISO installation.  * By default, baseurl and GPG
 * [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for disconnected environments.  Generally, this is used by the ISO installation.  * By default, baseurl a
 * [`simp::yum::schedule`](#simpyumschedule): Set up a YUM update schedule.
 
 **Functions**
 
 * [`simp::knockout`](#simpknockout): Deprecated knockout function, see simplib::knockout
-* [`simp::yum::repo::baseurl_string`](#simpyumrepobaseurl_string): 
+* [`simp::yum::repo::baseurl_string`](#simpyumrepobaseurl_string):
 * [`simp::yum::repo::gpgkey_string`](#simpyumrepogpgkey_string): A function to return a proper set of SIMP YUM repositories for the default build. Of limited use outside of an ISO install.
 * [`simp::yum::repo::gpgkeys::os_updates`](#simpyumrepogpgkeysos_updates): Build a list of GPG keys needed by a os_updates repo
 * [`simp::yum::repo::gpgkeys::simp`](#simpyumrepogpgkeyssimp): Build a list of GPG keys needed by a simp repo
@@ -345,8 +346,7 @@ Defaults to '0750' if a platform doesn't specify
 
 ### simp::admin
 
-Set up a host of common administrative functions including administrator
-group system access, auditor access, and default ``sudo`` rules
+administrator group system access, auditor access, and default ``sudo`` rules
 
 #### Parameters
 
@@ -455,6 +455,37 @@ If the system has PolicyKit support, will register ``$admin_group`` as a
 valid administrative group on the system
 
 Default value: `true`
+
+##### `set_selinux_login`
+
+Data type: `Boolean`
+
+Ensure that the SELinux login for ``$admin_group`` is set
+
+* This is recommended if you set the __default__ selogin profile to
+``user_u``
+
+Default value: `false`
+
+##### `selinux_user_context`
+
+Data type: `String[1]`
+
+The selinux user context to assign to ``$admin_group``
+
+* Has no effect if ``$set_selinux_login`` is not set
+
+Default value: 'staff_u'
+
+##### `selinux_user_mls_range`
+
+Data type: `String[1]`
+
+The selinux MLS range to assign to ``$admin_group``
+
+* Has no effect if ``$set_selinux_login`` is not set
+
+Default value: 's0-s0:c0.c1023'
 
 ### simp::base_apps
 
@@ -636,6 +667,48 @@ Trigger a 'reboot_notify' resource that will warn at every puppet run that
 a reboot is required if necessary.
 
 Default value: `true`
+
+### simp::kmod_blacklist::lock_modules
+
+This class toggles the ability to load any further kernel modules into the
+system until the system has been rebooted.
+
+This will only take effect if the system has the ``kernel.modules_disabled``
+sysctl feature.
+
+ * WARNING: It is *highly* likely that you will prevent important modules
+   from loading (such as networking) if you enable this. Test thoroughly
+   before enabling.
+
+#### Parameters
+
+The following parameters are available in the `simp::kmod_blacklist::lock_modules` class.
+
+##### `enable`
+
+Data type: `Any`
+
+Lock all module loading abilities
+
+Default value: `true`
+
+##### `notify_if_reboot_required`
+
+Data type: `Any`
+
+If the change requires the system to be rebooted to take effect, a
+notification will be printed during puppet runs until the system has been
+rebooted.
+
+Default value: `true`
+
+##### `persist`
+
+Data type: `Any`
+
+Lock all modules at boot time.
+
+Default value: `false`
 
 ### simp::mountpoints
 
