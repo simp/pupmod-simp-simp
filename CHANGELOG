@@ -1,4 +1,4 @@
-* Tue Jun 19 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0-0
+* Tue Jun 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0-0
 - Add SELinux login context management to `simp::admin`
 - Update the version of simp-selinux
 - Update the upper bound on puppetlabs-stdlib
