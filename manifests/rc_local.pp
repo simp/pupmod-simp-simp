@@ -1,4 +1,4 @@
-# Manage the content of ``/etc/rc.d/rc.local``
+# @summary Manage the content of ``/etc/rc.d/rc.local``
 #
 # By default, this class will disable the file altogether
 #

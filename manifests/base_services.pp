@@ -1,4 +1,4 @@
-# This class will be removed in a future version of SIMP.
+# @summary Deprecated - This class will be removed in a future version of SIMP.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #

@@ -1,4 +1,4 @@
-# Sets sysctl settings that are useful from a general 'modern system'
+# @summary Sets sysctl settings that are useful from a general 'modern system'
 # point of view.
 #
 # There are also items in this list that are particularly useful for

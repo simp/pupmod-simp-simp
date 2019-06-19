@@ -1,4 +1,4 @@
-# Manage resources related to the `root` user
+# @summary Manage resources related to the `root` user
 #
 # @param manage_perms
 #   Ensure that `$home` has restricted permissions and proper SELinux contexts.

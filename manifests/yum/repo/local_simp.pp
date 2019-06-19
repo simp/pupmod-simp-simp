@@ -1,4 +1,4 @@
-# Set up the local SIMP repositiories for disconnected environments.
+# @summary Set up the local SIMP repositiories for disconnected environments.
 #
 # Generally, this is used by the ISO installation.
 #

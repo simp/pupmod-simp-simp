@@ -1,4 +1,5 @@
-# Provide useful aliases that many people have wanted to use over time.
+# @summary Provide useful aliases that many people have wanted to use over
+# time.
 #
 # None of this is mandatory and all can be changed via the different
 # parameters.

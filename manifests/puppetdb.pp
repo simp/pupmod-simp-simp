@@ -1,4 +1,4 @@
-# This class enables a PuppetDB server with defaults set for SIMP
+# @summary This class enables a PuppetDB server with defaults set for SIMP
 # compatibility.
 #
 # **NOTE:** Hiera variables **must** be set appropriately under the puppetdb

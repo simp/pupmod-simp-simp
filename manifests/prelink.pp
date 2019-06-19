@@ -1,4 +1,4 @@
-# Manage prelinking
+# @summary Manage prelinking
 #
 # @param enable
 #   Whether to enable prelinking.  Prelinking can only be enabled if

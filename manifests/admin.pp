@@ -53,8 +53,10 @@
 # @param set_selinux_login
 #   Ensure that the SELinux login for ``$admin_group`` is set
 #
-#   * This is recommended if you set the __default__ selogin profile to
+#   * This is recommended if you set the ``__default__`` seusers mapping to
 #   ``user_u``
+#
+#   @see seusers(5)
 #
 # @param selinux_user_context
 #   The selinux user context to assign to ``$admin_group``

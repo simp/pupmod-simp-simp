@@ -1,4 +1,4 @@
-# Sets up either a primary LDAP server or a slave LDAP server.
+# @summary Sets up either a primary LDAP server or a slave LDAP server.
 #
 # If you are setting up a slave LDAP server, remember that the three
 # digit RID must be unique or each slave server that you attach to the

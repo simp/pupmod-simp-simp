@@ -5,51 +5,51 @@
 
 **Classes**
 
-* [`simp`](#simp): This class provides an entry point to configuring your systems to take full advantage of SIMP capabilities.  This is primarily done through t
+* [`simp`](#simp): This class provides an entry point to configuring your systems to
 * [`simp::admin`](#simpadmin): Set up a host of common administrative functions including
-* [`simp::base_apps`](#simpbase_apps): This is a set of applications that you will want on most systems  Services this class manages:   * irqbalance (enabled by default by vendor)
-* [`simp::base_services`](#simpbase_services): This class will be removed in a future version of SIMP.
+* [`simp::base_apps`](#simpbase_apps): This is a set of applications that you will want on most systems
+* [`simp::base_services`](#simpbase_services): Deprecated - This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
-* [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP Security Guide
-* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules into the system until the system has been rebooted.  This will only take ef
+* [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP
+* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules
 * [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
-* [`simp::mountpoints::el6_tmp_fix`](#simpmountpointsel6_tmp_fix): There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect permissions after the *second* reboot after bootstrapping SIMP. Th
+* [`simp::mountpoints::el6_tmp_fix`](#simpmountpointsel6_tmp_fix): There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have
 * [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
 * [`simp::mountpoints::tmp`](#simpmountpointstmp): Manages the various tmp mounts with optional security features.
 * [`simp::netconsole`](#simpnetconsole): Configure ``/etc/sysconfig/netconsole`` and the netconsole service
 * [`simp::nsswitch`](#simpnsswitch): A SIMP profile for using the nsswitch module to manage /etc/nsswitch
-* [`simp::one_shot`](#simpone_shot): Configure the system to disconnect from the Puppet server once it has successfully run  This should *not* be used as part of the standard SIM
-* [`simp::one_shot::finalize`](#simpone_shotfinalize): NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  A 'last effort' script to clean up all of
-* [`simp::one_shot::user`](#simpone_shotuser): NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  Configure a 'stand alone' system user
+* [`simp::one_shot`](#simpone_shot): Configure the system to disconnect from the Puppet server once it
+* [`simp::one_shot::finalize`](#simpone_shotfinalize): A 'last effort' script to clean up all of the SIMP material on the
+* [`simp::one_shot::user`](#simpone_shotuser): Configure a 'stand alone' system user
 * [`simp::pam_limits::max_logins`](#simppam_limitsmax_logins): Restrict the max logins on a system via PAM
 * [`simp::prelink`](#simpprelink): Manage prelinking
-* [`simp::puppetdb`](#simppuppetdb): This class enables a PuppetDB server with defaults set for SIMP compatibility.  **NOTE:** Hiera variables **must** be set appropriately under
-* [`simp::rc_local`](#simprc_local): Manage the content of ``/etc/rc.d/rc.local``  By default, this class will disable the file altogether
+* [`simp::puppetdb`](#simppuppetdb): This class enables a PuppetDB server with defaults set for SIMP
+* [`simp::rc_local`](#simprc_local): Manage the content of ``/etc/rc.d/rc.local``
 * [`simp::root_user`](#simproot_user): Manage resources related to the `root` user
-* [`simp::scenario::base`](#simpscenariobase): **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  This class provides the basis of what a
-* [`simp::scenario::poss`](#simpscenarioposs): **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**  The 'Puppet Open Source Software' Scenar
-* [`simp::server`](#simpserver): Set up a SIMP server in such a way that it will be ready to serve configuration data appropriately to your clients.
-* [`simp::server::kickstart`](#simpserverkickstart): This class provides a working framework for providing a kickstart server for your client hosts.
-* [`simp::server::kickstart::runpuppet`](#simpserverkickstartrunpuppet): This class manages the runpuppet script, which is a script that can be run to bootstrap provisioned clients, adding them to puppet and runnin
-* [`simp::server::kickstart::simp_client_bootstrap`](#simpserverkickstartsimp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts that can be run to bootstrap SIMP clients via Puppet, in a fashion simila
-* [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a slave LDAP server.  If you are setting up a slave LDAP server, remember that the three digit RID mu
-* [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients  If you don't have these provided somewhere, many of the modules will not f
-* [`simp::server::yum`](#simpserveryum): This class sets up a YUM site at `${data_dir}/yum` and is used by the default SIMP server.
-* [`simp::sssd::client`](#simpsssdclient): This class sets up an SSSD client based on the normal SIMP parameters  This should work for most out-of-the-box installations. Otherwise, it
-* [`simp::sudoers`](#simpsudoers): Provide useful aliases that many people have wanted to use over time.  None of this is mandatory and all can be changed via the different par
-* [`simp::sudoers::aliases`](#simpsudoersaliases): A set of default sudoers aliases  Take care not to add anything that can access a root shell
-* [`simp::sysctl`](#simpsysctl): Sets sysctl settings that are useful from a general 'modern system' point of view.  There are also items in this list that are particularly u
+* [`simp::scenario::base`](#simpscenariobase): This class provides the basis of what a native SIMP system should
+* [`simp::scenario::poss`](#simpscenarioposs): The 'Puppet Open Source Software' Scenario
+* [`simp::server`](#simpserver): Set up a SIMP server in such a way that it will be ready to serve
+* [`simp::server::kickstart`](#simpserverkickstart): This class provides a working framework for providing a kickstart
+* [`simp::server::kickstart::runpuppet`](#simpserverkickstartrunpuppet): This class manages the runpuppet script, which is a script that can
+* [`simp::server::kickstart::simp_client_bootstrap`](#simpserverkickstartsimp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts
+* [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a slave LDAP server.
+* [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients
+* [`simp::server::yum`](#simpserveryum): This class sets up a YUM site at `${data_dir}/yum` and is used by
+* [`simp::sssd::client`](#simpsssdclient): This class sets up an SSSD client based on the normal SIMP
+* [`simp::sudoers`](#simpsudoers): Provide useful aliases that many people have wanted to use over
+* [`simp::sudoers::aliases`](#simpsudoersaliases): A set of default sudoers aliases
+* [`simp::sysctl`](#simpsysctl): Sets sysctl settings that are useful from a general 'modern system'
 * [`simp::version`](#simpversion): Places SIMP version related information on the filesystem
-* [`simp::yum::repo::internet_simp_dependencies`](#simpyumrepointernet_simp_dependencies): Configure yum to use the internet public repository for SIMP dependencies
+* [`simp::yum::repo::internet_simp_dependencies`](#simpyumrepointernet_simp_dependencies): Configure yum to use the internet public repository for SIMP
 * [`simp::yum::repo::internet_simp_server`](#simpyumrepointernet_simp_server): Configure yum to use the internet public repository for SIMP servers
-* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (simp-managed) OS Updates repository  Generally, this is used by the ISO installation.  * By default, baseurl and GPG
-* [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for disconnected environments.  Generally, this is used by the ISO installation.  * By default, baseurl a
+* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (simp-managed) OS Updates repository
+* [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for disconnected environments.
 * [`simp::yum::schedule`](#simpyumschedule): Set up a YUM update schedule.
 
 **Functions**
 
 * [`simp::knockout`](#simpknockout): Deprecated knockout function, see simplib::knockout
-* [`simp::yum::repo::baseurl_string`](#simpyumrepobaseurl_string):
+* [`simp::yum::repo::baseurl_string`](#simpyumrepobaseurl_string): 
 * [`simp::yum::repo::gpgkey_string`](#simpyumrepogpgkey_string): A function to return a proper set of SIMP YUM repositories for the default build. Of limited use outside of an ISO install.
 * [`simp::yum::repo::gpgkeys::os_updates`](#simpyumrepogpgkeysos_updates): Build a list of GPG keys needed by a os_updates repo
 * [`simp::yum::repo::gpgkeys::simp`](#simpyumrepogpgkeyssimp): Build a list of GPG keys needed by a simp repo
@@ -59,8 +59,7 @@
 
 ### simp
 
-This class provides an entry point to configuring your systems to take full
-advantage of SIMP capabilities.
+take full advantage of SIMP capabilities.
 
 This is primarily done through the ``simp::scenario`` classes that provide
 specifically supported configurations of core SIMP systems and clients.
@@ -462,8 +461,10 @@ Data type: `Boolean`
 
 Ensure that the SELinux login for ``$admin_group`` is set
 
-* This is recommended if you set the __default__ selogin profile to
+* This is recommended if you set the ``__default__`` seusers mapping to
 ``user_u``
+
+@see seusers(5)
 
 Default value: `false`
 
@@ -488,8 +489,6 @@ The selinux MLS range to assign to ``$admin_group``
 Default value: 's0-s0:c0.c1023'
 
 ### simp::base_apps
-
-This is a set of applications that you will want on most systems
 
 Services this class manages:
   * irqbalance (enabled by default by vendor)
@@ -533,7 +532,7 @@ Default value: `true`
 
 ### simp::base_services
 
-This class will be removed in a future version of SIMP.
+Deprecated - This class will be removed in a future version of SIMP.
 
 ### simp::ctrl_alt_del
 
@@ -586,8 +585,7 @@ Default value: 'warning'
 
 ### simp::kmod_blacklist
 
-This class provides a default set of blacklist entries per the SCAP Security
-Guide
+Security Guide
 
 #### Parameters
 
@@ -670,8 +668,7 @@ Default value: `true`
 
 ### simp::kmod_blacklist::lock_modules
 
-This class toggles the ability to load any further kernel modules into the
-system until the system has been rebooted.
+into the system until the system has been rebooted.
 
 This will only take effect if the system has the ``kernel.modules_disabled``
 sysctl feature.
@@ -761,9 +758,8 @@ Default value: `true`
 
 ### simp::mountpoints::el6_tmp_fix
 
-There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect
-permissions after the *second* reboot after bootstrapping SIMP. This upstart
-job is an effective, but kludgy, way to remedy this issue
+incorrect permissions after the *second* reboot after bootstrapping SIMP.
+This upstart job is an effective, but kludgy, way to remedy this issue.
 
 We have not been able to repeat the issue reliably enough in a controlled
 environment to determine the root cause.
@@ -962,8 +958,7 @@ Default value: simplib::lookup('simp_options::sssd', { 'default_value' => false 
 
 ### simp::one_shot
 
-Configure the system to disconnect from the Puppet server once it has
-successfully run
+has successfully run
 
 This should *not* be used as part of the standard SIMP runpuppet
 configuration
@@ -1126,8 +1121,7 @@ Default value: `false`
 
 NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
-A 'last effort' script to clean up all of the SIMP material on the system
-that may cause issues
+system that may cause issues
 
 #### Parameters
 
@@ -1176,8 +1170,6 @@ Default value: $simp::one_shot::finalize_debug
 ### simp::one_shot::user
 
 NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
-
-Configure a 'stand alone' system user
 
 #### Parameters
 
@@ -1343,7 +1335,6 @@ Default value: simplib::lookup('simp_options::package_ensure', { 'default_value'
 
 ### simp::puppetdb
 
-This class enables a PuppetDB server with defaults set for SIMP
 compatibility.
 
 **NOTE:** Hiera variables **must** be set appropriately under the puppetdb
@@ -1584,8 +1575,6 @@ Default value: simplib::lookup('simp_options::firewall', { 'default_value' => fa
 
 ### simp::rc_local
 
-Manage the content of ``/etc/rc.d/rc.local``
-
 By default, this class will disable the file altogether
 
 #### Parameters
@@ -1714,9 +1703,8 @@ Default value: "/${username}"
 
 **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
-This class provides the basis of what a native SIMP system should
-be. It is expected that users may deviate from this configuration
-over time, but this should be an effective starting place.
+be. It is expected that users may deviate from this configuration over time,
+but this should be an effective starting place.
 
 #### Parameters
 
@@ -1751,7 +1739,6 @@ Default value: $::simp::rsync_stunnel
 
 Data type: `Boolean`
 
-Boolean
 If true, use the ssh_global_known_hosts function to gather the various host
 SSH public keys and populate the /etc/ssh/known_hosts file.
 
@@ -1871,8 +1858,6 @@ Default value: $::simp::stock_sssd
 
 **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
-The 'Puppet Open Source Software' Scenario
-
 This provides a *minimal* system that connects to a SIMP Puppet server.
 
 This class *does not* provide security for a system but it designed to simply
@@ -1896,7 +1881,6 @@ Default value: $::simp::puppet_server_hosts_entry
 
 ### simp::server
 
-Set up a SIMP server in such a way that it will be ready to serve
 configuration data appropriately to your clients.
 
 #### Parameters
@@ -1963,7 +1947,6 @@ for the ``scenario``
 
 ### simp::server::kickstart
 
-This class provides a working framework for providing a kickstart
 server for your client hosts.
 
 * **Note** You need both a DHCP and TFTP server for unattended Kickstart
@@ -2035,9 +2018,8 @@ Default value: 'none'
 
 ### simp::server::kickstart::runpuppet
 
-This class manages the runpuppet script, which is a script that can be run
-to bootstrap provisioned clients, adding them to puppet and running it in a
-fashion similar so `simp bootstrap`.
+be run to bootstrap provisioned clients, adding them to puppet and running it
+in a fashion similar so `simp bootstrap`.
 
 #### Parameters
 
@@ -2136,9 +2118,8 @@ Default value: simplib::lookup('simp_options::fips', { 'default_value' => false 
 
 ### simp::server::kickstart::simp_client_bootstrap
 
-This class manages simp_client_bootstrap scripts, which are scripts
-that can be run to bootstrap SIMP clients via Puppet, in a fashion
-similar to `simp bootstrap`, the bootstrap script for the SIMP server.
+that can be run to bootstrap SIMP clients via Puppet, in a fashion similar to
+`simp bootstrap`, the bootstrap script for the SIMP server.
 
 The three scripts managed by this class are as follows:
 
@@ -2342,8 +2323,6 @@ Default value: simplib::lookup('simp_options::fips', { 'default_value' => false 
 
 ### simp::server::ldap
 
-Sets up either a primary LDAP server or a slave LDAP server.
-
 If you are setting up a slave LDAP server, remember that the three
 digit RID must be unique or each slave server that you attach to the
 same master.
@@ -2404,8 +2383,6 @@ server.
 Default value: `false`
 
 ### simp::server::rsync_shares
-
-Set up various rsync services that are needed by the SIMP clients
 
 If you don't have these provided somewhere, many of the modules will not
 function properly.
@@ -2469,7 +2446,6 @@ Default value: simplib::lookup('simp_options::trusted_nets', { 'default_value' =
 
 ### simp::server::yum
 
-This class sets up a YUM site at `${data_dir}/yum` and is used by
 the default SIMP server.
 
 #### Parameters
@@ -2502,7 +2478,7 @@ Default value: simplib::lookup('simp_options::package_ensure', { 'default_value'
 
 ### simp::sssd::client
 
-This class sets up an SSSD client based on the normal SIMP parameters
+parameters
 
 This should work for most out-of-the-box installations. Otherwise, it serves
 as an example of what you can do to make it work for your environment.
@@ -2589,7 +2565,7 @@ Default value: 500
 
 ### simp::sudoers
 
-Provide useful aliases that many people have wanted to use over time.
+time.
 
 None of this is mandatory and all can be changed via the different
 parameters.
@@ -2632,8 +2608,6 @@ Default value: [
   ]
 
 ### simp::sudoers::aliases
-
-A set of default sudoers aliases
 
 Take care not to add anything that can access a root shell
 
@@ -2794,7 +2768,6 @@ Default value: [ '/bin/su' ]
 
 ### simp::sysctl
 
-Sets sysctl settings that are useful from a general 'modern system'
 point of view.
 
 There are also items in this list that are particularly useful for
@@ -3346,7 +3319,7 @@ Places SIMP version related information on the filesystem
 
 ### simp::yum::repo::internet_simp_dependencies
 
-Configure yum to use the internet public repository for SIMP dependencies
+dependencies
 
 #### Parameters
 
@@ -3386,8 +3359,6 @@ The unique release "slug" of SIMP for the target release
 Default value: `undef`
 
 ### simp::yum::repo::local_os_updates
-
-Configure yum to use a (simp-managed) OS Updates repository
 
 Generally, this is used by the ISO installation.
 
@@ -3453,8 +3424,6 @@ An optional Array of Urls to include additional GPG key files
 Default value: []
 
 ### simp::yum::repo::local_simp
-
-Set up the local SIMP repositiories for disconnected environments.
 
 Generally, this is used by the ISO installation.
 

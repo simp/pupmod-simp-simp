@@ -1,4 +1,5 @@
-# This class sets up an SSSD client based on the normal SIMP parameters
+# @summary This class sets up an SSSD client based on the normal SIMP
+# parameters
 #
 # This should work for most out-of-the-box installations. Otherwise, it serves
 # as an example of what you can do to make it work for your environment.

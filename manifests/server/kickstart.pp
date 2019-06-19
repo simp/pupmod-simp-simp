@@ -1,4 +1,4 @@
-# This class provides a working framework for providing a kickstart
+# @summary This class provides a working framework for providing a kickstart
 # server for your client hosts.
 #
 # @note You need both a DHCP and TFTP server for unattended Kickstart
