@@ -22,8 +22,6 @@ hierarchy:
     path: "%{facts.hostname}.yaml"
   - name: SIMP Compliance Engine
     lookup_key: compliance_markup::enforcement
-    options:
-      enabled_sce_versions: [2]
   - name: Custom Test Hiera
     path: "%{custom_hiera}.yaml"
   - name: "%{module_name}"
