@@ -34,9 +34,9 @@ describe 'compliance_markup', type: :class do
 
         #compliance_profiles.each do |target_profile|
         context "with compliance profile '#{target_profile}'" do
-          let(:pre_condition) {%(
-            #{expected_classes.map{|c| %{include #{c}}}.join("\n")}
-                               )}
+          let(:pre_condition) {
+            %(#{expected_classes.map{|c| %{include #{c}}}.join("\n")})
+          }
 
           it { is_expected.to compile }
 
