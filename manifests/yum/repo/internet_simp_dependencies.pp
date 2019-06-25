@@ -1,4 +1,5 @@
-# Configure yum to use the internet public repository for SIMP dependencies
+# @summary Configure yum to use the internet public repository for SIMP
+# dependencies
 #
 # @param simp_release_slug
 #   The unique release URL "slug" of SIMP for the target release

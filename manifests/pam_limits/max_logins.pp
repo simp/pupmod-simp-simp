@@ -1,4 +1,4 @@
-# Restrict the max logins on a system via PAM
+# @summary Restrict the max logins on a system via PAM
 #
 # @param value
 #   The maximum number of logins that a user may have simultaneously

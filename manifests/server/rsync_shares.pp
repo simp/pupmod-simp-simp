@@ -1,4 +1,4 @@
-# Set up various rsync services that are needed by the SIMP clients
+# @summary Set up various rsync services that are needed by the SIMP clients
 #
 # If you don't have these provided somewhere, many of the modules will not
 # function properly.

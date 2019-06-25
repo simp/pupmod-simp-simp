@@ -1,4 +1,4 @@
-# Manage the state of pressing ``ctrl-alt-del``
+# @summary Manage the state of pressing ``ctrl-alt-del``
 #
 # @param enable
 #   Allow ``ctrl-alt-del`` to restart the system

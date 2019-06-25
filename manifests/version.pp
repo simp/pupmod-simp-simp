@@ -1,4 +1,5 @@
-# Places SIMP version related information on the filesystem
+# @summary Places SIMP version related information on the filesystem
+#
 class simp::version () {
   # XXX: ToDo: Move /etc/simp creation to a simplib class and use
   # moduledata to resolve the variables..
