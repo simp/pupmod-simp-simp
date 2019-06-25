@@ -24,7 +24,7 @@ HOSTS:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
         gpgkeys:
-          - https://getfedora.org/static/352C64E5.txt
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
       simp:
         baseurl: 'https://packagecloud.io/simp-project/6_X/el/$releasever/$basearch'
         gpgkeys:
@@ -38,7 +38,7 @@ HOSTS:
           - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
           - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
           - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
-          - https://getfedora.org/static/352C64E5.txt
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 
   server-el6:
     roles:
@@ -55,21 +55,21 @@ HOSTS:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
         gpgkeys:
-          - https://getfedora.org/static/0608B895.txt
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
       simp:
         baseurl: 'https://packagecloud.io/simp-project/6_X/el/$releasever/$basearch'
         gpgkeys:
-         - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
       simp_dependencies:
         baseurl: 'https://packagecloud.io/simp-project/6_X_Dependencies/el/$releasever/$basearch'
         gpgkeys:
-         - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
-         - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
-         - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
-         - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
-         - https://getfedora.org/static/0608B895.txt
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
+          - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
 CONFIG:
   log_level: verbose
   type: aio

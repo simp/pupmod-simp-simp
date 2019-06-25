@@ -22,7 +22,7 @@ class simp::yum::repo::internet_simp_dependencies (
     'https://yum.puppetlabs.com/RPM-GPG-KEY-puppet',
     'https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94',
     'https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-96',
-    'https://getfedora.org/static/352C64E5.txt'
+    'https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-$releasever'
   ]
 
   $_release = $facts['os']['release']['major']
