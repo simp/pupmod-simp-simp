@@ -117,6 +117,7 @@ fixtures:
       repo: https://github.com/simp/pupmod-voxpupuli-selinux
       branch: simp-master
     xinetd: https://github.com/simp/pupmod-simp-xinetd
+    yum: https://github.com/simp/voxpupuli-yum
     yumrepo_core:
       repo: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
       puppet_version: ">= 6.0.0"

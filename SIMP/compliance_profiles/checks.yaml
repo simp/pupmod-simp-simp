@@ -87,43 +87,6 @@ checks:
     oval-ids:
     - xccdf_org:ssgproject:content_rule_disable_ctrlaltdel_reboot
     - disable_ctrlaltdel_reboot
-  oval:com.puppet.forge.simp.simp.fips:
-    settings:
-      parameter: simp::fips
-      value: true
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:AC-3: true
-      nist_800_53:rev4:AC-17A:2: true
-      nist_800_53:rev4:IA-7: true
-      nist_800_53:rev4:SC-13: true
-      disa_stig: true
-      RHEL-07-021280: true
-      RHEL-07-010300: true
-      SRG-OS-000033-GPOS-00014: true
-      SRG-OS-000396-GPOS-00176: true
-      SRG-OS-000478-GPOS-00223: true
-      SRG-OS-000120-GPOS-00061: true
-      cci:CCI-000068: true
-      cci:CCI-002450: true
-      cci:CCI-000803: true
-    identifiers:
-      nist_800_53:rev4:
-      - AC-3
-      - AC-17A:2
-      - IA-7
-      - SC-13
-      disa_stig:
-      - RHEL-07-021280
-      - RHEL-07-010300
-      - SRG-OS-000033-GPOS-00014
-      - SRG-OS-000396-GPOS-00176
-      - SRG-OS-000478-GPOS-00223
-      - SRG-OS-000120-GPOS-00061
-      - CCI-000068
-      - CCI-002450
-      - CCI-000803
   oval:com.puppet.forge.simp.simp.kmod_blacklist.blacklist:
     settings:
       parameter: simp::kmod_blacklist::blacklist
@@ -310,25 +273,6 @@ checks:
       nist_800_53:rev4:
       - AC-3
       - CM-7
-  oval:com.puppet.forge.simp.simp.nfs.stock.export_home.sec:
-    settings:
-      parameter: simp::nfs::stock::export_home::sec
-      value: none:sys
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:IA-2: true
-      disa_stig: true
-      RHEL-07-021240: true
-      SRG-OS-000480-GPOS-00227: true
-      cci:CCI-000366: true
-    identifiers:
-      nist_800_53:rev4:
-      - IA-2
-      disa_stig:
-      - RHEL-07-021240
-      - SRG-OS-000480-GPOS-00227
-      - CCI-000366
   oval:com.puppet.forge.simp.simp.nsswitch.ldap:
     settings:
       parameter: simp::nsswitch::ldap
@@ -340,9 +284,9 @@ checks:
     identifiers:
       nist_800_53:rev4:
       - IA-1
-  oval:com.puppet.forge.simp.simp.pam_limits.max_logins:
+  oval:com.puppet.forge.simp.simp.pam_limits.max_logins.value:
     settings:
-      parameter: simp::pam_limits::max_logins
+      parameter: simp::pam_limits::max_logins::value
       value: 10
     type: puppet-class-parameter
     controls:
