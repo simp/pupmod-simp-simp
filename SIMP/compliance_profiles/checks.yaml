@@ -273,17 +273,6 @@ checks:
       nist_800_53:rev4:
       - AC-3
       - CM-7
-  oval:com.puppet.forge.simp.simp.nsswitch.ldap:
-    settings:
-      parameter: simp::nsswitch::ldap
-      value: true
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:IA-1: true
-    identifiers:
-      nist_800_53:rev4:
-      - IA-1
   oval:com.puppet.forge.simp.simp.pam_limits.max_logins.value:
     settings:
       parameter: simp::pam_limits::max_logins::value
@@ -342,25 +331,6 @@ checks:
       nist_800_53:rev4:
       - AC-3
       - CM-7
-  oval:com.puppet.forge.simp.simp.rsync_stunnel:
-    settings:
-      parameter: simp::rsync_stunnel
-      value: true
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:SC-8: true
-      nist_800_53:rev4:SC-8:1: true
-      nist_800_53:rev4:SC-8:2: true
-      nist_800_53:rev4:SC-13: true
-      nist_800_53:rev4:SC-23: true
-    identifiers:
-      nist_800_53:rev4:
-      - SC-8
-      - SC-8:1
-      - SC-8:2
-      - SC-13
-      - SC-23
   oval:com.puppet.forge.simp.simp.runlevel:
     settings:
       parameter: simp::runlevel
@@ -393,25 +363,6 @@ checks:
       - RHEL-07-020290
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
-  oval:com.puppet.forge.simp.simp.server.rsync_shares.stunnel:
-    settings:
-      parameter: simp::server::rsync_shares::stunnel
-      value: true
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:SC-8: true
-      nist_800_53:rev4:SC-8:1: true
-      nist_800_53:rev4:SC-8:2: true
-      nist_800_53:rev4:SC-13: true
-      nist_800_53:rev4:SC-23: true
-    identifiers:
-      nist_800_53:rev4:
-      - SC-8
-      - SC-8:1
-      - SC-8:2
-      - SC-13
-      - SC-23
   oval:com.puppet.forge.simp.simp.sssd.client.autofs:
     settings:
       parameter: simp::sssd::client::autofs
@@ -441,25 +392,6 @@ checks:
     settings:
       parameter: simp::sssd::client::enumerate_users
       value: false
-    type: puppet-class-parameter
-    controls:
-      nist_800_53:rev4: true
-      nist_800_53:rev4:IA-2: true
-      disa_stig: true
-      RHEL-07-010000: true
-      SRG-OS-000001-GPOS-00001: true
-      cci:CCI-000015: true
-    identifiers:
-      nist_800_53:rev4:
-      - IA-2
-      disa_stig:
-      - RHEL-07-010000
-      - SRG-OS-000001-GPOS-00001
-      - CCI-000015
-  oval:com.puppet.forge.simp.simp.sssd.client.ldap_domain:
-    settings:
-      parameter: simp::sssd::client::ldap_domain
-      value: true
     type: puppet-class-parameter
     controls:
       nist_800_53:rev4: true
