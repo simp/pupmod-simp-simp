@@ -1,4 +1,4 @@
-# Configure yum to use the internet public repository for SIMP servers
+# @summary Configure yum to use the internet public repository for SIMP servers
 #
 # @note If a system is not intended to be a SIMP server, it probably doesn't need
 #       this profile.

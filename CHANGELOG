@@ -1,3 +1,25 @@
+* Tue Jun 25 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.9.0-0
+- Updated the URLs to the EPEL GPG keys. The URLs have changed.
+
+* Tue Jun 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0-0
+- Add SELinux login context management to `simp::admin`
+- Update the version of simp-selinux
+- Update the upper bound on puppetlabs-stdlib
+
+* Thu May 09 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.8.1-0
+- Set permission on /etc/simp and /etc/simp/simp.version to world readable.
+  Puppet needs to be able to read it for simp_version fact.
+
+* Mon May 06 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.8.0-0
+- Fixed a bug on el6 systems in which the 'puppetdb-dlo-cleanup' cron
+  job from the puppetdb module could not be created. Cron rejected this
+  job because the puppetdb user did not have cron access.
+- Added 2 'dead letter office' cleanup configuration parameters to
+  `simp::puppetdb`
+  - simp::puppetdb::automatic_dlo_cleanup which maps directly to
+    puppetdb::automatic_dlo_cleanup
+  - simp::puppetdb::dlo_max_age which maps directly to puppetdb::dlo_max_age
+
 * Thu Apr 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0-0
 - Refactor the simp::mountpoints::tmp to use systemd's tmp.mount target if
   the system supports systemd.

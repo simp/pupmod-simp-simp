@@ -1,5 +1,5 @@
-# Configure the system to disconnect from the Puppet server once it has
-# successfully run
+# @summary Configure the system to disconnect from the Puppet server once it
+# has successfully run
 #
 # This should *not* be used as part of the standard SIMP runpuppet
 # configuration

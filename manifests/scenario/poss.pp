@@ -1,6 +1,6 @@
 # **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 #
-# The 'Puppet Open Source Software' Scenario
+# @summary The 'Puppet Open Source Software' Scenario
 #
 # This provides a *minimal* system that connects to a SIMP Puppet server.
 #

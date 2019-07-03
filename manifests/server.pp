@@ -1,4 +1,4 @@
-# Set up a SIMP server in such a way that it will be ready to serve
+# @summary Set up a SIMP server in such a way that it will be ready to serve
 # configuration data appropriately to your clients.
 #
 # @param allow_simp_user

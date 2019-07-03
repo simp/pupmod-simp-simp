@@ -1,4 +1,4 @@
-# Set up a YUM update schedule.
+# @summary Set up a YUM update schedule.
 #
 # @param enable
 #   Enable or disable the update schedule

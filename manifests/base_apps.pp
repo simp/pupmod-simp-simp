@@ -1,4 +1,4 @@
-# This is a set of applications that you will want on most systems
+# @summary This is a set of applications that you will want on most systems
 #
 # Services this class manages:
 #   * irqbalance (enabled by default by vendor)

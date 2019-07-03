@@ -1,4 +1,4 @@
-# Configure yum to use a (simp-managed) OS Updates repository
+# @summary Configure yum to use a (simp-managed) OS Updates repository
 #
 # Generally, this is used by the ISO installation.
 #

@@ -1,6 +1,6 @@
 # NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 #
-# Configure a 'stand alone' system user
+# @summary Configure a 'stand alone' system user
 #
 # @param enable
 #   Enable the one_shot capabilities

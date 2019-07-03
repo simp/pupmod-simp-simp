@@ -1,4 +1,4 @@
-# A set of default sudoers aliases
+# @summary A set of default sudoers aliases
 #
 # Take care not to add anything that can access a root shell
 #

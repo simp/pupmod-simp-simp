@@ -1,10 +1,12 @@
-# This class sets up a YUM site at `${data_dir}/yum` and is used by
+# @summary This class sets up a YUM site at `${data_dir}/yum` and is used by
 # the default SIMP server.
 #
 # @param data_dir
 #
 # @param trusted_nets
 #   The networks to allow into the YUM server.
+#
+# @param createrepo_ensure
 #
 # @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
 #

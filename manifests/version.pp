@@ -1,4 +1,5 @@
-# Places SIMP version related information on the filesystem
+# @summary Places SIMP version related information on the filesystem
+#
 class simp::version () {
   # XXX: ToDo: Move /etc/simp creation to a simplib class and use
   # moduledata to resolve the variables..
@@ -12,12 +13,12 @@ class simp::version () {
     # Windows permission model is different then *nix,
     # so 770 is the only one that can be translated without
     # also pulling in windows_acl
-    $simp_root_dir_mode = '0770'
+    $simp_root_dir_mode = '0775'
   } else {
     $simp_root_dir = '/etc/simp'
     $simp_root_dir_group = 'root'
     $simp_root_dir_user = 'root'
-    $simp_root_dir_mode = '0640'
+    $simp_root_dir_mode = '0644'
     file { '/usr/local/sbin/simp':
       ensure => 'directory',
       owner  => 'root',

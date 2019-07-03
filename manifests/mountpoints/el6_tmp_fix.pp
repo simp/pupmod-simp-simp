@@ -1,6 +1,6 @@
-# There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have incorrect
-# permissions after the *second* reboot after bootstrapping SIMP. This upstart
-# job is an effective, but kludgy, way to remedy this issue
+# @summary There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have
+# incorrect permissions after the *second* reboot after bootstrapping SIMP.
+# This upstart job is an effective, but kludgy, way to remedy this issue.
 #
 # We have not been able to repeat the issue reliably enough in a controlled
 # environment to determine the root cause.

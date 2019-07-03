@@ -1,4 +1,4 @@
-# Add security settings to several mounts on the system.
+# @summary Add security settings to several mounts on the system.
 #
 # @param manage_tmp_perms
 #   Ensure that  ``/tmp``, ``/var/tmp``, and ``/usr/tmp``, all have the proper
@@ -16,7 +16,7 @@
 # @param manage_dev_pts
 #   Manage the ``/dev/pts`` mount on the system
 #
-# @author Trevor Vaughan <tvaughan@onyxpoint.com>
+# @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::mountpoints (
   Boolean       $manage_tmp_perms = true,

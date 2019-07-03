@@ -1,8 +1,8 @@
 # **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 #
-# This class provides the basis of what a native SIMP system should
-# be. It is expected that users may deviate from this configuration
-# over time, but this should be an effective starting place.
+# @summary This class provides the basis of what a native SIMP system should
+# be. It is expected that users may deviate from this configuration over time,
+# but this should be an effective starting place.
 #
 # @param mail_server
 #   Install a local mail service on the system
@@ -19,7 +19,7 @@
 #   * May be set to ``false`` to disable the rsync stunnel connection
 #   * If unset, will default to the Puppet server itself
 #
-# @param use_ssh_global_known_hosts Boolean
+# @param use_ssh_global_known_hosts
 #   If true, use the ssh_global_known_hosts function to gather the various host
 #   SSH public keys and populate the /etc/ssh/known_hosts file.
 #

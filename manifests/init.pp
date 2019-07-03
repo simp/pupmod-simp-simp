@@ -1,5 +1,5 @@
-# This class provides an entry point to configuring your systems to take full
-# advantage of SIMP capabilities.
+# @summary This class provides an entry point to configuring your systems to
+# take full advantage of SIMP capabilities.
 #
 # This is primarily done through the ``simp::scenario`` classes that provide
 # specifically supported configurations of core SIMP systems and clients.
@@ -137,13 +137,14 @@
 # @param vardir_owner
 #   Owner for ${facts['puppet_vardir']}/simp directory
 #   Defaults to 'root' if a platform doesn't specify
+#
 # @param vardir_group
 #   Group for ${facts['puppet_vardir]}/simp diorectory
 #   Defaults to 'root' if a platform doesn't specify
+#
 # @param vardir_mode
 #   Mode for ${facts['puppet_vardir])/simp directory
 #   Defaults to '0750' if a platform doesn't specify
-#
 #
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #

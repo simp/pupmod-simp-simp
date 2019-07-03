@@ -1,4 +1,4 @@
-# Sets sysctl settings that are useful from a general 'modern system'
+# @summary Sets sysctl settings that are useful from a general 'modern system'
 # point of view.
 #
 # There are also items in this list that are particularly useful for
@@ -27,7 +27,7 @@
 # @param net__core__netdev_max_backlog
 # @param net__core__somaxconn
 # @param net__ipv4__tcp_tw_reuse
-# @param fs__inotify__max_user_watch
+# @param fs__inotify__max_user_watches
 #     Increase the number of inotify watches allowed in order to prevent
 #     systemctl error: "Not Enough Disk Space" caused when it reaches limit.
 #
@@ -67,6 +67,7 @@
 # @param net__ipv6__conf__all__accept_source_route
 # @param net__ipv6__conf__all__autoconf
 # @param net__ipv6__conf__all__forwarding
+# @param net__ipv6__conf__all__accept_ra
 # @param net__ipv6__conf__default__accept_ra
 # @param net__ipv6__conf__default__accept_ra_defrtr
 # @param net__ipv6__conf__default__accept_ra_pinfo

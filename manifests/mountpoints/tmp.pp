@@ -1,4 +1,4 @@
-# This class manages the various tmp mounts with optional security features.
+# @summary Manages the various tmp mounts with optional security features.
 #
 # @see mount(8)
 #
@@ -31,12 +31,20 @@
 # @param tmp_service
 #   If on systemd system, enable and activate the tmp.mount service
 #
+#   * Note: If you set this to `true` on a system that does not already have
+#     the `tmp.mounts` service running, you may find that the service cannot
+#     start due to processes locking files in the existing `/tmp` directory. If
+#     this occurs, you can run `lsof /tmp` to determine what is locking. You
+#     will probably need to reboot your system to start with a properly clean
+#     `/tmp` mount.
+#
+# @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 class simp::mountpoints::tmp (
   Boolean       $secure       = true,
   Array[String] $tmp_opts     = ['noexec','nodev','nosuid'],
   Array[String] $var_tmp_opts = ['noexec','nodev','nosuid'],
   Array[String] $dev_shm_opts = ['noexec','nodev','nosuid'],
-  Boolean       $tmp_service  = true
+  Boolean       $tmp_service  = (fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false }
 ) {
 
   simplib::assert_metadata( $module_name )

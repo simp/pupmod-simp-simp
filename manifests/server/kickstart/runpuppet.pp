@@ -1,6 +1,6 @@
-# This class manages the runpuppet script, which is a script that can be run
-# to bootstrap provisioned clients, adding them to puppet and running it in a
-# fashion similar so `simp bootstrap`.
+# @summary This class manages the runpuppet script, which is a script that can
+# be run to bootstrap provisioned clients, adding them to puppet and running it
+# in a fashion similar so `simp bootstrap`.
 #
 # @param data_dir
 #   The location of the web root in which the kickstart directory

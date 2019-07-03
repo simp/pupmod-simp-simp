@@ -1,7 +1,7 @@
 # NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 #
-# A 'last effort' script to clean up all of the SIMP material on the system
-# that may cause issues
+# @summary A 'last effort' script to clean up all of the SIMP material on the
+# system that may cause issues
 #
 # @param dry_run
 #   Run the finalization script in 'dry_run' mode and output all commands
@@ -14,6 +14,8 @@
 #
 # @param remove_script
 #   Remove the finalization script itself from the system
+#
+# @param enable_debug
 #
 class simp::one_shot::finalize (
   Boolean $dry_run       = $simp::one_shot::finalize_dry_run,

@@ -47,6 +47,8 @@ polkit.addAdminRule(function(action, subject) {
               EOF
             }) }
           end
+
+          it { is_expected.to_not create_selinux_login('%administrators') }
         end
 
         context 'when setting tlog as the logged shell' do
@@ -139,6 +141,15 @@ polkit.addAdminRule(function(action, subject) {
           end
         end
 
+        context 'selinux settings' do
+          let(:params) {{ :set_selinux_login => true }}
+
+          it { is_expected.to create_selinux_login('%administrators').with({
+              :seuser => 'staff_u',
+              :mls_range => 's0-s0:c0.c1023'
+            })
+          }
+        end
       end
     end
   end

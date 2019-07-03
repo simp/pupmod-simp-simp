@@ -1,4 +1,4 @@
-# Mount ``/proc``
+# @summary Mount ``/proc``
 #
 # @param proc_hidepid
 #   * 0: This is the default setting and gives you the default

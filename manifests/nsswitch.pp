@@ -1,4 +1,4 @@
-# A SIMP profile for using the nsswitch module to manage /etc/nsswitch
+# @summary A SIMP profile for using the nsswitch module to manage /etc/nsswitch
 #
 # @param ldap SIMP global catalyst to enable LDAP
 # @param sssd SIMP global catalyst to enable sssd

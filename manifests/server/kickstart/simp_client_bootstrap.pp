@@ -1,6 +1,6 @@
-# This class manages simp_client_bootstrap scripts, which are scripts
-# that can be run to bootstrap SIMP clients via Puppet, in a fashion
-# similar to `simp bootstrap`, the bootstrap script for the SIMP server.
+# @summary This class manages simp_client_bootstrap scripts, which are scripts
+# that can be run to bootstrap SIMP clients via Puppet, in a fashion similar to
+# `simp bootstrap`, the bootstrap script for the SIMP server.
 #
 # The three scripts managed by this class are as follows:
 #
