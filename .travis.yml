@@ -79,7 +79,6 @@ jobs:
       env: PUPPET_VERSION="~> 5.3.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/defines
         - bundle exec rspec spec/facter
         - bundle exec rspec spec/functions
 
@@ -105,7 +104,6 @@ jobs:
       env: PUPPET_VERSION="~> 5.5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/defines
         - bundle exec rspec spec/facter
         - bundle exec rspec spec/functions
 
@@ -131,7 +129,6 @@ jobs:
       env: PUPPET_VERSION="~> 5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/defines
         - bundle exec rspec spec/facter
         - bundle exec rspec spec/functions
 
@@ -157,7 +154,6 @@ jobs:
       env: PUPPET_VERSION="~> 6.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/defines
         - bundle exec rspec spec/facter
         - bundle exec rspec spec/functions
 
