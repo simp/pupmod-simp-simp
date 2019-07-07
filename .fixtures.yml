@@ -43,6 +43,7 @@ fixtures:
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
     haveged: https://github.com/simp/pupmod-simp-haveged
+    hocon: https://github.com/simp/pupmod-puppetlabs-hocon
     host_core:
       repo: https://github.com/simp/pupmod-puppetlabs-host_core.git
       puppet_version: ">= 6.0.0"
