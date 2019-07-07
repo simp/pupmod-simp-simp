@@ -97,7 +97,7 @@ jobs:
       env: PUPPET_VERSION="~> 5.5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/classes
+        - bundle exec rspec spec/classes/core
 
     - stage: spec
       rvm: 2.4.5
@@ -105,7 +105,7 @@ jobs:
       env: PUPPET_VERSION="~> 5.5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/supplementary
+        - bundle exec rspec spec/classes/supplementary
 
     - stage: spec
       rvm: 2.4.5
@@ -130,7 +130,7 @@ jobs:
       env: PUPPET_VERSION="~> 5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/classes
+        - bundle exec rspec spec/classes/core
 
     - stage: spec
       name: 'Latest Puppet 5.x Classes - Supplementary'
@@ -138,7 +138,7 @@ jobs:
       env: PUPPET_VERSION="~> 5.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/supplementary
+        - bundle exec rspec spec/classes/supplementary
 
     - stage: spec
       name: 'Latest Puppet 5.x - Unit'
@@ -163,7 +163,7 @@ jobs:
       env: PUPPET_VERSION="~> 6.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/classes
+        - bundle exec rspec spec/classes/core
 
     - stage: spec
       name: 'Latest Puppet 6.x - Classes - Supplementary'
@@ -171,7 +171,7 @@ jobs:
       env: PUPPET_VERSION="~> 6.0"
       script:
         - bundle exec rake spec_prep
-        - bundle exec rspec spec/supplementary
+        - bundle exec rspec spec/classes/supplementary
 
     - stage: spec
       name: 'Latest Puppet 6.x - Unit'
