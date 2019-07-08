@@ -150,6 +150,28 @@ RSpec.configure do |c|
     FileUtils.rm_rf(@spec_global_env_temp)
     @spec_global_env_temp = nil
   end
+
+  if ENV['RSPEC_TIME']
+    c.before(:all) do
+      @suite_start_time = Time.now
+    end
+
+    c.before(:context) do
+      @context_start_time = Time.now
+    end
+
+    c.before(:example) do
+      @example_start_time = Time.now
+    end
+
+    c.after(:all) do
+      puts("TIME FOR SUITE '#{self.class.description}': #{Time.now - @suite_start_time}")
+    end
+
+    c.after(:context) do
+      puts("TIME FOR CONTEXT '#{self.class.description}': #{Time.now - @context_start_time}")
+    end
+  end
 end
 
 Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|

@@ -31,6 +31,10 @@ describe 'compliance_markup', type: :class do
   }
 
   on_supported_os.each do |os, os_facts|
+    if ENV['RSPEC_COMPLIANCE_ENGINE_OS']
+      next unless os.match?(Regexp.new(ENV['RSPEC_COMPLIANCE_ENGINE_OS']))
+    end
+
     context "on #{os}" do
       compliance_profiles.each do |target_profile|
         context "with compliance profile '#{target_profile}'" do
