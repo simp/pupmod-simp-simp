@@ -6,8 +6,8 @@
 # ------------------------------------------------------------------------------
 # Release       Puppet   Ruby   EOL
 # PE 2017.3     5.3      2.4.5  2018-12-31
-# SIMP 6.3      5.5.10   2.4.5  TBD***
-# PE 2018.1     5.5.8    2.4.5  2020-05 (LTS)***
+# SIMP 6.3      5.5      2.4.5  TBD***
+# PE 2018.1     5.5      2.4.5  2020-05 (LTS)***
 # PE 2019.0     6.0      2.5.1  2019-08-31^^^
 #
 # *** = Modules created for SIMP 6.3+ are not required to support Puppet < 5.5
@@ -20,6 +20,7 @@ sudo: false
 stages:
   - check
   - spec
+  - slow_spec
   - name: deploy
     if: 'tag IS present'
 
@@ -35,6 +36,7 @@ addons:
 
 before_install:
   - rm -f Gemfile.lock
+  - for x in ${HOME}/.rvm/gems/*; do gem uninstall -I -x -i "${x}" -v '>= 1.17' bundler || true; gem uninstall -I -x -i "${x}@global" -v '>= 1.17' bundler || true; done
   - gem install -v '~> 1.17' bundler
 
 global:
@@ -57,32 +59,208 @@ jobs:
         - bundle exec puppet module build
 
     - stage: spec
-      name: 'Puppet 5.3 (PE 2017.3)'
+      name: 'Puppet 5.3 (PE 2017.3) - Classes - 00'
       rvm: 2.4.5
       env: PUPPET_VERSION="~> 5.3.0"
       script:
-        - bundle exec rake spec_parallel
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/00_classes
+
+    - stage: slow_spec
+      name: 'Puppet 5.3 (PE 2017.3) - Classes - 10'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.3.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/10_classes
+
+    - stage: slow_spec
+      name: 'Puppet 5.3 (PE 2017.3) - Classes - 20'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.3.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/20_classes
+
+    - stage: spec
+      name: 'Puppet 5.3 (PE 2017.3) - Compliance Engine EL6'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.3.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Puppet 5.3 (PE 2017.3) - Compliance Engine EL7'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.3.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Puppet 5.3 (PE 2017.3) - Fast'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.3.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/facter
+        - bundle exec rspec spec/functions
 
     - stage: spec
       rvm: 2.4.5
-      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1)'
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Classes - 00'
       env: PUPPET_VERSION="~> 5.5.0"
       script:
-        - bundle exec rake spec_parallel
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/00_classes
+
+    - stage: slow_spec
+      rvm: 2.4.5
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Classes - 10'
+      env: PUPPET_VERSION="~> 5.5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/10_classes
+
+    - stage: slow_spec
+      rvm: 2.4.5
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Classes - 20'
+      env: PUPPET_VERSION="~> 5.5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/20_classes
 
     - stage: spec
-      name: 'Latest Puppet 5.x'
+      rvm: 2.4.5
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Compliance Engine EL6'
+      env: PUPPET_VERSION="~> 5.5.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      rvm: 2.4.5
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Compliance Engine EL7'
+      env: PUPPET_VERSION="~> 5.5.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      rvm: 2.4.5
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Fast'
+      env: PUPPET_VERSION="~> 5.5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/facter
+        - bundle exec rspec spec/functions
+
+    - stage: spec
+      name: 'Latest Puppet 5.x Classes - 00'
       rvm: 2.4.5
       env: PUPPET_VERSION="~> 5.0"
       script:
-        - bundle exec rake spec_parallel
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/00_classes
+
+    - stage: slow_spec
+      name: 'Latest Puppet 5.x Classes - 10'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/10_classes
+
+    - stage: slow_spec
+      name: 'Latest Puppet 5.x Classes - 20'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/20_classes
 
     - stage: spec
-      name: 'Latest Puppet 6.x'
+      name: 'Latest Puppet 5.x - Compliance Engine EL6'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Latest Puppet 5.x - Compliance Engine EL7'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Latest Puppet 5.x - Fast'
+      rvm: 2.4.5
+      env: PUPPET_VERSION="~> 5.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/facter
+        - bundle exec rspec spec/functions
+
+    - stage: spec
+      name: 'Latest Puppet 6.x - Classes - 00'
       rvm: 2.5.1
       env: PUPPET_VERSION="~> 6.0"
       script:
-        - bundle exec rake spec_parallel
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/00_classes
+
+    - stage: slow_spec
+      name: 'Latest Puppet 6.x - Classes - 10'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/10_classes
+
+    - stage: slow_spec
+      name: 'Latest Puppet 6.x - Classes - 20'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/classes/20_classes
+
+    - stage: spec
+      name: 'Latest Puppet 6.x - Compliance Engine EL6'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Latest Puppet 6.x - Compliance Engine EL7'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
+      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/unit
+
+    - stage: spec
+      name: 'Latest Puppet 6.x - Fast'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
+      script:
+        - bundle exec rake spec_prep
+        - bundle exec rspec spec/facter
+        - bundle exec rspec spec/functions
 
     - stage: deploy
       rvm: 2.4.5

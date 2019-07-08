@@ -19,7 +19,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         it { is_expected.to compile.with_all_deps }
         it do
            expected_content = File.read(File.join(File.dirname(__FILE__),
-             '..', '..', '..', '..', 'files', 'var', 'www', 'ks',
+             '..', '..', '..', '..', '..', 'files', 'var', 'www', 'ks',
              'bootstrap_simp_client'))
 
           is_expected.to create_file('/var/www/ks/bootstrap_simp_client').with({
