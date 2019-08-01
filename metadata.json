@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.10.1",
+  "version": "4.10.2",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -22,7 +22,7 @@
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 6.0.0"
+      "version_requirement": ">= 2.2.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
