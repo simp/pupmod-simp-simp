@@ -85,8 +85,9 @@ jobs:
     - stage: spec
       name: 'Puppet 5.3 (PE 2017.3) - Compliance Engine EL6'
       rvm: 2.4.5
-      env: PUPPET_VERSION="~> 5.3.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      env:
+        - PUPPET_VERSION="~> 5.3.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -94,8 +95,9 @@ jobs:
     - stage: spec
       name: 'Puppet 5.3 (PE 2017.3) - Compliance Engine EL7'
       rvm: 2.4.5
-      env: PUPPET_VERSION="~> 5.3.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      env:
+        - PUPPET_VERSION="~> 5.3.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -136,8 +138,9 @@ jobs:
     - stage: spec
       rvm: 2.4.5
       name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Compliance Engine EL6'
-      env: PUPPET_VERSION="~> 5.5.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      env:
+        - PUPPET_VERSION="~> 5.5.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -145,8 +148,9 @@ jobs:
     - stage: spec
       rvm: 2.4.5
       name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1) - Compliance Engine EL7'
-      env: PUPPET_VERSION="~> 5.5.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      env:
+        - PUPPET_VERSION="~> 5.5.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -187,8 +191,9 @@ jobs:
     - stage: spec
       name: 'Latest Puppet 5.x - Compliance Engine EL6'
       rvm: 2.4.5
-      env: PUPPET_VERSION="~> 5.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      env:
+        - PUPPET_VERSION="~> 5.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -196,8 +201,9 @@ jobs:
     - stage: spec
       name: 'Latest Puppet 5.x - Compliance Engine EL7'
       rvm: 2.4.5
-      env: PUPPET_VERSION="~> 5.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      env:
+        - PUPPET_VERSION="~> 5.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -238,8 +244,9 @@ jobs:
     - stage: spec
       name: 'Latest Puppet 6.x - Compliance Engine EL6'
       rvm: 2.5.1
-      env: PUPPET_VERSION="~> 6.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
+      env:
+        - PUPPET_VERSION="~> 6.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-6'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
@@ -247,8 +254,9 @@ jobs:
     - stage: spec
       name: 'Latest Puppet 6.x - Compliance Engine EL7'
       rvm: 2.5.1
-      env: PUPPET_VERSION="~> 6.0"
-      env: RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
+      env:
+        - PUPPET_VERSION="~> 6.0"
+        - RSPEC_COMPLIANCE_ENGINE_OS='centos-7'
       script:
         - bundle exec rake spec_prep
         - bundle exec rspec spec/unit
