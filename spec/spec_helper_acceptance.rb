@@ -23,7 +23,7 @@ unless ENV['BEAKER_provision'] == 'no'
 end
 
 hosts.each do |host|
-  # https://petersouter.co.uk/testing-windows-puppet-with-beaker/
+  # https://petersouter.xyz/testing-windows-with-beaker-without-cygwin/
   case host['platform']
   when /windows/
     GEOTRUST_GLOBAL_CA = <<-EOM.freeze
