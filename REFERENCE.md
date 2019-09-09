@@ -55,6 +55,14 @@
 * [`simp::yum::repo::gpgkeys::simp`](#simpyumrepogpgkeyssimp): Build a list of GPG keys needed by a simp repo
 * [`simp::yum::repo::sanitize_simp_release_slug`](#simpyumreposanitize_simp_release_slug): Sanitize the release slug in the SIMP repo URLs
 
+**Data types**
+
+* [`Simp::HostOrURL`](#simphostorurl): Shortcut for either hosts or URLs
+* [`Simp::PackageEnsure`](#simppackageensure): Valid package resource 'ensure' settings
+* [`Simp::Runlevel`](#simprunlevel): Valid system runlevel settings
+* [`Simp::Scenario`](#simpscenario): Valid SIMP scenarios  See the documentation for details on 'SIMP scenarios'
+* [`Simp::Urls`](#simpurls): URL shortcut for SIMP classes
+
 ## Classes
 
 ### simp
@@ -150,7 +158,7 @@ The rsync server from which files should be retrieved
 * May be set to ``false`` to disable the rsync stunnel connection
 * If unset, will default to the Puppet server itself
 
-Default value: simplib::lookup('simp_options::rsync', { 'default_value' => true })
+Default value: simplib::lookup('simp_options::stunnel', { 'default_value' => true })
 
 ##### `use_ssh_global_known_hosts`
 
@@ -3599,13 +3607,13 @@ Deprecated knockout function, see simplib::knockout
 
 Deprecated knockout function, see simplib::knockout
 
-Returns: `Any`
+Returns: `Array[String]`
 
 ##### `array`
 
 Data type: `Array`
 
-
+The array to knock out
 
 ### simp::yum::repo::baseurl_string
 
@@ -3710,4 +3718,38 @@ Returns: `Any` String
 Data type: `Variant[String,Undef]`
 
 The ``slug`` to sanitize
+
+## Data types
+
+### Simp::HostOrURL
+
+Shortcut for either hosts or URLs
+
+Alias of `Variant[Simplib::Host, Simplib::Host::Port, Simplib::Hostname, Simplib::Hostname::Port, Simplib::IP::V4, Simplib::IP::V4::Port, Simplib::IP::V6, Simplib::IP::V6::Port, Stdlib::HTTPSUrl, Stdlib::HTTPUrl]`
+
+### Simp::PackageEnsure
+
+Valid package resource 'ensure' settings
+
+Alias of `Enum['latest', 'absent', 'present', 'installed']`
+
+### Simp::Runlevel
+
+Valid system runlevel settings
+
+Alias of `Variant[Enum['rescue','multi-user','graphical'], Integer[1,5]]`
+
+### Simp::Scenario
+
+Valid SIMP scenarios
+
+See the documentation for details on 'SIMP scenarios'
+
+Alias of `Enum['simp', 'simp_lite', 'poss', 'none', 'remote_access']`
+
+### Simp::Urls
+
+URL shortcut for SIMP classes
+
+Alias of `Array[Variant[Stdlib::HTTPSUrl,Stdlib::HTTPUrl]]`
 

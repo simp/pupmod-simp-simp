@@ -91,37 +91,37 @@ class simp::scenario::base (
   Boolean                         $ldap                       = $::simp::ldap,
   Boolean                         $sssd                       = $::simp::sssd,
   Boolean                         $stock_sssd                 = $::simp::stock_sssd
-) inherits ::simp {
+) inherits simp {
 
   assert_private()
 
   runlevel { String($runlevel): }
 
-  if ($sssd and $stock_sssd) { include '::simp::sssd::client' }
+  if ($sssd and $stock_sssd) { include 'simp::sssd::client' }
 
-  if $use_sudoers_aliases { include '::simp::sudoers' }
+  if $use_sudoers_aliases { include 'simp::sudoers' }
 
-  if $manage_ctrl_alt_del { include '::simp::ctrl_alt_del' }
+  if $manage_ctrl_alt_del { include 'simp::ctrl_alt_del' }
 
-  if $manage_root_metadata { include '::simp::root_user' }
+  if $manage_root_metadata { include 'simp::root_user' }
 
-  if ($restrict_max_logins and $pam) { include '::simp::pam_limits::max_logins' }
+  if ($restrict_max_logins and $pam) { include 'simp::pam_limits::max_logins' }
 
   if $mail_server == 'remote' {
-    include '::postfix::server'
+    include 'postfix::server'
   }
   elsif $mail_server {
-    include '::postfix'
+    include 'postfix'
   }
 
   # Even if $ldap is true, if the host is on an IPA domain, do not include
   # simp_openldap::client
   # @see simp/simplib lib/facter/ipa.rb
   if $ldap and !$facts['ipa'] {
-    include '::simp_openldap::client'
+    include 'simp_openldap::client'
   }
 
-  if $manage_rc_local { include '::simp::rc_local' }
+  if $manage_rc_local { include 'simp::rc_local' }
 
   if $puppet_server_hosts_entry {
     if getvar('server_facts') and $server_facts['servername'] and $server_facts['serverip'] {

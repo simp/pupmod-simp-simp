@@ -16,11 +16,11 @@ class simp::server::yum (
   String               $createrepo_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   $_trusted_nets = simplib::nets2cidr($trusted_nets)
 
-  include '::simp_apache'
+  include 'simp_apache'
   simp_apache::site { 'yum':
     content => template('simp/etc/httpd/conf.d/yum.conf.erb')
   }

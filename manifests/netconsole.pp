@@ -30,6 +30,8 @@ class simp::netconsole (
   Optional[String]              $source_device  = undef,
 ) {
 
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+
   file { '/etc/sysconfig/netconsole':
     ensure  => $ensure,
     content => epp('simp/etc/sysconfig/netconsole.epp',

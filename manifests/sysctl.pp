@@ -157,7 +157,7 @@ class simp::sysctl (
   Optional[Boolean]    $ipv6                                           = undef
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   simplib::validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
   simplib::validate_sysctl_value('fs.inotify.max_user_watches', $fs__inotify__max_user_watches)
@@ -234,7 +234,7 @@ class simp::sysctl (
     }
   }
   if ($pam and !$core_dumps) {
-    include '::pam'
+    include 'pam'
 
     pam::limits::rule { 'prevent_core':
       domains => ['*'],

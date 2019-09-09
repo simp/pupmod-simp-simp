@@ -13,7 +13,7 @@ class simp::yum::repo::internet_simp_server (
   Variant[String,Undef] $simp_release_slug = undef,
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   $_release_slug = simp::yum::repo::sanitize_simp_release_slug( $simp_release_slug )
 

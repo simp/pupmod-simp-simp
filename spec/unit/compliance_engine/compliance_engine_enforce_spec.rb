@@ -31,6 +31,8 @@ describe 'compliance_markup', type: :class do
   }
 
   on_supported_os.each do |os, os_facts|
+    next if os_facts[:kernel] == 'windows'
+
     if ENV['RSPEC_COMPLIANCE_ENGINE_OS']
       next unless os.match?(Regexp.new(ENV['RSPEC_COMPLIANCE_ENGINE_OS']))
     end

@@ -112,7 +112,7 @@ class simp::sudoers::aliases (
   Array[Stdlib::AbsolutePath] $su_alias = [ '/bin/su' ]
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   sudo::alias::cmnd {
     'audit':

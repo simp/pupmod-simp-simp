@@ -14,6 +14,9 @@ describe 'simp' do
   end
 
   on_supported_os.each do |os, os_facts|
+    # Private classes should never be called on unsupported OSs
+    next if os_facts[:kernel] == 'windows'
+
     context "on #{os}" do
       let(:facts) do
         facts = os_facts.dup

@@ -6,9 +6,9 @@
 # environment to determine the root cause.
 class simp::mountpoints::el6_tmp_fix {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
-  include '::upstart'
+  include 'upstart'
 
   upstart::job { 'fix_tmp_perms':
     main_process_type => 'script',

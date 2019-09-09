@@ -11,7 +11,7 @@ class simp::pam_limits::max_logins (
   Integer[0] $value = 10
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   pam::limits::rule { 'max_logins':
     domains => ['*'],

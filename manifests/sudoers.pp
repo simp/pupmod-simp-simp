@@ -34,13 +34,13 @@ class simp::sudoers (
   ]
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
-  include '::sudo'
+  include 'sudo'
 
   sudo::default_entry { '00_main':
     content => $default_entry
   }
 
-  if $common_aliases { include '::simp::sudoers::aliases' }
+  if $common_aliases { include 'simp::sudoers::aliases' }
 }

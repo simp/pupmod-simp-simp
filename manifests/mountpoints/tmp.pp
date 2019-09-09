@@ -47,7 +47,7 @@ class simp::mountpoints::tmp (
   Boolean       $tmp_service  = (fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false }
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   unless $tmp_service and ('systemd' in $facts['init_systems']) {
     # Do not manage this if systemd is supposed to manage it

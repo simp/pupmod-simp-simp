@@ -10,40 +10,42 @@ describe 'simp::yum::repo::internet_simp_server' do
     end
 
     context "on #{os}" do
-      let(:facts) do
-        os_facts
-      end
+      let(:facts) { os_facts }
 
-      context 'when the `simp_release_slug` parameter is specified' do
-        let(:params) {{ :simp_release_slug => '5_X' }}
+      if os_facts[:kernel] == 'windows'
+        it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+      else
+        context 'when the `simp_release_slug` parameter is specified' do
+          let(:params) {{ :simp_release_slug => '5_X' }}
 
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_yumrepo('simp-project_5_X') }
-      end
-
-      context 'when `simp_release_slug` is undef' do
-        ['4.0.0', ''].each do |_version|
-          context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
-            let(:params) {{}}
-
-            let(:pre_condition) do
-              "function simplib::simp_version() { '#{_version}' }"
-            end
-            it do
-              is_expected.to raise_error(/SIMP/)
-            end
-          end
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_yumrepo('simp-project_5_X') }
         end
 
-        ['6.0.0', '6.1.0-foo'].each do |_version|
-          describe "when `simplib::simp_version() is valid (#{_version})" do
-            let(:params) {{}}
+        context 'when `simp_release_slug` is undef' do
+          ['4.0.0', ''].each do |_version|
+            context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
+              let(:params) {{}}
 
-            let(:pre_condition) do
-              "function simplib::simp_version() { '#{_version}' }"
+              let(:pre_condition) do
+                "function simplib::simp_version() { '#{_version}' }"
+              end
+              it do
+                is_expected.to raise_error(/SIMP/)
+              end
             end
-            it do
-              is_expected.to compile.with_all_deps
+          end
+
+          ['6.0.0', '6.1.0-foo'].each do |_version|
+            describe "when `simplib::simp_version() is valid (#{_version})" do
+              let(:params) {{}}
+
+              let(:pre_condition) do
+                "function simplib::simp_version() { '#{_version}' }"
+              end
+              it do
+                is_expected.to compile.with_all_deps
+              end
             end
           end
         end

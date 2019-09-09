@@ -60,12 +60,12 @@ class simp::server::kickstart::runpuppet (
   Variant[Integer[0],Boolean] $runpuppet_wait_for_cert = 10
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   if $puppet_server {
     $_puppet_server = $puppet_server
   }
-  elsif defined('::server_facts') {
+  elsif defined('server_facts') {
     $_puppet_server = $server_facts['servername']
   }
   else {
@@ -75,7 +75,7 @@ class simp::server::kickstart::runpuppet (
   if $puppet_ca {
     $_puppet_ca = $puppet_ca
   }
-  elsif defined('::server_facts') {
+  elsif defined('server_facts') {
     $_puppet_ca = $server_facts['servername']
   }
   else {

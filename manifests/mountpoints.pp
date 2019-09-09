@@ -26,14 +26,14 @@ class simp::mountpoints (
   Boolean       $manage_proc      = true
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
-  if $manage_tmp_perms { include '::simp::mountpoints::tmp' }
-  if $manage_proc { include '::simp::mountpoints::proc' }
+  if $manage_tmp_perms { include 'simp::mountpoints::tmp' }
+  if $manage_proc { include 'simp::mountpoints::proc' }
 
 
   if versioncmp($facts['os']['release']['major'],'6') == 0 {
-    include '::simp::mountpoints::el6_tmp_fix'
+    include 'simp::mountpoints::el6_tmp_fix'
   }
 
   if $manage_dev_pts {

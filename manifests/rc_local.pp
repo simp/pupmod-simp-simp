@@ -22,7 +22,7 @@ class simp::rc_local (
   Boolean              $management_comment = true
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
 
   $_default_header = "#!${shell}\n"

@@ -18,7 +18,7 @@
 #
 class simp::scenario::poss (
   Boolean $puppet_server_hosts_entry  = $::simp::puppet_server_hosts_entry
-) inherits ::simp {
+) inherits simp {
 
   assert_private()
 

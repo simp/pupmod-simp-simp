@@ -52,7 +52,7 @@ class simp::yum::repo::local_os_updates (
   Simp::Urls               $extra_gpgkey_urls = [],
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   $_repo_base = "${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}"
 

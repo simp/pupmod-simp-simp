@@ -1,3 +1,4 @@
+# Shortcut for either hosts or URLs
 type Simp::HostOrURL = Variant[
   Simplib::Host,
   Simplib::Host::Port,

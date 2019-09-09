@@ -25,7 +25,7 @@ class simp::kmod_blacklist::lock_modules (
   $persist                   = false
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   if $enable {
     sysctl { 'kernel.modules_disabled':

@@ -81,7 +81,7 @@ class simp::puppetdb (
   Boolean              $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   if $read_database_ssl !~ Undef {
     if $read_database_ssl {
@@ -102,7 +102,7 @@ class simp::puppetdb (
 
   $_java_max_memory = inline_template('<% if @java_max_memory[-1].chr == "%" %><%= (@memorysize_mb.to_f * (@java_max_memory[0..-2].to_f/100.0)).round.to_s + "m" %><% else %><%= @java_max_memory %><% end %>')
 
-  if !defined('::puppetdb::java_args') or empty($::puppetdb::java_args) {
+  if !defined('puppetdb::java_args') or empty($::puppetdb::java_args) {
     $_java_heapdump_on_oom = $java_heapdump_on_oom ? {
       true    => '-XX:HeapDumpOnOutOfMemoryError',
       default => '-XX:-HeapDumpOnOutOfMemoryError'
@@ -216,7 +216,7 @@ class simp::puppetdb (
 
   # Don't fight with the Puppet firewall module
   if $_simp_manage_firewall {
-    include '::iptables'
+    include 'iptables'
 
     iptables::listen::tcp_stateful { 'puppetdb':
       dports       => [$::puppetdb::ssl_listen_port],

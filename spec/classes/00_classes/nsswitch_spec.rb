@@ -4,14 +4,15 @@ describe 'simp::nsswitch' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-        let(:facts) do
-          os_facts
-        end
+        let(:facts) { os_facts }
 
-        context 'with default parameters' do
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('simp::nsswitch') }
-          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
+        if os_facts[:kernel] == 'windows'
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+        else
+          context 'with default parameters' do
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_class('simp::nsswitch') }
+            it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files
@@ -31,11 +32,11 @@ publickey:  nisplus
 automount:  files nisplus
 aliases:    files nisplus
 EOM
-        end
+          end
 
-        context 'with sssd => true' do
-          let(:params) {{ :sssd => true }}
-          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
+          context 'with sssd => true' do
+            let(:params) {{ :sssd => true }}
+            it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files [!NOTFOUND=return] sss
@@ -55,11 +56,11 @@ publickey:  nisplus
 automount:  files nisplus
 aliases:    files nisplus
 EOM
-        end
+          end
 
-        context 'with ldap => true' do
-          let(:params) {{ :ldap => true }}
-          it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
+          context 'with ldap => true' do
+            let(:params) {{ :ldap => true }}
+            it { is_expected.to create_file('nsswitch.conf').with_content(<<-EOM) }
 # This file is controlled by Puppet
 
 passwd:     files [!NOTFOUND=return] ldap
@@ -79,8 +80,9 @@ publickey:  nisplus
 automount:  files nisplus
 aliases:    files nisplus
 EOM
-        end
+          end
 
+        end
       end
     end
   end

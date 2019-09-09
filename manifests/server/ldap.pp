@@ -40,14 +40,14 @@ class simp::server::ldap (
   Boolean    $enable_lastbind = false
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
 
   # Order matters with these top two!
-  include '::simp_openldap'
-  include '::simp_openldap::server'
-  include '::simp_openldap::slapo::ppolicy'
-  include '::simp_openldap::slapo::syncprov'
-  if $enable_lastbind { include '::simp_openldap::slapo::lastbind' }
+  include 'simp_openldap'
+  include 'simp_openldap::server'
+  include 'simp_openldap::slapo::ppolicy'
+  include 'simp_openldap::slapo::syncprov'
+  if $enable_lastbind { include 'simp_openldap::slapo::lastbind' }
 
   $s_rid = String($rid)
   if $is_slave {

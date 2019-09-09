@@ -219,5 +219,5 @@ class simp (
     }
   }
 
-  if $version_info { include '::simp::version' }
+  if $version_info { include 'simp::version' }
 }
