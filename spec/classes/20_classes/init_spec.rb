@@ -147,7 +147,7 @@ describe 'simp' do
               'pupmod',
               'deferred_resources'
             ]
-            if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] && os_facts[:os][:release][:major].to_s == '6'
+            if ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '6')
               simp_lite = [
                 'aide',
                 'auditd',
