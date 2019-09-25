@@ -1,3 +1,6 @@
+* Tue Nov 19 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.11.0-0
+- Allow nsswitch overrides
+
 * Mon Oct 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
 - Removed `clamav` from the list of classes included by default in the
   SIMP scenarios.
