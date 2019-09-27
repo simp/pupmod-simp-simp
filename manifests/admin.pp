@@ -87,7 +87,7 @@ class simp::admin (
   String[1]             $selinux_user_mls_range    = 's0-s0:c0.c1023'
 ){
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'simp::sudoers'
 

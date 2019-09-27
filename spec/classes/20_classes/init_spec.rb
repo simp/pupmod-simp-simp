@@ -77,24 +77,24 @@ describe 'simp' do
 
           if _facts[:kernel] == 'windows'
             _facts[:puppet_vardir] = 'C:/Program Data/PuppetLabs/puppet/cache'
-            _facts[:puppet_settings] = {
+            _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
               'main' => {
                 'ssldir' => 'C:/Program Data/PuppetLabs/puppet/cache/ssl'
               },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            }
+            })
           else
             _facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-            _facts[:puppet_settings] = {
+            _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
               'main' => {
                 'ssldir' => '/opt/puppetlabs/puppet/cache/ssl',
               },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            }
+            })
           end
 
           _facts

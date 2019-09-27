@@ -24,7 +24,7 @@ class simp::prelink (
   Boolean $enable = false,
   String  $ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if ( $enable and ! $facts['fips_enabled'] ) {
     package { 'prelink':

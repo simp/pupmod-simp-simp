@@ -38,7 +38,7 @@ class simp::server (
   Array[String]       $classes         = []
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $scenario_map.has_key($scenario) {
     include simp::knockout(

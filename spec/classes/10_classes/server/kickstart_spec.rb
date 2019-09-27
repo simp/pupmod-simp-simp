@@ -15,15 +15,15 @@ describe 'simp::server::kickstart' do
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
           let(:facts) { os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:facts) do
-            os_facts[:puppet_settings] = {
+            os_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
               :agent => {
                 :server    => server_facts_hash['servername'],
                 :ca_server => server_facts_hash['servername']
               }
-            }
+            })
 
             os_facts
           end

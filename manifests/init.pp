@@ -192,7 +192,7 @@ class simp (
 
   # NOTE: this class intentionally does not make use of the function:
   #
-  # simplib::assert_metadata( $module_name )
+  # simplib::module_metadata::assert( $module_name )
   #
   # in order to permit-non-SIMP OSes to use the `poss` scenario
 

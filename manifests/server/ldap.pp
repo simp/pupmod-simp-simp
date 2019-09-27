@@ -40,7 +40,7 @@ class simp::server::ldap (
   Boolean    $enable_lastbind = false
 ){
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   # Order matters with these top two!
   include 'simp_openldap'

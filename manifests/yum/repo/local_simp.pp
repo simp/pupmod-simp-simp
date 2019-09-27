@@ -52,7 +52,7 @@ class simp::yum::repo::local_simp (
   Simp::Urls               $extra_gpgkey_urls = [],
 ){
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_repo_base = 'SIMP'
 

@@ -6,7 +6,7 @@ describe 'simp::server::rsync_shares' do
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
           let(:facts){ os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:facts) do
             os_facts[:simp_rsync_environments] = {

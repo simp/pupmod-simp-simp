@@ -26,7 +26,7 @@ class simp::ctrl_alt_del (
   Simplib::Syslog::Severity $severity  = 'warning'
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if 'systemd' in $facts['init_systems'] {
     $_logger = '/bin/echo -n'

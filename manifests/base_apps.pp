@@ -29,7 +29,7 @@ class simp::base_apps (
   Boolean                   $manage_elinks_config = true
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $core_apps = [
     'dos2unix',

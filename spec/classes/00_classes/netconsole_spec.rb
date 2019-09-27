@@ -7,7 +7,7 @@ describe 'simp::netconsole' do
         let(:facts){ os_facts }
         let(:params){{ :ensure => 'present' }}
 
-        it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+        it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
       else
         let(:facts) do
           os_facts[:networking] = {

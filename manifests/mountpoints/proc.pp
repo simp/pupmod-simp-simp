@@ -22,7 +22,7 @@ class simp::mountpoints::proc (
   Optional[Integer] $proc_gid     = undef
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $proc_gid {
     $_proc_options = "hidepid=${proc_hidepid},gid=${proc_gid}"

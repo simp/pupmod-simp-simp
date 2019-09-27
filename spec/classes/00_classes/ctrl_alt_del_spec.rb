@@ -7,7 +7,7 @@ describe 'simp::ctrl_alt_del' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           shared_examples_for "a systemd system" do
             it { is_expected.to compile.with_all_deps }

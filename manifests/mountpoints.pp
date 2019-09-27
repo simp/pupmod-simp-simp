@@ -26,7 +26,7 @@ class simp::mountpoints (
   Boolean       $manage_proc      = true
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $manage_tmp_perms { include 'simp::mountpoints::tmp' }
   if $manage_proc { include 'simp::mountpoints::proc' }

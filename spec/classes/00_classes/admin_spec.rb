@@ -6,7 +6,7 @@ describe 'simp::admin' do
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
           let(:facts) { os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:facts) do
             _facts = Marshal.load(Marshal.dump(os_facts))

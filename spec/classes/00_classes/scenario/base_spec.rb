@@ -23,14 +23,14 @@ describe 'simp' do
         facts[:openssh_version] = '5.8'
         facts[:augeasversion] = '1.2.3'
         facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-        facts[:puppet_settings] = {
+        facts[:puppet_settings] = os_facts[:puppet_settings].merge({
           'main' => {
             'ssldir' => '/opt/puppetlabs/puppet/vardir',
           },
           'agent' => {
             'server' => 'puppet.bar.baz'
           }
-        }
+        })
 
         facts
       end

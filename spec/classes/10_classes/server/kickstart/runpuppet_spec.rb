@@ -15,7 +15,7 @@ describe 'simp::server::kickstart::runpuppet' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           context 'default parameters (using fixtures/hieradata/default.yaml)' do
             it { is_expected.to compile.with_all_deps }

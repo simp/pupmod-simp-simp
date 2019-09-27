@@ -6,18 +6,18 @@ describe 'simp::server' do
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
           let(:facts){ os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows' is not supported/) }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:facts) do
             my_facts = os_facts.dup
-            my_facts[:puppet_settings] = {
+            my_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
               'main' => {
                 'ssldir' => '/opt/puppetlabs/puppet/vardir',
               },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            }
+            })
             my_facts[:augeasversion] = '1.4.0'
             my_facts[:openssh_version] = '5.7'
             my_facts

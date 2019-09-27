@@ -16,7 +16,7 @@ class simp::server::yum (
   String               $createrepo_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_trusted_nets = simplib::nets2cidr($trusted_nets)
 

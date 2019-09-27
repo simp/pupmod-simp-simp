@@ -91,7 +91,7 @@ class simp::one_shot (
   Boolean             $finalize_debug               = false
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'simplib::stages'
 

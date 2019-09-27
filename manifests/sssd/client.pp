@@ -51,7 +51,7 @@ class simp::sssd::client (
   Integer $min_id            = 500
 ){
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $ldap_domain or $local_domain {
     include 'sssd'

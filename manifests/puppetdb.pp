@@ -81,7 +81,7 @@ class simp::puppetdb (
   Boolean              $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
 
-  simplib::assert_metadata($module_name, { 'blacklist' => ['Windows'] })
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $read_database_ssl !~ Undef {
     if $read_database_ssl {
