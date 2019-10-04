@@ -159,17 +159,17 @@ pup6-unit:
 
 # Acceptance tests
 # ==============================================================================
-pup5.5.10-base-apps:
-  <<: *pup_5_5_10
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[base_apps]'
-
 pup5.5.10:
   <<: *pup_5_5_10
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default]'
+
+pup5.5.10-base-apps:
+  <<: *pup_5_5_10
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[base_apps]'
 
 pup5.5.10-fips:
   <<: *pup_5_5_10
@@ -221,17 +221,17 @@ pup5.5.10-oel-fips:
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
-pup6-base-apps:
-  <<: *pup_6
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[base_apps]'
-
 pup6:
   <<: *pup_6
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default]'
+
+pup6-base-apps:
+  <<: *pup_6
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[base_apps]'
 
 pup6-fips:
   <<: *pup_6
@@ -274,3 +274,8 @@ pup6-remote_access_scenario:
   script:
     - 'bundle exec rake beaker:suites[scenario_remote_access]'
 
+pup6-win:
+  <<: *pup_6
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[win_client]'

@@ -1,4 +1,6 @@
 simp::classes: [ '--yum' ]
+# Needed to ensure that the internal data references are valid
+simp::server::data: ['none']
 simp::vardir_owner: 'Administrators'
 simp::vardir_group: 'Administrators'
 simp::vardir_mode: '0770'

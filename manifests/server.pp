@@ -29,16 +29,16 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::server (
-  Boolean $allow_simp_user = false,
-  Boolean $pam             = simplib::lookup('simp_options::pam', { 'default_value'     => false }),
-  Boolean $clamav          = simplib::lookup('simp_options::clamav', { 'default_value'  => false }),
-  Boolean $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
-  String  $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
-  Array[String] $classes   = [],
-  Hash[String, Array]   $scenario_map,
+  Hash[String, Array] $scenario_map,
+  Boolean             $allow_simp_user = false,
+  Boolean             $pam             = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Boolean             $clamav          = simplib::lookup('simp_options::clamav', { 'default_value' => false }),
+  Boolean             $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
+  String              $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
+  Array[String]       $classes         = []
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $scenario_map.has_key($scenario) {
     include simp::knockout(
@@ -51,12 +51,12 @@ class simp::server (
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
 
-  if $clamav  { include '::clamav' }
-  if $auditd  { include '::auditd' }
+  if $clamav  { include 'clamav' }
+  if $auditd  { include 'auditd' }
 
   if $allow_simp_user {
     if $pam {
-      include '::pam'
+      include 'pam'
 
       pam::access::rule { 'allow_simp':
         users   => ['simp'],

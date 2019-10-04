@@ -44,8 +44,10 @@ class simp::server::kickstart (
   Boolean                $manage_simp_client_bootstrap = true,
   Enum['require','none'] $sslverifyclient              = 'none'
 ) {
-  if $manage_dhcp      { include '::dhcp::dhcpd' }
-  if $manage_tftpboot  { include '::tftpboot' }
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+
+  if $manage_dhcp      { include 'dhcp::dhcpd' }
+  if $manage_tftpboot  { include 'tftpboot' }
   if $manage_runpuppet {
     contain 'simp::server::kickstart::runpuppet'
   }
@@ -56,7 +58,7 @@ class simp::server::kickstart (
 
   $_trusted_nets = simplib::nets2cidr($trusted_nets)
 
-  include '::simp_apache'
+  include 'simp_apache'
   simp_apache::site { 'ks':
     content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
   }

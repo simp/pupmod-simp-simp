@@ -51,16 +51,16 @@ class simp::sssd::client (
   Integer $min_id            = 500
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $ldap_domain or $local_domain {
-    include '::sssd'
-    include '::sssd::service::nss'
-    include '::sssd::service::pam'
+    include 'sssd'
+    include 'sssd::service::nss'
+    include 'sssd::service::pam'
 
-    if $autofs { include '::sssd::service::autofs' }
-    if $sudo { include '::sssd::service::sudo' }
-    if $ssh { include '::sssd::service::ssh' }
+    if $autofs { include 'sssd::service::autofs' }
+    if $sudo { include 'sssd::service::sudo' }
+    if $ssh { include 'sssd::service::ssh' }
 
     if $local_domain {
       sssd::domain { 'LOCAL':

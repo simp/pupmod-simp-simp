@@ -87,12 +87,12 @@ class simp::admin (
   String[1]             $selinux_user_mls_range    = 's0-s0:c0.c1023'
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'simp::sudoers'
 
   if $pam {
-    include '::pam'
+    include 'pam'
 
     pam::access::rule { "Allow ${admin_group}":
       comment => "Allow the ${admin_group} to access the system from anywhere",
@@ -120,7 +120,7 @@ class simp::admin (
   if $force_logged_shell {
     # We restrict this so we don't need a fallback
     if $logged_shell == 'sudosh' {
-      include '::sudosh'
+      include 'sudosh'
 
       $_shell_cmd = ['/usr/bin/sudosh']
     }
@@ -130,7 +130,7 @@ class simp::admin (
     }
 
     if $logged_shell == 'tlog' {
-      include '::tlog::rec_session'
+      include 'tlog::rec_session'
 
       $_shell_cmd = $default_admin_sudo_cmnds
     }

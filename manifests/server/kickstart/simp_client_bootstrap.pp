@@ -129,12 +129,12 @@ class simp::server::kickstart::simp_client_bootstrap (
   Boolean                     $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false })
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $puppet_server {
     $_puppet_server = $puppet_server
   }
-  elsif defined('::server_facts') {
+  elsif defined('server_facts') {
     $_puppet_server = $server_facts['servername']
   }
   else {
@@ -144,7 +144,7 @@ class simp::server::kickstart::simp_client_bootstrap (
   if $puppet_ca {
     $_puppet_ca = $puppet_ca
   }
-  elsif defined('::server_facts') {
+  elsif defined('server_facts') {
     $_puppet_ca = $server_facts['servername']
   }
   else {

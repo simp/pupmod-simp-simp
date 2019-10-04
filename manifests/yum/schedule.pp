@@ -41,7 +41,7 @@ class simp::yum::schedule (
   Boolean                       $quiet        = true
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_ensure = $enable ? {
     true    => 'present',

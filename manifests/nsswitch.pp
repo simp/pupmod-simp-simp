@@ -10,7 +10,7 @@ class simp::nsswitch (
   Boolean $sssd = simplib::lookup('simp_options::sssd', { 'default_value' => false })
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_hosts = $facts['os']['release']['major'] ? {
     6       => ['files','myhostname','dns'],
@@ -62,7 +62,7 @@ class simp::nsswitch (
     $options = {}
   }
 
-  class { '::nsswitch':
+  class { 'nsswitch':
     * => $default_params + $options
   }
 }

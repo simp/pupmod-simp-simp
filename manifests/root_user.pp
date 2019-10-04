@@ -46,7 +46,7 @@ class simp::root_user (
   Stdlib::Absolutepath          $home            = "/${username}"
 ){
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $manage_perms {
     file { $home:

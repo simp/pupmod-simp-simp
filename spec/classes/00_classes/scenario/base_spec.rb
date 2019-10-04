@@ -14,20 +14,23 @@ describe 'simp' do
   end
 
   on_supported_os.each do |os, os_facts|
+    # Private classes should never be called on unsupported OSs
+    next if os_facts[:kernel] == 'windows'
+
     context "on #{os}" do
       let(:facts) do
         facts = os_facts.dup
         facts[:openssh_version] = '5.8'
         facts[:augeasversion] = '1.2.3'
         facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-        facts[:puppet_settings] = {
+        facts[:puppet_settings] = os_facts[:puppet_settings].merge({
           'main' => {
             'ssldir' => '/opt/puppetlabs/puppet/vardir',
           },
           'agent' => {
             'server' => 'puppet.bar.baz'
           }
-        }
+        })
 
         facts
       end
