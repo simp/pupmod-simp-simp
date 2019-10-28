@@ -1,3 +1,6 @@
+* Mon Oct 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
+- Removed clamav from the list of modules installed by default.
+
 * Thu Aug 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.2-0
 - Add Windows acceptance tests
 - Remove broken tasks directory
