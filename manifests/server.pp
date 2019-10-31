@@ -8,11 +8,12 @@
 #   Enable SIMP management of the PAM stack
 #
 # @param clamav
-#   The simp_options::clamav catalyst has been deprecated and will be removed
-#   from future releases of simp.  To manage ClamAV use the pupmod-simp-clamav
-#   module.  It has been left here for backwards compatibility.
+#   Deprecated. Enable SIMP management of Antivirus
 #
-#   Enable SIMP management of Antivirus
+#   This parameter and the simp_options::clamav catalyst are deprecated and
+#   both will be removed in a future SIMP release. Once removed, if you want
+#   to manage ClamAV, you will have to manually include the `clamav` class
+#   from the `simp-clamav` module in the server's class list.
 #
 # @param auditd
 #   Enable SIMP management of auditing
@@ -56,7 +57,7 @@ class simp::server (
   }
 
   # This setting will be removed from future releases of simp.
-  # See the  pupmod-simp-clamav module for information on how manage ClamAV
+  # See the simp-clamav module for information on how manage ClamAV
   if $clamav  { include 'clamav' }
 
   if $auditd  { include 'auditd' }

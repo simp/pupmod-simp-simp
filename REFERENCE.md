@@ -1909,15 +1909,20 @@ Data type: `Boolean`
 
 Enable SIMP management of the PAM stack
 
-Default value: simplib::lookup('simp_options::pam', { 'default_value'     => false })
+Default value: simplib::lookup('simp_options::pam', { 'default_value' => false })
 
 ##### `clamav`
 
 Data type: `Boolean`
 
-Enable SIMP management of Antivirus
+Deprecated. Enable SIMP management of Antivirus
 
-Default value: simplib::lookup('simp_options::clamav', { 'default_value'  => false })
+This parameter and the simp_options::clamav catalyst are deprecated and
+both will be removed in a future SIMP release. Once removed, if you want
+to manage ClamAV, you will have to manually include the `clamav` class
+from the `simp-clamav` module in the server's class list.
+
+Default value: simplib::lookup('simp_options::clamav', { 'default_value' => false })
 
 ##### `auditd`
 
