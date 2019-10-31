@@ -1,5 +1,10 @@
 * Mon Oct 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
 - Removed clamav from the list of modules installed by default.
+  Note:  This will not remove clamav from a system it is installed on, it
+  will stop managing it.  To continue managing ClamAV on a system add
+  clamav to the simp::classes in the appropriate heira file.  See
+  the pupmod-simp-clamav for information on configuring or removing
+  ClamAV on a system.
 
 * Thu Aug 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.2-0
 - Add Windows acceptance tests
