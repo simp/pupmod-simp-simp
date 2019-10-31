@@ -1,4 +1,19 @@
-* Thu Aug 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.2-0
+* Mon Oct 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
+- Removed `clamav` from the list of classes included by default in the
+  SIMP scenarios.
+  * This will not remove ClamAV from a system it is installed on, it
+    will stop managing it.
+  * To continue managing ClamAV on a system add `clamav` to `simp::classes`
+    in the appropriate hiera file for that SIMP client.
+  * See the `simp-clamav` module for information on configuring or removing
+    ClamAV on a system.
+- Deprecated `simp::server::clamav`.
+  * This parameter will be removed in a future SIMP release.
+  * Once removed, if you want to manage ClamAV on the SIMP server, you will
+    have to manually add the `clamav` class to `simp::classes` in the
+    SIMP server's hiera file.
+
+* Thu Aug 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
 - Add Windows acceptance tests
 - Remove broken tasks directory
 
