@@ -1,0 +1,28 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  win:
+    roles:
+      - windows
+    platform: windows-server-amd64
+    #box: gusztavvargadr/windows-server
+    box: opentable/win-2012r2-standard-amd64-nocm
+    hypervisor: <%= hypervisor %>
+    vagrant_memsize: 2048
+    vagrant_cpus: 2
+    user: vagrant
+    communicator: winrm
+    is_cygwin: false
+
+CONFIG:
+  log_level: verbose
+  type: aio
+  vagrant_memsize: 256
+<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
+  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
+<% end -%>

@@ -5,6 +5,15 @@ include Simp::RspecPuppetFacts
 
 require 'pathname'
 
+# Load additional stub stuff when tests are not running on Windows
+unless RUBY_PLATFORM =~ /mswin|mingw32|windows/
+  $LOAD_PATH.unshift(
+    File.expand_path(
+      File.join(File.dirname(__FILE__), 'stubs')
+    )
+  )
+end
+
 # RSpec Material
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
 module_name = File.basename(File.expand_path(File.join(__FILE__,'../..')))

@@ -55,7 +55,7 @@ class simp::kmod_blacklist (
   Boolean         $notify_if_reboot_required = true
 ) {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $enable_defaults {
     $_blacklist = $custom_blacklist + $blacklist

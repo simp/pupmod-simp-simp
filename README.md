@@ -58,6 +58,11 @@ include 'simp'
 include ``simp_options`` *before* ``simp`` so that the ``simp`` module has
 appropriate access to the parameters in ``simp_options``.
 
+## Reference
+
+See the [REFERENCE.md](./REFERENCE.md) for a comprehensive overview of the
+module components.
+
 ## Usage
 
 ### Basic Usage
@@ -110,12 +115,6 @@ different configurations easily:
 
 * ``none``
   * Does nothing at all. All configuration is in your control.
-
-
-# Limitations
-
-SIMP Puppet modules are generally intended to be used on a Red Hat Enterprise
-Linux-compatible distribution such as EL6 and EL7.
 
 ## Development
 

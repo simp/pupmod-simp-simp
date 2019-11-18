@@ -4,7 +4,7 @@
 #
 class simp::base_services {
 
-  simplib::assert_metadata( $module_name )
+  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   # to ensure api compatbility
   include 'simp::base_apps'

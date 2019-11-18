@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.10.2",
+  "version": "4.11.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -134,7 +134,7 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 3.15.1 < 4.0.0"
+      "version_requirement": ">= 4.0.0 < 5.0.0"
     },
     {
       "name": "simp/ssh",

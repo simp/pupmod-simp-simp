@@ -13,76 +13,81 @@ describe 'simp::server::kickstart' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-        let(:facts) do
-          os_facts[:puppet_settings] = {
-            :agent => {
-              :server    => server_facts_hash['servername'],
-              :ca_server => server_facts_hash['servername']
-            }
-          }
+        if os_facts[:kernel] == 'windows'
+          let(:facts) { os_facts }
+          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+        else
+          let(:facts) do
+            os_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
+              :agent => {
+                :server    => server_facts_hash['servername'],
+                :ca_server => server_facts_hash['servername']
+              }
+            })
 
-          os_facts
-        end
+            os_facts
+          end
 
-        context 'default settings' do
-          let(:params) {{ :data_dir => '/var/www' }}
+          context 'default settings' do
+            let(:params) {{ :data_dir => '/var/www' }}
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_class('simp_apache') }
-          it { is_expected.to create_class('dhcp::dhcpd') }
-          it { is_expected.to create_class('tftpboot') }
-          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.0\/24/) }
-          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 5.6.0.0\/16/) }
-          it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
-          it { is_expected.to contain_class('simp::server::kickstart::runpuppet') }
-          it { is_expected.to contain_class('simp::server::kickstart::simp_client_bootstrap') }
-        end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_class('simp_apache') }
+            it { is_expected.to create_class('dhcp::dhcpd') }
+            it { is_expected.to create_class('tftpboot') }
+            it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.0\/24/) }
+            it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 5.6.0.0\/16/) }
+            it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
+            it { is_expected.to contain_class('simp::server::kickstart::runpuppet') }
+            it { is_expected.to contain_class('simp::server::kickstart::simp_client_bootstrap') }
+          end
 
-        context 'manage_dhcp = false' do
-          let(:params) {{ :manage_dhcp => false }}
+          context 'manage_dhcp = false' do
+            let(:params) {{ :manage_dhcp => false }}
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not create_class('dhcp::dhcpd') }
-        end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to_not create_class('dhcp::dhcpd') }
+          end
 
-        context 'manage_tftpboot = false' do
-          let(:params) {{ :manage_tftpboot => false }}
+          context 'manage_tftpboot = false' do
+            let(:params) {{ :manage_tftpboot => false }}
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not create_class('tftpboot') }
-        end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to_not create_class('tftpboot') }
+          end
 
-        context 'manage_runpuppet = false' do
-          let(:params) {{ :manage_runpuppet => false }}
+          context 'manage_runpuppet = false' do
+            let(:params) {{ :manage_runpuppet => false }}
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not contain_class('simp::server::kickstart::runpuppet') }
-        end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to_not contain_class('simp::server::kickstart::runpuppet') }
+          end
 
-        context 'manage_simp_client_bootstrap = false' do
-          let(:params) {{ :manage_simp_client_bootstrap => false }}
+          context 'manage_simp_client_bootstrap = false' do
+            let(:params) {{ :manage_simp_client_bootstrap => false }}
 
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to_not contain_class('simp::server::kickstart::simp_client_bootstrap') }
-        end
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to_not contain_class('simp::server::kickstart::simp_client_bootstrap') }
+          end
 
-        context 'alternate_data_dir' do
-          let(:params) {{ :data_dir => '/srv/www' }}
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
-        end
+          context 'alternate_data_dir' do
+            let(:params) {{ :data_dir => '/srv/www' }}
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_file('/var/www/ks').with_target('/srv/www/ks') }
+          end
 
-        context 'trusted_nets = [ 0.0.0.0/0 ]' do
-          # Apache needs 0.0.0.0/0 to be translated to ALL
-          let(:params) {{ :trusted_nets => [ '0.0.0.0/0' ] }}
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
-        end
+          context 'trusted_nets = [ 0.0.0.0/0 ]' do
+            # Apache needs 0.0.0.0/0 to be translated to ALL
+            let(:params) {{ :trusted_nets => [ '0.0.0.0/0' ] }}
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
+          end
 
-        context 'trusted_nets = ALL' do
-          let(:params) {{ :trusted_nets => [ 'ALL' ] }}
-          it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
+          context 'trusted_nets = ALL' do
+            let(:params) {{ :trusted_nets => [ 'ALL' ] }}
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from ALL/) }
+          end
         end
       end
     end

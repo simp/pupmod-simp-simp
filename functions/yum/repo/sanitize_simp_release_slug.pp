@@ -8,8 +8,6 @@
 function simp::yum::repo::sanitize_simp_release_slug(
   Variant[String,Undef] $simp_release_slug = undef
 ) {
-    inspect(simplib::simp_version())
-
     if defined('$simp_release_slug') and !empty($simp_release_slug) {
       $_release_slug = $simp_release_slug
     }
