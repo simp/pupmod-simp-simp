@@ -15,6 +15,12 @@
 
 * Thu Aug 15 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
 - Add Windows acceptance tests
+
+* Mon Aug 12 2019 Robert Vincent <pillarsdotnet@gmail.com> - 4.10.2-0
+- Support puppetlabs/concat 6.x.
+
+* Mon Aug 05 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.1-0
+
 - Remove broken tasks directory
 
 * Thu Aug 01 2019 Robert Vincent <robert.vincent@conning.com> - 4.10.0-0
