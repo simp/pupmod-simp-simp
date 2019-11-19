@@ -9,6 +9,14 @@ describe 'simp::nsswitch' do
         if os_facts[:kernel] == 'windows'
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
+          let(:hosts_line){
+            if (os_facts[:os][:family] == 'RedHat') && os_facts[:os][:release] && (os_facts[:os][:release][:major] < '7')
+              'hosts:      files dns myhostname'
+            else
+              'hosts:      files dns mymachines myhostname'
+            end
+          }
+
           context 'with default parameters' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::nsswitch') }
@@ -19,7 +27,7 @@ passwd:     files
 shadow:     files
 group:      files
 sudoers:    files
-hosts:      files dns
+#{hosts_line}
 bootparams: nisplus [NOTFOUND=return] files
 ethers:     files
 netmasks:   files
@@ -43,7 +51,7 @@ passwd:     files [!NOTFOUND=return] sss
 shadow:     files [!NOTFOUND=return] sss
 group:      files [!NOTFOUND=return] sss
 sudoers:    files [!NOTFOUND=return] sss
-hosts:      files dns
+#{hosts_line}
 bootparams: nisplus [NOTFOUND=return] files
 ethers:     files
 netmasks:   files
@@ -67,7 +75,7 @@ passwd:     files [!NOTFOUND=return] ldap
 shadow:     files [!NOTFOUND=return] ldap
 group:      files [!NOTFOUND=return] ldap
 sudoers:    files [!NOTFOUND=return] ldap
-hosts:      files dns
+#{hosts_line}
 bootparams: nisplus [NOTFOUND=return] files
 ethers:     files
 netmasks:   files
@@ -81,7 +89,6 @@ automount:  files nisplus
 aliases:    files nisplus
 EOM
           end
-
         end
       end
     end
