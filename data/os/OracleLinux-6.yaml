@@ -15,5 +15,5 @@ simp::server::scenario_map:
 simp::nsswitch::defaults:
   hosts:
     - 'files'
-    - 'myhostname'
     - 'dns'
+    - 'myhostname'

@@ -23,6 +23,7 @@ lookup_options:
   simp::nsswitch::defaults:
     merge:
       strategy: hash
+
 simp::vardir_owner: 'root'
 simp::vardir_group: 'root'
 simp::vardir_mode: '0750'
@@ -51,6 +52,8 @@ simp::nsswitch::defaults:
   hosts:
     - 'files'
     - 'dns'
+    - 'mymachines'
+    - 'myhostname'
   bootparams:
     - 'nisplus'
     - '[NOTFOUND=return]'
