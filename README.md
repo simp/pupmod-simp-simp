@@ -27,7 +27,7 @@ This module is a component of the [System Integrity Management Platform](https:/
 
 If you find any issues, please submit them via [JIRA](https://simp-project.atlassian.net/).
 
-Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 This module should be used within the SIMP ecosystem and will be of limited
 independent use
@@ -118,7 +118,7 @@ different configurations easily:
 
 ## Development
 
-Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 ### Unit tests
 
