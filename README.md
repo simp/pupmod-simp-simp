@@ -71,6 +71,11 @@ It is recommended that you start with one of the SIMP scenarios described below.
 
 These may be set via the ``simp::scenario`` parameter via Hiera.
 
+| **NOTE** |
+| --- |
+| <ul><li>`simp::scenario` always affects SIMP **client** systems, no matter how it was set.</li><li>However: SIMP **servers** will default to the `simp` scenario unless `simp:scenario` is set _in Hiera_.</li></ul> |
+
+
 You may want to tweak individual module settings and should reference the
 [module documentation](https://github.com/simp/pupmod-simp-simp/docs/index.html)
 for full details.
@@ -79,12 +84,6 @@ for full details.
 
 The SIMP module has the following scenarios defined for getting started with
 different configurations easily:
-
-**NOTE**
-
-| SIMP scenarios always target the Puppet **client** systems. The SIMP server
-| is always kept in the safest mode by default but can be overridden explicitly
-| in Hiera if desired.
 
 * ``simp``
   * The default scenario. Enables all modules to support the default SIMP
