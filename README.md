@@ -60,8 +60,8 @@ appropriate access to the parameters in ``simp_options``.
 
 ## Reference
 
-See the [REFERENCE.md](./REFERENCE.md) for a comprehensive overview of the
-module components.
+See the [REFERENCE.md][reference_md] for a comprehensive overview of the module
+components.
 
 ## Usage
 
@@ -77,8 +77,9 @@ These may be set via the ``simp::scenario`` parameter via Hiera.
 
 
 You may want to tweak individual module settings and should reference the
-[module documentation](https://github.com/simp/pupmod-simp-simp/docs/index.html)
-for full details.
+[module documentation][reference_md] for full details.
+
+[reference_md]: https://github.com/simp/pupmod-simp-simp/blob/master/REFERENCE.md
 
 #### SIMP Scenarios
 
