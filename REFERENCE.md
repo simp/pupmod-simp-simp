@@ -126,12 +126,14 @@ to the ``scenario`` selected above.
   be **removed** from the Array
 
 @example The following list would include the `apache` class and exclude
-  the `ntpd` class.
+  the `ntpd` class:
+
   ```
   ---
   simp::classes:
       - 'apache'
       - '--ntpd'
+  ```
 
 Default value: []
 
@@ -963,6 +965,32 @@ Data type: `Boolean`
 SIMP global catalyst to enable sssd
 
 Default value: simplib::lookup('simp_options::sssd', { 'default_value' => false })
+
+##### `defaults`
+
+Data type: `Hash`
+
+
+
+##### `sssd_options`
+
+Data type: `Hash`
+
+
+
+##### `ldap_options`
+
+Data type: `Hash`
+
+
+
+##### `overrides`
+
+Data type: `Hash`
+
+
+
+Default value: {}
 
 ### simp::one_shot
 
