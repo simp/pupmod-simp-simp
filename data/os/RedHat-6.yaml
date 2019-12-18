@@ -3,6 +3,7 @@ simp::scenario::data::el6:
   - acpid
   - chkrootkit
   - upstart
+  - ntpd
 simp::scenario_map:
   one_shot: "%{alias('simp::scenario::data::el6')}"
   simp: "%{alias('simp::scenario::data::el6')}"

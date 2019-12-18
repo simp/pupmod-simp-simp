@@ -26,7 +26,10 @@ describe 'simp::yum::repo::local_simp' do
              'CentOS-6'      => ['RPM-GPG-KEY-EPEL-6'],
              'RedHat-7'      => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-redhat-release'],
              'OracleLinux-7' => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-oracle'],
-             'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7']
+             'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7'],
+             'RedHat-8'      => ['RPM-GPG-KEY-EPEL-8','RPM-GPG-KEY-redhat-release'],
+             'OracleLinux-8' => ['RPM-GPG-KEY-EPEL-8','RPM-GPG-KEY-oracle'],
+             'CentOS-8'      => ['RPM-GPG-KEY-EPEL-8']
           }
         }
 

@@ -1,3 +1,9 @@
+* Mon Dec 16 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
+- NTP is not used by default in EL8 so moved ntp to list of OS relevant apps
+  for EL6 and EL7 and added chronyd for EL8.
+- Added support for EL8.
+- Updated the bootstrap_simp_client to use chrony if kernel version is 4 or later.
+
 * Tue Nov 19 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.11.0-0
 - Allow nsswitch overrides
 
@@ -23,7 +29,6 @@
 - Support puppetlabs/concat 6.x.
 
 * Mon Aug 05 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.1-0
-
 - Remove broken tasks directory
 
 * Thu Aug 01 2019 Robert Vincent <robert.vincent@conning.com> - 4.10.0-0

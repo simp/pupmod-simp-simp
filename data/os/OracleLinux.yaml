@@ -30,7 +30,6 @@ simp::scenario_map:
     - deferred_resources
     - incron
     - issue
-    - ntpd
     - pam::access
     - resolv
     - simp::admin
@@ -61,7 +60,6 @@ simp::scenario_map:
     - deferred_resources
     - incron
     - issue
-    - ntpd
     - pam::access
     - resolv
     - simp::admin
@@ -95,7 +93,6 @@ simp::scenario_map:
     - deferred_resources
     - incron
     - issue
-    - ntpd
     - pam::access
     - pupmod
     - resolv
@@ -129,7 +126,6 @@ simp::server::data:
   - deferred_resources
   - incron
   - issue
-  - ntpd
   - pam::access
   - resolv
   - simp::admin
