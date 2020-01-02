@@ -8,6 +8,9 @@
   "project_page": "https://github.com/simp/pupmod-simp-simp",
   "issues_url": "https://simp-project.atlassian.net",
   "tags": [
+    "compliance",
+    "stig",
+    "nist_800-53",
     "simp",
     "profiles"
   ],
