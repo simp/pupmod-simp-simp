@@ -27,7 +27,7 @@ This module is a component of the [System Integrity Management Platform](https:/
 
 If you find any issues, please submit them via [JIRA](https://simp-project.atlassian.net/).
 
-Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 This module should be used within the SIMP ecosystem and will be of limited
 independent use
@@ -60,8 +60,8 @@ appropriate access to the parameters in ``simp_options``.
 
 ## Reference
 
-See the [REFERENCE.md](./REFERENCE.md) for a comprehensive overview of the
-module components.
+See the [REFERENCE.md][reference_md] for a comprehensive overview of the module
+components.
 
 ## Usage
 
@@ -71,20 +71,20 @@ It is recommended that you start with one of the SIMP scenarios described below.
 
 These may be set via the ``simp::scenario`` parameter via Hiera.
 
+| **NOTE** |
+| --- |
+| <ul><li>`simp::scenario` always affects SIMP **client** systems, no matter how it was set.</li><li>However: SIMP **servers** will default to the `simp` scenario unless `simp:scenario` is set _in Hiera_.</li></ul> |
+
+
 You may want to tweak individual module settings and should reference the
-[module documentation](https://github.com/simp/pupmod-simp-simp/docs/index.html)
-for full details.
+[module documentation][reference_md] for full details.
+
+[reference_md]: https://github.com/simp/pupmod-simp-simp/blob/master/REFERENCE.md
 
 #### SIMP Scenarios
 
 The SIMP module has the following scenarios defined for getting started with
 different configurations easily:
-
-**NOTE**
-
-| SIMP scenarios always target the Puppet **client** systems. The SIMP server
-| is always kept in the safest mode by default but can be overridden explicitly
-| in Hiera if desired.
 
 * ``simp``
   * The default scenario. Enables all modules to support the default SIMP
@@ -118,7 +118,7 @@ different configurations easily:
 
 ## Development
 
-Please read our [Contribution Guide] (https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 ### Unit tests
 
