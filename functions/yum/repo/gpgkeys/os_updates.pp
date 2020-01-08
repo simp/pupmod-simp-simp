@@ -2,10 +2,16 @@
 #
 # @return [Array<String>]
 function simp::yum::repo::gpgkeys::os_updates() {
-  $release_key = $facts['os']['name'] ? {
-    'RedHat'      => 'RPM-GPG-KEY-redhat-release',
-    'OracleLinux' => 'RPM-GPG-KEY-oracle',
-    default       => "RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"
+  case $facts['os']['name'] {
+    'RedHat': {$release_key = 'RPM-GPG-KEY-redhat-release'}
+    'OracleLinux': {$release_key = 'RPM-GPG-KEY-oracle'}
+    'CentOS': {
+      case $facts['os']['release']['major'] {
+        '6', '7': {  $release_key = "RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"}
+        default: { $release_key = "RPM-GPG-KEY-${facts['os']['name']}-Official"}
+      }
+    }
+    default: { $release_key = "RPM-GPG-KEY-${facts['os']['name']}" }
   }
   [$release_key]
 }

@@ -38,7 +38,6 @@ describe 'simp::server::kickstart' do
             it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 1.2.3.0\/24/) }
             it { is_expected.to create_simp_apache__site('ks').with_content(/Allow from 5.6.0.0\/16/) }
             it { is_expected.to create_file('/var/www/ks').with_mode('2640') }
-            it { is_expected.to contain_class('simp::server::kickstart::runpuppet') }
             it { is_expected.to contain_class('simp::server::kickstart::simp_client_bootstrap') }
           end
 
@@ -54,13 +53,6 @@ describe 'simp::server::kickstart' do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to_not create_class('tftpboot') }
-          end
-
-          context 'manage_runpuppet = false' do
-            let(:params) {{ :manage_runpuppet => false }}
-
-            it { is_expected.to compile.with_all_deps }
-            it { is_expected.to_not contain_class('simp::server::kickstart::runpuppet') }
           end
 
           context 'manage_simp_client_bootstrap = false' do

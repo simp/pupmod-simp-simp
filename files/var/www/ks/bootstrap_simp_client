@@ -465,8 +465,15 @@ EOM
   def set_system_time
     return if @options[:ntp_servers].nil? or @options[:ntp_servers].empty?
     info(title("Setting the system time against #{@options[:ntp_servers].join(' ')}", 2))
-    # this can fail if ntpd is up and running, so only log any failures
-    result = execute("/usr/sbin/ntpdate -b #{@options[:ntp_servers].join(' ')}")
+    # this can fail if the time service is up and running, so only log any failures
+    kernelversion = execute("/usr/bin/uname -r")[:stdout].split(".")[0]
+    case  kernelversion
+    when '2','3'
+      result = execute("/usr/sbin/ntpdate -b #{@options[:ntp_servers].join(' ')}")
+    else
+      serverlist = @options[:ntp_servers].map {|s| "\'server #{s} iburst\'" }.join(' ')
+      result = execute("/usr/sbin/chronyd -q #{serverlist}")
+    end
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 

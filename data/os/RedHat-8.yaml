@@ -1,0 +1,12 @@
+---
+simp::scenario::data::el8:
+  - rkhunter
+  - chrony
+simp::scenario_map:
+  one_shot: "%{alias('simp::scenario::data::el8')}"
+  simp: "%{alias('simp::scenario::data::el8')}"
+  simp_lite: "%{alias('simp::scenario::data::el8')}"
+simp::server::scenario_map:
+  poss: "%{alias('simp::scenario::data::el8')}"
+  simp: "%{alias('simp::scenario::data::el8')}"
+  simp_lite: "%{alias('simp::scenario::data::el8')}"

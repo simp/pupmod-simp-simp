@@ -16,6 +16,11 @@ describe 'BootstrapSimpClient' do
     :stdout => '',
     :stderr => ''
   }}
+  let(:uname_result) {{
+    :exitstatus => 0,
+    :stdout => '3.4.5',
+    :stderr => ''
+  }}
 
   before :each do
     @tmp_dir = Dir.mktmpdir( File.basename( __FILE__ ) )
@@ -313,6 +318,10 @@ EOM
     end
 
     it 'returns 0 when processing succeeds' do
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+        :exitstatus => 0,
+        :stdout => '3.4.5',
+        :stderr => ''})
       bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
       puppet_cmd1 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
@@ -518,13 +527,31 @@ EOM
       bootstrap.set_system_time
     end
 
-    it 'when ntp servers are configured it runs ntpdate' do
+    it 'when ntp servers are configured it runs ntpdate for kernel < 4' do
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+        :exitstatus => 0,
+        :stdout => '3.4.5',
+        :stderr => ''})
       bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
       bootstrap.parse_command_line(@test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
     end
 
+    it 'when ntp servers are configured it runs chronyd for kernel >= 4 ' do
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+        :exitstatus => 0,
+        :stdout => '4.14.5',
+        :stderr => ''})
+      bootstrap.stubs(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").returns(success_result)
+      bootstrap.parse_command_line(@test_args + [ '-n', 'ntpserver1,ntpserver2' ])
+      bootstrap.set_system_time
+    end
+
     it 'logs error when ntpdate fails' do
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+        :exitstatus => 0,
+        :stdout => '3.14.5',
+        :stderr => ''})
       bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns({
         :exitstatus => -1,
         :stdout => '',
@@ -736,4 +763,5 @@ EOM
       expect { bootstrap.info('info message') }.to raise_error(Errno::ENOENT)
     end
   end
+
 end

@@ -45,55 +45,43 @@ describe 'simp::server' do
             poss = [
               'pupmod',
             ]
-            if ['RedHat','CentOS','OracleLinux'].include? os_facts[:os][:name] and os_facts[:os][:release][:major].to_s == '6' then
-              simp_lite = [
-                'aide',
-                'auditd',
+            simp_lite = [
+              'aide',
+              'auditd',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
+            case os_facts[:os][:release][:major]
+            when '6'
+              simp_lite_os_spec = [
                 'chkrootkit',
-                'at',
-                'cron',
-                'incron',
-                'useradd',
-                'resolv',
-                'nsswitch',
-                'issue',
-                'tuned',
-                'swap',
-                'timezone',
-                'ntpd',
-                'simp::admin',
-                'simp::base_apps',
-                'simp::base_services',
-                'simp::kmod_blacklist',
-                'simp::mountpoints',
-                'simp::prelink',
-                'simp::sysctl',
-                'ssh'
+                'ntpd'
+              ]
+            when '7'
+              simp_lite_os_spec = [
+                'rkhunter',
+                'ntpd'
               ]
             else
-              simp_lite = [
-                'aide',
-                'auditd',
+              simp_lite_os_spec = [
                 'rkhunter',
-                'at',
-                'cron',
-                'incron',
-                'useradd',
-                'resolv',
-                'nsswitch',
-                'issue',
-                'tuned',
-                'swap',
-                'timezone',
-                'ntpd',
-                'simp::admin',
-                'simp::base_apps',
-                'simp::base_services',
-                'simp::kmod_blacklist',
-                'simp::mountpoints',
-                'simp::prelink',
-                'simp::sysctl',
-                'ssh'
+                'chrony'
               ]
             end
             simp = [
@@ -104,6 +92,7 @@ describe 'simp::server' do
               'simp' => {
                 'contains' => [
                   simp,
+                  simp_lite_os_spec,
                   simp_lite,
                   poss,
                 ],
@@ -112,6 +101,7 @@ describe 'simp::server' do
               },
               'simp_lite' => {
                 'contains' => [
+                  simp_lite_os_spec,
                   simp_lite,
                   poss,
                   simp
@@ -122,6 +112,7 @@ describe 'simp::server' do
               'poss' => {
                 'contains' => [
                   poss,
+                  simp_lite_os_spec,
                   simp_lite,
                   simp,
                 ],
@@ -145,6 +136,7 @@ describe 'simp::server' do
                 end
               end
             end
+
           end
         end
       end

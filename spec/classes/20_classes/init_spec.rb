@@ -147,56 +147,37 @@ describe 'simp' do
               'pupmod',
               'deferred_resources'
             ]
+            simp_lite = [
+              'aide',
+              'auditd',
+              'at',
+              'cron',
+              'incron',
+              'useradd',
+              'resolv',
+              'nsswitch',
+              'issue',
+              'tuned',
+              'swap',
+              'timezone',
+              'simp::admin',
+              'simp::base_apps',
+              'simp::base_services',
+              'simp::kmod_blacklist',
+              'simp::mountpoints',
+              'simp::prelink',
+              'simp::sysctl',
+              'ssh'
+            ]
             if ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '6')
-              simp_lite = [
-                'aide',
-                'auditd',
-                'chkrootkit',
-                'at',
-                'cron',
-                'incron',
-                'useradd',
-                'resolv',
-                'nsswitch',
-                'issue',
-                'tuned',
-                'swap',
-                'timezone',
-                'ntpd',
-                'simp::admin',
-                'simp::base_apps',
-                'simp::base_services',
-                'simp::kmod_blacklist',
-                'simp::mountpoints',
-                'simp::prelink',
-                'simp::sysctl',
-                'ssh'
-              ]
+              simp_lite << 'chkrootkit'
+              simp_lite << 'ntpd'
+            elsif ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
+              simp_lite << 'rkhunter'
+              simp_lite << 'ntpd'
             else
-              simp_lite = [
-                'aide',
-                'auditd',
-                'rkhunter',
-                'at',
-                'cron',
-                'incron',
-                'useradd',
-                'resolv',
-                'nsswitch',
-                'issue',
-                'tuned',
-                'swap',
-                'timezone',
-                'ntpd',
-                'simp::admin',
-                'simp::base_apps',
-                'simp::base_services',
-                'simp::kmod_blacklist',
-                'simp::mountpoints',
-                'simp::prelink',
-                'simp::sysctl',
-                'ssh'
-              ]
+              simp_lite << 'rkhunter'
+              simp_lite << 'chrony'
             end
             simp = [
               'pam::wheel',

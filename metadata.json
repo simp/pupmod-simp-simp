@@ -13,6 +13,10 @@
   ],
   "dependencies": [
     {
+      "name": "aboe76/chrony",
+      "version_requirement": ">= 0.3.1 < 1.0.0"
+    },
+    {
       "name": "camptocamp/kmod",
       "version_requirement": ">= 2.1.0 < 3.0.0"
     },
@@ -46,7 +50,7 @@
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 8.5.0 < 9.0.0"
     },
     {
       "name": "simp/chkrootkit",
@@ -162,7 +166,7 @@
     },
     {
       "name": "simp/tftpboot",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.3.0 < 7.0.0"
     },
     {
       "name": "simp/tlog",
@@ -196,21 +200,24 @@
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {

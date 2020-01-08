@@ -19,6 +19,7 @@ function simp::yum::repo::gpgkeys::simp() {
     case $facts['os']['release']['major'] {
       '6':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-6'] }
       '7':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-7'] }
+      '8':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-8'] }
       default: { $_os_rel_gpgkeys = [] }
     }
 
