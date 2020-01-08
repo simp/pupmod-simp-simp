@@ -3,6 +3,10 @@
   for EL6 and EL7 and added chronyd for EL8.
 - Added support for EL8.
 - Updated the bootstrap_simp_client to use chrony if kernel version is 4 or later.
+- Removed the old runpuppet kickstart scripts.  The simp_bootstrap_client scripts
+  should be used instead.
+- Deprecated parameter simp::server::kickstart::runpuppet because the runpuppet scripts
+  are no longer used.
 
 * Tue Nov 19 2019 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.11.0-0
 - Allow nsswitch overrides
