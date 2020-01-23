@@ -27,6 +27,7 @@ fixtures:
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
     autofs: https://github.com/simp/pupmod-simp-autofs
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
+    chrony: https://github.com/simp/pupmod-aboe76-chrony
     clamav: https://github.com/simp/pupmod-simp-clamav
     compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
     concat: https://github.com/simp/puppetlabs-concat
