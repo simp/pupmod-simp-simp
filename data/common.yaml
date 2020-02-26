@@ -43,20 +43,22 @@ simp::server::scenario_map:
 simp::nsswitch::defaults:
   passwd:
     - 'files'
+    - 'mymachines'
+    - 'systemd'
   shadow:
     - 'files'
   group:
     - 'files'
+    - 'mymachines'
+    - 'systemd'
   sudoers:
     - 'files'
   hosts:
     - 'files'
-    - 'dns'
     - 'mymachines'
+    - 'dns'
     - 'myhostname'
   bootparams:
-    - 'nisplus'
-    - '[NOTFOUND=return]'
     - 'files'
   ethers:
     - 'files'
@@ -66,61 +68,57 @@ simp::nsswitch::defaults:
     - 'files'
   protocols:
     - 'files'
+  publickey:
+    - 'files'
   rpc:
     - 'files'
   services:
     - 'files'
   netgroup:
     - 'files'
-  publickey:
-    - 'nisplus'
   automount:
     - 'files'
-    - 'nisplus'
   aliases:
     - 'files'
-    - 'nisplus'
 
 simp::nsswitch::sssd_options:
-  group:
-    - 'files'
-    - '[!NOTFOUND=return]'
-    - 'sss'
-  netgroup:
-    - 'files'
-    - '[!NOTFOUND=return]'
-    - 'sss'
   passwd:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
     - 'sss'
+    - 'mymachines'
+    - 'systemd'
   shadow:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
+    - 'sss'
+  group:
+    - 'files [!NOTFOUND=return]'
+    - 'sss'
+    - 'mymachines'
+    - 'systemd'
+  netgroup:
+    - 'files [!NOTFOUND=return]'
     - 'sss'
   sudoers:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
     - 'sss'
 
 simp::nsswitch::ldap_options:
-  group:
-    - 'files'
-    - '[!NOTFOUND=return]'
-    - 'ldap'
-  netgroup:
-    - 'files'
-    - '[!NOTFOUND=return]'
-    - 'ldap'
   passwd:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
     - 'ldap'
+    - 'mymachines'
+    - 'systemd'
   shadow:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
+    - 'ldap'
+  group:
+    - 'files [!NOTFOUND=return]'
+    - 'ldap'
+    - 'mymachines'
+    - 'systemd'
+  netgroup:
+    - 'files [!NOTFOUND=return]'
     - 'ldap'
   sudoers:
-    - 'files'
-    - '[!NOTFOUND=return]'
+    - 'files [!NOTFOUND=return]'
     - 'ldap'
