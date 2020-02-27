@@ -1,3 +1,11 @@
+* Wed Feb 26 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+- Updated the simp::nsswitch class to have sane defaults
+  - Added support for mymachines and myhostname by default
+  - Removed all NIS references since NIS should not be in general usage any
+    longer and was never natively supported by SIMP
+  - Configuration files are now common cross all supported OSs since nsswitch
+    "does the right thing" when it hits a module that it does not recognize
+
 * Mon Dec 16 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.11.0-0
 - NTP is not used by default in EL8 so moved ntp to list of OS relevant apps
   for EL6 and EL7 and added chronyd for EL8.

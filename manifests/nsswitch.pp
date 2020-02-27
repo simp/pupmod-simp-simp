@@ -27,7 +27,7 @@ class simp::nsswitch (
     $options = {}
   }
 
-  class { '::nsswitch':
+  class { 'nsswitch':
     * => $defaults + $options + $overrides
   }
 }

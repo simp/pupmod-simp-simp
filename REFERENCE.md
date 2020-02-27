@@ -30,7 +30,6 @@
 * [`simp::scenario::poss`](#simpscenarioposs): The 'Puppet Open Source Software' Scenario
 * [`simp::server`](#simpserver): Set up a SIMP server in such a way that it will be ready to serve
 * [`simp::server::kickstart`](#simpserverkickstart): This class provides a working framework for providing a kickstart
-* [`simp::server::kickstart::runpuppet`](#simpserverkickstartrunpuppet): This class manages the runpuppet script, which is a script that can
 * [`simp::server::kickstart::simp_client_bootstrap`](#simpserverkickstartsimp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts
 * [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a slave LDAP server.
 * [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients
@@ -2034,16 +2033,22 @@ Default value: `true`
 
 Data type: `Boolean`
 
-If true, generate the runpuppet script in $data_dir/ks.
+Deprecated  The runpuppet script has been replaced by the
+simp_client_bootstrap script.  The runpuppet script did
+not work well on CentOS 7 and will not work on CentOS 8.
+Remember to update your kickstart scripts to call the correct
+script. See the bootstrap scripts in simp-core under build/distributions
+for examples.
+This parameter will be removed in later versions.
 
-Default value: `true`
+Default value: `false`
 
 ##### `manage_simp_client_bootstrap`
 
 Data type: `Boolean`
 
 If true, generate the simp_client_bootstrap sysv init
-script and simp_clinet_bootstrap.service systemd
+script and simp_client_bootstrap.service systemd
 service unit file in $data_dir/ks.
 
 Default value: `true`
@@ -2056,106 +2061,6 @@ Verify the certificate of the kickstart client.  One of optional, require,
 none, optional_no_ca.
 
 Default value: 'none'
-
-### simp::server::kickstart::runpuppet
-
-be run to bootstrap provisioned clients, adding them to puppet and running it
-in a fashion similar so `simp bootstrap`.
-
-#### Parameters
-
-The following parameters are available in the `simp::server::kickstart::runpuppet` class.
-
-##### `data_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-The location of the web root in which the kickstart directory
-will reside.  Only used to compute the default for `location`.
-
-Default value: simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'})
-
-##### `location`
-
-Data type: `Stdlib::Absolutepath`
-
-The location of the runpuppet file to be placed when generated.
-
-Default value: "${data_dir}/ks/runpuppet"
-
-##### `ntp_servers`
-
-Data type: `Variant[Array, Hash]`
-
-An array of ntp servers or hash of server/value pairs that should
-be used during client kickstarts to slew the local time correctly
-prior to PKI key distribution.
-
-Failure to set the system clock will not cause the runpuppet script to fail
-to execute.
-
-Default value: simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] })
-
-##### `puppet_server`
-
-Data type: `Optional[Simplib::Host]`
-
-The FQDN of your Puppet server
-
-* If not set, will use ``$server_facts['servername']``, or the puppet
-  server set in puppet.conf if trusted_server_facts isn't set or found.
-
-Default value: simplib::lookup('simp_options::puppet::server', { 'default_value' => undef })
-
-##### `puppet_ca`
-
-Data type: `Optional[Simplib::Host]`
-
-The FQDN of your Puppet CA
-
-* If not set, will use ``$server_facts['servername']``, or the puppet
-  server set in puppet.conf if trusted_server_facts isn't set or found.
-
-Default value: simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef })
-
-##### `puppet_ca_port`
-
-Data type: `Simplib::Port`
-
-The port upon which the Puppet CA is listening.
-
-Default value: simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 })
-
-##### `runpuppet_print_stats`
-
-Data type: `Boolean`
-
-If true, print statistics for each client puppet run during bootstrap.
-
-Default value: `true`
-
-##### `runpuppet_wait_for_cert`
-
-Data type: `Variant[Integer[0],Boolean]`
-
-If set to an integer, the runpuppet client script will wait for this many
-seconds between checking into the puppet master for a signed certificate.
-This will go on until a signed certificate is presented.
-
-If set to false or 0, the client will immediately timeout if a signed
-certificate is not presented.
-
-Default value: 10
-
-##### `fips`
-
-Data type: `Boolean`
-
-If true, set puppet keylength to 2048, else 4096.  This non-compliant
-setting is to work around problems with older versions of Ruby.  It
-will be fixed, when Puppet fully supports FIPS mode.
-
-Default value: simplib::lookup('simp_options::fips', { 'default_value' => false })
 
 ### simp::server::kickstart::simp_client_bootstrap
 
