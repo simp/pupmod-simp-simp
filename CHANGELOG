@@ -1,4 +1,5 @@
-* Wed Feb 26 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+* Mon Mar 02 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+- Replace the use of augeasproviders-shellvar with a direct augeas resource
 - Updated the simp::nsswitch class to have sane defaults
   - Added support for mymachines and myhostname by default
   - Removed all NIS references since NIS should not be in general usage any

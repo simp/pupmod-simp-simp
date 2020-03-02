@@ -52,12 +52,13 @@ describe 'simp::prelink' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
             it {
-              is_expected.to contain_shellvar('disable prelink').with( {
-                :ensure   => 'present',
-                :target   => '/etc/sysconfig/prelink',
-                :variable => 'PRELINKING',
-                :value    => 'no',
-                :before   => 'Exec[remove prelinking]'
+              is_expected.to contain_augeas('disable prelink').with( {
+                :lens    => 'Shellvars.lns',
+                :incl    => '/etc/sysconfig/prelink',
+                :changes => [
+                  'set PRELINKING "no"'
+                ],
+                :before  => 'Exec[remove prelinking]'
               } )
             }
 
@@ -82,13 +83,14 @@ describe 'simp::prelink' do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
-            it { is_expected.to contain_package('prelink').that_comes_before('Shellvar[enable prelink]') }
             it {
-              is_expected.to contain_shellvar('enable prelink').with( {
-                :ensure   => 'present',
-                :target   => '/etc/sysconfig/prelink',
-                :variable => 'PRELINKING',
-                :value    => 'yes'
+              is_expected.to contain_augeas('enable prelink').with( {
+                :lens      => 'Shellvars.lns',
+                :incl      => '/etc/sysconfig/prelink',
+                :changes   => [
+                  'set PRELINKING "yes"'
+                ],
+                :subscribe => 'Package[prelink]'
               } )
              }
           end
