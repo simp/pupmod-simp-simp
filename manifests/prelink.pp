@@ -31,14 +31,14 @@ class simp::prelink (
       ensure => $ensure
     }
 
-    shellvar { 'enable prelink':
-      ensure   => present,
-      target   => '/etc/sysconfig/prelink',
-      variable => 'PRELINKING',
-      value    => 'yes'
+    augeas { 'enable prelink':
+      lens      => 'Shellvars.lns',
+      incl      => '/etc/sysconfig/prelink',
+      changes   => [
+        'set PRELINKING "yes"'
+      ],
+      subscribe => Package['prelink']
     }
-
-    Package['prelink'] ~> Shellvar['enable prelink']
   }
   else {
     if $facts['prelink'] {
@@ -47,12 +47,13 @@ class simp::prelink (
       # disable prelinking and then run /etc/cron.daily/prelink (from
       # the installed prelink package).
       if $facts['prelink']['enabled'] {
-        shellvar { 'disable prelink':
-          ensure   => present,
-          target   => '/etc/sysconfig/prelink',
-          variable => 'PRELINKING',
-          value    => 'no',
-          before   => Exec['remove prelinking']
+        augeas { 'disable prelink':
+          lens    => 'Shellvars.lns',
+          incl    => '/etc/sysconfig/prelink',
+          changes => [
+            'set PRELINKING "no"'
+          ],
+          before  => Exec['remove prelinking']
         }
       }
 

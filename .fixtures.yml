@@ -22,7 +22,6 @@ fixtures:
     augeasproviders_pam: https://github.com/simp/augeasproviders_pam
     augeasproviders_postgresql: https://github.com/simp/augeasproviders_postgresql
     augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
-    augeasproviders_shellvar: https://github.com/simp/augeasproviders_shellvar
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
     autofs: https://github.com/simp/pupmod-simp-autofs
@@ -39,6 +38,9 @@ fixtures:
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
     fips: https://github.com/simp/pupmod-simp-fips
+    firewalld:
+      repo: https://github.com/simp/pupmod-voxpupuli-firewalld
+      ref: v4.2.2
     haveged: https://github.com/simp/pupmod-simp-haveged
     hocon: https://github.com/simp/pupmod-puppetlabs-hocon
     host_core:
