@@ -1,4 +1,6 @@
-* Mon Mar 02 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+* Mon Mar 30 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+- Removed optional appilcations from simp::base_apps for wider OS compatibility
+  - simp::base_apps::manage_elinks_config no longer has any effect
 - Replace the use of augeasproviders-shellvar with a direct augeas resource
 - Updated the simp::nsswitch class to have sane defaults
   - Added support for mymachines and myhostname by default

@@ -10,21 +10,6 @@ describe 'simp::base_apps' do
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:core_packages) { [
-            'dos2unix',
-            'elinks',
-            'hunspell',
-            'lsof',
-            'man',
-            'man-pages',
-            'mlocate',
-            'pax',
-            'pinfo',
-            'sos',
-            'star',
-            'symlinks',
-            'vim-enhanced',
-            'words',
-            'x86info',
             'irqbalance',
             'netlabel_tools',
             'bind-utils'
@@ -39,9 +24,6 @@ describe 'simp::base_apps' do
                 is_expected.to create_package(package).with_ensure('installed')
               end
             end
-            it { is_expected.to create_file('/etc/elinks.conf') }
-            it { is_expected.to create_file_line('elinks_ui_lang').with_line('set ui.language = "System"') }
-            it { is_expected.to create_file_line('elinks_css_disable').with_line('set document.css.enable = 0') }
             if os_facts[:os][:release][:major].to_i >= 7
               it { is_expected.to create_svckill__ignore('quotaon') }
               it { is_expected.to create_svckill__ignore('messagebus') }
@@ -84,14 +66,6 @@ describe 'simp::base_apps' do
               end
             end
           end
-
-          context 'with $manage_elinks_config => false' do
-            let(:params) {{ :manage_elinks_config => false }}
-            it { is_expected.not_to create_file('/etc/elinks.conf') }
-            it { is_expected.not_to create_file_line('elinks_ui_lang') }
-            it { is_expected.not_to create_file_line('elinks_css_disable') }
-          end
-
         end
       end
     end

@@ -20,18 +20,18 @@ include 'simp::base_services'
   }
 
   context 'default parameters' do
-    hosts.each do |node|
+    hosts.each do |host|
       it "should prepare #{host}" do
         # Set up base modules and hieradata
-        set_hieradata_on( node, hieradata )
+        set_hieradata_on( host, hieradata )
       end
 
       it 'should apply with no errors' do
-        apply_manifest_on( node, manifest, :catch_failures => true )
+        apply_manifest_on( host, manifest, :catch_failures => true )
       end
 
       it 'should be idempotent' do
-        apply_manifest_on( node, manifest, :catch_changes  => true )
+        apply_manifest_on( host, manifest, :catch_changes  => true )
       end
 
     end
