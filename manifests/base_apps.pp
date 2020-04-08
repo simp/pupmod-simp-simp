@@ -19,7 +19,8 @@
 #   A list of other applications that you wish to install
 #
 # @param manage_elinks_config
-#   Add some useful settings to the global elinks configuration
+#   DEPRECATED: This functionality is not required for normal operation of the
+#   system and should be moved to external management.
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
@@ -32,21 +33,6 @@ class simp::base_apps (
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $core_apps = [
-    'dos2unix',
-    'elinks',
-    'hunspell',
-    'lsof',
-    'man',
-    'man-pages',
-    'mlocate',
-    'pax',
-    'pinfo',
-    'sos',
-    'star',
-    'symlinks',
-    'vim-enhanced',
-    'words',
-    'x86info',
     'irqbalance',
     'netlabel_tools',
     'bind-utils'
@@ -124,27 +110,6 @@ class simp::base_apps (
       hasrestart => true,
       hasstatus  => true,
       require    => Package['quota']
-    }
-  }
-
-  if $manage_elinks_config {
-    file { '/etc/elinks.conf':
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      require => Package['elinks']
-    }
-
-    file_line { 'elinks_ui_lang':
-      path    => '/etc/elinks.conf',
-      line    => 'set ui.language = "System"',
-      require => File['/etc/elinks.conf']
-    }
-
-    file_line { 'elinks_css_disable':
-      path    => '/etc/elinks.conf',
-      line    => 'set document.css.enable = 0',
-      require => File['/etc/elinks.conf']
     }
   }
 }

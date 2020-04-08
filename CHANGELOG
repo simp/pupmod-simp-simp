@@ -1,4 +1,22 @@
-* Mon Mar 02 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+* Mon Mar 30 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
+- The following applications have been removed from the base os applications
+  installed automatically by simp:
+    'man',
+    'man-pages',
+    'vim-enhanced',
+    'dos2unix',
+    'elinks',
+    'hunspell',
+    'lsof',
+    'mlocate',
+    'pax',
+    'pinfo',
+    'sos',
+    'star',
+    'symlinks',
+    'words',
+    'x86info'
+- simp::base_apps::manage_elinks_config no longer has any effect
 - Replace the use of augeasproviders-shellvar with a direct augeas resource
 - Updated the simp::nsswitch class to have sane defaults
   - Added support for mymachines and myhostname by default
