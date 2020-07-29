@@ -16,7 +16,7 @@
   ],
   "dependencies": [
     {
-      "name": "aboe76/chrony",
+      "name": "aboe/chrony",
       "version_requirement": ">= 0.3.1 < 1.0.0"
     },
     {
@@ -109,7 +109,7 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 7.1.0 < 8.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     },
     {
       "name": "simp/resolv",
@@ -129,7 +129,7 @@
     },
     {
       "name": "simp/simp_apache",
-      "version_requirement": ">= 6.0.1 < 7.0.0"
+      "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
       "name": "simp/simp_openldap",

@@ -1,6 +1,11 @@
+* Tue Aug 18 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.11.1-0
+- changed the upper bounds for dependencies for simp_apache and pupmod
+- corrected version numbering for chrony
+
 * Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.1-0
 - Align OpenLDAP terminology with vendor changes
 
+>>>>>>> (SIMP-8075) Update dependencies for SIMP
 * Mon Mar 30 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
 - The following applications have been removed from the base os applications
   installed automatically by simp:
