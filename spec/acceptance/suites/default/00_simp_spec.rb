@@ -31,6 +31,7 @@ describe 'simp class' do
         apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
         apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
         host.reboot
+        sleep(20)
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
 

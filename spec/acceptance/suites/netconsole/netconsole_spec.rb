@@ -59,6 +59,11 @@ describe 'simp::netconsole class' do
 
       it "should unconfigure the shipper (#{shipper.name})" do
         apply_manifest_on(shipper, remove_manifest, catch_failures: true)
+        # host.reboot checks the previous and current boot times to see if reboot
+        # was successful.  It uses who -b which only is only accurate to 1 minute.
+        # Need to make sure that this  reboot happens at least 60 seconds after the previous
+        # one because  spiffy fast machines will do the tests an reboot too quickly.
+        sleep 60
         shipper.reboot
       end
     end
