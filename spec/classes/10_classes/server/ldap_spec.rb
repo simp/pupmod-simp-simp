@@ -20,8 +20,8 @@ describe 'simp::server::ldap' do
             it { is_expected.to create_simp_openldap__server__limits('LDAP_Sync_DN_Unlimited_Query') }
           end
 
-          context 'is_slave' do
-            let(:params){{ :is_slave => true }}
+          context 'is_consumer' do
+            let(:params){{ :is_consumer => true }}
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_simp_openldap__server__syncrepl('111') }

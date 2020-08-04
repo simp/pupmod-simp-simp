@@ -1,11 +1,14 @@
-# @summary Sets up either a primary LDAP server or a slave LDAP server.
+# @summary Sets up either a primary LDAP server or a consumer LDAP server.
 #
-# If you are setting up a slave LDAP server, remember that the three
-# digit RID must be unique or each slave server that you attach to the
+# If you are setting up a consumer LDAP server, remember that the three
+# digit RID must be unique or each consumer server that you attach to the
 # same master.
 #
 # @param is_slave
-#   If true, set this node up as an LDAP slave. The Hiera parameter
+#   Deprecated in favor of vendor-aligned update: ``is_consumer``
+#
+# @param is_consumer
+#   If true, set this node up as an LDAP consumer. The Hiera parameter
 #   ldap::master will be used as the master server.
 #
 #   If you want to use values other than the defaults as provided with
@@ -21,7 +24,7 @@
 #   Used for setting up sync limits for the bind user.
 #
 # @param sync_dn
-#   Used for setting up sync limits for slave nodes.
+#   Used for setting up sync limits for consumer nodes.
 #
 # @param enable_lastbind
 #   If true, enable the 'lastbind' plugin for OpenLDAP. This records
@@ -34,6 +37,7 @@
 #
 class simp::server::ldap (
   Boolean    $is_slave        = false,
+  Boolean    $is_consumer     = $is_slave,
   Integer[0] $rid             = 111,
   String     $bind_dn         = simplib::lookup('simp_options::ldap::bind_dn', { 'default_value' => '' }),
   String     $sync_dn         = simplib::lookup('simp_options::ldap::sync_dn', { 'default_value' => '' }),
@@ -50,7 +54,7 @@ class simp::server::ldap (
   if $enable_lastbind { include 'simp_openldap::slapo::lastbind' }
 
   $s_rid = String($rid)
-  if $is_slave {
+  if $is_consumer {
     simp_openldap::server::syncrepl { $s_rid: }
   }
 
