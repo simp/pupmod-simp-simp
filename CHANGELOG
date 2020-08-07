@@ -5,7 +5,6 @@
 * Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.1-0
 - Align OpenLDAP terminology with vendor changes
 
->>>>>>> (SIMP-8075) Update dependencies for SIMP
 * Mon Mar 30 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.11.0-0
 - The following applications have been removed from the base os applications
   installed automatically by simp:
