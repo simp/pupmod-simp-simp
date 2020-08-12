@@ -194,10 +194,10 @@ variables:
     BEAKER_PUPPET_COLLECTION: 'puppet5'
     MATRIX_RUBY_VERSION: '2.4'
 
-.pup_5_5_17: &pup_5_5_17
+.pup_5_5_20: &pup_5_5_20
   image: 'ruby:2.4'
   variables:
-    PUPPET_VERSION: '5.5.17'
+    PUPPET_VERSION: '5.5.20'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
     MATRIX_RUBY_VERSION: '2.4'
 
@@ -283,14 +283,16 @@ pup6-lint:
 pup5-unit:
   <<: *pup_5
   <<: *unit_tests
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
-pup5.5.17-unit:
-  <<: *pup_5_5_17
+pup5.5.20-unit:
+  <<: *pup_5_5_20
   <<: *unit_tests
 
 pup6-unit:
   <<: *pup_6
   <<: *unit_tests
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
 pup6.16.0-unit:
   <<: *pup_6_16_0
@@ -306,63 +308,63 @@ pup6.16.0-unit:
 # Repo-specific content
 # ==============================================================================
 
-pup5.5.17:
-  <<: *pup_5_5_17
+pup5.5.20:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-pup5.5.17-base-apps:
-  <<: *pup_5_5_17
+pup5.5.20-base-apps:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[base_apps]'
 
-pup5.5.17-fips:
-  <<: *pup_5_5_17
+pup5.5.20-fips:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
 
-pup5.5.17-no_simp_server:
-  <<: *pup_5_5_17
+pup5.5.20-no_simp_server:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'bundle exec rake beaker:suites[no_simp_server]'
 
-pup5.5.17-netconsole:
-  <<: *pup_5_5_17
+pup5.5.20-netconsole:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[netconsole]'
 
-pup5.5.17-one_shot_scenario:
-  <<: *pup_5_5_17
+pup5.5.20-one_shot_scenario:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[scenario_one_shot]'
 
-pup5.5.17-poss_scenario:
-  <<: *pup_5_5_17
+pup5.5.20-poss_scenario:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[scenario_poss]'
 
-pup5.5.17-remote_access_scenario:
-  <<: *pup_5_5_17
+pup5.5.20-remote_access_scenario:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[scenario_remote_access]'
 
-pup5.5.17-oel:
-  <<: *pup_5_5_17
+pup5.5.20-oel:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
-pup5.5.17-oel-fips:
-  <<: *pup_5_5_17
+pup5.5.20-oel-fips:
+  <<: *pup_5_5_20
   <<: *acceptance_base
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
@@ -371,18 +373,21 @@ pup5.5.17-oel-fips:
 pup6:
   <<: *pup_6
   <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
   script:
     - 'bundle exec rake beaker:suites[default]'
 
 pup6-base-apps:
   <<: *pup_6
   <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
   script:
     - 'bundle exec rake beaker:suites[base_apps]'
 
 pup6-fips:
   <<: *pup_6
   <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
 
@@ -421,8 +426,8 @@ pup6-remote_access_scenario:
   script:
     - 'bundle exec rake beaker:suites[scenario_remote_access]'
 
-pup6-win:
-  <<: *pup_6
+pup6.16.0-win:
+  <<: *pup_6_16_0
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[win_client]'

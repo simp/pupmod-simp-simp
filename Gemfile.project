@@ -1,0 +1,9 @@
+# Use this file to declare gems specific to this project that are not included
+# by the standardized Gemfile.
+#
+# It is safe to check in changes to this file.  Unlike the Gemfile, changes
+# made to this file will not be overwritten during standardized asset syncs.
+group :system_tests do
+  gem 'beaker-windows'
+end
+# vim: set ft=ruby:
