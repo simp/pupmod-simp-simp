@@ -1,3 +1,7 @@
+* Wed Aug 19 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.11.1-0
+- changed the ssh settings for the wnidows node in the
+  win_client acceptance test
+
 * Tue Aug 18 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.11.1-0
 - changed the upper bounds for dependencies for simp_apache and pupmod
 - corrected version numbering for chrony
