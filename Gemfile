@@ -31,6 +31,7 @@ end
 group :system_tests do
   gem 'beaker'
   gem 'beaker-rspec'
+  gem 'beaker-windows'
   gem 'simp-beaker-helpers', ENV['SIMP_BEAKER_HELPERS_VERSION'] || ['>= 1.18.7', '< 2']
 end
 
