@@ -787,8 +787,8 @@ The following parameters are available in the `simp::mountpoints::proc` class.
 
 Data type: `Integer[0,2]`
 
-* 0: This is the default setting and gives you the default
-     behavior
+* 0: This is the system default setting and provides no access restrictions
+     on /proc
 
 * 1: With this option an normal user would not see other processes but
      their own about ``ps``, ``top`` , etc..., but they are still able to
@@ -797,18 +797,38 @@ Data type: `Integer[0,2]`
 * 2 (default): Users are only able to see their own processes (like with
     ``hidepid=1``), and process IDs are also hidden in ``/proc``!
 
-* **NOTE:** This option has no effect if ``$manage_proc`` is not ``true``
-
 Default value: `2`
+
+##### `manage_proc_group`
+
+Data type: `Boolean`
+
+Enable management of the group that allows access to ``/proc``
+
+* This was added, and enabled by default, to fix issue with updates to
+``polkit`` per the vendor recommended guidance
+
+Default value: ``true``
+
+##### `proc_group`
+
+Data type: `String[1]`
+
+The group name to be associated with ``$proc_gid``
+
+Default value: `pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', '_gid__group'), 'simp_proc_read')`
 
 ##### `proc_gid`
 
-Data type: `Optional[Integer]`
+Data type: `Integer[0]`
 
 This group will be able to see all processes on the system regardless of
 the ``$proc_hidepid`` setting
 
-Default value: ``undef``
+* If this is set to ``0`` then the ``gid`` option will be removed from the
+  option string
+
+Default value: `pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', 'gid'), 231)`
 
 ### `simp::mountpoints::tmp`
 

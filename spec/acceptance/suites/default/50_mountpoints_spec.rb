@@ -29,6 +29,13 @@ describe 'simplib::secure_mountpoints class' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
 
+      it 'should have /proc mounted with hidepid=2 and gid=231' do
+        proc_mount = on(host, 'mount | grep " /proc "').output.strip
+
+        expect(proc_mount).to match(/gid=231/)
+        expect(proc_mount).to match(/hidepid=2/)
+      end
+
       it 'should prevent running applications in the noexec mounts' do
         tmp_dirs.each do |dir|
           on(host,%(cp /bin/ls #{dir}))
