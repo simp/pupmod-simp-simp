@@ -122,3 +122,6 @@ simp::nsswitch::ldap_options:
   sudoers:
     - 'files [!NOTFOUND=return]'
     - 'ldap'
+
+simp::sssd::client::local_domain: false
+
