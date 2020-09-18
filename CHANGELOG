@@ -1,3 +1,10 @@
+* Wed Sep 09 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.12.0-0
+- Updated simp::mountpoints::proc
+  - Due to updates to polkit that require being added to the /proc gid group
+    - Assign a group and gid by default
+    - Create a group by default
+    - Discover these values from the system if possible
+
 * Wed Aug 19 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.11.1-0
 - changed the ssh settings for the wnidows node in the
   win_client acceptance test
