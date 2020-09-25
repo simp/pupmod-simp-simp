@@ -107,6 +107,13 @@ jobs:
       script:
         - bundle exec rake spec_prep && bundle exec rspec spec/classes/00_classes
 
+    - stage: spec
+      rvm: 2.4.9
+      name: 'Puppet 5.5 (SIMP 6.4, PE 2018.1) - Classes - 00'
+      env: PUPPET_VERSION="~> 5.5.0"
+      script:
+        - bundle exec rake spec_prep && bundle exec rspec spec/classes/01_classes
+
     - stage: slow_spec
       rvm: 2.4.9
       name: 'Puppet 5.5 (SIMP 6.4, PE 2018.1) - Classes - 10'
