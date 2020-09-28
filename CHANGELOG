@@ -1,3 +1,13 @@
+
+* Tue Sep 15 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.12.0-0
+- Updated sssd/client configuration for EL8
+- Do not configure local provider for EL8
+- Use the files provider for the local domain for el7 and later
+- Deprecate sssd client autofs,ssh and sudo settings.  The sssd
+  module configures services in sssd::services list.  Use that
+  setting to configure those entries.
+- Configure sssd even if local and ldap are not configured for el8.
+
 * Wed Sep 09 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.12.0-0
 - Updated simp::mountpoints::proc
   - Due to updates to polkit that require being added to the /proc gid group

@@ -10,3 +10,6 @@ simp::server::scenario_map:
   poss: "%{alias('simp::scenario::data::el7')}"
   simp: "%{alias('simp::scenario::data::el7')}"
   simp_lite: "%{alias('simp::scenario::data::el7')}"
+
+simp::sssd::client::local_domain: true
+
