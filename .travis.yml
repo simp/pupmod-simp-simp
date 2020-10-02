@@ -152,7 +152,7 @@ jobs:
       env: PUPPET_VERSION="~> 5.5.0"
       script:
         - bundle exec rake spec_prep && bundle exec rspec spec/facter
-        - bundle exec rspec spec/functions
+        - bundle exec rspec spec/functions spec/type_aliases
 
           ###    - stage: spec
           ###      name: 'Latest Puppet 5.x Classes - 00'
@@ -199,7 +199,7 @@ jobs:
           ###      env: PUPPET_VERSION="~> 5.0"
           ###      script:
           ###        - bundle exec rake spec_prep && bundle exec rspec spec/facter
-          ###        - bundle exec rspec spec/functions
+          ###        - bundle exec rspec spec/functions spec/type_aliases
           ###
     - stage: spec
       name: 'Latest Puppet 6.x - Classes - 00'
@@ -253,7 +253,7 @@ jobs:
       env: PUPPET_VERSION="~> 6.0"
       script:
         - bundle exec rake spec_prep && bundle exec rspec spec/facter
-        - bundle exec rspec spec/functions
+        - bundle exec rspec spec/functions spec/type_aliases
 
     - stage: deploy
       rvm: 2.4.9

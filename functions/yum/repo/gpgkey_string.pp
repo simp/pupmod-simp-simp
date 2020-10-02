@@ -13,7 +13,7 @@
 # @param extra_gpgkey_urls
 #   Additional GPG keys that need to be included
 #
-# @return String
+# @return [String]
 function simp::yum::repo::gpgkey_string(
   Array[Simp::HostOrURL] $servers,
   Array[String]          $simp_gpgkeys,

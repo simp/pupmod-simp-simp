@@ -9,15 +9,16 @@ describe 'simp yum configuration' do
     <<-EOS
       include 'simp'
       include 'pupmod'
-      include 'simp::yum::repo::internet_simp_server'
-      include 'simp::yum::repo::internet_simp_dependencies'
+      include 'simp::yum::repo::internet_simp'
     EOS
   }
 
   context 'add repos to system' do
     hosts.each do |host|
       it 'should set the SIMP version' do
-        on(host, 'echo 6.0.0-0.el7 > /etc/simp/simp.version')
+        # simplib::simp_version() needs either this file or an installed simp RPM
+        # in order to return a SIMP version!
+        on(host, 'echo 6.4.0-0.el7 > /etc/simp/simp.version')
       end
       it 'should work with no errors' do
         apply_manifest_on(host, manifest, :catch_failures => true)
@@ -26,19 +27,17 @@ describe 'simp yum configuration' do
       it 'should be idempotent' do
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
-      describe file('/etc/yum.repos.d/simp-project_6_X.repo') do
-        its(:content) { should match(/https:\/\/packagecloud.io\/simp-project\/6_X\/el\/[67]\/x86_64/) }
-      end
-      describe file('/etc/yum.repos.d/simp-project_6_X_Dependencies.repo') do
-        its(:content) { should match(/https:\/\/packagecloud.io\/simp-project\/6_X_Dependencies\/el\/[67]\/x86_64/) }
+
+      it 'should install simp-release-community package' do
+        result = on(host, 'puppet resource package simp-release-community')
+        expect(result.stdout).to_not match(/purged/)
       end
     end
   end
 
-  context 'the contents of the simp repo' do
+  context 'the contents of the simp internet repos' do
     it 'should contain some simp server packages' do
       packages = [
-        'simp-adapter-pe',
         'simp-adapter',
         'simp',
         'pupmod-simp-simp',
@@ -47,23 +46,21 @@ describe 'simp yum configuration' do
       block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')
         packages.each do |package|
-          on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X' list | grep #{package} ")
+          on(host, "yum --disablerepo=* --enablerepo='simp-community-simp' list | grep #{package} ")
         end
       end
     end
-  end
 
-  context 'the contents of the simp dependencies repo' do
-    it 'should contain some simp server packages' do
-      packages = [
-        'haveged',
-        'simp-ppolicy-check-password',
-        'logstash'
-      ]
+    it 'should contain some simp dependency packages' do
+      packages = {
+        'haveged'      => 'simp-community-epel',
+        'postgresql96' => 'simp-community-postgresql',
+        'puppet-agent' => 'simp-community-puppet'
+      }
       block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')
-        packages.each do |package|
-          on(host, "yum --disablerepo=* --enablerepo='simp-project_6_X_Dependencies' list | grep #{package} ")
+        packages.each do |package,repo|
+          on(host, "yum --disablerepo=* --enablerepo='#{repo}' list | grep #{package} ")
         end
       end
     end
