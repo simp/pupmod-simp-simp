@@ -1,14 +1,25 @@
-# Sanitize the release slug in the SIMP repo URLs
+# DEPRECATED Sanitize the release slug in the SIMP repo URLs
+#
+# The packagecloud repositories to which this release slug generated
+# by this function corresponds are no longer maintained.
 #
 # @param simp_release_slug
 #   The ``slug`` to sanitize
 #
-# @return String
+# @return [String]
 #
 function simp::yum::repo::sanitize_simp_release_slug(
-  Variant[String,Undef] $simp_release_slug = undef
+  Optional[String] $simp_release_slug = undef
 ) {
-    if defined('$simp_release_slug') and !empty($simp_release_slug) {
+    # Even though this function is deprecated, we don't want to log
+    # a deprecation warning because the classes that use it already log
+    # deprecation warnings.
+    #
+    # TODO Remove this function when the deprecated
+    # simp::yum::repo::internet_simp_server and
+    # simp::yum::repo::internet_dependencies classes are removed.
+
+    if ($simp_release_slug !~ Undef) and !empty($simp_release_slug) {
       $_release_slug = $simp_release_slug
     }
     else {

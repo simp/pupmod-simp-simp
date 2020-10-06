@@ -1,3 +1,26 @@
+* Mon Oct 05 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 4.13.0-0
+- Added:
+  - ``simp::yum::repo::internet_simp`` class:
+    - Uses the SIMP yum repository package (simp-community-release) to
+      configure yum for SIMP's internet public repositories at simp-project.com.
+    - simp-project.com is the new host for SIMP's yum repositories.
+    - packagecloud is no longer being updated.
+  - ``simp::yum::repo::simp_release_version`` function: Returns the SIMP release
+    version for use in the SIMP internet yum repositories.
+  - ``Simp::Version`` data type alias for valid version strings for use in the
+    SIMP internet repositories.
+- Deprecated:
+  - ``simp::yum::repo::internet_simp_server`` and
+    ``simp::yum::repo::internet_simp_dependencies`` classes:
+    - These resources are no longer useful because their API matches the OBE
+      packagecloud SIMP repositories.
+    - As a workaround, the classes have been modified to use
+      ``simp::yum::repo::internet_simp`` to configure the correct repositories
+      at simp-project.com.
+    - You should switch to using ``simp::yum::repo::internet_simp``, directly, as
+      these classes will be removed in a future release.
+  - ``simp::yum::repo::sanitize_simp_release_slug`` function: a function
+     only useful to the deprecated classes.
 
 * Tue Sep 15 2020 Jeanne Greulich  <jeannegreulich@onyxpoint.com> - 4.12.0-0
 - Updated sssd/client configuration for EL8

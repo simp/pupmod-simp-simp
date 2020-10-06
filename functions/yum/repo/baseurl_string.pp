@@ -1,4 +1,4 @@
-# @return String
+# @return [String]
 function simp::yum::repo::baseurl_string(
   Array[Simp::HostOrURL] $servers,
   String                 $simp_baseurl_path,
