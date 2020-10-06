@@ -22,13 +22,13 @@ function simp::yum::repo::simp_release_version(
       # We get here if the simp.version file (in /etc/simp or
       # C:/ProgramData/SIMP) is not available or the pupmod-simp-simp
       # RPM is not installed.
-      fail('Unable to determine SIMP version automatically. You must configured SIMP version to use in SIMP internet repositories')
+      fail('Unable to determine SIMP version automatically. You must configure the SIMP version to use SIMP internet repositories')
     }
 
     # If the value is the result of "rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp",
     # it will have the dist qualifier (e.g. '.el7') on it.  Need to strip that
     # away.
-    $_simp_version_no_dist = inline_template('<%= @_simp_version.gsub(/\.el[0-9]+$/, "") %>')
+    $_simp_version_no_dist = $_simp_version.regsubst('\.el\d+$', '')
 
     if $_simp_version_no_dist =~ Simp::Version {
       $_release_version = $_simp_version_no_dist
