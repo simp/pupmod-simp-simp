@@ -24,6 +24,10 @@
 # @param ssl_set_cert_paths
 # @param ssl_listen_address
 # @param ssl_listen_port
+# @param cipher_suites
+#   Cipher suites supported by PuppetDB's HTTP interface (jetty).
+#   Used to set ``puppetdb::cipher_suites``.
+#
 # @param use_puppet_ssl_certs
 # @param disable_ssl
 # @param manage_package_repo
@@ -52,33 +56,34 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::puppetdb (
-  Simplib::Netlist     $trusted_nets                      = simplib::lookup('simp_options::trusted_nets', { 'default_value'            => ['127.0.0.1'] }),
-  Simplib::IP          $listen_address                    = '127.0.0.1',
-  Simplib::Port        $listen_port                       = 8138,
-  Boolean              $open_listen_port                  = false,
-  Boolean              $ssl_deploy_certs                  = true,
-  Boolean              $ssl_set_cert_paths                = true,
-  Simplib::IP          $ssl_listen_address                = '0.0.0.0',
-  Simplib::Port        $ssl_listen_port                   = 8139,
-  Boolean              $use_puppet_ssl_certs              = true,
-  Boolean              $disable_ssl                       = false,
-  Boolean              $manage_package_repo               = false,
-  String               $database_password                 = simplib::passgen('simp_puppetdb'),
-  String               $read_database_username            = 'simp_puppetdb',
-  String               $read_database_password            = simplib::passgen('simp_read_puppetdb'),
-  String               $read_database_name                = 'simp_puppetdb',
-  Optional[Boolean]    $read_database_ssl                 = undef,
-  String               $read_database_jdbc_ssl_properties = '?ssl=true',
-  Boolean              $manage_firewall                   = true,
-  Boolean              $manage_puppetserver               = true,
-  String               $java_max_memory                   = '40%',
-  Optional[String]     $java_start_memory                 = undef,
-  Stdlib::Absolutepath $java_tmpdir                       = '/opt/puppetlabs/puppet/cache/pdb_tmp',
-  Boolean              $java_heapdump_on_oom              = false,
-  Boolean              $java_prefer_ipv4                  = true,
-  Boolean              $automatic_dlo_cleanup             = true,
-  Integer              $dlo_max_age                       = 90,
-  Boolean              $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
+  Simplib::Netlist                    $trusted_nets                      = simplib::lookup('simp_options::trusted_nets', { 'default_value'            => ['127.0.0.1'] }),
+  Simplib::IP                         $listen_address                    = '127.0.0.1',
+  Simplib::Port                       $listen_port                       = 8138,
+  Boolean                             $open_listen_port                  = false,
+  Boolean                             $ssl_deploy_certs                  = true,
+  Boolean                             $ssl_set_cert_paths                = true,
+  Simplib::IP                         $ssl_listen_address                = '0.0.0.0',
+  Simplib::Port                       $ssl_listen_port                   = 8139,
+  Array[Simp::Puppetdb::Ciphersuites] $cipher_suites,                    # module data
+  Boolean                             $use_puppet_ssl_certs              = true,
+  Boolean                             $disable_ssl                       = false,
+  Boolean                             $manage_package_repo               = false,
+  String                              $database_password                 = simplib::passgen('simp_puppetdb'),
+  String                              $read_database_username            = 'simp_puppetdb',
+  String                              $read_database_password            = simplib::passgen('simp_read_puppetdb'),
+  String                              $read_database_name                = 'simp_puppetdb',
+  Optional[Boolean]                   $read_database_ssl                 = undef,
+  String                              $read_database_jdbc_ssl_properties = '?ssl=true',
+  Boolean                             $manage_firewall                   = true,
+  Boolean                             $manage_puppetserver               = true,
+  String                              $java_max_memory                   = '40%',
+  Optional[String]                    $java_start_memory                 = undef,
+  Stdlib::Absolutepath                $java_tmpdir                       = '/opt/puppetlabs/puppet/cache/pdb_tmp',
+  Boolean                             $java_heapdump_on_oom              = false,
+  Boolean                             $java_prefer_ipv4                  = true,
+  Boolean                             $automatic_dlo_cleanup             = true,
+  Integer                             $dlo_max_age                       = 90,
+  Boolean                             $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
@@ -136,6 +141,7 @@ class simp::puppetdb (
     'ssl_set_cert_paths'                => $ssl_set_cert_paths,
     'ssl_listen_address'                => $ssl_listen_address,
     'ssl_listen_port'                   => $ssl_listen_port,
+    'cipher_suites'                     => join($cipher_suites, ','),
     'disable_ssl'                       => $disable_ssl,
     'manage_package_repo'               => $manage_package_repo,
     'database_password'                 => $database_password,

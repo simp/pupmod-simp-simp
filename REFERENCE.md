@@ -61,6 +61,7 @@
 
 * [`Simp::HostOrURL`](#simphostorurl): Shortcut for either hosts or URLs
 * [`Simp::PackageEnsure`](#simppackageensure): Valid package resource 'ensure' settings
+* [`Simp::Puppetdb::Ciphersuites`](#simppuppetdbciphersuites): Valid SSL Cipher Suites for puppetdb
 * [`Simp::Runlevel`](#simprunlevel): Valid system runlevel settings
 * [`Simp::Scenario`](#simpscenario): Valid SIMP scenarios  See the documentation for details on 'SIMP scenarios'
 * [`Simp::Urls`](#simpurls): URL shortcut for SIMP classes
@@ -1477,6 +1478,13 @@ Data type: `Simplib::Port`
 
 
 Default value: `8139`
+
+##### `cipher_suites`
+
+Data type: `Array[Simp::Puppetdb::CipherSuites]`
+
+Cipher suites supported by PuppetDB's HTTP interface (jetty).
+Used to set ``puppetdb::cipher_suites``.
 
 ##### `use_puppet_ssl_certs`
 
@@ -3814,6 +3822,12 @@ Alias of `Variant[Simplib::Host, Simplib::Host::Port, Simplib::Hostname, Simplib
 Valid package resource 'ensure' settings
 
 Alias of `Enum['latest', 'absent', 'present', 'installed']`
+
+### `Simp::Puppetdb::Ciphersuites`
+
+Valid SSL Cipher Suites for puppetdb
+
+Alias of `Enum['TLS_RSA_WITH_AES_256_GCM_SHA384', 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_GCM_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA', 'TLS_EMPTY_RENEGOTIATION_INFO_SCSV']`
 
 ### `Simp::Runlevel`
 
