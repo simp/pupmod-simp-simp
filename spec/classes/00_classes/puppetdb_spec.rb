@@ -12,6 +12,109 @@ describe 'simp::puppetdb' do
             { :puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } }}.merge(os_facts)
           end
 
+          if os_facts[:os][:release][:major] == '6'
+           expected_ciphers = [
+            'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_RSA_WITH_AES_256_CBC_SHA256',
+            'TLS_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256',
+            'TLS_DHE_DSS_WITH_AES_256_CBC_SHA',
+            'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256',
+            'TLS_DHE_DSS_WITH_AES_128_CBC_SHA',
+            'TLS_EMPTY_RENEGOTIATION_INFO_SCSV'
+           ].join(',')
+          elsif os_facts[:os][:release][:major] == '7'
+           expected_ciphers = [
+            'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_RSA_WITH_AES_256_CBC_SHA256',
+            'TLS_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384',
+            'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256',
+            'TLS_DHE_DSS_WITH_AES_256_CBC_SHA',
+            'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256',
+            'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256',
+            'TLS_DHE_DSS_WITH_AES_128_CBC_SHA',
+            'TLS_EMPTY_RENEGOTIATION_INFO_SCSV'
+           ].join(',')
+          else
+           expected_ciphers = [
+            'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
+            'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
+            'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
+            'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
+            'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+            'TLS_EMPTY_RENEGOTIATION_INFO_SCSV'
+           ].join(',')
+          end
+
+
           context 'with default parameters' do
             let(:hieradata) { 'simp__puppetdb' }
 
@@ -25,6 +128,7 @@ describe 'simp::puppetdb' do
               :ssl_set_cert_paths                => true,
               :ssl_listen_address                => '0.0.0.0',
               :ssl_listen_port                   => 8139,
+              :cipher_suites                     => expected_ciphers,
               :disable_ssl                       => false,
               :manage_package_repo               => false,
   #            :database_password      => varies from run-to-run

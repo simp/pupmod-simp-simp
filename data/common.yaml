@@ -23,6 +23,11 @@ lookup_options:
   simp::nsswitch::defaults:
     merge:
       strategy: hash
+  simp::puppetdb::cipher_suites:
+    merge:
+      strategy: deep
+      knockout_prefix: "--"
+      sort_merged_arrays: true
 
 simp::vardir_owner: 'root'
 simp::vardir_group: 'root'

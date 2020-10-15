@@ -4,3 +4,6 @@ simp::server::data: ['none']
 simp::vardir_owner: 'Administrators'
 simp::vardir_group: 'Administrators'
 simp::vardir_mode: '0770'
+
+# Unused but needs to be set
+simp::puppetdb::cipher_suites: []

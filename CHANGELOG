@@ -1,3 +1,10 @@
+* Wed Oct 14 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 4.14.0-0
+- Added:
+  - ``simp::puppetdb::cipher_suites`` parameter to manage the
+    cipher suites supported by PuppetDB's HTTP interface (jetty).
+    - Used to set ``puppetdb::cipher_suites``.
+    - Value set to a safe set.
+
 * Mon Oct 05 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 4.13.0-0
 - Added:
   - ``simp::yum::repo::internet_simp`` class:
