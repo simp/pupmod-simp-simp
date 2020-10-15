@@ -1,3 +1,10 @@
+* Thu Oct 15 2020  Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.14.0-0
+- Added:
+  - New parameters to `simp::yum::repo::local_simp` and
+    `simp::yum::repo::local_os_updates`:
+      `relative_repo_path`, `baseurl`, and `gpgkey`
+  - `baseurl` and `gpgkey` allow complete yumrepo overrides
+
 * Wed Oct 14 2020 Liz Nemsick <lnemsick.simp@gmail.com> - 4.14.0-0
 - Added:
   - ``simp::puppetdb::cipher_suites`` parameter to manage the
