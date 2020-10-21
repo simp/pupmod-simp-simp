@@ -1,7 +1,7 @@
 # @summary Set up the local SIMP repositiories for network-isolated
 #   environments.
 #
-# Generally, this is used by the ISO installation's SIMP server and agents.
+# Generally, this is used by the ISO installation's SIMP agents.
 #
 # * By default, baseurl and GPG key URLs will work with repositories managed
 #   with ``simp::server::yum``.

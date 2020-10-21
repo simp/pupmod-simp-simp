@@ -1,7 +1,7 @@
 # @summary Configure yum to use a (SIMP-managed) OS Updates repository for
 #   network-isolated environments.
 #
-# Generally, this is used by the ISO installation's SIMP server and agents.
+# Generally, this is used by the ISO installation's SIMP agents.
 #
 # * By default, baseurl and GPG key URLs will work with repositories managed
 #   with `simp::server::yum`.
@@ -15,7 +15,7 @@
 #  @example Describing a single server with specific URLs
 #    # This explicitly sets the `baseurl` and `gpgkey` keys in os_updates.repo.
 #    # (This overrides all other parameters and automagic URL logic.)
-#    simp::yum::repo::os_updates_local {
+#    simp::yum::repo::local_os_updates {
 #      baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates',
 #      gpgkey  => 'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
 #    }
@@ -23,14 +23,14 @@
 #  @example Describing a single server by FQDN
 #    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
 #    # yumrepo with the `baseurl` "https://yum.test.simp/yum/CentOS/7/x86_64/Updates"
-#    simp::yum::repo::os_updates_local {
+#    simp::yum::repo::local_os_updates {
 #      servers => ['yum.test.simp']
 #    }
 #
 #  @example Describing a single server by FQDN
 #    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
 #    # yumrepo with a 3-entry `baseurl` and a 3-entry `gpgkey`
-#    simp::yum::repo::os_updates_local {
+#    simp::yum::repo::local_os_updates {
 #      servers => [
 #        'yum.test.simp',
 #        'yum2.test.simp',
