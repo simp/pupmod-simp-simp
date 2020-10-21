@@ -43,8 +43,10 @@
 * [`simp::yum::repo::internet_simp`](#simpyumrepointernet_simp): Configure yum to use the internet public repository for SIMP
 * [`simp::yum::repo::internet_simp_dependencies`](#simpyumrepointernet_simp_dependencies): DEPRECATED Configure yum to use the internet public repositories for SIMP dependencies
 * [`simp::yum::repo::internet_simp_server`](#simpyumrepointernet_simp_server): DEPRECATED Configure yum to use the internet public repository for SIMP servers
-* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (simp-managed) OS Updates repository
-* [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for disconnected environments.
+* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (SIMP-managed) OS Updates repository for
+network-isolated environments.
+* [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for network-isolated
+environments.
 * [`simp::yum::schedule`](#simpyumschedule): Set up a YUM update schedule.
 
 ### Functions
@@ -1481,7 +1483,7 @@ Default value: `8139`
 
 ##### `cipher_suites`
 
-Data type: `Array[Simp::Puppetdb::CipherSuites]`
+Data type: `Array[Simp::Puppetdb::Ciphersuites]`
 
 Cipher suites supported by PuppetDB's HTTP interface (jetty).
 Used to set ``puppetdb::cipher_suites``.
@@ -3424,36 +3426,42 @@ Default value: ``undef``
 
 ### `simp::yum::repo::local_os_updates`
 
-Generally, this is used by the ISO installation.
+Generally, this is used by the ISO installation's SIMP agents.
 
 * By default, baseurl and GPG key URLs will work with repositories managed
-  with ``simp::server::yum``.
+  with `simp::server::yum`.
 
-* Multiple yum servers and arbitrary URLs are accepted; see the ``servers``
+* Multiple yum servers and arbitrary URLs are accepted; see the `servers`
   parameter for details.
 
 * For more complex scenarios, create a site-specific profile and use the native
   `yumrepo` type directly.
 
+ @example Describing a single server with specific URLs
+   # This explicitly sets the `baseurl` and `gpgkey` keys in os_updates.repo.
+   # (This overrides all other parameters and automagic URL logic.)
+   simp::yum::repo::local_os_updates {
+     baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates',
+     gpgkey  => 'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
+   }
+
  @example Describing a single server by FQDN
-   # When classified to an CentOS 6 x86_64 host, this creates an os_updates
-   # yumrepo with the ``baseurl`` "https://yum.test.simp/yum/CentOS/6/x86_64/Updates"
-   simp::yum::repo::os_updates_local {
+   # When classified to an CentOS 7 x86_64 host, this creates an os_updates
+   # yumrepo with the `baseurl` "https://yum.test.simp/yum/CentOS/7/x86_64/Updates"
+   simp::yum::repo::local_os_updates {
      servers => ['yum.test.simp']
    }
 
  @example Describing a single server by FQDN
-   # When classified to an CentOS 6 x86_64 host, this creates an os_updates
-   # yumrepo with a 3-entry ``baseurl`` and a 3-entry ``gpgkey``
-   simp::yum::repo::os_updates_local {
+   # When classified to an CentOS 7 x86_64 host, this creates an os_updates
+   # yumrepo with a 3-entry `baseurl` and a 3-entry `gpgkey`
+   simp::yum::repo::local_os_updates {
      servers => [
        'yum.test.simp',
        'yum2.test.simp',
-       'https://yum.updates.url/full/path/to/repo/c6-64-u'
+       'https://yum.updates.url/specific/path/to/repo/c7-64-u'
      ],
-     extra_gpgkey_urls => [
-       'https://yum.updates.url/full/path/to/repo/c6-64-u/RPM-GPG-KEY-CentOS-6'
-     ]
+     gpgkey => 'https://yum.updates.url/full/path/to/repo/c6-64-u/RPM-GPG-KEY-CentOS-7',
    }
 
 #### Parameters
@@ -3467,9 +3475,11 @@ Data type: `Array[Simp::HostOrURL]`
 An Array of FQDNs, IPs, or URLs containing the yum server(s) to use.
 
 * An FQDN or IP will be assumed to host it yum repository and GPG keys at
-  the URLs established by ``simp::server::yum``.
+  the URLs established by `simp::server::yum`.
 
 * A URL will be used as-is, and should point directly to its yum repository.
+
+This parameter has no effect if the `baseurl` parameter is set directly.
 
 ##### `enable_repo`
 
@@ -3483,13 +3493,46 @@ Default value: ``true``
 
 Data type: `Simp::Urls`
 
-An optional Array of Urls to include additional GPG key files
+An optional Array of Urls to include additional GPG key files.
+This parameter has no effect if the `gpgkey` parameter is set directly.
 
 Default value: `[]`
 
+##### `relative_repo_path`
+
+Data type: `String[1]`
+
+The relative path to the yum repo relative to the URL(s) set in `$servers`.
+This parameter has no effect if the `baseurl` parameter is set directly.
+
+Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}"`
+
+##### `baseurl`
+
+Data type: `String[1]`
+
+The URL for this repository. Set this to absent to remove it from the file completely.
+Set this parameter directly to completely skip all automated URL logic.
+
+Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates")`
+
+##### `gpgkey`
+
+Data type: `String[1]`
+
+The URL for the GPG key with which packages from this repository are signed.
+Set this parameter directly to completely skip default URL/path logic.
+
+Default value: `simp::yum::repo::gpgkey_string(
+      $servers,
+      simp::yum::repo::gpgkeys::os_updates(),
+      $relative_repo_path,
+      $extra_gpgkey_urls
+  )`
+
 ### `simp::yum::repo::local_simp`
 
-Generally, this is used by the ISO installation.
+Generally, this is used by the ISO installation's SIMP agents.
 
 * By default, baseurl and GPG key URLs will work with repositories managed
   with ``simp::server::yum``.
@@ -3501,24 +3544,37 @@ Generally, this is used by the ISO installation.
   `yumrepo` type directly.
 
  @example Describing a single server by FQDN
-   # When classified to an CentOS 6 x86_64 host, this creates an os_updates
-   # yumrepo with the ``baseurl`` "https://yum.test.simp/yum/CentOS/6/x86_64/Updates"
-   simp::yum::repo::os_updates_local {
+   # When classified to an CentOS 7 x86_64 host, this creates a `simp`
+   # yumrepo with the ``baseurl`` "https://yum.test.simp/yum/CentOS/7/x86_64/Updates"
+   simp::yum::repo::simp_local {
      servers => ['yum.test.simp']
    }
 
  @example Describing a single server by FQDN
-   # When classified to an CentOS 6 x86_64 host, this creates an os_updates
-   # yumrepo with a 3-entry ``baseurl`` and a 3-entry ``gpgkey``
-   simp::yum::repo::os_updates_local {
+   # When classified to an CentOS 7 x86_64 host, this creates a `simp`
+   # yumrepo with a 3-entry ``baseurl`` and a multiple ``gpgkey`` entries
+   simp::yum::repo::simp_local {
      servers => [
        'yum.test.simp',
        'yum2.test.simp',
        'https://yum.updates.url/full/path/to/repo/c6-64-u'
      ],
-     extra_gpgkey_urls => [
-       'https://yum.updates.url/full/path/to/repo/c6-64-u/RPM-GPG-KEY-CentOS-6'
-     ]
+   }
+
+ @example Describing a single server with specific URLs
+   # This explicitly sets the `baseurl` and `gpgkey` keys in simp.repo
+   # (This overrides all other parameters and automagic URL logic.)
+   simp::yum::repo::local_simp {
+     baseurl => 'https://yum.test.simp/yum/SIMP/CentOS/8/x86_64',
+     gpgkey  => [
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-8',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-96',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP-6',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet',
+       'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs',
+     ].join("\n    ")
    }
 
 #### Parameters
@@ -3536,6 +3592,8 @@ An Array of FQDNs, IPs, or URLs containing the yum server(s) to use.
 
 * A URL will be used as-is, and should point directly to its yum repository.
 
+This parameter has no effect if the `baseurl` parameter is set directly.
+
 ##### `enable_repo`
 
 Data type: `Boolean`
@@ -3548,9 +3606,43 @@ Default value: ``true``
 
 Data type: `Simp::Urls`
 
-An optional Array of Urls to include additional GPG key files
+An optional Array of Urls to include additional GPG key files.
+This parameter has no effect if the `gpgkey` parameter is set directly.
 
 Default value: `[]`
+
+##### `relative_repo_path`
+
+Data type: `String[1]`
+
+The relative path to the yum repo relative to the URL(s) set in `$servers`.
+In simp repos
+This parameter has no effect if the `baseurl` parameter is set directly.
+
+Default value: `'SIMP'`
+
+##### `baseurl`
+
+Data type: `String[1]`
+
+The URL for this repository. Set this to absent to remove it from the file completely.
+Set this parameter directly to completely skip all automated URL logic.
+
+Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}")`
+
+##### `gpgkey`
+
+Data type: `String[1]`
+
+The URL for the GPG key with which packages from this repository are signed.
+Set this parameter directly to completely skip default URL/path logic.
+
+Default value: `simp::yum::repo::gpgkey_string(
+    $servers,
+    simp::yum::repo::gpgkeys::simp(),
+    "${relative_repo_path}/GPGKEYS",
+    $extra_gpgkey_urls
+  )`
 
 ### `simp::yum::schedule`
 
