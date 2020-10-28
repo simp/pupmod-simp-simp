@@ -72,8 +72,8 @@ class simp::yum::repo::local_os_updates (
   Boolean                $enable_repo        = true,
   Simp::Urls             $extra_gpgkey_urls  = [],
   String[1]              $relative_repo_path = "${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}",
-  String[1]              $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates"),
-  String[1]              $gpgkey             = simp::yum::repo::gpgkey_string(
+  Optional[String[1]]    $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates"),
+  Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
       $servers,
       simp::yum::repo::gpgkeys::os_updates(),
       $relative_repo_path,

@@ -1,4 +1,4 @@
-# @return [String]
+# @return [Variant[Undef,String]]
 function simp::yum::repo::baseurl_string(
   Array[Simp::HostOrURL] $servers,
   String                 $simp_baseurl_path,
@@ -11,5 +11,8 @@ function simp::yum::repo::baseurl_string(
       "https://${_server}/yum/${simp_baseurl_path}"
     }
   }
-  $_server_urls.join("\n    ")
+
+  unless empty($_server_urls) {
+    $_server_urls.unique.join("\n    ")
+  }
 }

@@ -1,4 +1,15 @@
-* Thu Oct 15 2020  Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.14.0-0
+* Wed Oct 28 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.1-0
+- Fixed:
+  - Ensure that the sudoers rule for removing the puppet ssldir is not created
+    when running from bolt since the directory target is changed at each bolt
+    run and will result in non-idempotency.
+  - Un-pinned the firewalld module version in .fixtures.yml because that no
+    longer appears to cause issues.
+  - Allow the local yum repos to optionally specify gpgkey or baseurl strings
+    since, technically, both are optional in the `yumrepo` type if they already
+    exist on disk.
+
+* Thu Oct 15 2020 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.14.0-0
 - Added:
   - New parameters to `simp::yum::repo::local_simp` and
     `simp::yum::repo::local_os_updates`:

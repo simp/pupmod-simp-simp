@@ -3509,7 +3509,7 @@ Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${fac
 
 ##### `baseurl`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 The URL for this repository. Set this to absent to remove it from the file completely.
 Set this parameter directly to completely skip all automated URL logic.
@@ -3518,7 +3518,7 @@ Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}
 
 ##### `gpgkey`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 The URL for the GPG key with which packages from this repository are signed.
 Set this parameter directly to completely skip default URL/path logic.
@@ -3623,7 +3623,7 @@ Default value: `'SIMP'`
 
 ##### `baseurl`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 The URL for this repository. Set this to absent to remove it from the file completely.
 Set this parameter directly to completely skip all automated URL logic.
@@ -3632,7 +3632,7 @@ Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}
 
 ##### `gpgkey`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 The URL for the GPG key with which packages from this repository are signed.
 Set this parameter directly to completely skip default URL/path logic.
@@ -3773,7 +3773,7 @@ The simp::yum::repo::baseurl_string function.
 
 The simp::yum::repo::baseurl_string function.
 
-Returns: `String`
+Returns: `Variant[Undef,String]`
 
 ##### `servers`
 
@@ -3799,7 +3799,7 @@ build. Of limited use outside of an ISO install.
 A function to return a proper set of SIMP YUM repositories for the default
 build. Of limited use outside of an ISO install.
 
-Returns: `String`
+Returns: `Variant[Undef,String]`
 
 ##### `servers`
 

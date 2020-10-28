@@ -177,17 +177,21 @@ class simp::admin (
     passwd    => !$passwordless_admin_sudo
   }
 
-  # This logic is to avoid allowing admins to run `rm -rf` when the fact
-  # doesn't exist
-  case $facts['puppet_settings'] {
-    Hash:    { $_ssldir = $facts['puppet_settings']['main']['ssldir'] }
-    default: { $_ssldir = '/etc/puppetlabs/puppet/ssl' }
-  }
-  sudo::user_specification { 'admin clean puppet certs':
-    user_list => ["%${admin_group}"],
-    runas     => 'root',
-    cmnd      => ["/bin/rm -rf ${$_ssldir}"],
-    passwd    => !$passwordless_admin_sudo
+  # Bolt sets this to a random directory every time it runs
+  unless simplib::in_bolt() {
+    # This logic is to avoid allowing admins to run `rm -rf` when the fact
+    # doesn't exist
+    case $facts['puppet_settings'] {
+      Hash:    { $_ssldir = $facts['puppet_settings']['main']['ssldir'] }
+      default: { $_ssldir = '/etc/puppetlabs/puppet/ssl' }
+    }
+
+    sudo::user_specification { 'admin clean puppet certs':
+      user_list => ["%${admin_group}"],
+      runas     => 'root',
+      cmnd      => ["/bin/rm -rf ${$_ssldir}"],
+      passwd    => !$passwordless_admin_sudo
+    }
   }
 
   $_polkit_ensure = ($set_polkit_admin_group and $facts['os']['release']['major'] >= '7') ? {
