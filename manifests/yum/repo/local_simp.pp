@@ -80,8 +80,8 @@ class simp::yum::repo::local_simp (
   Boolean                $enable_repo        = true,
   Simp::Urls             $extra_gpgkey_urls  = [],
   String[1]              $relative_repo_path = 'SIMP',
-  String[1]              $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}"),
-  String[1]              $gpgkey             = simp::yum::repo::gpgkey_string(
+  Optional[String[1]]    $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}"),
+  Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
     $servers,
     simp::yum::repo::gpgkeys::simp(),
     "${relative_repo_path}/GPGKEYS",

@@ -40,7 +40,6 @@ fixtures:
     fips: https://github.com/simp/pupmod-simp-fips
     firewalld:
       repo: https://github.com/simp/pupmod-voxpupuli-firewalld
-      ref: v4.2.2
     haveged: https://github.com/simp/pupmod-simp-haveged
     hocon: https://github.com/simp/pupmod-puppetlabs-hocon
     host_core:

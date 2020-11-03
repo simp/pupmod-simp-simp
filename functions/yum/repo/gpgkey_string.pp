@@ -13,7 +13,7 @@
 # @param extra_gpgkey_urls
 #   Additional GPG keys that need to be included
 #
-# @return [String]
+# @return [Variant[Undef,String]]
 function simp::yum::repo::gpgkey_string(
   Array[Simp::HostOrURL] $servers,
   Array[String]          $simp_gpgkeys,
@@ -26,6 +26,10 @@ function simp::yum::repo::gpgkey_string(
     $simp_gpgkeys.map |$_gpgkey| { "https://${_server}/yum/${simp_baseurl_path}/${_gpgkey}" }
   }
 
-  # smoosh everything into a `yumrepo`-compatible String
-  join(concat($_standard_gpgkey_urls, $extra_gpgkey_urls), "\n    ")
+  $_gpgkey_urls = concat($_standard_gpgkey_urls, $extra_gpgkey_urls).flatten.unique
+
+  unless empty($_gpgkey_urls) {
+    # smoosh everything into a `yumrepo`-compatible String
+    $_gpgkey_urls.join("\n    ")
+  }
 }
