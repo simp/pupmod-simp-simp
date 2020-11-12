@@ -1,3 +1,6 @@
+* Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.2-0
+- Update the required version of simp/svckill to the puppet 6 safe version.
+
 * Wed Oct 28 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.1-0
 - Fixed:
   - Ensure that the sudoers rule for removing the puppet ssldir is not created
