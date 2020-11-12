@@ -34,7 +34,7 @@ describe 'simp::root_user' do
               :password => 'mysecretpassword'
             }}
             it { is_expected.to create_file('/root') }
-            it { is_expected.to create_user('root').with_password('mysecretpassword') }
+            it { is_expected.to create_user('root').with_password(sensitive('mysecretpassword')) }
             it { is_expected.to create_group('root') }
           end
 
@@ -43,7 +43,7 @@ describe 'simp::root_user' do
               :hashed_password => '$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0'
             }}
             it { is_expected.to create_file('/root') }
-            it { is_expected.to create_user('root').with_password('$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0') }
+            it { is_expected.to create_user('root').with_password(sensitive(params[:hashed_password])) }
             it { is_expected.to create_group('root') }
           end
 

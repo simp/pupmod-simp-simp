@@ -93,9 +93,16 @@ class simp::one_shot::user (
     gid    => $gid
   }
 
+  if $password {
+    $_password = Sensitive($password)
+  }
+  else {
+    $_password = undef
+  }
+
   user { $username:
     ensure     => $_ensure,
-    password   => $password,
+    password   => $_password,
     comment    => 'SIMP Standalone User',
     forcelocal => true,
     uid        => $uid,

@@ -10,7 +10,7 @@ group :test do
   gem 'rake'
   gem 'puppet', puppet_version
   gem 'rspec'
-  gem 'rspec-puppet'
+  gem 'rspec-puppet', '~> 2.8.0'
   gem 'hiera-puppet-helper'
   gem 'puppetlabs_spec_helper'
   gem 'metadata-json-lint'
@@ -20,8 +20,6 @@ group :test do
   gem 'simp-rspec-puppet-facts', ENV['SIMP_RSPEC_PUPPET_FACTS_VERSION'] || '~> 3.1'
   gem 'simp-rake-helpers', ENV['SIMP_RAKE_HELPERS_VERSION'] || ['> 5.11', '< 6']
   gem( 'pdk', ENV['PDK_VERSION'] || '~> 1.0', :require => false) if major_puppet_version > 5
-  # Remove when rspec-puppet 2.8.0 is released
-  gem 'rspec-expectations', '~> 3.9.0'
 end
 
 group :development do
