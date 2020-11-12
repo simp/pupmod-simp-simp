@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.14.1",
+  "version": "4.14.2",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -161,7 +161,7 @@
     },
     {
       "name": "simp/svckill",
-      "version_requirement": ">= 3.3.0 < 4.0.0"
+      "version_requirement": ">= 3.6.1 < 4.0.0"
     },
     {
       "name": "simp/swap",
