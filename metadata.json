@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.14.2",
+  "version": "4.14.3",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -125,7 +125,7 @@
     },
     {
       "name": "simp/selinux",
-      "version_requirement": ">= 2.4.1 < 3.0.0"
+      "version_requirement": ">= 2.6.1 < 3.0.0"
     },
     {
       "name": "simp/simp_apache",

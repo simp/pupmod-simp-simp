@@ -12,7 +12,7 @@
 * [`simp::base_services`](#simpbase_services): Deprecated - This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
 * [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP
-* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules
+* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): Toggles the ability to load any further kernel modules into the system until the system has been rebooted.
 * [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
 * [`simp::mountpoints::el6_tmp_fix`](#simpmountpointsel6_tmp_fix): There is a bizarre bug where ``/tmp`` and ``/var/tmp`` will have
 * [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
@@ -684,8 +684,6 @@ a reboot is required if necessary.
 Default value: ``true``
 
 ### `simp::kmod_blacklist::lock_modules`
-
-into the system until the system has been rebooted.
 
 This will only take effect if the system has the ``kernel.modules_disabled``
 sysctl feature.
