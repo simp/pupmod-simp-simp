@@ -1,3 +1,7 @@
+* Thu Nov 19 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.3-0
+- Call `selinux::install` prior to using native types that require the packages
+  to be installed.
+
 * Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.2-0
 - Update the required version of simp/svckill to the puppet 6 safe version.
 
