@@ -111,13 +111,13 @@ EOM
 
   def disable_service(service_name)
     info(title("Disabling #{service_name} service", 2))
-    result = execute("puppet resource service #{service_name} enable=false")
+    result = execute("/opt/puppetlabs/bin/puppet resource service #{service_name} enable=false")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
   def enable_service(service_name)
     info(title("Enabling #{service_name} service", 2))
-    result = execute("puppet resource service #{service_name} enable=true")
+    result = execute("/opt/puppetlabs/bin/puppet resource service #{service_name} enable=true")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
