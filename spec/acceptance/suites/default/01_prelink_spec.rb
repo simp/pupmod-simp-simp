@@ -12,7 +12,10 @@ describe 'simp::prelink class' do
 
   hosts.each do |host|
     context "on #{host}" do
-      if pfact_on(host, 'prelink')
+      begin
+        # This will fail if the fact is not found
+        pfact_on(host, 'prelink')
+
         context 'with default parameters' do
           it 'should apply manifest' do
             apply_manifest_on(host, manifest, :catch_failures => true)
@@ -110,7 +113,7 @@ describe 'simp::prelink class' do
             expect( check_for_package(host, 'prelink') ).to be false
           end
         end
-      else
+      rescue KeyError
         it 'does not have prelink capabilities'
       end
     end
