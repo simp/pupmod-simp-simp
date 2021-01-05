@@ -2,15 +2,17 @@
 # the '.rb' suffix.  So, use a symlink to it that has the '.rb' suffix.
 # This symlink is in the tests directory.
 $: << File.expand_path(File.join(File.dirname(__FILE__), '..','..','tests'))
-require 'bootstrap_simp_client'
-
 require 'spec_helper'
 require 'tmpdir'
+require 'bootstrap_simp_client'
 
 describe 'BootstrapSimpClient' do
 
-  let(:bootstrap) { BootstrapSimpClient.new }
   let(:puppet_command) { '/opt/puppetlabs/bin/puppet' }
+
+  let(:bootstrap) do
+    BootstrapSimpClient.new
+  end
 
   let(:success_result) {{
     :exitstatus => 0,
@@ -42,6 +44,9 @@ describe 'BootstrapSimpClient' do
     # Need to make sure we have something to find
     FileUtils.touch(@puppet_conf_file)
     ENV['LOCKED'] = nil
+
+    BootstrapSimpClient.expects(:puppet_exe_path).returns(puppet_command)
+    BootstrapSimpClient.expects(:puppet_config_path).returns(@puppet_conf_file)
   end
 
   after :each do
@@ -195,7 +200,6 @@ EOM
   # will also test validate_options here
   describe '#parse_command_line' do
     it 'uses defaults when only required options are specified' do
-      File.stubs(:exist?).returns(true)
       test_args = [ '-s', 'puppet.test.local', '-c', 'puppetca.test.local']
       bootstrap.parse_command_line(test_args)
 
@@ -210,7 +214,7 @@ EOM
                                    BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE),
         :set_static_hostname    => false,
         :ntp_servers            => [],
-        :puppet_conf_file       => BootstrapSimpClient::DEFAULT_PUPPET_CONF_FILE,
+        :puppet_conf_file       => bootstrap.options[:puppet_conf_file],
         :digest_algorithm       => BootstrapSimpClient::DEFAULT_DIGEST_ALGORITHM,
         :puppet_keylength       => BootstrapSimpClient::DEFAULT_PUPPET_KEYLENGTH,
         :puppet_ca_port         => BootstrapSimpClient::DEFAULT_PUPPET_CA_PORT,
