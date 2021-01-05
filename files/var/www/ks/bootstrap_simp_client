@@ -10,16 +10,18 @@ class BootstrapSimpClient
 
   class ConfigurationError < RuntimeError; end
 
+  PUPPET_EXE = '/opt/puppetlabs/bin/puppet'
+  unless File.exist?(PUPPET_EXE)
+    PUPPET_EXE = %x{which puppet}.strip
+  end
+
+  raise 'Error: Could not find a puppet executable on the system' unless File.exist?(PUPPET_EXE)
+
   DEFAULT_BOOTSTRAP_SERVICE     = 'simp_client_bootstrap'
   DEFAULT_SERVICE_CONFIG_DIR    = '/etc/sysconfig'
   DEFAULT_SET_STATIC_HOSTNAME   = false
 
-  # puppet config
-  if File.exist?('/opt/puppetlabs/bin/puppet')
-    DEFAULT_PUPPET_CONF_FILE    = `/opt/puppetlabs/bin/puppet config print config`.strip
-  else
-    DEFAULT_PUPPET_CONF_FILE    = '/etc/puppetlabs/puppet/puppet.conf'
-  end
+  DEFAULT_PUPPET_CONF_FILE      = `#{PUPPET_EXE} config print config`.strip
   DEFAULT_PUPPET_CA_PORT        = 8141
   DEFAULT_DIGEST_ALGORITHM      = 'sha256'
   DEFAULT_PUPPET_KEYLENGTH      = 4096
@@ -111,13 +113,13 @@ EOM
 
   def disable_service(service_name)
     info(title("Disabling #{service_name} service", 2))
-    result = execute("/opt/puppetlabs/bin/puppet resource service #{service_name} enable=false")
+    result = execute("#{PUPPET_EXE} resource service #{service_name} enable=false")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
   def enable_service(service_name)
     info(title("Enabling #{service_name} service", 2))
-    result = execute("/opt/puppetlabs/bin/puppet resource service #{service_name} enable=true")
+    result = execute("#{PUPPET_EXE} resource service #{service_name} enable=true")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
@@ -401,7 +403,7 @@ EOM
       end
 
       cmd = [
-        '/opt/puppetlabs/bin/puppet',
+        PUPPET_EXE,
         'agent',
         '--onetime',
         '--no-daemonize',
