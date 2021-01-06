@@ -1,8 +1,10 @@
 # ------------------------------------------------------------------------------
 #             NOTICE: **This file is maintained with puppetsync**
 #
-# Everything above the "Repo-specific content" comment will be overwritten by
-# the next puppetsync.
+# This file is updated automatically as part of a puppet module baseline.
+#
+# The next baseline sync will overwrite any local changes to everything above
+# the line "# Repo-specific content"
 # ------------------------------------------------------------------------------
 # The testing matrix considers ruby/puppet versions supported by SIMP and PE:
 #
@@ -13,7 +15,7 @@
 # Release       Puppet   Ruby    EOL
 # SIMP 6.4      5.5      2.4.10  TBD
 # PE 2018.1     5.5      2.4.10  2021-01 (LTS overlap)
-# PE 2019.8     6.18     2.5.7   2021-11 (LTS)
+# PE 2019.8     6.18     2.5.7   2022-12 (LTS)
 ---
 
 stages:
@@ -43,20 +45,35 @@ variables:
   BUNDLE_NO_PRUNE:   'true'
 
 
-# bundler dependencies and caching
-#
-# - Cache bundler gems between pipelines foreach Ruby version
-# - Try to use cached and local resources before downloading dependencies
-# --------------------------------------
+# bundler dependencies + caching, optional RVM setup, with diagnostic output
+# --------------------------------------------------------------------------
 .setup_bundler_env: &setup_bundler_env
   cache:
+    # Cache bundler gems between pipelines for each Ruby version
     key: "${CI_PROJECT_NAMESPACE}_ruby-${MATRIX_RUBY_VERSION}_bundler"
     paths:
       - '.vendor'
   before_script:
-    # Try to force the underlying ruby manager to use the correct version
-    - 'echo "${MATRIX_RUBY_VERSION}" > .ruby-version && cd .. && cd -'
     - 'ruby -e "puts %(\n\n), %q(=)*80, %(\nSIMP-relevant Environment Variables:\n\n#{e=ENV.keys.grep(/^PUPPET|^SIMP|^BEAKER|MATRIX/); pad=e.map{|x| x.size}.max+1; e.map{|v| %(    * #{%(#{v}:).ljust(pad)} #{39.chr + ENV[v] + 39.chr}\n)}.join}\n),  %q(=)*80, %(\n\n)"'
+    # Diagnostic ruby & gem information
+    - 'which ruby && ruby --version || :'
+    - "[[ $- == *i* ]] && echo 'Interactive shell session' || echo 'Non-interactive shell session'"
+    - "shopt -q login_shell && echo 'Login shell' || echo 'Not a login shell'"
+    - 'rvm ls || :'
+
+    # If RVM is available, make SURE it's using the right Ruby:
+    #   * Source rvm (to run in non-login shells)
+    #   * If any $MATRIX_RUBY_VERSION rubies are available, use the latest
+    #   * Otherwise: install & use ${MATRIX_RUBY_VERSION}-head (e.g., latest)
+    #     * ^^ This could be wonky and introduce variations across runners
+    #     * ^^ maybe it should just fail if there is no $MATRIX_RUBY_VERSION installed?
+    - "command -v rvm && { if declare -p rvm_path &> /dev/null; then source \"${rvm_path}/scripts/rvm\"; else source \"$HOME/.rvm/scripts/rvm\" || source /etc/profile.d/rvm.sh; fi; }"
+    - "command -v rvm && { LATEST_RVM_RUBY_XY=\"$(rvm ls | grep \"$MATRIX_RUBY_VERSION\" | tail -1 | sed -e 's/^.*\\([0-9]\\+\\.[0-9]\\+\\.[0-9]\\+\\).*$/\\1/g')\"; if [ -z \"$LATEST_RVM_RUBY_XY\" ]; then LATEST_RVM_RUBY_XY=\"${MATRIX_RUBY_VERSION}-head\"; rvm install \"$LATEST_RVM_RUBY\" --no-docs; else echo \"Found RVM Ruby: '${LATEST_RVM_RUBY_XY}'\"; fi; rvm use \"$LATEST_RVM_RUBY_XY\" ;  }"
+    - 'ruby --version || :'
+    - 'gem list sync || :'
+
+    # Bundle gems (preferring cached > local > downloaded resources)
+    #   * Try to use cached and local resources before downloading dependencies
     - 'declare GEM_BUNDLER_VER=(-v "~> ${BUNDLER_VERSION:-1.17.1}")'
     - 'declare GEM_INSTALL_CMD=(gem install --no-document)'
     - 'declare BUNDLER_INSTALL_CMD=(bundle install --no-binstubs --jobs $(nproc) "${FLAGS[@]}")'
@@ -65,35 +82,40 @@ variables:
     - 'rm -rf pkg/ || :'
     - 'bundle check || rm -f Gemfile.lock && ("${BUNDLER_INSTALL_CMD[@]}" --local || "${BUNDLER_INSTALL_CMD[@]}" || bundle pristine ||  "${BUNDLER_INSTALL_CMD[@]}") || { echo "PIPELINE: Bundler could not install everything (see log output above)" && exit 99 ; }'
 
+    # Diagnostic bundler, ruby, and gem checks:
+    - 'bundle exec rvm ls || :'
+    - 'bundle exec which ruby || :'
+    - 'bundle show sync || :'
+    - 'bundle exec gem list sync || :'
+
+
 # Assign a matrix level when your test will run.  Heavier jobs get higher numbers
 # NOTE: To skip all jobs with a SIMP_MATRIX_LEVEL, set SIMP_MATRIX_LEVEL=0
+# ------------------------------------------------------------------------------
 
 .relevant_file_conditions_trigger_spec_tests: &relevant_file_conditions_trigger_spec_tests
   changes:
     - .gitlab-ci.yml
     - .fixtures.yml
+    - .rspec
+    - metadata.json
     - "spec/spec_helper.rb"
-    - "spec/{classes,unit,defines,type_aliases,types,hosts}/**/*.rb"
-    - "{manifests,files,types}/**/*"
-    - "templates/*.{erb,epp}"
-    - "lib/**/*"
+    - "spec/{classes,unit,defines,type_aliases,types,hosts,lib}/**/*.rb"
+    - "{SIMP,data,manifests,files,types,lib}/**/*"
+    - "templates/**/*.{erb,epp}"
     - "Gemfile"
-    - "SIMP/**/*"
-    - "data/**/*"
   exists:
-    - "spec/{classes,unit,defines,type_aliases,types,hosts}/**/*_spec.rb"
+    - "spec/{classes,unit,defines,type_aliases,types,hosts,lib}/**/*_spec.rb"
 
 .relevant_file_conditions_trigger_acceptance_tests: &relevant_file_conditions_trigger_acceptance_tests
   changes:
     - .gitlab-ci.yml
+    - .fixtures.yml
     - "spec/spec_helper_acceptance.rb"
-    - "spec/acceptance/**/*"
-    - "{manifests,files,types}/**/*"
-    - "templates/*.{erb,epp}"
-    - "lib/**/*"
+    - "spec/{helpers,acceptance}/**/*"
+    - "{SIMP,data,manifests,files,types,lib}/**/*"
+    - "templates/**/*.{erb,epp}"
     - "Gemfile"
-    - "SIMP/**/*"
-    - "data/**/*"
   exists:
     - "spec/acceptance/**/*_spec.rb"
 
@@ -148,8 +170,8 @@ variables:
     - <<: *skip_job_when_commit_message_says_to
     - <<: *force_run_job_when_var_and_lvl_1_or_above
     - <<: *force_run_job_when_commit_mssage_lvl_1_or_above
-    - <<: *relevant_file_conditions_trigger_acceptance_tests
-      <<: *run_job_when_level_1_or_above_w_changes
+    - <<: *run_job_when_level_1_or_above_w_changes
+      <<: *relevant_file_conditions_trigger_acceptance_tests
     - when: never
 
 .with_SIMP_SPEC_MATRIX_LEVEL_1: &with_SIMP_SPEC_MATRIX_LEVEL_1
@@ -157,8 +179,8 @@ variables:
     - <<: *skip_job_when_commit_message_says_to
     - <<: *force_run_job_when_commit_mssage_lvl_1_or_above
     - <<: *force_run_job_when_var_and_lvl_1_or_above
-    - <<: *relevant_file_conditions_trigger_spec_tests
-      <<: *run_job_when_level_1_or_above_w_changes
+    - <<: *run_job_when_level_1_or_above_w_changes
+      <<: *relevant_file_conditions_trigger_spec_tests
     - when: never
 
 # SIMP_MATRIX_LEVEL=2: Resource-heavy or redundant jobs
@@ -216,11 +238,11 @@ variables:
     MATRIX_RUBY_VERSION: '2.5'
 
 .pup_7: &pup_7
-  image: 'ruby:2.5'
+  image: 'ruby:2.7'
   variables:
     PUPPET_VERSION: '~> 7.0'
     BEAKER_PUPPET_COLLECTION: 'puppet7'
-    MATRIX_RUBY_VERSION: '2.5'
+    MATRIX_RUBY_VERSION: '2.7'
 
 # Testing Environments
 #-----------------------------------------------------------------------
@@ -264,8 +286,7 @@ releng_checks:
   stage: 'validation'
   tags: ['docker']
   script:
-    - 'if `hash apt-get`; then apt-get update; fi'
-    - 'if `hash apt-get`; then apt-get install -y rpm; fi'
+    - 'command -v rpm || if command -v apt-get; then apt-get update; apt-get install -y rpm; fi ||:'
     - 'bundle exec rake check:dot_underscore'
     - 'bundle exec rake check:test_file'
     - 'bundle exec rake pkg:check_version'
@@ -276,16 +297,8 @@ releng_checks:
 # Linting
 #-----------------------------------------------------------------------
 
-pup5-lint:
-  <<: *pup_5
-  <<: *lint_tests
-
-pup6-lint:
+pup-lint:
   <<: *pup_6
-  <<: *lint_tests
-
-pup7-lint:
-  <<: *pup_7
   <<: *lint_tests
 
 # Unit Tests
@@ -325,12 +338,6 @@ pup5:
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default]'
-
-pup5-fips:
-  <<: *pup_5
-  <<: *acceptance_base
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
 
 pup6:
   <<: *pup_6
@@ -436,9 +443,3 @@ pup7:
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default]'
-
-pup7-fips:
-  <<: *pup_7
-  <<: *acceptance_base
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
