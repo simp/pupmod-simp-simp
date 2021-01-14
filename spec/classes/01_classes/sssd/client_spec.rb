@@ -16,7 +16,11 @@ describe 'simp::sssd::client' do
         else
           context 'with default parameters' do
             it_should_behave_like 'sssd client'
-            it { is_expected.to_not contain_sssd__domain('LOCAL')}
+            if os_facts[:os][:release][:major] < '8'
+              it { is_expected.to contain_sssd__domain('LOCAL')}
+            else
+              it { is_expected.to_not contain_sssd__domain('LOCAL')}
+            end
             it { is_expected.to_not contain_sssd__domain('LDAP')}
           end
 
