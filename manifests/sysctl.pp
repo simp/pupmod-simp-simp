@@ -251,14 +251,14 @@ class simp::sysctl (
   }
   else {
     $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
-    sysctl { 'net.ipv6.conf.all.disable_ipv6': value => $_disable_ipv6 }
   }
 
-  if $facts['ipv6_enabled'] and ( $_disable_ipv6 == 0 ) {
+  unless $facts['simplib_sysctl']['net.ipv6.conf.all.disable_ipv6'] =~ Undef {
     sysctl {
       'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
       'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
       'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
+      'net.ipv6.conf.all.disable_ipv6'             : value => $_disable_ipv6;
       'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
       'net.ipv6.conf.all.accept_ra'                : value => $net__ipv6__conf__all__accept_ra;
       'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
