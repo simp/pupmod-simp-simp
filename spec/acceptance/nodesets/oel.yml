@@ -6,7 +6,7 @@
   end
 -%>
 HOSTS:
-  server-oel7:
+  server-oel7.simp.beaker:
     roles:
       - server
       - default

@@ -6,7 +6,7 @@
   end
 -%>
 HOSTS:
-  server-el7:
+  server-el7.simp.beaker:
     roles:
       - server
       - default
