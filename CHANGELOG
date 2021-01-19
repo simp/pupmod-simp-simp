@@ -1,3 +1,7 @@
+* Tue Jan 19 2021 Kendall Moore <kendall.moore@onyxpoint.com> - 4.14.4-0
+- Allow explicit management of IPv6 kernel tuning parameters as long as IPv6
+  is loaded into the kernel.
+
 * Thu Nov 19 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.3-0
 - Call `selinux::install` prior to using native types that require the packages
   to be installed.
