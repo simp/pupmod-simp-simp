@@ -7,7 +7,8 @@ function simp::yum::repo::gpgkeys::os_updates() {
     'OracleLinux': {$release_key = 'RPM-GPG-KEY-oracle'}
     'CentOS': {
       case $facts['os']['release']['major'] {
-        '6', '7': {  $release_key = "RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"}
+        #FIXME Not handling EL8 yet
+        '7': {  $release_key = "RPM-GPG-KEY-${facts['os']['name']}-${facts['os']['release']['major']}"}
         default: { $release_key = "RPM-GPG-KEY-${facts['os']['name']}-Official"}
       }
     }

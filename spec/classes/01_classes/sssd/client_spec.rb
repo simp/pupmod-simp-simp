@@ -16,7 +16,7 @@ describe 'simp::sssd::client' do
         else
           context 'with default parameters' do
             it_should_behave_like 'sssd client'
-            if os_facts[:os][:release][:major] <= '7'
+            if os_facts[:os][:release][:major] == '7'
               it { is_expected.to contain_sssd__domain('LOCAL')}
             else
               it { is_expected.to_not contain_sssd__domain('LOCAL')}
@@ -36,24 +36,13 @@ describe 'simp::sssd::client' do
               :min_id            => 501
             }}
             it_should_behave_like 'sssd client'
-            if os_facts[:os][:release][:major] <= '6'
-              it { is_expected.to contain_sssd__domain('LOCAL').with({
-                'id_provider'   => 'local',
-                'auth_provider' => 'local',
-                'min_id' => 501,
-                'enumerate' => false,
-                'cache_credentials' => false
-                })
-              }
-            else
-              it { is_expected.to contain_sssd__domain('LOCAL').with({
-                'id_provider'   => 'files',
-                'min_id' => 501,
-                'enumerate' => false,
-                'cache_credentials' => false
-                })
-              }
-            end
+            it { is_expected.to contain_sssd__domain('LOCAL').with({
+              'id_provider'   => 'files',
+              'min_id' => 501,
+              'enumerate' => false,
+              'cache_credentials' => false
+              })
+            }
             it { is_expected.to contain_sssd__domain('LDAP').with({
               'min_id' => 501,
               'enumerate' => true,

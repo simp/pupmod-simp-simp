@@ -68,11 +68,6 @@ describe 'simp::server' do
               'ssh'
             ]
             case os_facts[:os][:release][:major]
-            when '6'
-              simp_lite_os_spec = [
-                'chkrootkit',
-                'ntpd'
-              ]
             when '7'
               simp_lite_os_spec = [
                 'rkhunter',

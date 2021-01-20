@@ -17,20 +17,20 @@ describe 'simp::server::rsync_shares' do
                   'global' => { 'id' => 'Global', 'shares' => ['clamav', 'jenkins_plugins', 'mcafee'] },
                   'centos' => {
                     'id'     => 'CentOS',
-                    '6'      => { 'id' => '6',      'shares' => ['bind_dns'] },
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
+                    '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
                     'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
                   },
                   'redhat' => {
                     'id'     => 'RedHat',
-                    '6'      => { 'id' => '6',      'shares' => ['bind_dns'] },
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
+                    '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
                     'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
                   },
                   'oraclelinux' => {
                     'id'     => 'OracleLinux',
-                    '6'      => { 'id' => '6',      'shares' => ['bind_dns'] },
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
+                    '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
                     'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
                   }
                 }
@@ -45,8 +45,8 @@ describe 'simp::server::rsync_shares' do
           it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
           it { is_expected.to create_rsync__server__section("mcafee_#{environment}") }
           it { is_expected.to create_rsync__server__section("jenkins_plugins_#{environment}") }
-          it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_6") }
           it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
+          it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_8") }
           it { is_expected.to create_rsync__server__section("apache_#{environment}_RedHat") }
           it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_RedHat") }
           it { is_expected.to create_rsync__server__section("dhcpd_#{environment}_RedHat") }
@@ -92,8 +92,8 @@ describe 'simp::server::rsync_shares' do
             it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
             it { is_expected.to_not create_rsync__server__section("mcafee_#{environment}") }
             it { is_expected.to_not create_rsync__server__section("jenkins_plugins_#{environment}") }
-            it { is_expected.to_not create_rsync__server__section("bind_dns_default_#{environment}_RedHat_6") }
             it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
+            it { is_expected.to_not create_rsync__server__section("bind_dns_default_#{environment}_RedHat_8") }
             it { is_expected.to create_rsync__server__section("apache_#{environment}_RedHat") }
             it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_RedHat") }
             it { is_expected.to_not create_rsync__server__section("dhcpd_#{environment}_RedHat") }
