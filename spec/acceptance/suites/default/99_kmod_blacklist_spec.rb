@@ -93,7 +93,7 @@ describe 'simp::kmod_blacklist class' do
       }
 
       it 'sets up a module for removal tests' do
-        on(host, %(modprobe crypto_null))
+        on(host, %(modprobe snd_usb_audio))
       end
 
       it 'should lock via hiera' do
@@ -115,14 +115,14 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'should prevent manual removal of a loaded module' do
-        on(host, 'rmmod crypto_null', :acceptable_exit_codes => [1])
+        on(host, 'rmmod snd_usb_audio', :acceptable_exit_codes => [1])
       end
 
       it 'should unlock on reboot' do
         host.reboot
 
-        on(host, 'modprobe crypto_null')
-        on(host, 'rmmod crypto_null')
+        on(host, 'modprobe snd_usb_audio')
+        on(host, 'rmmod snd_usb_audio')
       end
     end
   end

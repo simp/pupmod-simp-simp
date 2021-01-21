@@ -34,6 +34,7 @@ fixtures:
     cron_core:
       repo: https://github.com/simp/pupmod-puppetlabs-cron_core.git
       puppet_version: ">= 6.0.0"
+    crypto_policy: https://github.com/simp/pupmod-simp-crypto_policy
     deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
@@ -88,6 +89,7 @@ fixtures:
     simplib: https://github.com/simp/pupmod-simp-simplib
     simp_apache: https://github.com/simp/pupmod-simp-apache
     simp_banners: https://github.com/simp/pupmod-simp-simp_banners
+    simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog

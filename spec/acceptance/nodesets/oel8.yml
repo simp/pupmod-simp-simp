@@ -6,24 +6,26 @@
   end
 -%>
 HOSTS:
-  server-el8.simp.beaker:
+  server-oel8.simp.beaker:
     roles:
       - server
       - default
       - master
       - simp_server
+      - el8
     platform:   el-8-x86_64
-    box:        centos/8
+    box:        generic/oracle8
     hypervisor: <%= hypervisor %>
     yum_repos:
       updates:
-        baseurl: 'http://mirror.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/'
+        baseurl: 'https://yum$ociregion.oracle.com/repo/OracleLinux/OL8/baseos/latest/$basearch/'
         gpgkeys:
-          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol8
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
         gpgkeys:
           - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+
 CONFIG:
   log_level: verbose
   type: aio
