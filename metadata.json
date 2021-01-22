@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.14.3",
+  "version": "4.15.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -195,14 +195,13 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 5.0.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
@@ -210,7 +209,6 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]
@@ -218,7 +216,6 @@
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7",
         "8"
       ]

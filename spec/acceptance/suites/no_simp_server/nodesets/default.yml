@@ -6,19 +6,24 @@
   end
 -%>
 HOSTS:
-  oel7:
+  el7-server:
     roles:
       - default
+      - server
     platform:   el-7-x86_64
-    box:        generic/oracle7
+    box:        centos/7
+    hypervisor: <%= hypervisor %>
+
+  el7-client:
+    roles:
+      - client
+    platform:   el-7-x86_64
+    box:        centos/7
     hypervisor: <%= hypervisor %>
 
 CONFIG:
   log_level: verbose
-  type:      aio
-  vagrant_memsize: 256
-  synced_folder: disabled
+  type: aio
 <% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
   puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
 <% end -%>
-  # vb_gui: true

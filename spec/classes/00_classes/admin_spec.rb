@@ -43,17 +43,15 @@ describe 'simp::admin' do
               :cmnd      => ['/bin/rm -rf /opt/puppet/somewhere/ssl'],
               :passwd    => false
             }) }
-            if os_facts[:os][:release][:major].to_i >= 7
-              it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
-                :ensure => 'present',
-                :priority => 10,
-                :content => <<-EOF
-polkit.addAdminRule(function(action, subject) {
-  return ["unix-group:administrators"];
-});
-                EOF
-              }) }
-            end
+            it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
+              :ensure => 'present',
+              :priority => 10,
+              :content => <<~EOF
+                polkit.addAdminRule(function(action, subject) {
+                  return ["unix-group:administrators"];
+                });
+              EOF
+            }) }
 
             it { is_expected.to_not create_selinux_login('%administrators') }
           end
@@ -123,13 +121,11 @@ polkit.addAdminRule(function(action, subject) {
           end
 
           context 'polkit settings' do
-            if os_facts[:os][:release][:major].to_i >= 7
-              it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
-                :ensure   => 'present',
-                :priority => 10,
-                :content  => /unix-group:administrators/
-              }) }
-            end
+            it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
+              :ensure   => 'present',
+              :priority => 10,
+              :content  => /unix-group:administrators/
+            }) }
 
             context 'with set_polkit_admin_group => false' do
               let(:params) {{ :set_polkit_admin_group => false }}
@@ -140,13 +136,11 @@ polkit.addAdminRule(function(action, subject) {
 
             context 'with admin_group => coolkids' do
               let(:params) {{ :admin_group => 'coolkids' }}
-              if os_facts[:os][:release][:major].to_i >= 7
-                it { is_expected.to create_polkit__authorization__rule('Set coolkids group to a policykit administrator').with({
-                  :ensure   => 'present',
-                  :priority => 10,
-                  :content  => /unix-group:coolkids/
-                }) }
-              end
+              it { is_expected.to create_polkit__authorization__rule('Set coolkids group to a policykit administrator').with({
+                :ensure   => 'present',
+                :priority => 10,
+                :content  => /unix-group:coolkids/
+              }) }
             end
           end
 

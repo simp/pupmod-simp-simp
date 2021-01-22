@@ -26,9 +26,6 @@ describe 'simp::yum::repo::local_simp' do
       }
       let(:other_gpgkeys){
         {
-           'RedHat-6'      => ['RPM-GPG-KEY-EPEL-6','RPM-GPG-KEY-redhat-release'],
-           'OracleLinux-6' => ['RPM-GPG-KEY-EPEL-6','RPM-GPG-KEY-oracle'],
-           'CentOS-6'      => ['RPM-GPG-KEY-EPEL-6'],
            'RedHat-7'      => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-redhat-release'],
            'OracleLinux-7' => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-oracle'],
            'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7'],

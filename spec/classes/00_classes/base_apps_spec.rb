@@ -24,16 +24,9 @@ describe 'simp::base_apps' do
                 is_expected.to create_package(package).with_ensure('installed')
               end
             end
-            if os_facts[:os][:release][:major].to_i >= 7
-              it { is_expected.to create_svckill__ignore('quotaon') }
-              it { is_expected.to create_svckill__ignore('messagebus') }
-            else
-              it { is_expected.to create_package('hal') }
-              it { is_expected.to create_package('quota') }
-              it { is_expected.to create_service('haldaemon') }
-              it { is_expected.to create_service('quota_nld') }
-            end
 
+            it { is_expected.to create_svckill__ignore('quotaon') }
+            it { is_expected.to create_svckill__ignore('messagebus') }
             it { is_expected.to_not create_package('portreserve') }
             it { is_expected.to_not create_service('portreserve') }
           end

@@ -14,12 +14,6 @@ class BootstrapSimpClient
   DEFAULT_SERVICE_CONFIG_DIR    = '/etc/sysconfig'
   DEFAULT_SET_STATIC_HOSTNAME   = false
 
-  # puppet config
-  if File.exist?('/opt/puppetlabs/bin/puppet')
-    DEFAULT_PUPPET_CONF_FILE    = `/opt/puppetlabs/bin/puppet config print config`.strip
-  else
-    DEFAULT_PUPPET_CONF_FILE    = '/etc/puppetlabs/puppet/puppet.conf'
-  end
   DEFAULT_PUPPET_CA_PORT        = 8141
   DEFAULT_DIGEST_ALGORITHM      = 'sha256'
   DEFAULT_PUPPET_KEYLENGTH      = 4096
@@ -39,12 +33,37 @@ class BootstrapSimpClient
 
   DELIM = '='*80
 
+  def self.puppet_exe_path
+    return @puppet_exe if @puppet_exe
+
+    puppet_exe = nil
+
+    if File.exist?('/opt/puppetlabs/bin/puppet')
+      puppet_exe = '/opt/puppetlabs/bin/puppet'
+    else
+      puppet_exe = %x{which puppet}.strip
+    end
+
+    raise 'Error: Could not find a puppet executable on the system' unless File.exist?(puppet_exe)
+
+    @puppet_exe = puppet_exe
+
+    @puppet_exe
+  end
+
+  def self.puppet_config_path
+    %x{#{puppet_exe_path} config print config}.strip
+  end
+
+  attr_reader :options
+  attr_reader :puppet_exe
+
   def initialize
     @options = {
       :bootstrap_service      => DEFAULT_BOOTSTRAP_SERVICE,
       :set_static_hostname    => DEFAULT_SET_STATIC_HOSTNAME,
       :ntp_servers            => [],
-      :puppet_conf_file       => DEFAULT_PUPPET_CONF_FILE,
+      :puppet_conf_file       => self.class.puppet_config_path,
       :puppet_ca_port         => DEFAULT_PUPPET_CA_PORT,
       :digest_algorithm       => DEFAULT_DIGEST_ALGORITHM,
       :puppet_keylength       => DEFAULT_PUPPET_KEYLENGTH,
@@ -61,6 +80,8 @@ class BootstrapSimpClient
     }
     @retry_interval = nil
     @hostnamectl = '/usr/bin/hostnamectl'
+
+    @puppet_exe = self.class.puppet_exe_path
   end
 
   #####################################################################
@@ -111,13 +132,13 @@ EOM
 
   def disable_service(service_name)
     info(title("Disabling #{service_name} service", 2))
-    result = execute("puppet resource service #{service_name} enable=false")
+    result = execute("#{@puppet_exe} resource service #{service_name} enable=false")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
   def enable_service(service_name)
     info(title("Enabling #{service_name} service", 2))
-    result = execute("puppet resource service #{service_name} enable=true")
+    result = execute("#{@puppet_exe} resource service #{service_name} enable=true")
     warn(result[:stderr]) if result[:exitstatus] != 0
   end
 
@@ -336,7 +357,7 @@ EOM
       opts.on(
         '-C', '--puppet-config-file CONFIGFILE',
         'Puppet configuration file. Defaults to',
-        DEFAULT_PUPPET_CONF_FILE
+        @options[:puppet_conf_file]
       ) do |puppet_conf_file|
         @options[:puppet_conf_file] = puppet_conf_file
       end
@@ -401,7 +422,7 @@ EOM
       end
 
       cmd = [
-        '/opt/puppetlabs/bin/puppet',
+        @puppet_exe,
         'agent',
         '--onetime',
         '--no-daemonize',

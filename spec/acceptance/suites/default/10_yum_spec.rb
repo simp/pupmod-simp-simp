@@ -37,8 +37,7 @@ describe 'simp yum configuration' do
         # Mock out the actual YUM repos
         repos = [
           '/var/www/yum/SIMP/x86_64',
-          '/var/www/yum/CentOS/7/x86_64/Updates',
-          '/var/www/yum/CentOS/6/x86_64/Updates'
+          '/var/www/yum/CentOS/7/x86_64/Updates'
         ]
 
         repos.each do |repo|
