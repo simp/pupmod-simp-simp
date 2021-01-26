@@ -1,3 +1,9 @@
+# ------------------------------------------------------------------------------
+#         NOTICE: **This file is maintained with puppetsync**
+#
+# This file is automatically updated as part of a puppet module baseline.
+# The next baseline sync will overwrite any local changes made to this file.
+# ------------------------------------------------------------------------------
 gem_sources = ENV.fetch('GEM_SERVERS','https://rubygems.org').split(/[, ]+/)
 
 ENV['PDK_DISABLE_ANALYTICS'] ||= 'true'
@@ -10,7 +16,7 @@ group :test do
   gem 'rake'
   gem 'puppet', puppet_version
   gem 'rspec'
-  gem 'rspec-puppet', '~> 2.8.0'
+  gem 'rspec-puppet'
   gem 'hiera-puppet-helper'
   gem 'puppetlabs_spec_helper'
   gem 'metadata-json-lint'
@@ -31,8 +37,7 @@ end
 group :system_tests do
   gem 'beaker'
   gem 'beaker-rspec'
-  gem 'beaker-windows'
-  gem 'simp-beaker-helpers', ENV['SIMP_BEAKER_HELPERS_VERSION'] || ['>= 1.21.2', '< 2']
+  gem 'simp-beaker-helpers', ENV['SIMP_BEAKER_HELPERS_VERSION'] || ['>= 1.21.4', '< 2']
 end
 
 # Evaluate extra gemfiles if they exist
