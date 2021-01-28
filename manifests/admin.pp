@@ -194,7 +194,7 @@ class simp::admin (
     }
   }
 
-  $_polkit_ensure = ($set_polkit_admin_group and $facts['os']['release']['major'] >= '7') ? {
+  $_polkit_ensure = $set_polkit_admin_group ? {
     true    => 'present',
     default => 'absent'
   }

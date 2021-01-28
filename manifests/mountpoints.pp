@@ -32,10 +32,6 @@ class simp::mountpoints (
   if $manage_proc { include 'simp::mountpoints::proc' }
 
 
-  if versioncmp($facts['os']['release']['major'],'6') == 0 {
-    include 'simp::mountpoints::el6_tmp_fix'
-  }
-
   if $manage_dev_pts {
     mount { '/dev/pts':
       ensure   => 'mounted',

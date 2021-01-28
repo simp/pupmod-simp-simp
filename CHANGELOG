@@ -1,9 +1,11 @@
-* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.15.0
-- Removed EL6 from supported OSes
-
-* Thu Dec 24 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.15.0
+* Thu Jan 28 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.15.0
 - Drop support for EL 6 due to EOL
 - Add support for Puppet 7
+- Ensure that netconsole-service is installed on EL8+
+- Added a JSON formatted profiling formatter for rspec
+
+* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.15.0
+- Removed EL6 from supported OSes
 
 * Mon Dec 21 2020 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.0
 - Fix bootstrap_simp_client to use fully qualified path on call to

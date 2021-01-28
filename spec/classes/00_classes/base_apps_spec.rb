@@ -27,27 +27,6 @@ describe 'simp::base_apps' do
 
             it { is_expected.to create_svckill__ignore('quotaon') }
             it { is_expected.to create_svckill__ignore('messagebus') }
-            it { is_expected.to_not create_package('portreserve') }
-            it { is_expected.to_not create_service('portreserve') }
-          end
-
-          context 'with portreserve configured' do
-            let(:facts) {
-              _facts = os_facts.dup
-              _facts[:portreserve_configured] = true
-              _facts
-            }
-
-            it { is_expected.to compile.with_all_deps }
-
-            if os_facts[:os][:release][:major].to_i >= 7
-              it { is_expected.to_not create_package('portreserve') }
-              it { is_expected.to_not create_service('portreserve') }
-            else
-              it { is_expected.to create_package('portreserve') }
-              it { is_expected.to create_file('/etc/portreserve/discard').with_content(/^discard$/).that_notifies('Service[portreserve]') }
-              it { is_expected.to create_service('portreserve') }
-            end
           end
 
           context 'with extra_apps' do

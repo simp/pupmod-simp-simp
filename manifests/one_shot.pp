@@ -103,14 +103,6 @@ class simp::one_shot (
 
   contain 'simp::one_shot::user'
 
-  # Handle VMWare systems on EL6
-  if ($facts['virtual'] == 'vmware') and (versioncmp($facts['os']['release']['major'], '6') == 1) {
-    service { 'vmtoolsd':
-      ensure => 'running',
-      enable => true
-    }
-  }
-
   # The last of the last
   #
   # This ensures that *any* failures that happen in the previous stages will
