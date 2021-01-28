@@ -8,6 +8,10 @@ describe 'simp::server::ldap' do
 
         if os_facts[:kernel] == 'windows'
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+        elsif os_facts[:os][:release][:major] > '7'
+          it {
+            expect { is_expected.to compile.with_all_deps }.to raise_error(/is not supported as an LDAP server/)
+          }
         else
           context 'default parameters' do
             it { is_expected.to compile.with_all_deps }

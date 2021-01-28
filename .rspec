@@ -1,3 +1,4 @@
 --format documentation
 --color
 --fail-fast
+-I ./spec/rspec_formatters

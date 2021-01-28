@@ -58,25 +58,13 @@ class simp::sssd::client (
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  # Don't attemt to setup sssd in el6 or 7 if a local or ldap domain is not defined.
+  # Don't attemt to setup sssd in EL7 if a local or ldap domain is not defined.
 
   if $local_domain or $ldap_domain or versioncmp($facts['os']['release']['major'], '8') >= 0 {
 
     include 'sssd'
 
     if $local_domain {
-
-      if versioncmp($facts['os']['release']['major'],'6') <= 0 {
-        $_provider_attr = {
-          id_provider   => 'local',
-          auth_provider => 'local',
-        }
-      }
-      else {
-        $_provider_attr = {
-          id_provider   => 'files',
-        }
-      }
 
       sssd::domain { 'LOCAL':
         description       => 'LOCAL Users Domain',
@@ -85,7 +73,7 @@ class simp::sssd::client (
         # These don't make sense on the local domain
         enumerate         => false,
         cache_credentials => false,
-        *                 => $_provider_attr,
+        id_provider       => 'files'
       }
     }
 

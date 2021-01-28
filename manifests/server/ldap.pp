@@ -33,8 +33,6 @@
 #   every time someone logs into any system connected to the LDAP
 #   server.
 #
-# @author Trevor Vaughan <mailto:tvaughan@onyxpoint.com>
-#
 class simp::server::ldap (
   Boolean    $is_slave        = false,
   Boolean    $is_consumer     = $is_slave,

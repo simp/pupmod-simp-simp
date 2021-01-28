@@ -49,14 +49,16 @@ class simp::mountpoints::tmp (
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  unless $tmp_service and ('systemd' in $facts['init_systems']) {
+  unless $tmp_service {
     # Do not manage this if systemd is supposed to manage it
+
     file { '/tmp':
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
-      mode   => 'u+rwx,g+rwx,o+rwxt',
-      force  => true
+      ensure  => 'directory',
+      owner   => 'root',
+      group   => 'root',
+      mode    => 'u+rwx,g+rwx,o+rwxt',
+      seltype => 'tmp_t',
+      force   => true
     }
   }
 
@@ -69,13 +71,6 @@ class simp::mountpoints::tmp (
     force   => true
   }
 
-  if $tmp_service and ('systemd' in $facts['init_systems']) {
-    $_tmp_seltype = undef
-  }
-  else {
-    $_tmp_seltype = 'tmp_t'
-  }
-
   file { '/usr/tmp':
     ensure  => 'symlink',
     target  => '/var/tmp',
@@ -86,7 +81,7 @@ class simp::mountpoints::tmp (
 
   # If we decide to secure the tmp mounts....
   if $secure {
-    if $tmp_service and ('systemd' in $facts['init_systems']) {
+    if $tmp_service {
       # Systemd adds appropriate extra sets of options and is authoritative so
       # everything should be set via $tmp_opts instead of reverse mapped like
       # we do if it's a regular partition.
@@ -245,7 +240,7 @@ class simp::mountpoints::tmp (
   # Specifically, this meets the requirement to start the tmp.mount service but
   # understands that the ``systemd::unit_file`` resource above will also
   # attempt to manage the tmp.mount service.
-  if $tmp_service and ('systemd' in $facts['init_systems']) {
+  if $tmp_service {
     unless defined(Systemd::Unit_file['tmp.mount']) {
       ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true }})
     }

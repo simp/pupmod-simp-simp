@@ -16,23 +16,15 @@ describe 'simp::kmod_blacklist' do
              'squashfs', 'tipc', 'udf', 'usb-storage']
           }
 
-          if os_facts[:os][:release][:major] == '6'
-            let(:early_prefix){ 'zz' }
-            let(:late_prefix){ '00' }
-          else
-            let(:early_prefix){ '00' }
-            let(:late_prefix){ 'zz' }
-          end
-
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::kmod_blacklist') }
 
           it 'should blacklist all the default kmods' do
-            is_expected.to create_file("/etc/modprobe.d/#{late_prefix}_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
+            is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
 
             stock_blacklist.each do |mod|
               is_expected.to create_kmod__blacklist(mod)
-              is_expected.to create_file("/etc/modprobe.d/#{early_prefix}_simp_disable.conf").with_ensure('absent')
+              is_expected.to create_file("/etc/modprobe.d/00_simp_disable.conf").with_ensure('absent')
             end
           end
 
@@ -42,11 +34,11 @@ describe 'simp::kmod_blacklist' do
             }}
 
             it 'should blacklist all the default kmods authoritatively' do
-              is_expected.to create_file("/etc/modprobe.d/#{early_prefix}_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
+              is_expected.to create_file("/etc/modprobe.d/00_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
 
               stock_blacklist.each do |mod|
                 is_expected.to create_kmod__blacklist(mod)
-                is_expected.to create_file("/etc/modprobe.d/#{late_prefix}_simp_disable.conf").with_ensure('absent')
+                is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_ensure('absent')
               end
             end
           end
@@ -55,7 +47,7 @@ describe 'simp::kmod_blacklist' do
             let(:custom_list) { ['nfs','fuse'] }
             let(:params) {{ :custom_blacklist => custom_list }}
             it 'should include all the kmods in the blacklist' do
-              is_expected.to create_file("/etc/modprobe.d/#{late_prefix}_simp_disable.conf").with_content((custom_list + stock_blacklist).map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
+              is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_content((custom_list + stock_blacklist).map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
 
               (stock_blacklist + custom_list).each do |mod|
                 is_expected.to create_kmod__blacklist(mod)
@@ -70,7 +62,7 @@ describe 'simp::kmod_blacklist' do
               :custom_blacklist => custom_list
             }}
             it 'should include only the custom the kmods in the blacklist' do
-              is_expected.to create_file("/etc/modprobe.d/#{late_prefix}_simp_disable.conf").with_content(custom_list.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
+              is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_content(custom_list.map{|x| x = "install #{x} /bin/true" }.join("\n") + "\n")
 
               custom_list.each do |mod|
                 is_expected.to create_kmod__blacklist(mod)

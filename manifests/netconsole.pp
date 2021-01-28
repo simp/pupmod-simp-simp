@@ -21,6 +21,8 @@
 # @param source_device
 #   Network interface to broadcast logs from
 #
+# @param package_ensure
+#   The `ensure` parameter for the netconsole package when applicable
 class simp::netconsole (
   Enum['present','absent']      $ensure,
   Optional[Simplib::IP]         $target_ip      = undef,
@@ -28,9 +30,25 @@ class simp::netconsole (
   Optional[Simplib::MacAddress] $target_macaddr = undef,
   Optional[Simplib::Port]       $source_port    = undef,
   Optional[String]              $source_device  = undef,
+  String[1]                     $package_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+
+  if (versioncmp($facts.dig('os','release','major'), '8') >= 0) {
+    if ($ensure == 'present') {
+      package { 'netconsole-service':
+        ensure => $package_ensure,
+        notify => [
+          Service['netconsole'],
+          File['/etc/sysconfig/netconsole']
+        ]
+      }
+    }
+    else {
+      package { 'netconsole-service': ensure => $ensure }
+    }
+  }
 
   file { '/etc/sysconfig/netconsole':
     ensure  => $ensure,
