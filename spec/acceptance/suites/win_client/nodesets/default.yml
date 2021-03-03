@@ -10,8 +10,7 @@ HOSTS:
     roles:
       - windows
     platform: windows-server-amd64
-    #box: gusztavvargadr/windows-server
-    box: opentable/win-2012r2-standard-amd64-nocm
+    box: devopsgroup-io/windows_server-2012r2-standard-amd64-nocm
     hypervisor: <%= hypervisor %>
     vagrant_memsize: 2048
     vagrant_cpus: 2
