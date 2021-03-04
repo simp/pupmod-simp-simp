@@ -480,6 +480,12 @@ pup6.pe-win:
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[win_client]'
+  # For reasons we assume must be knowable only to madmen and the devine,
+  # Beaker/Vagrant consistently fails to connect via Net::SSH to the `win` box
+  # with a "Host win unreachable" message, despite the `win` nodeset config
+  # being identical to simplib's Windows tests (which work), and a simple
+  # `vagrant ssh` from the Vagrantfile's directory works without problems.
+  allow_failure: true
 ###
 ### pup6.pe:
 ###   <<: *pup_6_pe
