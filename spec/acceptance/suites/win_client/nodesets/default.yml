@@ -6,6 +6,13 @@
   end
 -%>
 HOSTS:
+  el7:
+    roles:
+      - default
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: <%= hypervisor %>
+
   win:
     roles:
       - windows

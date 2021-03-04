@@ -124,3 +124,4 @@ fixtures:
     '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton
   symlinks:
     simp: "#{source_dir}"
+      #compliance_markup: "#{source_dir}/../compliance_markup"
