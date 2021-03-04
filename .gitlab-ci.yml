@@ -292,228 +292,228 @@ variables:
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_1
 
 
-# Pipeline / testing matrix
-#=======================================================================
-
-releng_checks:
-  <<: *pup_6_x
-  <<: *setup_bundler_env
-  stage: 'validation'
-  tags: ['docker']
-  script:
-    - 'command -v rpm || if command -v apt-get; then apt-get update; apt-get install -y rpm; fi ||:'
-    - 'bundle exec rake check:dot_underscore'
-    - 'bundle exec rake check:test_file'
-    - 'bundle exec rake pkg:check_version'
-    - 'bundle exec rake pkg:compare_latest_tag'
-    - 'bundle exec rake pkg:create_tag_changelog'
-    - 'bundle exec pdk build --force --target-dir=dist'
-
-
-# Linting
-#-----------------------------------------------------------------------
-
-# NOTE: Don't add more lint checks here.
-#       puppet-lint is a validator, not a parser; it includes its own lexer and
-#       doesn't use the Puppet gem at all.  Running multiple lint tests against
-#       different Puppet versions won't accomplish anything.
-
-pup-lint:
-  <<: *pup_6_x
-  <<: *lint_tests
-
-# Unit Tests
-#-----------------------------------------------------------------------
-
-pup5.x-unit:
-  <<: *pup_5_x
-  <<: *unit_tests
-  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
-
-pup5.pe-unit:
-  <<: *pup_5_pe
-  <<: *unit_tests
-
-pup6.x-unit:
-  <<: *pup_6_x
-  <<: *unit_tests
-  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
-
-pup6.pe-unit:
-  <<: *pup_6_pe
-  <<: *unit_tests
-
-pup7.x-unit:
-  <<: *pup_7_x
-  <<: *unit_tests
-
-# ------------------------------------------------------------------------------
-#             NOTICE: **This file is maintained with puppetsync**
-#
-# Everything above the "Repo-specific content" comment will be overwritten by
-# the next puppetsync.
-# ------------------------------------------------------------------------------
-
-# Repo-specific content
-# ==============================================================================
-
-pup5.pe:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[default]'
-
-pup5.pe-base-apps:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[base_apps]'
-
-pup5.pe-fips:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
-
-pup5.pe-no_simp_server:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[no_simp_server]'
-
-pup5.pe-netconsole:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[netconsole]'
-
-pup5.pe-one_shot_scenario:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[scenario_one_shot]'
-
-pup5.pe-poss_scenario:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[scenario_poss]'
-
-pup5.pe-remote_access_scenario:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[scenario_remote_access]'
-
-pup5.pe-oel:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[default,oel]'
-
-pup5.pe-oel-fips:
-  <<: *pup_5_pe
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
-
-pup6.x:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
-  script:
-    - 'bundle exec rake beaker:suites[default]'
-
-pup6.x-base-apps:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
-  script:
-    - 'bundle exec rake beaker:suites[base_apps]'
-
-pup6.x-fips:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
-
-pup6.x-no_simp_server:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[no_simp_server]'
-
-pup6.x-netconsole:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[netconsole]'
-
-pup6.x-one_shot_scenario:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[scenario_one_shot]'
-
-pup6.x-poss_scenario:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[scenario_poss]'
-
-pup6.x-remote_access_scenario:
-  <<: *pup_6_x
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[scenario_remote_access]'
-
+### # Pipeline / testing matrix
+### #=======================================================================
+###
+### releng_checks:
+###   <<: *pup_6_x
+###   <<: *setup_bundler_env
+###   stage: 'validation'
+###   tags: ['docker']
+###   script:
+###     - 'command -v rpm || if command -v apt-get; then apt-get update; apt-get install -y rpm; fi ||:'
+###     - 'bundle exec rake check:dot_underscore'
+###     - 'bundle exec rake check:test_file'
+###     - 'bundle exec rake pkg:check_version'
+###     - 'bundle exec rake pkg:compare_latest_tag'
+###     - 'bundle exec rake pkg:create_tag_changelog'
+###     - 'bundle exec pdk build --force --target-dir=dist'
+###
+###
+### # Linting
+### #-----------------------------------------------------------------------
+###
+### # NOTE: Don't add more lint checks here.
+### #       puppet-lint is a validator, not a parser; it includes its own lexer and
+### #       doesn't use the Puppet gem at all.  Running multiple lint tests against
+### #       different Puppet versions won't accomplish anything.
+###
+### pup-lint:
+###   <<: *pup_6_x
+###   <<: *lint_tests
+###
+### # Unit Tests
+### #-----------------------------------------------------------------------
+###
+### pup5.x-unit:
+###   <<: *pup_5_x
+###   <<: *unit_tests
+###   <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
+###
+### pup5.pe-unit:
+###   <<: *pup_5_pe
+###   <<: *unit_tests
+###
+### pup6.x-unit:
+###   <<: *pup_6_x
+###   <<: *unit_tests
+###   <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
+###
+### pup6.pe-unit:
+###   <<: *pup_6_pe
+###   <<: *unit_tests
+###
+### pup7.x-unit:
+###   <<: *pup_7_x
+###   <<: *unit_tests
+###
+### # ------------------------------------------------------------------------------
+### #             NOTICE: **This file is maintained with puppetsync**
+### #
+### # Everything above the "Repo-specific content" comment will be overwritten by
+### # the next puppetsync.
+### # ------------------------------------------------------------------------------
+###
+### # Repo-specific content
+### # ==============================================================================
+###
+### pup5.pe:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[default]'
+###
+### pup5.pe-base-apps:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[base_apps]'
+###
+### pup5.pe-fips:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
+###
+### pup5.pe-no_simp_server:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[no_simp_server]'
+###
+### pup5.pe-netconsole:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[netconsole]'
+###
+### pup5.pe-one_shot_scenario:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_one_shot]'
+###
+### pup5.pe-poss_scenario:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_poss]'
+###
+### pup5.pe-remote_access_scenario:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_remote_access]'
+###
+### pup5.pe-oel:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[default,oel]'
+###
+### pup5.pe-oel-fips:
+###   <<: *pup_5_pe
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
+###
+### pup6.x:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
+###   script:
+###     - 'bundle exec rake beaker:suites[default]'
+###
+### pup6.x-base-apps:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
+###   script:
+###     - 'bundle exec rake beaker:suites[base_apps]'
+###
+### pup6.x-fips:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
+###   script:
+###     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
+###
+### pup6.x-no_simp_server:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[no_simp_server]'
+###
+### pup6.x-netconsole:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[netconsole]'
+###
+### pup6.x-one_shot_scenario:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_one_shot]'
+###
+### pup6.x-poss_scenario:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_poss]'
+###
+### pup6.x-remote_access_scenario:
+###   <<: *pup_6_x
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'bundle exec rake beaker:suites[scenario_remote_access]'
+###
 pup6.pe-win:
   <<: *pup_6_pe
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[win_client]'
-
-pup6.pe:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[default]'
-
-pup6.pe-base-apps:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[base_apps]'
-
-pup6.pe-fips:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
-
-pup6.pe-netconsole:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[netconsole]'
-
-pup6.pe-oel:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[default,oel]'
-
-pup6.pe-oel-fips:
-  <<: *pup_6_pe
-  <<: *acceptance_base
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
+###
+### pup6.pe:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[default]'
+###
+### pup6.pe-base-apps:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[base_apps]'
+###
+### pup6.pe-fips:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
+###
+### pup6.pe-netconsole:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[netconsole]'
+###
+### pup6.pe-oel:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   script:
+###     - 'bundle exec rake beaker:suites[default,oel]'
+###
+### pup6.pe-oel-fips:
+###   <<: *pup_6_pe
+###   <<: *acceptance_base
+###   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+###   script:
+###     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
