@@ -17,8 +17,8 @@ HOSTS:
     user: vagrant
     communicator: winrm
     is_cygwin: false
-    ### ssh:
-    ###   host_key: '+ssh-dss'
+    ssh:
+      host_key: '+ssh-dss'
 
 CONFIG:
   log_level: verbose
