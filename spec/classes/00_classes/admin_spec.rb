@@ -106,6 +106,37 @@ describe 'simp::admin' do
             }) }
           end
 
+          context 'with admin and auditor settings with extra options' do
+            let(:params) {{
+                :admin_group               => 'admins',
+                :auditor_group             => 'auditors',
+                :admin_sudo_options        => {
+                  'role' => 'unconfined_r'
+                },
+                :auditor_sudo_options      => {
+                  'role' => 'staff_r'
+                },
+                :passwordless_auditor_sudo => false,
+                :force_logged_shell        => false
+            }}
+            it { is_expected.to create_sudo__user_specification('admin global').with({
+              :user_list => ['%admins'],
+              :cmnd      => ['/bin/su - root'],
+              :options   => {
+                'role' => 'unconfined_r'
+              },
+              :passwd    => false
+            }) }
+            it { is_expected.to create_sudo__user_specification('auditors').with({
+              :user_list => ['%auditors'],
+              :cmnd      => ['AUDIT'],
+              :options   => {
+                'role' => 'staff_r'
+              },
+              :passwd    => true
+            }) }
+          end
+
           context "when $facts['puppet_settings'] isn't available" do
             let(:facts) do
               _facts = Marshal.load(Marshal.dump(os_facts))

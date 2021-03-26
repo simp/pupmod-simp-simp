@@ -40,6 +40,20 @@
 # @param default_admin_sudo_cmnds
 #   The set of commands that ``$admin_group`` should be able to run by default
 #
+# @param admin_sudo_options
+#   A hash of sudo options to give to all admin sudo commands
+#
+# @example
+#   simp::admin::admin_sudo_options:
+#     role: 'unconfined_r'
+#
+# @param auditor_sudo_options
+#   A hash of sudo options to give to all auditor sudo commands
+# 
+# @example
+#   simp::admin::auditor_sudo_options:
+#     role: 'staff_r'
+#
 # @param pam
 #   Allow SIMP management of the PAM stack
 #
@@ -80,6 +94,8 @@ class simp::admin (
   Boolean               $force_logged_shell        = true,
   Enum['sudosh','tlog'] $logged_shell              = 'tlog',
   Array[String[2]]      $default_admin_sudo_cmnds  = ['/bin/su - root'],
+  Hash                  $admin_sudo_options        = {},
+  Hash                  $auditor_sudo_options      = {},
   Boolean               $pam                       = simplib::lookup('simp_options::pam', { 'default_value' => false }),
   Boolean               $set_polkit_admin_group    = true,
   Boolean               $set_selinux_login         = false,
@@ -158,14 +174,16 @@ class simp::admin (
     user_list => ["%${admin_group}"],
     runas     => 'ALL',
     cmnd      => $_shell_cmd,
-    passwd    => !$passwordless_admin_sudo
+    passwd    => !$passwordless_admin_sudo,
+    options   => $admin_sudo_options
   }
 
   sudo::user_specification { 'auditors':
     user_list => ["%${auditor_group}"],
     runas     => 'root',
     cmnd      => ['AUDIT'],
-    passwd    => !$passwordless_auditor_sudo
+    passwd    => !$passwordless_auditor_sudo,
+    options   => $auditor_sudo_options
   }
 
   # The following two are especially important if you're using sudosh.
@@ -174,7 +192,8 @@ class simp::admin (
     user_list => ["%${admin_group}"],
     runas     => 'root',
     cmnd      => ['/usr/sbin/puppet', '/opt/puppetlabs/bin/puppet'],
-    passwd    => !$passwordless_admin_sudo
+    passwd    => !$passwordless_admin_sudo,
+    options   => $admin_sudo_options
   }
 
   # Bolt sets this to a random directory every time it runs
@@ -190,7 +209,8 @@ class simp::admin (
       user_list => ["%${admin_group}"],
       runas     => 'root',
       cmnd      => ["/bin/rm -rf ${$_ssldir}"],
-      passwd    => !$passwordless_admin_sudo
+      passwd    => !$passwordless_admin_sudo,
+      options   => $admin_sudo_options
     }
   }
 
