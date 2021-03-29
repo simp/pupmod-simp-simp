@@ -31,17 +31,27 @@ describe 'simp::admin' do
             it { is_expected.to create_sudo__user_specification('admin global').with({
               :user_list => ['%administrators'],
               :cmnd      => ['/bin/su - root'],
-              :passwd    => false
+              :runas     => 'root',
+              :passwd    => false,
+              :options   => {
+                'role' => 'unconfined_r'
+              },
             }) }
             it { is_expected.to create_sudo__user_specification('auditors').with({
               :user_list => ['%security'],
               :cmnd      => ['AUDIT'],
+              :runas     => 'root',
+              :options   => {},
               :passwd    => false
             }) }
             it { is_expected.to create_sudo__user_specification('admin clean puppet certs').with({
               :user_list => ['%administrators'],
               :cmnd      => ['/bin/rm -rf /opt/puppet/somewhere/ssl'],
-              :passwd    => false
+              :runas     => 'root',
+              :passwd    => false,
+              :options   => {
+                'role' => 'unconfined_r'
+              },
             }) }
             it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
               :ensure => 'present',
