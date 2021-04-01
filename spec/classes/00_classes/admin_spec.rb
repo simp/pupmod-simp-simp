@@ -31,17 +31,27 @@ describe 'simp::admin' do
             it { is_expected.to create_sudo__user_specification('admin global').with({
               :user_list => ['%administrators'],
               :cmnd      => ['/bin/su - root'],
-              :passwd    => false
+              :runas     => 'root',
+              :passwd    => false,
+              :options   => {
+                'role' => 'unconfined_r'
+              },
             }) }
             it { is_expected.to create_sudo__user_specification('auditors').with({
               :user_list => ['%security'],
               :cmnd      => ['AUDIT'],
+              :runas     => 'root',
+              :options   => {},
               :passwd    => false
             }) }
             it { is_expected.to create_sudo__user_specification('admin clean puppet certs').with({
               :user_list => ['%administrators'],
               :cmnd      => ['/bin/rm -rf /opt/puppet/somewhere/ssl'],
-              :passwd    => false
+              :runas     => 'root',
+              :passwd    => false,
+              :options   => {
+                'role' => 'unconfined_r'
+              },
             }) }
             it { is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
               :ensure => 'present',
@@ -102,6 +112,37 @@ describe 'simp::admin' do
             it { is_expected.to create_sudo__user_specification('auditors').with({
               :user_list => ['%auditors'],
               :cmnd      => ['AUDIT'],
+              :passwd    => true
+            }) }
+          end
+
+          context 'with admin and auditor settings with extra options' do
+            let(:params) {{
+                :admin_group               => 'admins',
+                :auditor_group             => 'auditors',
+                :admin_sudo_options        => {
+                  'role' => 'unconfined_r'
+                },
+                :auditor_sudo_options      => {
+                  'role' => 'staff_r'
+                },
+                :passwordless_auditor_sudo => false,
+                :force_logged_shell        => false
+            }}
+            it { is_expected.to create_sudo__user_specification('admin global').with({
+              :user_list => ['%admins'],
+              :cmnd      => ['/bin/su - root'],
+              :options   => {
+                'role' => 'unconfined_r'
+              },
+              :passwd    => false
+            }) }
+            it { is_expected.to create_sudo__user_specification('auditors').with({
+              :user_list => ['%auditors'],
+              :cmnd      => ['AUDIT'],
+              :options   => {
+                'role' => 'staff_r'
+              },
               :passwd    => true
             }) }
           end
