@@ -1,3 +1,10 @@
+* Wed Apr 28 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.0
+- As of SIMP 6.6 the SIMP yum repo is expected to  OS version specific allowing the
+  yum server to hosts SIMP RPMs and it dependencies for more than one OS.
+  The SIMP repo will now be under /var/www/yum/SIMP/<osfamily>/<os major version>/<arch>
+  instead of /var/www/yum/SIMP/<arch>.
+  This updates the creation of the yum config files to point to the correct directories.
+
 * Mon Mar 29 2021 Michael Riddle <michael.riddle@onyxpoint.com> - 4.15.0
 - Added additional parameters to simp::admin to allow for more fine-grained
   control of global admin and auditor sudo rules
