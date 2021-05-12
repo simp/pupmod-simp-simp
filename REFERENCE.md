@@ -12,6 +12,7 @@
 * [`simp::base_services`](#simpbase_services): Deprecated - This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
 * [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP
+* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules
 * [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
 * [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
 * [`simp::mountpoints::tmp`](#simpmountpointstmp): Manages the various tmp mounts with optional security features.
@@ -33,7 +34,7 @@
 * [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a consumer LDAP server.
 * [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients
 * [`simp::server::yum`](#simpserveryum): This class sets up a YUM site at `${data_dir}/yum` and is used by
-* [`simp::sssd::client`](#simpsssdclient): This class sets up an SSSD client based on the normal SIMP
+* [`simp::sssd::client`](#simpsssdclient): Set up an SSSD client based on the normal SIMP parameters
 * [`simp::sudoers`](#simpsudoers): Provide useful aliases that many people have wanted to use over
 * [`simp::sudoers::aliases`](#simpsudoersaliases): A set of default sudoers aliases
 * [`simp::sysctl`](#simpsysctl): Sets sysctl settings that are useful from a general 'modern system'
@@ -390,6 +391,24 @@ Defaults to '0750' if a platform doesn't specify
 
 administrator group system access, auditor access, and default ``sudo`` rules
 
+#### Examples
+
+##### 
+
+```puppet
+The following is generally needed for transitions to root
+Additional rules should be added for non-root users
+simp::admin::admin_sudo_options:
+  role: 'unconfined_r'
+```
+
+##### 
+
+```puppet
+simp::admin::auditor_sudo_options:
+  role: 'unconfined_r'
+```
+
 #### Parameters
 
 The following parameters are available in the `simp::admin` class:
@@ -403,6 +422,10 @@ The following parameters are available in the `simp::admin` class:
 * [`force_logged_shell`](#force_logged_shell)
 * [`logged_shell`](#logged_shell)
 * [`default_admin_sudo_cmnds`](#default_admin_sudo_cmnds)
+* [`admin_sudo_options`](#admin_sudo_options)
+* [`auditor_sudo_options`](#auditor_sudo_options)
+* [`admin_runas`](#admin_runas)
+* [`auditor_runas`](#auditor_runas)
 * [`pam`](#pam)
 * [`set_polkit_admin_group`](#set_polkit_admin_group)
 * [`set_selinux_login`](#set_selinux_login)
@@ -492,6 +515,40 @@ Data type: `Array[String[2]]`
 The set of commands that ``$admin_group`` should be able to run by default
 
 Default value: `['/bin/su - root']`
+
+##### <a name="admin_sudo_options"></a>`admin_sudo_options`
+
+Data type: `Hash`
+
+A hash of sudo options to give to all admin sudo root transition and puppet
+commands
+
+Default value: `{ 'role' => 'unconfined_r' }`
+
+##### <a name="auditor_sudo_options"></a>`auditor_sudo_options`
+
+Data type: `Hash`
+
+A hash of sudo options to give to all specified auditor sudo commands
+
+Default value: `{}`
+
+##### <a name="admin_runas"></a>`admin_runas`
+
+Data type: `String`
+
+What to set the runas user for all admin sudo root transition and puppet
+commands
+
+Default value: `'root'`
+
+##### <a name="auditor_runas"></a>`auditor_runas`
+
+Data type: `String`
+
+What to set the runas user for all specified auditor sudo commands
+
+Default value: `'root'`
 
 ##### <a name="pam"></a>`pam`
 
@@ -736,6 +793,51 @@ Trigger a 'reboot_notify' resource that will warn at every puppet run that
 a reboot is required if necessary.
 
 Default value: ``true``
+
+### <a name="simpkmod_blacklistlock_modules"></a>`simp::kmod_blacklist::lock_modules`
+
+into the system until the system has been rebooted.
+
+This will only take effect if the system has the ``kernel.modules_disabled``
+sysctl feature.
+
+ * WARNING: It is *highly* likely that you will prevent important modules
+   from loading (such as networking) if you enable this. Test thoroughly
+   before enabling.
+
+#### Parameters
+
+The following parameters are available in the `simp::kmod_blacklist::lock_modules` class:
+
+* [`enable`](#enable)
+* [`notify_if_reboot_required`](#notify_if_reboot_required)
+* [`persist`](#persist)
+
+##### <a name="enable"></a>`enable`
+
+Data type: `Any`
+
+Lock all module loading abilities
+
+Default value: ``true``
+
+##### <a name="notify_if_reboot_required"></a>`notify_if_reboot_required`
+
+Data type: `Any`
+
+If the change requires the system to be rebooted to take effect, a
+notification will be printed during puppet runs until the system has been
+rebooted.
+
+Default value: ``true``
+
+##### <a name="persist"></a>`persist`
+
+Data type: `Any`
+
+Lock all modules at boot time.
+
+Default value: ``false``
 
 ### <a name="simpmountpoints"></a>`simp::mountpoints`
 
@@ -2667,77 +2769,80 @@ Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value
 
 ### <a name="simpsssdclient"></a>`simp::sssd::client`
 
-parameters.
-
 This should work for most out-of-the-box installations. Otherwise, it serves
 as an example of what you can do to make it work for your environment.
-
-Since this class calls several defines, you will want to use a resource
-collector to enhance/override the resource declarations.
-
- The following settings have no effect on sssd unless the service
- was included in sssd::services.  Since sssd now includes the service
- setup automatically if the service is included this is not needed.
-
-* **See also**
-  * https://docs.puppetlabs.com/puppet/latest/reference/lang_resources_advanced.html#amending-attributes-with-a-collector
-    * Amending Attributes With a Collector
 
 #### Parameters
 
 The following parameters are available in the `simp::sssd::client` class:
 
-* [`ldap_domain`](#ldap_domain)
 * [`local_domain`](#local_domain)
-* [`autofs`](#autofs)
-* [`sudo`](#sudo)
-* [`ssh`](#ssh)
+* [`local_domain_options`](#local_domain_options)
+* [`ldap_domain`](#ldap_domain)
+* [`ldap_domain_options`](#ldap_domain_options)
+* [`ldap_389ds_compat`](#ldap_389ds_compat)
+* [`ldap_provider_options`](#ldap_provider_options)
 * [`enumerate_users`](#enumerate_users)
 * [`cache_credentials`](#cache_credentials)
 * [`min_id`](#min_id)
-
-##### <a name="ldap_domain"></a>`ldap_domain`
-
-Data type: `Boolean`
-
-Configure the LDAP domain.  To Enable the LDAP domain you
-must include 'LDAP' sssd::domains.
-
-Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
+* [`autofs`](#autofs)
+* [`sudo`](#sudo)
+* [`ssh`](#ssh)
 
 ##### <a name="local_domain"></a>`local_domain`
 
 Data type: `Boolean`
 
-Configure the 'LOCAL' domain.  To use the local domain you must include
-'LOCAL'  in sssd::domains.
+Configure the 'LOCAL' domain
 
-##### <a name="autofs"></a>`autofs`
+To use the local domain you must include 'LOCAL'  in sssd::domains via hiera
 
-Data type: `Boolean`
+##### <a name="local_domain_options"></a>`local_domain_options`
 
-Enable ``autofs`` support in SSSD
-deprecated.  Instead set sssd::services to include 'autofs'.
+Data type: `Hash`
 
-Default value: ``true``
+A Hash of options to pass directly into the `sssd::domain` defined type
 
-##### <a name="sudo"></a>`sudo`
+Default value: `{}`
 
-Data type: `Boolean`
-
-deprecated.  Instead set sssd::services to include 'sudo'
-Enable ``sudo`` support in SSSD
-
-Default value: ``true``
-
-##### <a name="ssh"></a>`ssh`
+##### <a name="ldap_domain"></a>`ldap_domain`
 
 Data type: `Boolean`
 
-deprecated.  Instead set sssd::services to include 'sudo'
-Enable ``ssh`` support in SSSD
+Configure the LDAP domain
 
-Default value: ``true``
+To Enable the LDAP domain you must include 'LDAP' sssd::domains via hiera
+
+Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
+
+##### <a name="ldap_domain_options"></a>`ldap_domain_options`
+
+Data type: `Hash`
+
+A Hash of options to pass directly into the `sssd::domain` defined type
+
+Default value: `{}`
+
+##### <a name="ldap_389ds_compat"></a>`ldap_389ds_compat`
+
+Data type: `Boolean`
+
+Whether or not the target server is "389-DS compatible"
+
+* This includes FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
+
+* `true` => set the account option to 389DS compatible
+* `false` => set the account option to 'shadow' compatible (OpenLDAP)
+
+Default value: ``false``
+
+##### <a name="ldap_provider_options"></a>`ldap_provider_options`
+
+Data type: `Hash`
+
+A Hash of options to pass directly into the `sssd::provider::ldap` defined type
+
+Default value: `{}`
 
 ##### <a name="enumerate_users"></a>`enumerate_users`
 
@@ -2764,6 +2869,30 @@ Data type: `Integer`
 The lowest user ID that SSSD should recognize from the remote server
 
 Default value: `500`
+
+##### <a name="autofs"></a>`autofs`
+
+Data type: `Boolean`
+
+Deprecated
+
+Default value: ``true``
+
+##### <a name="sudo"></a>`sudo`
+
+Data type: `Boolean`
+
+Deprecated
+
+Default value: ``true``
+
+##### <a name="ssh"></a>`ssh`
+
+Data type: `Boolean`
+
+Deprecated
+
+Default value: ``true``
 
 ### <a name="simpsudoers"></a>`simp::sudoers`
 
@@ -3933,7 +4062,7 @@ The relative path to the yum repo relative to the URL(s) set in `$servers`.
 In simp repos
 This parameter has no effect if the `baseurl` parameter is set directly.
 
-Default value: `'SIMP'`
+Default value: `"SIMP/${facts['os'][name]}/${facts['os']['release']['major']}"`
 
 ##### <a name="baseurl"></a>`baseurl`
 
