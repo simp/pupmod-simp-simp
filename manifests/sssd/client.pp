@@ -19,13 +19,15 @@
 # @param ldap_domain_options
 #   A Hash of options to pass directly into the `sssd::domain` defined type
 #
-# @param ldap_389ds_compat
-#   Whether or not the target server is "389-DS compatible"
+# @param ldap_server_type
+#   The type of LDAP server that the system is communicating with
 #
-#   * This includes FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
+#   * This mainly matters for password policy details but may increase in scope
+#     in the future
 #
-#   * `true` => set the account option to 389DS compatible
-#   * `false` => set the account option to 'shadow' compatible (OpenLDAP)
+#   * Use `389ds` for servers that are 'Netscape compatible'. This includes
+#     FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
+#   * Use `plain` for servers that are 'regular LDAP' like OpenLDAP
 #
 # @param ldap_provider_options
 #   A Hash of options to pass directly into the `sssd::provider::ldap` defined type
@@ -53,19 +55,18 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sssd::client (
-  Boolean $local_domain,
-  Hash    $local_domain_options  = {},
-  Boolean $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
-  Hash    $ldap_domain_options   = {},
-  # This should be flipped to `true` once EL7 is no longer supported
-  Boolean $ldap_389ds_compat     = false,
-  Hash    $ldap_provider_options = {},
-  Boolean $autofs                = true, #deprecated
-  Boolean $sudo                  = true, #deprecated
-  Boolean $ssh                   = true, #deprecated
-  Boolean $enumerate_users       = false,
-  Boolean $cache_credentials     = true,
-  Integer $min_id                = 500
+  Boolean               $local_domain,
+  Hash                  $local_domain_options  = {},
+  Boolean               $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Hash                  $ldap_domain_options   = {},
+  Enum['plain','389ds'] $ldap_server_type,
+  Hash                  $ldap_provider_options = {},
+  Boolean               $autofs                = true, #deprecated
+  Boolean               $sudo                  = true, #deprecated
+  Boolean               $ssh                   = true, #deprecated
+  Boolean               $enumerate_users       = false,
+  Boolean               $cache_credentials     = true,
+  Integer               $min_id                = 500
 ){
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
@@ -105,13 +106,13 @@ class simp::sssd::client (
       'ldap_user_gecos'           => 'displayName'
     }
 
-    if $ldap_389ds_compat {
+    if $ldap_server_type in ['389ds'] {
       $_ldap_server_type_defaults = {
         'ldap_account_expire_policy' => 'ipa',
         'ldap_user_ssh_public_key'   => 'nsSshPublicKey'
       }
     }
-    else {
+    elsif $ldap_server_type in ['plain'] {
       $_ldap_server_type_defaults = {
         'ldap_account_expire_policy' => 'shadow',
         'ldap_user_ssh_public_key'   => 'sshPublicKey'

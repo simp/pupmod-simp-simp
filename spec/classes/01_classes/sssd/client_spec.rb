@@ -10,6 +10,7 @@ describe 'simp::sssd::client' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) { os_facts }
+        let(:params) {{ :ldap_server_type => 'plain' }}
 
         if os_facts[:kernel] == 'windows'
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
@@ -26,15 +27,15 @@ describe 'simp::sssd::client' do
 
           context 'with alternate params' do
             let(:params) {{
-              :local_domain      => true,
-              :local_domain_options => { 'max_id' => 12345 },
-              :ldap_domain       => true,
-              :ldap_domain_options => { 'max_id' => 23456 },
+              :local_domain          => true,
+              :local_domain_options  => { 'max_id' => 12345 },
+              :ldap_domain           => true,
+              :ldap_domain_options   => { 'max_id' => 23456 },
               :ldap_provider_options => { 'ldap_user_name' => 'bob' },
-              :ldap_389ds_compat => true,
-              :enumerate_users   => true,
-              :cache_credentials => false,
-              :min_id            => 501
+              :ldap_server_type      => '389ds',
+              :enumerate_users       => true,
+              :cache_credentials     => false,
+              :min_id                => 501
             }}
 
             it_should_behave_like 'sssd client'

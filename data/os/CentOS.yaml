@@ -1,7 +1,5 @@
 #
 ---
-simp::sssd::client::ldap_389ds_compat: true
-
 simp::scenario_map:
   none: []
   poss:
