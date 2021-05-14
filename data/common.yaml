@@ -130,4 +130,3 @@ simp::nsswitch::ldap_options:
 
 simp::sssd::client::local_domain: false
 
-simp::sssd::client::ldap_server_type: 'plain'
