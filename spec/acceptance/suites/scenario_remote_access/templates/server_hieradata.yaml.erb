@@ -23,3 +23,5 @@ simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['ALL']
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+# Settings for the type of LDAP server
+simp::sssd::client::ldap_server_type: <%= ldap_type %>
