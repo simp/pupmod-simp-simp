@@ -32,7 +32,13 @@ describe 'remote_access scenario' do
   # Both client and server need these
   let(:server_fqdn) { fact_on(ldap_server, 'fqdn') }
   let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map{ |d| "dc=#{d}" }.join(',') }
-
+  # For now default to openldap server until test includes a 389DS server
+  let(:ldap_type) { if fact_on(ldap_server,'operatingsystemmajrelease') == '7'
+                     'plain'
+                   else
+                     '389ds'
+                   end
+  }
   context "set up simp_openldap::server on #{ldap_server}" do
     let(:server_hieradata)      { File.read(File.expand_path('templates/server_hieradata.yaml.erb', File.dirname(__FILE__))) }
     let(:add_testuser)          { File.read(File.expand_path('templates/add_testuser.ldif.erb', File.dirname(__FILE__))) }

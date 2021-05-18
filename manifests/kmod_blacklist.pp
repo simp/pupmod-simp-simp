@@ -72,12 +72,12 @@ class simp::kmod_blacklist (
 
   # Overrides in modprobe are processed in shell glob alphabetical order
   if $allow_overrides {
-    $_disable_file = "/etc/modprobe.d/zz_simp_disable.conf"
-    $_obsolete_disable_file = "/etc/modprobe.d/00_simp_disable.conf"
+    $_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
+    $_obsolete_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
   }
   else {
-    $_disable_file = "/etc/modprobe.d/00_simp_disable.conf"
-    $_obsolete_disable_file = "/etc/modprobe.d/zz_simp_disable.conf"
+    $_disable_file = '/etc/modprobe.d/00_simp_disable.conf'
+    $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
   }
 
   $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} /bin/true" }, "\n")
