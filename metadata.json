@@ -1,10 +1,6 @@
 {
   "name": "simp-simp",
-<<<<<<< HEAD
-  "version": "4.14.4",
-=======
   "version": "4.15.0",
->>>>>>> b4d46120374c6d5d62e198a981dc2b5ce623232b
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
