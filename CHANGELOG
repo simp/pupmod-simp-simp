@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-* Tue Jan 19 2021 Kendall Moore <kendall.moore@onyxpoint.com> - 4.14.4-0
-- Allow explicit management of IPv6 kernel tuning parameters as long as IPv6
-  is loaded into the kernel.
-=======
 * Wed May 12 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.15.0
 - Removed
   - Drop support for EL 6 due to EOL
@@ -29,7 +24,6 @@
 
 * Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.15.0
 - Removed EL6 from supported OSes
->>>>>>> b4d46120374c6d5d62e198a981dc2b5ce623232b
 
 * Thu Nov 19 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.3-0
 - Call `selinux::install` prior to using native types that require the packages
