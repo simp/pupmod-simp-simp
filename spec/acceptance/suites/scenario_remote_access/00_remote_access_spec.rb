@@ -8,10 +8,10 @@ test_name 'remote_access scenario'
 # The remote_access scenario includes the components required for
 # for a user to 'log into' a client (and nothing more!).  The test
 # procedure is as follows:
-#   1. Create an ldap server on server-el7
+#   1. Create an ldap server on a server node
 #   2. Add an LDAP 'test.user'
-#   3. Apply the remote_access scenario on client-el7 and client-el6
-#   4. Attempt to ssh as 'test.user' to client-el7 and client-el6.
+#   3. Apply the remote_access scenario on client nodes.
+#   4. Attempt to ssh as 'test.user' to the client nodes.
 
 describe 'remote_access scenario' do
   let(:server_manifest) {
@@ -32,16 +32,24 @@ describe 'remote_access scenario' do
   # Both client and server need these
   let(:server_fqdn) { fact_on(ldap_server, 'fqdn') }
   let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map{ |d| "dc=#{d}" }.join(',') }
-
+  # For now default to openldap server until test includes a 389DS server
+  let(:ldap_type) { if fact_on(ldap_server,'operatingsystemmajrelease') == '7'
+                     'plain'
+                   else
+                     '389ds'
+                   end
+  }
   context "set up simp_openldap::server on #{ldap_server}" do
     let(:server_hieradata)      { File.read(File.expand_path('templates/server_hieradata.yaml.erb', File.dirname(__FILE__))) }
     let(:add_testuser)          { File.read(File.expand_path('templates/add_testuser.ldif.erb', File.dirname(__FILE__))) }
     let(:add_testuser_to_admin) { File.read(File.expand_path('templates/add_testuser_to_admin.ldif.erb', File.dirname(__FILE__))) }
 
+    # FIXME: SIMP-9136
     # Required for simp ldap password policy
     it 'should set up needed repositories' do
       on(ldap_server, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash')
     end
+
     it 'should configure hiera' do
        set_hieradata_on(ldap_server, ERB.new(server_hieradata).result(binding))
     end
@@ -79,10 +87,13 @@ describe 'remote_access scenario' do
     context "set up remote_access scenario on #{client}" do
       let(:client_hieradata)      { File.read(File.expand_path('templates/client_hieradata.yaml.erb', File.dirname(__FILE__))) }
       let(:client_fqdn) { fact_on(client, 'fqdn') }
+
+      # FIXME: SIMP-9136
       # Need this for sudosh2
       it 'should set up needed repositories' do
         on(client, 'curl -s https://packagecloud.io/install/repositories/simp-project/6_X_Dependencies/script.rpm.sh | bash')
       end
+
       it 'should configure hiera' do
         set_hieradata_on(client, ERB.new(client_hieradata).result(binding))
       end

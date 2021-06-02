@@ -1,0 +1,39 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  server-oel7.simp.beaker:
+    roles:
+      - server
+      - default
+      - ldap_server
+    platform:   el-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+  client-oel7.simp.beaker:
+    roles:
+      - client
+    platform:   el-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+  client-oel8.simp.beaker:
+    roles:
+      - client
+    platform:   el-8-x86_64
+    box:        generic/oracle8
+    hypervisor: <%= hypervisor %>
+
+CONFIG:
+  log_level: verbose
+  type: aio
+  vagrant_memsize: 2048
+  synced_folder: disabled
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>

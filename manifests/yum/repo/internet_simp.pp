@@ -54,8 +54,8 @@ class simp::yum::repo::internet_simp(
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   package { $simp_repos_package:
-    source => $simp_repos_package_url,
-    ensure => $package_ensure
+    ensure => $package_ensure,
+    source => $simp_repos_package_url
   }
 
   if $package_ensure == 'absent' {

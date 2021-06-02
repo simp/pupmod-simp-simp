@@ -169,10 +169,7 @@ describe 'simp' do
               'simp::sysctl',
               'ssh'
             ]
-            if ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '6')
-              simp_lite << 'chkrootkit'
-              simp_lite << 'ntpd'
-            elsif ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
+            if ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
               simp_lite << 'rkhunter'
               simp_lite << 'ntpd'
             else

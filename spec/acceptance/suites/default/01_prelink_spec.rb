@@ -3,6 +3,7 @@ require 'json'
 
 test_name 'simp::prelink'
 
+
 describe 'simp::prelink class' do
   let(:manifest) {
     <<-EOS
@@ -11,7 +12,9 @@ describe 'simp::prelink class' do
   }
 
   hosts.each do |host|
-    context "on #{host}" do
+    os_major = fact_on(host, 'operatingsystemmajrelease')
+
+    if os_major == '7'
       context 'with default parameters' do
         it 'should apply manifest' do
           apply_manifest_on(host, manifest, :catch_failures => true)
@@ -48,8 +51,7 @@ describe 'simp::prelink class' do
         end
 
         it 'should install prelink package only if not in FIPS mode' do
-          facts = JSON.load(on(host, 'puppet facts').stdout)
-          if facts['values']['fips_enabled']
+          if fact_on(host, 'fips_enabled')
             expect( check_for_package(host, 'prelink') ).to be false
           else
             expect( check_for_package(host, 'prelink') ).to be true
@@ -57,18 +59,16 @@ describe 'simp::prelink class' do
         end
 
         it 'should enable prelink only if not in FIPS mode' do
-          facts = JSON.load(on(host, 'puppet facts').stdout)
-          if facts['values']['fips_enabled']
-            expect( facts['values']['prelink'] ).to be nil
+          if fact_on(host, 'fips_enabled')
+            expect(pfact_on(host, 'prelink')).to eq ""
           else
-            expect( facts['values']['prelink'] ).to_not be nil
-            expect( facts['values']['prelink']['enabled'] ).to be true
+            expect(pfact_on(host, 'prelink')).to_not eq ""
+            expect(pfact_on(host, 'prelink.enabled')).to be true
           end
         end
 
         it 'should run prelink only if not in FIPS mode' do
-          facts = JSON.load(on(host, 'puppet facts').stdout)
-          if facts['values']['fips_enabled']
+          if fact_on(host, 'fips_enabled')
             result = on(host, 'ls /etc/prelink.cache', :acceptable_exit_codes => [2])
           else
             # first see if prelink cron job has already run
@@ -112,6 +112,8 @@ describe 'simp::prelink class' do
           expect( check_for_package(host, 'prelink') ).to be false
         end
       end
+    else
+     it 'does not have prelink capabilities'
     end
   end
 end

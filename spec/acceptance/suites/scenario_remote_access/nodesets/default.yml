@@ -6,28 +6,27 @@
   end
 -%>
 HOSTS:
-  server-el7:
+  server-el7.simp.beaker:
     roles:
       - server
       - default
       - ldap_server
-      - el7
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: <%= hypervisor %>
-  client-el7:
+
+  client-el7.simp.beaker:
     roles:
       - client
-      - el7
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: <%= hypervisor %>
-  client-el6:
+
+  client-el8.simp.beaker:
     roles:
       - client
-      - el6
-    platform:   el-6-x86_64
-    box:        centos/6
+    platform:   el-8-x86_64
+    box:        centos/8
     hypervisor: <%= hypervisor %>
 
 CONFIG:

@@ -41,8 +41,9 @@
 # @param kernel__core_uses_pid
 # @param kernel__dmesg_restrict
 #
-# Does not apply to RHEL 7 systems:
 # @param kernel__exec_shield
+#   **DEPRECATED BY VENDOR WILL BE REMOVED IN NEXT RELEASE**
+#
 # @param kernel__panic
 # @param kernel__randomize_va_space
 # @param kernel__sysrq
@@ -243,10 +244,6 @@ class simp::sysctl (
       value   => 0,
       order   => 100
     }
-  }
-
-  if $::operatingsystemmajrelease == '6' {
-    sysctl { 'kernel.exec-shield': value => $kernel__exec_shield }
   }
 
   if $ipv6.is_a(Undef) {

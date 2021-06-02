@@ -1,0 +1,34 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  server-oel8.simp.beaker:
+    roles:
+      - server
+      - default
+      - master
+      - simp_server
+      - el8
+    platform:   el-8-x86_64
+    box:        generic/oracle8
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      updates:
+        baseurl: 'https://yum$ociregion.oracle.com/repo/OracleLinux/OL8/baseos/latest/$basearch/'
+        gpgkeys:
+          - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol8
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
+        gpgkeys:
+          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+
+CONFIG:
+  log_level: verbose
+  type: aio
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>

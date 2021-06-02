@@ -8,13 +8,9 @@
 HOSTS:
   oel7:
     roles:
-      - server
       - default
-      - master
-      - simp_server
-      - el7
     platform:   el-7-x86_64
-    box:        onyxpoint/oel-7-x86_64
+    box:        generic/oracle7
     hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
@@ -35,32 +31,6 @@ HOSTS:
           - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
           - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
           - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
-
-  oel6:
-    roles:
-      - simp_server
-    platform:   el-6-x86_64
-    box:        onyxpoint/oel-6-x86_64
-    hypervisor: <%= hypervisor %>
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
-        gpgkeys:
-          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
-      simp:
-        baseurl: 'https://packagecloud.io/simp-project/6_X/el/$releasever/$basearch'
-        gpgkeys:
-          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
-      simp_dependencies:
-        baseurl: 'https://packagecloud.io/simp-project/6_X_Dependencies/el/$releasever/$basearch'
-        gpgkeys:
-          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
-          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
-          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
-          - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
-          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6
 
 CONFIG:
   log_level: verbose

@@ -26,9 +26,6 @@ describe 'simp::yum::repo::local_simp' do
       }
       let(:other_gpgkeys){
         {
-           'RedHat-6'      => ['RPM-GPG-KEY-EPEL-6','RPM-GPG-KEY-redhat-release'],
-           'OracleLinux-6' => ['RPM-GPG-KEY-EPEL-6','RPM-GPG-KEY-oracle'],
-           'CentOS-6'      => ['RPM-GPG-KEY-EPEL-6'],
            'RedHat-7'      => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-redhat-release'],
            'OracleLinux-7' => ['RPM-GPG-KEY-EPEL-7','RPM-GPG-KEY-oracle'],
            'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7'],
@@ -40,7 +37,7 @@ describe 'simp::yum::repo::local_simp' do
 
       context 'with a single server name' do
         let(:params) {{ :servers => ['puppet.example.simp'] }}
-        let(:os_yum_path){ 'SIMP' }
+        let(:os_yum_path){ "SIMP/#{facts[:os][:name]}/#{facts[:os][:release][:major]}"}
         let(:os_baseurl){ "#{os_yum_path}/#{facts[:architecture]}" }
         let(:os_gpgkey){ "#{os_yum_path}/GPGKEYS" }
 
@@ -89,7 +86,7 @@ describe 'simp::yum::repo::local_simp' do
         it {
           os_maj_rel  = facts[:os][:release][:major]
           os_name     = facts[:os][:name]
-          os_yum_path =  'SIMP'
+          os_yum_path =  "SIMP/#{os_name}/#{os_maj_rel}"
           os_baseurl  = "#{os_yum_path}/#{facts[:architecture]}"
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
                           "SIMP/6/#{facts[:architecture]}"

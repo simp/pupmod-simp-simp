@@ -35,10 +35,13 @@ describe 'simp yum configuration' do
         )
 
         # Mock out the actual YUM repos
+        os_data = fact_on(host,'os')
+
+        os_name =  os_data['name']
+        os_majrel = os_data['release']['major']
         repos = [
-          '/var/www/yum/SIMP/x86_64',
-          '/var/www/yum/CentOS/7/x86_64/Updates',
-          '/var/www/yum/CentOS/6/x86_64/Updates'
+          "/var/www/yum/SIMP/#{os_name}/#{os_majrel}/x86_64",
+          "/var/www/yum/#{os_name}/#{os_majrel}/x84_64/Updates"
         ]
 
         repos.each do |repo|

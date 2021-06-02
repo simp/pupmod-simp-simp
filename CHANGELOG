@@ -1,6 +1,35 @@
+<<<<<<< HEAD
 * Tue Jan 19 2021 Kendall Moore <kendall.moore@onyxpoint.com> - 4.14.4-0
 - Allow explicit management of IPv6 kernel tuning parameters as long as IPv6
   is loaded into the kernel.
+=======
+* Wed May 12 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.15.0
+- Removed
+  - Drop support for EL 6 due to EOL
+- Fixed
+  - Ensure that netconsole-service is installed on EL8+
+- Added
+  - Add support for Puppet 7
+  - Added a JSON formatted profiling formatter for rspec
+  - Allow users to modify the defined type options in `simp::sssd::client`
+
+
+* Wed Apr 28 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.0
+- As of SIMP 6.6 the SIMP yum repo is expected to  OS version specific allowing the
+  yum server to hosts SIMP RPMs and it dependencies for more than one OS.
+  The SIMP repo will now be under /var/www/yum/SIMP/<osfamily>/<os major version>/<arch>
+  instead of /var/www/yum/SIMP/<arch>.
+  This updates the creation of the yum config files to point to the correct directories.
+- Fix bootstrap_simp_client to use fully qualified path on call to
+  puppet.
+
+* Mon Mar 29 2021 Michael Riddle <michael.riddle@onyxpoint.com> - 4.15.0
+- Added additional parameters to simp::admin to allow for more fine-grained
+  control of global admin and auditor sudo rules
+
+* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.15.0
+- Removed EL6 from supported OSes
+>>>>>>> b4d46120374c6d5d62e198a981dc2b5ce623232b
 
 * Thu Nov 19 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.14.3-0
 - Call `selinux::install` prior to using native types that require the packages

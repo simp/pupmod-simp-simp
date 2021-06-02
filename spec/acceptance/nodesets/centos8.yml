@@ -6,7 +6,7 @@
   end
 -%>
 HOSTS:
-  server-el8:
+  server-el8.simp.beaker:
     roles:
       - server
       - default
@@ -16,6 +16,10 @@ HOSTS:
     box:        centos/8
     hypervisor: <%= hypervisor %>
     yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
         gpgkeys:

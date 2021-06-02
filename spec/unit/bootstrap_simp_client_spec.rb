@@ -2,14 +2,17 @@
 # the '.rb' suffix.  So, use a symlink to it that has the '.rb' suffix.
 # This symlink is in the tests directory.
 $: << File.expand_path(File.join(File.dirname(__FILE__), '..','..','tests'))
-require 'bootstrap_simp_client'
-
 require 'spec_helper'
 require 'tmpdir'
+require 'bootstrap_simp_client'
 
 describe 'BootstrapSimpClient' do
 
-  let(:bootstrap) { BootstrapSimpClient.new }
+  let(:puppet_command) { '/opt/puppetlabs/bin/puppet' }
+
+  let(:bootstrap) do
+    BootstrapSimpClient.new
+  end
 
   let(:success_result) {{
     :exitstatus => 0,
@@ -41,6 +44,9 @@ describe 'BootstrapSimpClient' do
     # Need to make sure we have something to find
     FileUtils.touch(@puppet_conf_file)
     ENV['LOCKED'] = nil
+
+    BootstrapSimpClient.expects(:puppet_exe_path).returns(puppet_command)
+    BootstrapSimpClient.expects(:puppet_config_path).returns(@puppet_conf_file)
   end
 
   after :each do
@@ -194,11 +200,10 @@ EOM
   # will also test validate_options here
   describe '#parse_command_line' do
     it 'uses defaults when only required options are specified' do
-      File.stubs(:exist?).returns(true)
       test_args = [ '-s', 'puppet.test.local', '-c', 'puppetca.test.local']
       bootstrap.parse_command_line(test_args)
 
-      cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             ' --no-show_diff --no-splay --verbose --logdest' +
             ' /root/puppet.bootstrap.log --waitforcert 10 --evaltrace' +
             ' --summarize'
@@ -209,7 +214,7 @@ EOM
                                    BootstrapSimpClient::DEFAULT_BOOTSTRAP_SERVICE),
         :set_static_hostname    => false,
         :ntp_servers            => [],
-        :puppet_conf_file       => BootstrapSimpClient::DEFAULT_PUPPET_CONF_FILE,
+        :puppet_conf_file       => bootstrap.options[:puppet_conf_file],
         :digest_algorithm       => BootstrapSimpClient::DEFAULT_DIGEST_ALGORITHM,
         :puppet_keylength       => BootstrapSimpClient::DEFAULT_PUPPET_KEYLENGTH,
         :puppet_ca_port         => BootstrapSimpClient::DEFAULT_PUPPET_CA_PORT,
@@ -254,7 +259,7 @@ EOM
       ]
       bootstrap.parse_command_line(test_args)
 
-      cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             ' --no-show_diff --no-splay --verbose --logdest' +
             ' mylog.txt --waitforcert 20'
 
@@ -318,17 +323,14 @@ EOM
     end
 
     it 'returns 0 when processing succeeds' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
-        :exitstatus => 0,
-        :stdout => '3.4.5',
-        :stderr => ''})
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns(uname_result)
       bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
-      puppet_cmd1 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
       bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
 
-      puppet_cmd2 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
@@ -337,8 +339,8 @@ EOM
       Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
       bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns(success_result)
 
-      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
-      bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
+      bootstrap.stubs(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").returns(success_result)
+      bootstrap.stubs(:execute).with("#{puppet_command} resource service puppet enable=true").returns(success_result)
 
       expect( bootstrap.run(@test_args + [ '-n', 'ntpserver1,ntpserver2' ]) ).to eq 0
 
@@ -358,19 +360,19 @@ EOM
      end
 
      it 'runs configured number of puppet agent runs' do
-      puppet_cmd1 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
       bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
 
-      puppet_cmd2 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
       Facter.stubs(:value).with(:selinux).returns(false)
 
-      bootstrap.stubs(:execute).with('puppet resource service simp_client_bootstrap enable=false').returns(success_result)
-      bootstrap.stubs(:execute).with('puppet resource service puppet enable=true').returns(success_result)
+      bootstrap.stubs(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").returns(success_result)
+      bootstrap.stubs(:execute).with("#{puppet_command} resource service puppet enable=true").returns(success_result)
 
       expect( bootstrap.run(@test_args + [ '-r', '4' ]) ).to eq 0
 
@@ -386,12 +388,12 @@ EOM
      end
 
      it 'returns 1 when fixfiles fails' do
-      puppet_cmd1 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
       bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
 
-      puppet_cmd2 = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
@@ -412,7 +414,7 @@ EOM
      end
 
      it 'returns 1 when processing times out' do
-      puppet_cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      puppet_cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
       bootstrap.stubs(:execute).with(puppet_cmd).returns({
@@ -434,7 +436,7 @@ EOM
   describe '#run_puppet_agent' do
 
     it 'executes the puppet agent command' do
-      cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       bootstrap.stubs(:execute).with(cmd).returns(success_result)
@@ -444,7 +446,7 @@ EOM
     end
 
     it 'executes the puppet agent command with extra arguments' do
-      cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
       bootstrap.stubs(:execute).with(cmd).returns(success_result)
@@ -460,7 +462,7 @@ EOM
         :stderr => 'some puppet agent error'
       }
 
-      cmd = '/opt/puppetlabs/bin/puppet agent --onetime --no-daemonize' +
+      cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       results = [failed_result, failed_result, success_result]
@@ -528,10 +530,7 @@ EOM
     end
 
     it 'when ntp servers are configured it runs ntpdate for kernel < 4' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
-        :exitstatus => 0,
-        :stdout => '3.4.5',
-        :stderr => ''})
+      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns(uname_result)
       bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
       bootstrap.parse_command_line(@test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
@@ -763,5 +762,4 @@ EOM
       expect { bootstrap.info('info message') }.to raise_error(Errno::ENOENT)
     end
   end
-
 end

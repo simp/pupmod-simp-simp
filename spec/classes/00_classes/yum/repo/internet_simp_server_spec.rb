@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', '..', 'metadata.json'))
-metadata_json = File.read(metadata_file, {:encoding => "utf-8"} )
+metadata_json = File.read(metadata_file, :encoding => "utf-8" )
 
 describe 'simp::yum::repo::internet_simp_server' do
   on_supported_os.each do |os, os_facts|

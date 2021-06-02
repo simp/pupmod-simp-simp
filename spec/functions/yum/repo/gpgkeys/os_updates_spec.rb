@@ -16,7 +16,7 @@ describe 'simp::yum::repo::gpgkeys::os_updates' do
               return_value = ['RPM-GPG-KEY-oracle']
             else
               if os_facts[:os][:name] ==  'CentOS'
-                if os_facts[:os][:release][:major] <= '7'
+                if os_facts[:os][:release][:major] < '8'
                   return_value = ["RPM-GPG-KEY-#{os_facts[:os][:name]}-#{os_facts[:os][:release][:major]}"]
                 else
                   return_value = ["RPM-GPG-KEY-#{os_facts[:os][:name]}-Official"]

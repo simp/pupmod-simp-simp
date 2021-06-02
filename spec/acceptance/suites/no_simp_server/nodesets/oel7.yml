@@ -1,0 +1,29 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  oel7-server:
+    roles:
+      - default
+      - server
+    platform:   el-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+  oel7-client:
+    roles:
+      - client
+    platform:   el-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+CONFIG:
+  log_level: verbose
+  type: aio
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>
