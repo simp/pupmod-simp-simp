@@ -253,7 +253,7 @@ class simp::sysctl (
     $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
   }
 
-  unless $facts['simplib_sysctl']['net.ipv6.conf.all.disable_ipv6'] =~ Undef {
+  if $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') {
     sysctl {
       'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
       'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
