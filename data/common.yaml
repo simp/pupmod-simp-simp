@@ -128,5 +128,3 @@ simp::nsswitch::ldap_options:
     - 'files [!NOTFOUND=return]'
     - 'ldap'
 
-simp::sssd::client::local_domain: false
-

@@ -4,12 +4,10 @@
 # as an example of what you can do to make it work for your environment.
 #
 # @param local_domain
-#   Configure the 'LOCAL' domain
-#
-#   To use the local domain you must include 'LOCAL'  in sssd::domains via hiera
+#   DEPRECATED:  This param does nothing.  It will be removed in the next version
 #
 # @param local_domain_options
-#   A Hash of options to pass directly into the `sssd::domain` defined type
+#   DEPRECATED:  This param does nothing.  It will be removed in the next version
 #
 # @param ldap_domain
 #   Configure the LDAP domain
@@ -55,13 +53,13 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sssd::client (
-  Boolean               $local_domain,
-  Hash                  $local_domain_options  = {},
+  Boolean               $local_domain          = false, #deprecated
+  Hash                  $local_domain_options  = {},    #deprecated
   Boolean               $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Hash                  $ldap_domain_options   = {},
   Enum['plain','389ds'] $ldap_server_type,
   Hash                  $ldap_provider_options = {},
-  Boolean               $autofs                = true, #deprecated
+  Boolean               $autofs                = true, #deprecateddd
   Boolean               $sudo                  = true, #deprecated
   Boolean               $ssh                   = true, #deprecated
   Boolean               $enumerate_users       = false,
@@ -72,21 +70,6 @@ class simp::sssd::client (
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'sssd'
-
-  if $local_domain {
-    $_local_domain_defaults = {
-      'description' => 'LOCAL Users Domain',
-      'min_id'      => $min_id
-    }
-
-    sssd::domain { 'LOCAL':
-      access_provider   => 'permit',
-      enumerate         => false,
-      cache_credentials => false,
-      id_provider       => 'files',
-      *                 => $_local_domain_defaults + $local_domain_options
-    }
-  }
 
   if $ldap_domain {
     $_ldap_domain_defaults = {

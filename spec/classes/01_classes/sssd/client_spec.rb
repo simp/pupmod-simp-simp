@@ -17,18 +17,12 @@ describe 'simp::sssd::client' do
         else
           context 'with default parameters' do
             it_should_behave_like 'sssd client'
-            if os_facts[:os][:release][:major] < '8'
-              it { is_expected.to contain_sssd__domain('LOCAL')}
-            else
-              it { is_expected.to_not contain_sssd__domain('LOCAL')}
-            end
+            it { is_expected.to_not contain_sssd__domain('LOCAL')}
             it { is_expected.to_not contain_sssd__domain('LDAP')}
           end
 
           context 'with alternate params' do
             let(:params) {{
-              :local_domain          => true,
-              :local_domain_options  => { 'max_id' => 12345 },
               :ldap_domain           => true,
               :ldap_domain_options   => { 'max_id' => 23456 },
               :ldap_provider_options => { 'ldap_user_name' => 'bob' },
@@ -39,14 +33,6 @@ describe 'simp::sssd::client' do
             }}
 
             it_should_behave_like 'sssd client'
-            it {
-              is_expected.to contain_sssd__domain('LOCAL')
-                .with_id_provider('files')
-                .with_min_id(501)
-                .with_max_id(12345)
-                .with_enumerate(false)
-                .with_cache_credentials(false)
-            }
 
             it {
               is_expected.to contain_sssd__domain('LDAP')
