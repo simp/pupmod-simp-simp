@@ -11,8 +11,18 @@ HOSTS:
       - server
       - default
       - ldap_server
+      - openldap
     platform:   el-7-x86_64
     box:        centos/7
+    hypervisor: <%= hypervisor %>
+
+  server-el8.simp.beaker:
+    roles:
+      - server
+      - ldap_server
+      - ds389
+    platform:   el-8-x86_64
+    box:        centos/8
     hypervisor: <%= hypervisor %>
 
   client-el7.simp.beaker:

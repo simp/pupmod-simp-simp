@@ -9,10 +9,20 @@ HOSTS:
   server-oel7.simp.beaker:
     roles:
       - server
-      - default
       - ldap_server
+      - openldap
     platform:   el-7-x86_64
     box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+  server-oel8.simp.beaker:
+    roles:
+      - server
+      - default
+      - ldap_server
+      - ds389
+    platform:   el-8-x86_64
+    box:        generic/oracle8
     hypervisor: <%= hypervisor %>
 
   client-oel7.simp.beaker:

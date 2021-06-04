@@ -38,6 +38,7 @@ fixtures:
     deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources
     datacat: https://github.com/simp/puppet-datacat
     dhcp: https://github.com/simp/pupmod-simp-dhcp
+    ds389: https://github.com/simp/pupmod-simp-ds389
     fips: https://github.com/simp/pupmod-simp-fips
     firewalld:
       repo: https://github.com/simp/pupmod-voxpupuli-firewalld
@@ -93,6 +94,7 @@ fixtures:
     simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
     simp_options: https://github.com/simp/pupmod-simp-simp_options
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
+    simp_ds389: https://github.com/simp/pupmod-simp-simp_ds389
     ssh: https://github.com/simp/pupmod-simp-ssh
     sshkeys_core:
       repo: https://github.com/simp/pupmod-puppetlabs-sshkeys_core.git

@@ -43,7 +43,6 @@ describe 'simp "one_shot" scenario' do
 simp_options::dns::servers: ['8.8.8.8']
 simp_options::puppet::server: #{host_fqdn}
 simp_options::puppet::ca: #{host_fqdn}
-sssd::domains: ['LOCAL']
 
 # Settings required for acceptance test, some may be required
 simp::scenario: one_shot

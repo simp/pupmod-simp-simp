@@ -9,7 +9,6 @@ simp_options::ldap::bind_hash: '{SSHA}foobarbaz!!!!'
 simp_options::ldap::sync_pw: 's00per sekr3t!'
 simp_options::ldap::sync_hash: '{SSHA}foobarbaz!!!!'
 simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
-sssd::domains: ['LOCAL']
 simp::scenario: simp
 simp_options::ldap: false
 simp_options::rsync: false
