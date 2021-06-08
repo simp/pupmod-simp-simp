@@ -14,13 +14,13 @@ describe 'simp::sysctl' do
             it { is_expected.to create_class('simp::sysctl') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.all.accept_source_route').with(:value => 0 ) }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 0 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(:value => 0 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 0 ) }
             it { is_expected.to create_sysctl('fs.inotify.max_user_watches').with(:value => 102400 ) }
           end
 
-          context "with ipv6 => true" do
+          context "with ipv6 enabled" do
             let(:params) {{ :ipv6 => true }}
             let(:facts) {
               os_facts.merge({ :ipv6_enabled => true })
@@ -32,12 +32,17 @@ describe 'simp::sysctl' do
             it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 0 ) }
           end
 
-          context "with ipv6 => false" do
-            let(:params) {{ :ipv6 => false }}
+          context "with ipv6 disabled" do
+            let(:params) {{
+              :ipv6                                          => false,
+              :net__ipv6__conf__all__accept_redirects        => 1,
+              :net__ipv6__conf__all__accept_source_route     => 1,
+              :net__ipv6__conf__default__accept_source_route => 1,
+            }}
             it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => 1 ) }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.all.accept_redirects') }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.all.accept_source_route').with(:value => 0 ) }
-            it { is_expected.not_to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 0 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(:value => 1 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(:value => 1 ) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(:value => 1 ) }
           end
 
           context "kernel__core_pattern with absolute path" do
