@@ -16,10 +16,6 @@
   ],
   "dependencies": [
     {
-      "name": "aboe/chrony",
-      "version_requirement": ">= 0.3.1 < 1.0.0"
-    },
-    {
       "name": "camptocamp/kmod",
       "version_requirement": ">= 2.1.0 < 3.0.0"
     },
@@ -28,8 +24,12 @@
       "version_requirement": ">= 2.2.0 < 3.0.0"
     },
     {
+      "name": "puppet/chrony",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    },
+    {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.0 < 7.0.0"
+      "version_requirement": ">= 2.2.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
@@ -41,7 +41,7 @@
     },
     {
       "name": "saz/timezone",
-      "version_requirement": ">= 5.1.1 < 6.0.0"
+      "version_requirement": ">= 5.1.1 < 7.0.0"
     },
     {
       "name": "simp/aide",
@@ -195,7 +195,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 8.0.0"
+      "version_requirement": ">= 6.0.0 < 8.0.0"
     }
   ],
   "operatingsystem_support": [

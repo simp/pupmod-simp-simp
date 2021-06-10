@@ -5,122 +5,121 @@ fixtures:
     # Note: Ideally, would like to name this 'environment', to match
     # the name of the component in a simp-core Puppetfile.  However,
     # pluginsync on the VMs barfs with a module named 'environment'
-    simp_environment: https://github.com/simp/simp-environment-skeleton
+    simp_environment: https://github.com/simp/simp-environment-skeleton.git
     # End Kluge
-    acpid: https://github.com/simp/pupmod-simp-acpid
-    aide: https://github.com/simp/pupmod-simp-aide
-    auditd: https://github.com/simp/pupmod-simp-auditd
-    at: https://github.com/simp/pupmod-simp-at
+    acpid: https://github.com/simp/pupmod-simp-acpid.git
+    aide: https://github.com/simp/pupmod-simp-aide.git
+    auditd: https://github.com/simp/pupmod-simp-auditd.git
+    at: https://github.com/simp/pupmod-simp-at.git
     augeas_core:
       repo: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
       puppet_version: ">= 6.0.0"
-    augeasproviders_apache: https://github.com/simp/augeasproviders_apache
-    augeasproviders_core: https://github.com/simp/augeasproviders_core
-    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
-    augeasproviders_mounttab: https://github.com/simp/augeasproviders_mounttab
-    augeasproviders_nagios: https://github.com/simp/augeasproviders_nagios
-    augeasproviders_pam: https://github.com/simp/augeasproviders_pam
-    augeasproviders_postgresql: https://github.com/simp/augeasproviders_postgresql
-    augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet
-    augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh
-    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
-    autofs: https://github.com/simp/pupmod-simp-autofs
-    chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit
-    chrony: https://github.com/simp/pupmod-aboe76-chrony
-    clamav: https://github.com/simp/pupmod-simp-clamav
-    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
-    concat: https://github.com/simp/puppetlabs-concat
-    cron: https://github.com/simp/pupmod-simp-cron
+    augeasproviders_apache: https://github.com/simp/augeasproviders_apache.git
+    augeasproviders_core: https://github.com/simp/augeasproviders_core.git
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub.git
+    augeasproviders_mounttab: https://github.com/simp/augeasproviders_mounttab.git
+    augeasproviders_nagios: https://github.com/simp/augeasproviders_nagios.git
+    augeasproviders_pam: https://github.com/simp/augeasproviders_pam.git
+    augeasproviders_postgresql: https://github.com/simp/augeasproviders_postgresql.git
+    augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet.git
+    augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh.git
+    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
+    autofs: https://github.com/simp/pupmod-simp-autofs.git
+    chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit.git
+    chrony: https://github.com/simp/pupmod-voxpupuli-chrony.git
+    clamav: https://github.com/simp/pupmod-simp-clamav.git
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
+    concat: https://github.com/simp/puppetlabs-concat.git
+    cron: https://github.com/simp/pupmod-simp-cron.git
     cron_core:
       repo: https://github.com/simp/pupmod-puppetlabs-cron_core.git
       puppet_version: ">= 6.0.0"
-    crypto_policy: https://github.com/simp/pupmod-simp-crypto_policy
-    deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources
-    datacat: https://github.com/simp/puppet-datacat
-    dhcp: https://github.com/simp/pupmod-simp-dhcp
-    fips: https://github.com/simp/pupmod-simp-fips
+    crypto_policy: https://github.com/simp/pupmod-simp-crypto_policy.git
+    deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources.git
+    dhcp: https://github.com/simp/pupmod-simp-dhcp.git
+    fips: https://github.com/simp/pupmod-simp-fips.git
     firewalld:
-      repo: https://github.com/simp/pupmod-voxpupuli-firewalld
-    haveged: https://github.com/simp/pupmod-simp-haveged
-    hocon: https://github.com/simp/pupmod-puppetlabs-hocon
+      repo: https://github.com/simp/pupmod-voxpupuli-firewalld.git
+    haveged: https://github.com/simp/pupmod-simp-haveged.git
+    hocon: https://github.com/simp/pupmod-puppetlabs-hocon.git
     host_core:
       repo: https://github.com/simp/pupmod-puppetlabs-host_core.git
       puppet_version: ">= 6.0.0"
-    incron: https://github.com/simp/pupmod-simp-incron
-    inifile: https://github.com/simp/puppetlabs-inifile
-    iptables: https://github.com/simp/pupmod-simp-iptables
-    issue: https://github.com/simp/pupmod-simp-issue
-    java: https://github.com/simp/puppetlabs-java
+    incron: https://github.com/simp/pupmod-simp-incron.git
+    inifile: https://github.com/simp/puppetlabs-inifile.git
+    iptables: https://github.com/simp/pupmod-simp-iptables.git
+    issue: https://github.com/simp/pupmod-simp-issue.git
+    java: https://github.com/simp/puppetlabs-java.git
     kmod: https://github.com/simp/puppet-kmod.git
-    krb5: https://github.com/simp/pupmod-simp-krb5
-    logrotate: https://github.com/simp/pupmod-simp-logrotate
-    motd: https://github.com/simp/puppetlabs-motd
+    krb5: https://github.com/simp/pupmod-simp-krb5.git
+    logrotate: https://github.com/simp/pupmod-simp-logrotate.git
+    motd: https://github.com/simp/puppetlabs-motd.git
     mount_core:
       repo: https://github.com/simp/pupmod-puppetlabs-mount_core.git
       puppet_version: ">= 6.0.0"
-    named: https://github.com/simp/pupmod-simp-named
-    nfs: https://github.com/simp/pupmod-simp-nfs
-    nsswitch: https://github.com/simp/puppet-nsswitch
-    ntpd: https://github.com/simp/pupmod-simp-ntpd
-    oddjob: https://github.com/simp/pupmod-simp-oddjob
-    pam: https://github.com/simp/pupmod-simp-pam
-    pki: https://github.com/simp/pupmod-simp-pki
-    polkit: https://github.com/simp/pupmod-simp-polkit
-    postfix: https://github.com/simp/pupmod-simp-postfix
+    named: https://github.com/simp/pupmod-simp-named.git
+    nfs: https://github.com/simp/pupmod-simp-nfs.git
+    nsswitch: https://github.com/simp/puppet-nsswitch.git
+    ntpd: https://github.com/simp/pupmod-simp-ntpd.git
+    oddjob: https://github.com/simp/pupmod-simp-oddjob.git
+    pam: https://github.com/simp/pupmod-simp-pam.git
+    pki: https://github.com/simp/pupmod-simp-pki.git
+    polkit: https://github.com/simp/pupmod-simp-polkit.git
+    postfix: https://github.com/simp/pupmod-simp-postfix.git
     postgresql:
-      repo: https://github.com/simp/puppetlabs-postgresql
-      ref: 5.12.1
+      repo: https://github.com/simp/puppetlabs-postgresql.git
+      ref: v7.2.0
     puppetdb:
-      repo: https://github.com/simp/puppetlabs-puppetdb
-      ref: 7.1.0
-    pupmod: https://github.com/simp/pupmod-simp-pupmod
+      repo: https://github.com/simp/puppetlabs-puppetdb.git
+      ref: 7.8.0
+    pupmod: https://github.com/simp/pupmod-simp-pupmod.git
     puppet_authorization:
-      repo: https://github.com/simp/puppetlabs-puppet_authorization
-      ref: 0.5.0
-    resolv: https://github.com/simp/pupmod-simp-resolv
-    rkhunter: https://github.com/simp/pupmod-simp-rkhunter
-    rsync: https://github.com/simp/pupmod-simp-rsync
-    rsyslog: https://github.com/simp/pupmod-simp-rsyslog
-    selinux: https://github.com/simp/pupmod-simp-selinux
+      repo: https://github.com/simp/puppetlabs-puppet_authorization.git
+      ref: 0.5.1
+    resolv: https://github.com/simp/pupmod-simp-resolv.git
+    rkhunter: https://github.com/simp/pupmod-simp-rkhunter.git
+    rsync: https://github.com/simp/pupmod-simp-rsync.git
+    rsyslog: https://github.com/simp/pupmod-simp-rsyslog.git
+    selinux: https://github.com/simp/pupmod-simp-selinux.git
     selinux_core:
       repo: https://github.com/simp/pupmod-puppetlabs-selinux_core.git
       puppet_version: ">= 6.0.0"
-    simpcat: https://github.com/simp/pupmod-simp-concat
-    simplib: https://github.com/simp/pupmod-simp-simplib
-    simp_apache: https://github.com/simp/pupmod-simp-apache
-    simp_banners: https://github.com/simp/pupmod-simp-simp_banners
-    simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld
-    simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap
-    simp_options: https://github.com/simp/pupmod-simp-simp_options
-    simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog
-    ssh: https://github.com/simp/pupmod-simp-ssh
+    simpcat: https://github.com/simp/pupmod-simp-concat.git
+    simplib: https://github.com/simp/pupmod-simp-simplib.git
+    simp_apache: https://github.com/simp/pupmod-simp-apache.git
+    simp_banners: https://github.com/simp/pupmod-simp-simp_banners.git
+    simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld.git
+    simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap.git
+    simp_options: https://github.com/simp/pupmod-simp-simp_options.git
+    simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog.git
+    ssh: https://github.com/simp/pupmod-simp-ssh.git
     sshkeys_core:
       repo: https://github.com/simp/pupmod-puppetlabs-sshkeys_core.git
       puppet_version: ">= 6.0.0"
-    sssd: https://github.com/simp/pupmod-simp-sssd
-    stdlib: https://github.com/simp/puppetlabs-stdlib
-    stunnel: https://github.com/simp/pupmod-simp-stunnel
-    systemd: https://github.com/simp/puppet-systemd
-    sudo: https://github.com/simp/pupmod-simp-sudo
-    sudosh: https://github.com/simp/pupmod-simp-sudosh
-    svckill: https://github.com/simp/pupmod-simp-svckill
-    swap: https://github.com/simp/pupmod-simp-swap
-    tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
-    tftpboot: https://github.com/simp/pupmod-simp-tftpboot
-    timezone: https://github.com/simp/pupmod-simp-timezone
-    tlog: https://github.com/simp/pupmod-simp-tlog
-    tuned: https://github.com/simp/pupmod-simp-tuned
-    upstart: https://github.com/simp/pupmod-simp-upstart
-    useradd: https://github.com/simp/pupmod-simp-useradd
+    sssd: https://github.com/simp/pupmod-simp-sssd.git
+    stdlib: https://github.com/simp/puppetlabs-stdlib.git
+    stunnel: https://github.com/simp/pupmod-simp-stunnel.git
+    systemd: https://github.com/simp/puppet-systemd.git
+    sudo: https://github.com/simp/pupmod-simp-sudo.git
+    sudosh: https://github.com/simp/pupmod-simp-sudosh.git
+    svckill: https://github.com/simp/pupmod-simp-svckill.git
+    swap: https://github.com/simp/pupmod-simp-swap.git
+    tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers.git
+    tftpboot: https://github.com/simp/pupmod-simp-tftpboot.git
+    timezone: https://github.com/simp/pupmod-simp-timezone.git
+    tlog: https://github.com/simp/pupmod-simp-tlog.git
+    tuned: https://github.com/simp/pupmod-simp-tuned.git
+    upstart: https://github.com/simp/pupmod-simp-upstart.git
+    useradd: https://github.com/simp/pupmod-simp-useradd.git
     vox_selinux:
-      repo: https://github.com/simp/pupmod-voxpupuli-selinux
+      repo: https://github.com/simp/pupmod-voxpupuli-selinux.git
       branch: simp-master
-    xinetd: https://github.com/simp/pupmod-simp-xinetd
-    yum: https://github.com/simp/voxpupuli-yum
+    xinetd: https://github.com/simp/pupmod-simp-xinetd.git
+    yum: https://github.com/simp/voxpupuli-yum.git
     yumrepo_core:
       repo: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
       puppet_version: ">= 6.0.0"
     # Kluge for rsync data
-    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton
+    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton.git
   symlinks:
     simp: "#{source_dir}"
