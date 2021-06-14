@@ -1,4 +1,4 @@
-* Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.0
+* Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.1
 - sssd::client no longer creates a local provider.
 - The version of pupmud-simp-sssd required by this module was updated to 7.0
   because the version of sssd installed does not require a provider.

@@ -262,7 +262,24 @@ variables:
   <<: *setup_bundler_env
   <<: *with_SIMP_SPEC_MATRIX_LEVEL_1
   script:
-    - 'bundle exec rake spec'
+    - 'bundle exec rake spec_prep'
+    - 'bundle exec rspec spec/classes/00_classes'
+    - 'bundle exec rspec spec/defines'
+    - 'bundle exec rspec spec/facter'
+    - 'bundle exec rspec spec/functions'
+    - 'bundle exec rspec spec/type_aliases'
+    - 'bundle exec rspec spec/unit'
+
+.slow_unit_tests: &slow_unit_tests
+  stage: 'validation'
+  tags: ['docker']
+  <<: *setup_bundler_env
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_1
+  script:
+    - 'bundle exec rake spec_prep'
+    - 'bundle exec rspec spec/classes/01_classes'
+    - 'bundle exec rspec spec/classes/10_classes'
+    - 'bundle exec rspec spec/classes/20_classes'
 
 .acceptance_base: &acceptance_base
   stage: 'acceptance'
@@ -315,13 +332,26 @@ pup6.x-unit:
   <<: *unit_tests
   <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
+pup6.x-unit_slow:
+  <<: *pup_6_x
+  <<: *slow_unit_tests
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
+
 pup6.pe-unit:
   <<: *pup_6_pe
   <<: *unit_tests
 
+pup6.pe-unit_slow:
+  <<: *pup_6_pe
+  <<: *slow_unit_tests
+
 pup7.x-unit:
   <<: *pup_7_x
   <<: *unit_tests
+
+pup7.x-unit_slow:
+  <<: *pup_7_x
+  <<: *slow_unit_tests
 
 # ------------------------------------------------------------------------------
 #             NOTICE: **This file is maintained with puppetsync**
