@@ -1,6 +1,6 @@
 * Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.1
 - sssd::client no longer creates a local provider.
-- The version of pupmud-simp-sssd required by this module was updated to 7.0
+- The version of pupmod-simp-sssd required by this module was updated to 7.0
   because the version of sssd installed does not require a provider.
   If you require a local provider use the  sssd module to create one.
 - NOTES FOR UPGRADE: The local domain was configured by default in earlier versions of SIMP because
