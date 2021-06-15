@@ -59,7 +59,7 @@ class simp::sssd::client (
   Hash                  $ldap_domain_options   = {},
   Enum['plain','389ds'] $ldap_server_type,
   Hash                  $ldap_provider_options = {},
-  Boolean               $autofs                = true, #deprecateddd
+  Boolean               $autofs                = true, #deprecated
   Boolean               $sudo                  = true, #deprecated
   Boolean               $ssh                   = true, #deprecated
   Boolean               $enumerate_users       = false,
