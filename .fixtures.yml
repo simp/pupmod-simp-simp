@@ -67,16 +67,10 @@ fixtures:
     pki: https://github.com/simp/pupmod-simp-pki.git
     polkit: https://github.com/simp/pupmod-simp-polkit.git
     postfix: https://github.com/simp/pupmod-simp-postfix.git
-    postgresql:
-      repo: https://github.com/simp/puppetlabs-postgresql.git
-      ref: v7.2.0
-    puppetdb:
-      repo: https://github.com/simp/puppetlabs-puppetdb.git
-      ref: 7.8.0
+    postgresql: https://github.com/simp/puppetlabs-postgresql.git
+    puppetdb: https://github.com/simp/puppetlabs-puppetdb.git
     pupmod: https://github.com/simp/pupmod-simp-pupmod.git
-    puppet_authorization:
-      repo: https://github.com/simp/puppetlabs-puppet_authorization.git
-      ref: 0.5.1
+    puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization.git
     resolv: https://github.com/simp/pupmod-simp-resolv.git
     rkhunter: https://github.com/simp/pupmod-simp-rkhunter.git
     rsync: https://github.com/simp/pupmod-simp-rsync.git

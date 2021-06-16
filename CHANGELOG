@@ -1,20 +1,24 @@
-* Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.15.1
-- sssd::client no longer creates a local provider.
-  - The version of pupmod-simp-sssd required by this module was updated to 7.0
-    because the version of sssd installed does not require a provider.
-    If you require a local provider use the  sssd module to create one.
-  - NOTES FOR UPGRADE: The local domain was configured by default in earlier versions of SIMP because
-    sssd would not start without a domain. A "LOCAL" entry was added to the list
-    of sssd domains to create in hiera.   You will need to remove this domain from
-    the list of domains in hiera unless you are configuring a "LOCAL" domain
-    somewhere else in your puppet code. The hiera variable is sssd::domains.
-    If you do not remove this domain from the list of domains in hiera
-    and are not configuring it yourself sssd will fail to start because it will
-    not find a provider for the "LOCAL" domain.
+* Wed Jun 16 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
+- Added
+  - simp::puppetdb::disable_update_checking to disable default analytics in
+    accordance with NIST guidance
+
+* Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.16.0
+- Changed:
+  - sssd::client no longer creates a local provider.
+    - The version of pupmod-simp-sssd required by this module was updated to 7.0
+      because the version of sssd installed does not require a provider.
+      If you require a local provider use the  sssd module to create one.
+    - NOTES FOR UPGRADE: The local domain was configured by default in earlier
+      versions of SIMP because sssd would not start without a domain. A "LOCAL"
+      entry was added to the list of sssd domains to create in hiera. You will
+      need to remove this domain from the list of domains in hiera unless you
+      are configuring a "LOCAL" domain somewhere else in your puppet code. The
+      hiera variable is sssd::domains. If you do not remove this domain from the
+      list of domains in hiera and are not configuring it yourself sssd will
+      fail to start because it will not find a provider for the "LOCAL" domain.
   - Added warning if LOCAL domain was found in sssd::domains. Also added ability
     to disable the warning.
-- Updated the the acceptance tests that use an LDAP server to also test against
-  an instance of 389ds on el8.
 
 * Tue Jun 08 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 4.15.0
 - Removed
