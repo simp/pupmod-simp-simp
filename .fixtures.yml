@@ -11,9 +11,7 @@ fixtures:
     aide: https://github.com/simp/pupmod-simp-aide.git
     auditd: https://github.com/simp/pupmod-simp-auditd.git
     at: https://github.com/simp/pupmod-simp-at.git
-    augeas_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
-      puppet_version: ">= 6.0.0"
+    augeas_core: https://github.com/simp/pupmod-puppetlabs-augeas_core.git
     augeasproviders_apache: https://github.com/simp/augeasproviders_apache.git
     augeasproviders_core: https://github.com/simp/augeasproviders_core.git
     augeasproviders_grub: https://github.com/simp/augeasproviders_grub.git
@@ -31,9 +29,7 @@ fixtures:
     compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
     concat: https://github.com/simp/puppetlabs-concat.git
     cron: https://github.com/simp/pupmod-simp-cron.git
-    cron_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-cron_core.git
-      puppet_version: ">= 6.0.0"
+    cron_core: https://github.com/simp/pupmod-puppetlabs-cron_core.git
     crypto_policy: https://github.com/simp/pupmod-simp-crypto_policy.git
     deferred_resources: https://github.com/simp/pupmod-simp-deferred_resources.git
     dhcp: https://github.com/simp/pupmod-simp-dhcp.git
@@ -43,9 +39,7 @@ fixtures:
       repo: https://github.com/simp/pupmod-voxpupuli-firewalld.git
     haveged: https://github.com/simp/pupmod-simp-haveged.git
     hocon: https://github.com/simp/pupmod-puppetlabs-hocon.git
-    host_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-host_core.git
-      puppet_version: ">= 6.0.0"
+    host_core: https://github.com/simp/pupmod-puppetlabs-host_core.git
     incron: https://github.com/simp/pupmod-simp-incron.git
     inifile: https://github.com/simp/puppetlabs-inifile.git
     iptables: https://github.com/simp/pupmod-simp-iptables.git
@@ -55,9 +49,7 @@ fixtures:
     krb5: https://github.com/simp/pupmod-simp-krb5.git
     logrotate: https://github.com/simp/pupmod-simp-logrotate.git
     motd: https://github.com/simp/puppetlabs-motd.git
-    mount_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-mount_core.git
-      puppet_version: ">= 6.0.0"
+    mount_core: https://github.com/simp/pupmod-puppetlabs-mount_core.git
     named: https://github.com/simp/pupmod-simp-named.git
     nfs: https://github.com/simp/pupmod-simp-nfs.git
     nsswitch: https://github.com/simp/puppet-nsswitch.git
@@ -76,9 +68,7 @@ fixtures:
     rsync: https://github.com/simp/pupmod-simp-rsync.git
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog.git
     selinux: https://github.com/simp/pupmod-simp-selinux.git
-    selinux_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-selinux_core.git
-      puppet_version: ">= 6.0.0"
+    selinux_core: https://github.com/simp/pupmod-puppetlabs-selinux_core.git
     simpcat: https://github.com/simp/pupmod-simp-concat.git
     simplib: https://github.com/simp/pupmod-simp-simplib.git
     simp_apache: https://github.com/simp/pupmod-simp-apache.git
@@ -89,9 +79,7 @@ fixtures:
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog.git
     simp_ds389: https://github.com/simp/pupmod-simp-simp_ds389.git
     ssh: https://github.com/simp/pupmod-simp-ssh.git
-    sshkeys_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-sshkeys_core.git
-      puppet_version: ">= 6.0.0"
+    sshkeys_core: https://github.com/simp/pupmod-puppetlabs-sshkeys_core.git
     sssd: https://github.com/simp/pupmod-simp-sssd.git
     stdlib: https://github.com/simp/puppetlabs-stdlib.git
     stunnel: https://github.com/simp/pupmod-simp-stunnel.git
@@ -112,10 +100,8 @@ fixtures:
       branch: simp-master
     xinetd: https://github.com/simp/pupmod-simp-xinetd.git
     yum: https://github.com/simp/voxpupuli-yum.git
-    yumrepo_core:
-      repo: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
-      puppet_version: ">= 6.0.0"
+    yumrepo_core: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
     # Kluge for rsync data
-    '../acceptance/rsync_shares/simp': https://github.com/simp/simp-rsync-skeleton.git
+    "../acceptance/rsync_shares/simp": https://github.com/simp/simp-rsync-skeleton.git
   symlinks:
     simp: "#{source_dir}"
