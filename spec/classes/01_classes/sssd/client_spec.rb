@@ -19,6 +19,7 @@ describe 'simp::sssd::client' do
             it_should_behave_like 'sssd client'
             it { is_expected.to_not contain_sssd__domain('LOCAL')}
             it { is_expected.to_not contain_sssd__domain('LDAP')}
+            it { is_expected.to_not create_notify('SSSD LOCAL domain warning') }
           end
 
           context 'with alternate params' do
@@ -48,6 +49,14 @@ describe 'simp::sssd::client' do
                 .with_ldap_account_expire_policy('ipa')
                 .with_ldap_user_ssh_public_key('nsSshPublicKey')
             }
+          end
+          context 'with LOCAL domain set in hiera' do
+            let(:hieradata) { 'sssd_domains' }
+            it { is_expected.to create_notify('SSSD LOCAL domain warning') }
+          end
+          context 'with LOCAL not set in hiera' do
+            let(:hieradata) { 'sssd_domains_nolocal' }
+            it { is_expected.to_not create_notify('SSSD LOCAL domain warning') }
           end
         end
       end
