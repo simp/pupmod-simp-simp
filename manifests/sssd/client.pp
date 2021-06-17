@@ -4,12 +4,10 @@
 # as an example of what you can do to make it work for your environment.
 #
 # @param local_domain
-#   Configure the 'LOCAL' domain
-#
-#   To use the local domain you must include 'LOCAL'  in sssd::domains via hiera
+#   DEPRECATED:  This param does nothing.  It will be removed in the next version
 #
 # @param local_domain_options
-#   A Hash of options to pass directly into the `sssd::domain` defined type
+#   DEPRECATED:  This param does nothing.  It will be removed in the next version
 #
 # @param ldap_domain
 #   Configure the LDAP domain
@@ -52,11 +50,14 @@
 # @param ssh
 #   Deprecated
 #
+# @param disable_local_domain_warning
+#   Set to true to disable local domain warning
+#
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sssd::client (
-  Boolean               $local_domain,
-  Hash                  $local_domain_options  = {},
+  Boolean               $local_domain          = false, #deprecated
+  Hash                  $local_domain_options  = {},    #deprecated
   Boolean               $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Hash                  $ldap_domain_options   = {},
   Enum['plain','389ds'] $ldap_server_type,
@@ -66,25 +67,34 @@ class simp::sssd::client (
   Boolean               $ssh                   = true, #deprecated
   Boolean               $enumerate_users       = false,
   Boolean               $cache_credentials     = true,
-  Integer               $min_id                = 500
+  Integer               $min_id                = 500,
+  Boolean               $enable_domain_warn    = true
 ){
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'sssd'
 
-  if $local_domain {
-    $_local_domain_defaults = {
-      'description' => 'LOCAL Users Domain',
-      'min_id'      => $min_id
-    }
+  if  $enable_domain_warn {
+    $_sssd_domains_from_hiera = lookup('sssd::domains',undef,undef, [])
+    $_warning_msg = @(END)
+    SSSD no longer requires a local domain and simp::sssd::client no longer configures
+    it.  It appears that LOCAL is still in the list of domains for this machine.
 
-    sssd::domain { 'LOCAL':
-      access_provider   => 'permit',
-      enumerate         => false,
-      cache_credentials => false,
-      id_provider       => 'files',
-      *                 => $_local_domain_defaults + $local_domain_options
+    Please review hiera data and remove LOCAL from the list of sssd domains or follow
+    the instructions in the sssd module to create a provider if you feel it is needed.
+
+    The hiera value to be updated will look like:
+
+    sssd::domains:
+      - 'LOCAL'
+
+    To disable this warning set simp::sssd::client::enable_domain_warn to false in hiera.
+    | END
+    if member($_sssd_domains_from_hiera, 'LOCAL') {
+      notify { 'SSSD LOCAL domain warning':
+        message => $_warning_msg
+      }
     }
   }
 

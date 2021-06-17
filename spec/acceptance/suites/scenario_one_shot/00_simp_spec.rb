@@ -43,7 +43,6 @@ describe 'simp "one_shot" scenario' do
 simp_options::dns::servers: ['8.8.8.8']
 simp_options::puppet::server: #{host_fqdn}
 simp_options::puppet::ca: #{host_fqdn}
-sssd::domains: ['LOCAL']
 
 # Settings required for acceptance test, some may be required
 simp::scenario: one_shot
@@ -76,6 +75,8 @@ simp_options::trusted_nets: ['ALL']
 # Settings to make beaker happy
 ssh::server::conf::permitrootlogin: true
 ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+
+sssd::enable_files_domain: true
 
 pam::access::users:
   vagrant:

@@ -1,20 +1,3 @@
----
-# Mock up ldap
-
-simp_options::ldap::uri:
-  - 'ldap://<%= server_fqdn %>'
-simp_options::ldap::base_dn: '<%= base_dn %>'
-simp_options::ldap::bind_dn: 'cn=hostAuth,ou=Hosts,<%= base_dn %>'
-simp_options::ldap::bind_pw: 'foobarbaz'
-simp_options::ldap::bind_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
-simp_options::ldap::sync_dn: 'cn=LDAPSync,ou=Hosts,<%= base_dn %>'
-simp_options::ldap::sync_pw: 'foobarbaz'
-simp_options::ldap::sync_hash: '{SSHA}BNPDR0qqE6HyLTSlg13T0e/+yZnSgYQz'
-simp_options::ldap::root_dn: 'cn=LDAPAdmin,ou=People,<%= base_dn %>'
-simp_options::ldap::master: 'ldap://<%= server_fqdn %>'
-# suP3rP@ssw0r!
-simp_openldap::server::conf::rootpw: "{SSHA}ZcqPNbcqQhDNF5jYTLGl+KAGcrHNW9oo"
-
 # Required for simp options
 simp_options::puppet::server: <%= client_fqdn %>
 simp_options::puppet::ca: <%= client_fqdn %>
@@ -25,12 +8,12 @@ sssd::domains:
 simp_options::dns::servers: ['8.8.8.8']
 
 # Emulate remote_access hiera
+# Note:ldap settings and pki settings are in common file
+# that is merged with this file.
 simp::scenario: remote_access
 simp_options::auditd: false
-simp_options::clamav: false
 simp_options::firewall: false
 simp_options::haveged: false
-simp_options::ldap: true
 simp_options::logrotate: false
 simp_options::pam: true
 # Set to 'true' for non-puppetserver based acceptance
@@ -44,10 +27,6 @@ simp_options::kerberos: false
 
 # Extra tweaks for acceptance
 simp_options::rsync: false
-simp_options::clamav: false
-simp_options::pki: true
-simp_options::pki::source: '/etc/pki/simp-testing/pki'
-simp_options::trusted_nets: ['ALL']
 
 # Settings to make beaker happy
 pam::access::default_deny: false
@@ -58,5 +37,3 @@ sudo::user_specifications:
     user_list: ['vagrant', 'test.user']
     cmnd: ['ALL']
     passwd: false
-# Settings for the type of LDAP server
-simp::sssd::client::ldap_server_type: <%= ldap_type %>

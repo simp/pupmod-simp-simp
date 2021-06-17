@@ -1,16 +1,16 @@
-dn: cn=test.user,ou=Group,<%= base_dn %>
+dn: cn=<%= test_user %>,ou=Group,<%= base_dn %>
 objectClass: posixGroup
 objectClass: top
-cn: test.user
+cn: testuser
 gidNumber: 10000
 description: 'Test user'
 
-dn: uid=test.user,ou=People,<%= base_dn %>
-uid: test.user
-cn: test.user
+dn: uid=<%= test_user %>,ou=People,<%= base_dn %>
+uid: <%= test_user %>
+cn: <%= test_user %>
 givenName: Test
 sn: User
-mail: test.user@funurl.net
+mail: <%= test_user %>@funurl.net
 objectClass: inetOrgPerson
 objectClass: posixAccount
 objectClass: top
@@ -26,6 +26,6 @@ sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI9DPUsQXNTqU2nWShmMCnGOXPDY
 loginShell: /bin/bash
 uidNumber: 10000
 gidNumber: 10000
-homeDirectory: /home/test.user
+homeDirectory: /home/<%= test_user %>
 #suP3rP@ssw0r!
 userPassword: {SSHA}r2GaizHFWY8pcHpIClU0ye7vsO4uHv/y

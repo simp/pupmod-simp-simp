@@ -14,8 +14,6 @@ simp::server::scenario_map:
 # Most EL7 systems point at OpenLDAP and we don't want to cause user issues
 simp::sssd::client::ldap_server_type: 'plain'
 
-simp::sssd::client::local_domain: true
-
 simp::puppetdb::cipher_suites:
   - TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384
   - TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384

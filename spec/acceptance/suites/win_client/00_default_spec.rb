@@ -13,7 +13,6 @@ describe 'windows node' do
   let(:hieradata) {{
     'simp_options::puppet::server' => host_fqdn,
     'simp_options::puppet::ca'     => host_fqdn,
-    'sssd::domains'                => ['LOCAL'],
     'simp::classes'                => ['simp_options']
   }}
 
