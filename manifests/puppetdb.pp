@@ -51,6 +51,7 @@
 # @param java_prefer_ipv4
 # @param automatic_dlo_cleanup
 # @param dlo_max_age
+# @param disable_update_checking
 # @param firewall
 #
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
@@ -83,6 +84,7 @@ class simp::puppetdb (
   Boolean                             $java_prefer_ipv4                  = true,
   Boolean                             $automatic_dlo_cleanup             = true,
   Integer                             $dlo_max_age                       = 90,
+  Boolean                             $disable_update_checking           = true,
   Boolean                             $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
 
@@ -152,17 +154,11 @@ class simp::puppetdb (
     'manage_firewall'                   => ($manage_firewall and !($_simp_manage_firewall)),
     'java_args'                         => $_java_args,
     'automatic_dlo_cleanup'             => $automatic_dlo_cleanup,
-    'dlo_max_age'                       => 90
+    'dlo_max_age'                       => 90,
+    'disable_update_checking'           => $disable_update_checking
   }
 
   class { 'puppetdb': * => $_my_defaults }
-
-  if $automatic_dlo_cleanup {
-    unless $facts['systemd'] {
-      cron::user { $::puppetdb::puppetdb_user: }
-      Cron::User[$::puppetdb::puppetdb_user] -> Cron['puppetdb-dlo-cleanup']
-    }
-  }
 
   include 'puppetdb::master::config'
 

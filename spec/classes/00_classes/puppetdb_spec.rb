@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe 'simp::puppetdb' do
+  fips_mode_save = OpenSSL.fips_mode
+
+  before(:each) do
+    OpenSSL.fips_mode = false if OpenSSL.respond_to?(:fips_mode)
+  end
+
+  after(:each) do
+    OpenSSL.fips_mode = fips_mode_save if OpenSSL.respond_to?(:fips_mode)
+  end
+
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
@@ -107,6 +117,7 @@ describe 'simp::puppetdb' do
               :manage_firewall                   => false,
   #            :java_args              => Xmx & Xms vary because of OS memory differences in facts
               :automatic_dlo_cleanup             => true,
+              :disable_update_checking           => true,
               :dlo_max_age                       => 90
             ) }
 
