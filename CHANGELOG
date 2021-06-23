@@ -1,3 +1,6 @@
+* Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.16.0
+- Ensured support for Puppet 7 in requirements and stdlib
+
 * Wed Jun 16 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
 - Added
   - simp::puppetdb::disable_update_checking to disable default analytics in
