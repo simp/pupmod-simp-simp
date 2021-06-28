@@ -126,16 +126,14 @@ class simp::mountpoints::tmp (
             fstype   => 'none',
             options  => simplib::join_mount_opts(['bind'],$tmp_opts),
             device   => $facts['tmp_mount_path_tmp'],
-            remounts => true
+            remounts => true,
+            notify   => Exec['remount /tmp']
           }
 
-          if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
-            $_remount_tmp_opts = join($tmp_opts,',')
-
-            exec { 'remount /tmp':
-              command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-              require => Mount['/tmp']
-            }
+          $_remount_tmp_opts = join($tmp_opts,',')
+          exec { 'remount /tmp':
+            command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
+            refreshonly => true
           }
         }
       }
