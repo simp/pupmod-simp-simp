@@ -22,7 +22,7 @@ HOSTS:
       - ldap_server
       - ds389
     platform:   el-8-x86_64
-    box:        centos/8
+    box:        generic/centos8
     hypervisor: <%= hypervisor %>
 
   client-el7.simp.beaker:
@@ -36,7 +36,7 @@ HOSTS:
     roles:
       - client
     platform:   el-8-x86_64
-    box:        centos/8
+    box:        generic/centos8
     hypervisor: <%= hypervisor %>
 
 CONFIG:

@@ -21,10 +21,6 @@ HOSTS:
         baseurl: 'https://yum$ociregion.oracle.com/repo/OracleLinux/OL8/baseos/latest/$basearch/'
         gpgkeys:
           - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol8
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-8&arch=$basearch'
-        gpgkeys:
-          - https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
 
 CONFIG:
   log_level: verbose

@@ -11,14 +11,14 @@ HOSTS:
       - default
       - shipper
     platform:   el-8-x86_64
-    box:        centos/8
+    box:        generic/centos8
     hypervisor: <%= hypervisor %>
 
   el8-receiver:
     roles:
       - receiver
     platform:   el-8-x86_64
-    box:        centos/8
+    box:        generic/centos8
     hypervisor: <%= hypervisor %>
 
 CONFIG:
