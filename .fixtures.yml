@@ -45,7 +45,7 @@ fixtures:
     iptables: https://github.com/simp/pupmod-simp-iptables.git
     issue: https://github.com/simp/pupmod-simp-issue.git
     java: https://github.com/simp/puppetlabs-java.git
-    kmod: https://github.com/simp/puppet-kmod.git
+    kmod: https://github.com/simp/pupmod-voxpupuli-kmod.git
     krb5: https://github.com/simp/pupmod-simp-krb5.git
     logrotate: https://github.com/simp/pupmod-simp-logrotate.git
     motd: https://github.com/simp/puppetlabs-motd.git
