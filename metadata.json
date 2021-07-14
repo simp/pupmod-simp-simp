@@ -16,8 +16,8 @@
   ],
   "dependencies": [
     {
-      "name": "camptocamp/kmod",
-      "version_requirement": ">= 2.1.0 < 3.0.0"
+      "name": "puppet/kmod",
+      "version_requirement": ">= 2.1.0 < 4.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_sysctl",
