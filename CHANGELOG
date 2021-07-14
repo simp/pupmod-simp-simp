@@ -1,3 +1,6 @@
+* Wed Jul 14 2021 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.16.0
+- Support all valid values for simp::pam_limits::max_logins::value
+
 * Tue Jul 13 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
 - Added
   - simp::puppetdb::disable_update_checking to disable default analytics in
