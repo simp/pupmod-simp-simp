@@ -44,7 +44,6 @@ HOSTS:
           - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppet
           - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlabs
 
-
 CONFIG:
   log_level: verbose
   type: aio
