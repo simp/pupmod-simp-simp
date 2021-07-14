@@ -8,7 +8,7 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::pam_limits::max_logins (
-  Integer[0] $value = 10
+  Pam::Limits::Value $value = 10
 ) {
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
