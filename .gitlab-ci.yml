@@ -422,6 +422,7 @@ pup6.x-remote_access_scenario:
 pup6.pe-win:
   <<: *pup_6_pe
   <<: *acceptance_base
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_2
   script:
     - 'bundle exec rake beaker:suites[win_client]'
   # For reasons (we assume must be knowable only to madmen and the devine),
@@ -490,3 +491,9 @@ pup6.pe-oel-fips:
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
+
+pup7.x:
+  <<: *pup_7_x
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[default,default]'
