@@ -16,6 +16,7 @@ describe 'simp::yum::repo::local_simp' do
 
       let(:base_gpgkeys){
         [
+          'RPM-GPG-KEY-puppet-20250406',
           'RPM-GPG-KEY-puppet',
           'RPM-GPG-KEY-puppetlabs',
           'RPM-GPG-KEY-SIMP',

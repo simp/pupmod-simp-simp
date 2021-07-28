@@ -6,6 +6,7 @@ function simp::yum::repo::gpgkeys::simp() {
 
   # Common keys, distributed in simp-gpgkeys
   $_simp_gpgkeys = [
+    'RPM-GPG-KEY-puppet-20250406',
     'RPM-GPG-KEY-puppet',
     'RPM-GPG-KEY-puppetlabs',
     'RPM-GPG-KEY-SIMP',
