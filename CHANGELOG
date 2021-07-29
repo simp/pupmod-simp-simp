@@ -1,3 +1,7 @@
+* Wed Jul 28 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
+- Added the latest GPG key for Puppet RPMs (RPM-GPG-KEY-20250406) to the list
+  of GPG keys for the local `simp` repo.
+
 * Wed Jul 14 2021 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.16.0
 - Support all valid values for simp::pam_limits::max_logins::value
 
