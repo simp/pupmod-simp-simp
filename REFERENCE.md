@@ -1538,7 +1538,7 @@ The following parameters are available in the `simp::pam_limits::max_logins` cla
 
 ##### <a name="value"></a>`value`
 
-Data type: `Integer[0]`
+Data type: `Pam::Limits::Value`
 
 The maximum number of logins that a user may have simultaneously
 
@@ -1623,8 +1623,10 @@ The following parameters are available in the `simp::puppetdb` class:
 * [`java_tmpdir`](#java_tmpdir)
 * [`java_heapdump_on_oom`](#java_heapdump_on_oom)
 * [`java_prefer_ipv4`](#java_prefer_ipv4)
+* [`java_use_code_cache_flushing`](#java_use_code_cache_flushing)
 * [`automatic_dlo_cleanup`](#automatic_dlo_cleanup)
 * [`dlo_max_age`](#dlo_max_age)
+* [`disable_update_checking`](#disable_update_checking)
 * [`firewall`](#firewall)
 
 ##### <a name="trusted_nets"></a>`trusted_nets`
@@ -1837,6 +1839,14 @@ Data type: `Boolean`
 
 Default value: ``true``
 
+##### <a name="java_use_code_cache_flushing"></a>`java_use_code_cache_flushing`
+
+Data type: `Boolean`
+
+
+
+Default value: ``true``
+
 ##### <a name="automatic_dlo_cleanup"></a>`automatic_dlo_cleanup`
 
 Data type: `Boolean`
@@ -1852,6 +1862,14 @@ Data type: `Integer`
 
 
 Default value: `90`
+
+##### <a name="disable_update_checking"></a>`disable_update_checking`
+
+Data type: `Boolean`
+
+
+
+Default value: ``true``
 
 ##### <a name="firewall"></a>`firewall`
 
@@ -2780,7 +2798,7 @@ The following parameters are available in the `simp::sssd::client` class:
 * [`local_domain_options`](#local_domain_options)
 * [`ldap_domain`](#ldap_domain)
 * [`ldap_domain_options`](#ldap_domain_options)
-* [`ldap_389ds_compat`](#ldap_389ds_compat)
+* [`ldap_server_type`](#ldap_server_type)
 * [`ldap_provider_options`](#ldap_provider_options)
 * [`enumerate_users`](#enumerate_users)
 * [`cache_credentials`](#cache_credentials)
@@ -2788,20 +2806,21 @@ The following parameters are available in the `simp::sssd::client` class:
 * [`autofs`](#autofs)
 * [`sudo`](#sudo)
 * [`ssh`](#ssh)
+* [`enable_domain_warn`](#enable_domain_warn)
 
 ##### <a name="local_domain"></a>`local_domain`
 
 Data type: `Boolean`
 
-Configure the 'LOCAL' domain
+DEPRECATED:  This param does nothing.  It will be removed in the next version
 
-To use the local domain you must include 'LOCAL'  in sssd::domains via hiera
+Default value: ``false``
 
 ##### <a name="local_domain_options"></a>`local_domain_options`
 
 Data type: `Hash`
 
-A Hash of options to pass directly into the `sssd::domain` defined type
+DEPRECATED:  This param does nothing.  It will be removed in the next version
 
 Default value: `{}`
 
@@ -2823,18 +2842,18 @@ A Hash of options to pass directly into the `sssd::domain` defined type
 
 Default value: `{}`
 
-##### <a name="ldap_389ds_compat"></a>`ldap_389ds_compat`
+##### <a name="ldap_server_type"></a>`ldap_server_type`
 
-Data type: `Boolean`
+Data type: `Enum['plain','389ds']`
 
-Whether or not the target server is "389-DS compatible"
+The type of LDAP server that the system is communicating with
 
-* This includes FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
+* This mainly matters for password policy details but may increase in scope
+  in the future
 
-* `true` => set the account option to 389DS compatible
-* `false` => set the account option to 'shadow' compatible (OpenLDAP)
-
-Default value: ``false``
+* Use `389ds` for servers that are 'Netscape compatible'. This includes
+  FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
+* Use `plain` for servers that are 'regular LDAP' like OpenLDAP
 
 ##### <a name="ldap_provider_options"></a>`ldap_provider_options`
 
@@ -2891,6 +2910,14 @@ Default value: ``true``
 Data type: `Boolean`
 
 Deprecated
+
+Default value: ``true``
+
+##### <a name="enable_domain_warn"></a>`enable_domain_warn`
+
+Data type: `Boolean`
+
+Set to true to enable local domain warning
 
 Default value: ``true``
 

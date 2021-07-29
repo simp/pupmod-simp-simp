@@ -50,8 +50,8 @@
 # @param ssh
 #   Deprecated
 #
-# @param disable_local_domain_warning
-#   Set to true to disable local domain warning
+# @param enable_domain_warn
+#   Set to true to enable local domain warning
 #
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #

@@ -49,6 +49,7 @@
 # @param java_tmpdir
 # @param java_heapdump_on_oom
 # @param java_prefer_ipv4
+# @param java_use_code_cache_flushing
 # @param automatic_dlo_cleanup
 # @param dlo_max_age
 # @param disable_update_checking
@@ -82,6 +83,7 @@ class simp::puppetdb (
   Stdlib::Absolutepath                $java_tmpdir                       = '/opt/puppetlabs/puppet/cache/pdb_tmp',
   Boolean                             $java_heapdump_on_oom              = false,
   Boolean                             $java_prefer_ipv4                  = true,
+  Boolean                             $java_use_code_cache_flushing      = true,
   Boolean                             $automatic_dlo_cleanup             = true,
   Integer                             $dlo_max_age                       = 90,
   Boolean                             $disable_update_checking           = true,
@@ -111,8 +113,13 @@ class simp::puppetdb (
 
   if !defined('puppetdb::java_args') or empty($::puppetdb::java_args) {
     $_java_heapdump_on_oom = $java_heapdump_on_oom ? {
-      true    => '-XX:HeapDumpOnOutOfMemoryError',
+      true    => '-XX:+HeapDumpOnOutOfMemoryError',
       default => '-XX:-HeapDumpOnOutOfMemoryError'
+    }
+
+    $_java_use_code_cache_flushing = $java_use_code_cache_flushing ? {
+      true    => '-XX:+UseCodeCacheFlushing',
+      default => '-XX:-UseCodeCacheFlushing'
     }
 
     if empty($java_start_memory) {
@@ -123,11 +130,12 @@ class simp::puppetdb (
     }
 
     $_java_args = {
-      '-Xmx'                        => $_java_max_memory,
-      '-Xms'                        => $_java_start_memory,
-      $_java_heapdump_on_oom        => '',
-      '-Djava.io.tmpdir='           => $java_tmpdir,
-      '-Djava.net.preferIPv4Stack=' => bool2str($java_prefer_ipv4)
+      '-Xmx'                         => $_java_max_memory,
+      '-Xms'                         => $_java_start_memory,
+      $_java_heapdump_on_oom         => '',
+      $_java_use_code_cache_flushing => '',
+      '-Djava.io.tmpdir='            => $java_tmpdir,
+      '-Djava.net.preferIPv4Stack='  => bool2str($java_prefer_ipv4)
     }
   }
 
