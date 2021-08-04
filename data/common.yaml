@@ -104,7 +104,7 @@ simp::nsswitch::sssd_options:
     - 'files [!NOTFOUND=return]'
     - 'sss'
   sudoers:
-    - 'files [!NOTFOUND=return]'
+    - 'files'
     - 'sss'
 
 simp::nsswitch::ldap_options:

@@ -18,13 +18,17 @@
 class simp::sudoers (
   Boolean $common_aliases = false,
   Array $default_entry    = [
+    '!visiblepw',
+    'always_set_home',
+    'match_group_by_gid',
+    'always_query_group_plugin',
     'listpw=all',
     'requiretty',
     'syslog=authpriv',
     '!root_sudo',
     '!umask',
-    'env_reset',
     'secure_path = /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
+    'env_reset',
     'env_keep = "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR \
       LS_COLORS MAIL PS1 PS2 QTDIR USERNAME \
       LANG LC_ADDRESS LC_CTYPE LC_COLLATE LC_IDENTIFICATION \
