@@ -189,12 +189,14 @@ class simp::admin (
     options   => $admin_sudo_options
   }
 
-  sudo::user_specification { 'auditors':
-    user_list => ["%${auditor_group}"],
-    runas     => $auditor_runas,
-    cmnd      => ['AUDIT'],
-    passwd    => !$passwordless_auditor_sudo,
-    options   => $auditor_sudo_options
+  if $simp::sudoers::common_aliases {
+    sudo::user_specification { 'auditors':
+      user_list => ["%${auditor_group}"],
+      runas     => $auditor_runas,
+      cmnd      => ['AUDIT'],
+      passwd    => !$passwordless_auditor_sudo,
+      options   => $auditor_sudo_options
+    }
   }
 
   # The following two are especially important if you're using sudosh.

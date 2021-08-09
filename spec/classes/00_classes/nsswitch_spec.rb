@@ -43,7 +43,7 @@ describe 'simp::nsswitch' do
               passwd:     files [!NOTFOUND=return] sss mymachines systemd
               shadow:     files [!NOTFOUND=return] sss
               group:      files [!NOTFOUND=return] sss mymachines systemd
-              sudoers:    files [!NOTFOUND=return] sss
+              sudoers:    files sss
               hosts:      files mymachines dns myhostname
               bootparams: files
               ethers:     files

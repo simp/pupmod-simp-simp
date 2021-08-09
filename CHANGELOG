@@ -1,4 +1,4 @@
-* Thu Jul 29 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
+* Wed Aug 04 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
 - Added
   - simp::puppetdb::disable_update_checking to disable default analytics in
     accordance with NIST guidance
@@ -7,6 +7,14 @@
   - Migrated from camptocamp/kmod to puppet/kmod
 - Fixed
   - Corrected the HeapDumpOnOutOfMemoryError setting for PuppetDB
+  - Ensure that nsswitch SSSD options for sudoers do not stop on files
+  - Do not include the auditors sudo user specification if the aliases have not
+    been included
+  - Add the following to sudoers defaults
+    - !visiblepw
+    - always_set_home
+    - match_group_by_gid
+    - always_query_group_plugin
 
 * Wed Jul 28 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
 - Added the latest GPG key for Puppet RPMs (RPM-GPG-KEY-20250406) to the list
