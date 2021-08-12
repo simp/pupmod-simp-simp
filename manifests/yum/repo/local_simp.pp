@@ -68,6 +68,10 @@
 #   In simp repos
 #   This parameter has no effect if the `baseurl` parameter is set directly.
 #
+# @param relative_gpgkey_path
+#   The relative path to the GPGKEYS for the SIMP repo.  It defaults
+#   to the directory where simp-gpgkeys installs the gpgkeys.
+#
 # @param baseurl
 #   The URL for this repository. Set this to absent to remove it from the file completely.
 #   Set this parameter directly to completely skip all automated URL logic.
@@ -77,14 +81,15 @@
 #   Set this parameter directly to completely skip default URL/path logic.
 class simp::yum::repo::local_simp (
   Array[Simp::HostOrURL] $servers,
-  Boolean                $enable_repo        = true,
-  Simp::Urls             $extra_gpgkey_urls  = [],
-  String[1]              $relative_repo_path = "SIMP/${facts['os'][name]}/${facts['os']['release']['major']}",
-  Optional[String[1]]    $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}"),
-  Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
+  Boolean                $enable_repo           = true,
+  Simp::Urls             $extra_gpgkey_urls     = [],
+  String[1]              $relative_repo_path    = "SIMP/${facts['os'][name]}/${facts['os']['release']['major']}",
+  String[1]              $relative_gpgkey_path  = "SIMP/GPGKEYS",
+  Optional[String[1]]    $baseurl               = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}"),
+  Optional[String[1]]    $gpgkey                = simp::yum::repo::gpgkey_string(
     $servers,
     simp::yum::repo::gpgkeys::simp(),
-    "${relative_repo_path}/GPGKEYS",
+    $relative_gpgkey_path,
     $extra_gpgkey_urls
   )
 ){

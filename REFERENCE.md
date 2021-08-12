@@ -4052,6 +4052,7 @@ The following parameters are available in the `simp::yum::repo::local_simp` clas
 * [`enable_repo`](#enable_repo)
 * [`extra_gpgkey_urls`](#extra_gpgkey_urls)
 * [`relative_repo_path`](#relative_repo_path)
+* [`relative_gpgkey_path`](#relative_gpgkey_path)
 * [`baseurl`](#baseurl)
 * [`gpgkey`](#gpgkey)
 
@@ -4095,6 +4096,15 @@ This parameter has no effect if the `baseurl` parameter is set directly.
 
 Default value: `"SIMP/${facts['os'][name]}/${facts['os']['release']['major']}"`
 
+##### <a name="relative_gpgkey_path"></a>`relative_gpgkey_path`
+
+Data type: `String[1]`
+
+The relative path to the GPGKEYS for the SIMP repo.  It defaults
+to the directory where simp-gpgkeys installs the gpgkeys.
+
+Default value: `"SIMP/GPGKEYS"`
+
 ##### <a name="baseurl"></a>`baseurl`
 
 Data type: `Optional[String[1]]`
@@ -4114,7 +4124,7 @@ Set this parameter directly to completely skip default URL/path logic.
 Default value: `simp::yum::repo::gpgkey_string(
     $servers,
     simp::yum::repo::gpgkeys::simp(),
-    "${relative_repo_path}/GPGKEYS",
+    $relative_gpgkey_path,
     $extra_gpgkey_urls
   )`
 
