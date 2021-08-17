@@ -119,13 +119,15 @@ class simp::sssd::client (
     if $ldap_server_type in ['389ds'] {
       $_ldap_server_type_defaults = {
         'ldap_account_expire_policy' => 'ipa',
-        'ldap_user_ssh_public_key'   => 'nsSshPublicKey'
+        'ldap_user_ssh_public_key'   => 'nsSshPublicKey',
+        'ldap_schema'                => 'rfc2307bis'
       }
     }
     elsif $ldap_server_type in ['plain'] {
       $_ldap_server_type_defaults = {
         'ldap_account_expire_policy' => 'shadow',
-        'ldap_user_ssh_public_key'   => 'sshPublicKey'
+        'ldap_user_ssh_public_key'   => 'sshPublicKey',
+        'ldap_schema'                => 'rfc2307'
       }
     }
 
