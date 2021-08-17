@@ -40,7 +40,7 @@ describe 'simp::yum::repo::local_simp' do
         let(:params) {{ :servers => ['puppet.example.simp'] }}
         let(:os_yum_path){ "SIMP/#{facts[:os][:name]}/#{facts[:os][:release][:major]}"}
         let(:os_baseurl){ "#{os_yum_path}/#{facts[:architecture]}" }
-        let(:os_gpgkey){ "#{os_yum_path}/GPGKEYS" }
+        let(:os_gpgkey){ "SIMP/GPGKEYS" }
 
         it { is_expected.to compile.with_all_deps }
         it {
@@ -53,8 +53,9 @@ describe 'simp::yum::repo::local_simp' do
           )
         }
 
-        context 'with relative_repo_path = x/y/z' do
-          let(:params){super().merge( relative_repo_path: 'x/y/z')}
+        context 'with relative_repo_path = x/y/z and relative_gpgkey_path x/y/z/GPGKEYS' do
+          let(:params){super().merge( relative_repo_path: 'x/y/z',
+                                      relative_gpgkey_path: 'x/y/z/GPGKEYS')}
           it { is_expected.to compile.with_all_deps }
           it {
             _keys = base_gpgkeys + other_gpgkeys.fetch( "#{facts[:os][:name]}-#{facts[:os][:release][:major]}" )
@@ -93,7 +94,7 @@ describe 'simp::yum::repo::local_simp' do
                           "SIMP/6/#{facts[:architecture]}"
 
           os_baseurl  = "#{os_yum_path}/#{facts[:architecture]}"
-          os_gpgkey   = "#{os_yum_path}/GPGKEYS"
+          os_gpgkey   = "SIMP/GPGKEYS"
           _keys = base_gpgkeys + other_gpgkeys.fetch( "#{facts[:os][:name]}-#{facts[:os][:release][:major]}" )
           _gpgkey = ['puppet.example.simp', '192.0.2.5']
             .map{ |y|  _keys.map{|x| "https://#{y}/yum/#{os_gpgkey}/#{x}"} }

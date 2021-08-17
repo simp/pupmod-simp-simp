@@ -1,3 +1,13 @@
+* Thu Aug 12 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
+- Add relative_gpgkey_path parameter to simp::yum::repo::simp_local
+  and default it to SIMP/GPGKEYS, the location that the simp-gpgkeys
+  rpm installs the gpgkeys.
+  The above fix is needed because SIMP local repos were split up to be
+  OS version specific  but the GPGkeys are placed in one location by
+  simp-gpgkeys.  This works
+  because simp::yum::repo::simp_local takes care to add only the OS
+  specific gpgkeys to the repo definition.
+
 * Wed Aug 04 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
 - Added
   - simp::puppetdb::disable_update_checking to disable default analytics in
