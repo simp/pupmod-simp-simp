@@ -8,8 +8,6 @@
     rfc2307 schema.
   * In 389-DS group members are added using the "member" attribute and dn
     of the user as defined in the rfc2307bis schema.
-
-* Thu Aug 12 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
 - Add relative_gpgkey_path parameter to simp::yum::repo::simp_local
   and default it to SIMP/GPGKEYS, the location that the simp-gpgkeys
   rpm installs the gpgkeys.
