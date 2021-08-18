@@ -1,4 +1,13 @@
-* Thu Aug 12 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
+* Tue Aug 17 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
+- Update the sssd client configuration to set the ldap_schema
+  for ldap providers based on the setting simp::sssd::client::ldap_server_type,
+  which uses "plain" for openldap servers and "389ds" for 389-DS servers.
+  SIMP configuration and documentation for each of those servers is:
+  - In openldap group members are added using the attribute
+    "memberUid" and the cn of the user entry as defined in the
+    rfc2307 schema.
+  * In 389-DS group members are added using the "member" attribute and dn
+    of the user as defined in the rfc2307bis schema.
 - Add relative_gpgkey_path parameter to simp::yum::repo::simp_local
   and default it to SIMP/GPGKEYS, the location that the simp-gpgkeys
   rpm installs the gpgkeys.
