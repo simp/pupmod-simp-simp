@@ -15,8 +15,6 @@
     - always_set_home
     - match_group_by_gid
     - always_query_group_plugin
-  - Ensured that users setting `simp_options::ldap` to `false` would not be
-    prompted to set `simp::sssd::client::ldap_server_type
 
 * Tue Aug 17 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
 - Update the sssd client configuration to set the ldap_schema
