@@ -35,8 +35,6 @@ simp_options::firewall : true
 sssd::domains :
   - 'LDAP'
 
-#Need to default this for EL8 systems
-simp::sssd::client::ldap_server_type: 'plain'
 simp::yum::repo::local_simp::servers:
   - 'yum.bar.baz'
 simp::yum::repo::local_os_updates::servers:

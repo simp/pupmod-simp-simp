@@ -56,19 +56,19 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sssd::client (
-  Boolean               $local_domain          = false, #deprecated
-  Hash                  $local_domain_options  = {},    #deprecated
-  Boolean               $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
-  Hash                  $ldap_domain_options   = {},
-  Enum['plain','389ds'] $ldap_server_type,
-  Hash                  $ldap_provider_options = {},
-  Boolean               $autofs                = true, #deprecated
-  Boolean               $sudo                  = true, #deprecated
-  Boolean               $ssh                   = true, #deprecated
-  Boolean               $enumerate_users       = false,
-  Boolean               $cache_credentials     = true,
-  Integer               $min_id                = 500,
-  Boolean               $enable_domain_warn    = true
+  Boolean                                        $local_domain          = false, #deprecated
+  Hash                                           $local_domain_options  = {},    #deprecated
+  Boolean                                        $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
+  Hash                                           $ldap_domain_options   = {},
+  Variant[Boolean[false], Enum['plain','389ds']] $ldap_server_type      = $ldap_domain ? { false => false, default => undef },
+  Hash                                           $ldap_provider_options = {},
+  Boolean                                        $autofs                = true, #deprecated
+  Boolean                                        $sudo                  = true, #deprecated
+  Boolean                                        $ssh                   = true, #deprecated
+  Boolean                                        $enumerate_users       = false,
+  Boolean                                        $cache_credentials     = true,
+  Integer                                        $min_id                = 500,
+  Boolean                                        $enable_domain_warn    = true
 ){
 
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
@@ -98,7 +98,7 @@ class simp::sssd::client (
     }
   }
 
-  if $ldap_domain {
+  if $ldap_server_type and $ldap_domain {
     $_ldap_domain_defaults = {
       'description' => 'LOCAL Users Domain',
       'min_id'      => $min_id

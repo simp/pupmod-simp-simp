@@ -10,7 +10,6 @@ describe 'simp::sssd::client' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) { os_facts }
-        let(:params) {{ :ldap_server_type => 'plain' }}
 
         if os_facts[:kernel] == 'windows'
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
@@ -22,10 +21,22 @@ describe 'simp::sssd::client' do
             it { is_expected.to_not create_notify('SSSD LOCAL domain warning') }
           end
 
-          context 'with alternate params' do
+          context 'with ldap_domain=true' do
+            let(:params) do
+              { :ldap_domain => true }
+            end
+
+            if os_facts[:os][:release][:major] == '7'
+              it_should_behave_like 'sssd client'
+            else
+              it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/ldap_server_type.+expects a value/) }
+            end
+          end
+
+          context 'with ldap_domain and ldap_server_type=plain' do
             let(:params) {{
-              :ldap_domain           => true,
-              :ldap_server_type      => 'plain',
+              :ldap_domain      => true,
+              :ldap_server_type => 'plain',
             }}
             it_should_behave_like 'sssd client'
             it {
@@ -42,7 +53,8 @@ describe 'simp::sssd::client' do
                 .with_cache_credentials(true)
             }
           end
-          context 'with alternate params' do
+
+          context 'with multiple parameters set' do
             let(:params) {{
               :ldap_domain           => true,
               :ldap_domain_options   => { 'max_id' => 23456 },
@@ -71,6 +83,7 @@ describe 'simp::sssd::client' do
                 .with_ldap_schema('rfc2307bis')
             }
           end
+
           context 'with LOCAL domain set in hiera' do
             let(:hieradata) { 'sssd_domains' }
             it { is_expected.to create_notify('SSSD LOCAL domain warning') }

@@ -1,3 +1,21 @@
+* Tue Aug 24 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
+- Added
+  - simp::puppetdb::disable_update_checking to disable default analytics in
+    accordance with NIST guidance
+  - PuppetDB now sets UseCodeCacheFlushing by default
+- Changed
+  - Migrated from camptocamp/kmod to puppet/kmod
+- Fixed
+  - Corrected the HeapDumpOnOutOfMemoryError setting for PuppetDB
+  - Ensure that nsswitch SSSD options for sudoers do not stop on files
+  - Do not include the auditors sudo user specification if the aliases have not
+    been included
+  - Add the following to sudoers defaults
+    - !visiblepw
+    - always_set_home
+    - match_group_by_gid
+    - always_query_group_plugin
+
 * Tue Aug 17 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
 - Update the sssd client configuration to set the ldap_schema
   for ldap providers based on the setting simp::sssd::client::ldap_server_type,
@@ -16,36 +34,6 @@
   simp-gpgkeys.  This works
   because simp::yum::repo::simp_local takes care to add only the OS
   specific gpgkeys to the repo definition.
-
-* Wed Aug 04 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.0
-- Added
-  - simp::puppetdb::disable_update_checking to disable default analytics in
-    accordance with NIST guidance
-  - PuppetDB now sets UseCodeCacheFlushing by default
-- Changed
-  - Migrated from camptocamp/kmod to puppet/kmod
-- Fixed
-  - Corrected the HeapDumpOnOutOfMemoryError setting for PuppetDB
-  - Ensure that nsswitch SSSD options for sudoers do not stop on files
-  - Do not include the auditors sudo user specification if the aliases have not
-    been included
-  - Add the following to sudoers defaults
-    - !visiblepw
-    - always_set_home
-    - match_group_by_gid
-    - always_query_group_plugin
-
-* Wed Jul 28 2021 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.16.0
-- Added the latest GPG key for Puppet RPMs (RPM-GPG-KEY-20250406) to the list
-  of GPG keys for the local `simp` repo.
-
-* Wed Jul 14 2021 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.16.0
-- Support all valid values for simp::pam_limits::max_logins::value
-
-* Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.16.0
-- Ensured support for Puppet 7 in requirements and stdlib
-
-* Tue Jun 08 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.16.0
 - Changed:
   - sssd::client no longer creates a local provider.
     - The version of pupmod-simp-sssd required by this module was updated to 7.0
@@ -61,6 +49,14 @@
       fail to start because it will not find a provider for the "LOCAL" domain.
   - Added warning if LOCAL domain was found in sssd::domains. Also added ability
     to disable the warning.
+- Added the latest GPG key for Puppet RPMs (RPM-GPG-KEY-20250406) to the list
+  of GPG keys for the local `simp` repo.
+
+* Wed Jul 14 2021 Steven Pritchard <steven.pritchard@onyxpoint.com> - 4.16.0
+- Support all valid values for simp::pam_limits::max_logins::value
+
+* Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.16.0
+- Ensured support for Puppet 7 in requirements and stdlib
 
 * Tue Jun 08 2021 Liz Nemsick <lnemsick.simp@gmail.com> - 4.15.0
 - Removed
