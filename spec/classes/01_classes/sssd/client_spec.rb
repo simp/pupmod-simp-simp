@@ -23,18 +23,14 @@ describe 'simp::sssd::client' do
 
           context 'with ldap_domain=true' do
             let(:params) do
-              new_params = {
-                :ldap_domain => true
-              }
-
-              if os_facts[:os][:release][:major] != '7'
-                new_params[:ldap_server_type] = 'plain'
-              end
-
-              new_params
+              { :ldap_domain => true }
             end
 
-            it_should_behave_like 'sssd client'
+            if os_facts[:os][:release][:major] == '7'
+              it_should_behave_like 'sssd client'
+            else
+              it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/ldap_server_type.+expects a value/) }
+            end
           end
 
           context 'with ldap_domain and ldap_server_type=plain' do
