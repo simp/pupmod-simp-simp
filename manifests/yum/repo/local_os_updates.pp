@@ -84,15 +84,16 @@ class simp::yum::repo::local_os_updates (
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
   yumrepo { 'os_updates':
-    baseurl         => $baseurl,
-    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
-    enabled         => $_enable_repo,
-    enablegroups    => 0,
-    gpgcheck        => 1,
-    gpgkey          => $gpgkey,
-    sslverify       => 0,
-    keepalive       => 0,
-    metadata_expire => 3600,
-    tag             => 'firstrun'
+    baseurl             => $baseurl,
+    descr               => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
+    enabled             => $_enable_repo,
+    enablegroups        => 0,
+    gpgcheck            => 1,
+    gpgkey              => $gpgkey,
+    sslverify           => 0,
+    keepalive           => 0,
+    metadata_expire     => 3600,
+    tag                 => 'firstrun',
+    skip_if_unavailable => 1
   }
 }

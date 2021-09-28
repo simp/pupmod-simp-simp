@@ -48,7 +48,7 @@ describe 'simp::yum::repo::local_simp' do
           gpgkey = _keys.map{|x| "https://puppet.example.simp/yum/#{os_gpgkey}/#{x}"}.join("\n    ")
 
           is_expected.to contain_yumrepo('simp').with(
-            :baseurl => "https://puppet.example.simp/yum/#{os_baseurl}",
+            :baseurl => "https://puppet.example.simp/yum/#{os_baseurl}/simp",
             :gpgkey  => gpgkey,
           )
         }
@@ -62,7 +62,7 @@ describe 'simp::yum::repo::local_simp' do
             gpgkey = _keys.map{|x| "https://puppet.example.simp/yum/x/y/z/GPGKEYS/#{x}"}.join("\n    ")
 
             is_expected.to contain_yumrepo('simp').with(
-              :baseurl => "https://puppet.example.simp/yum/x/y/z/x86_64",
+              :baseurl => "https://puppet.example.simp/yum/x/y/z/x86_64/simp",
               :gpgkey  => gpgkey,
             )
           }
@@ -104,7 +104,7 @@ describe 'simp::yum::repo::local_simp' do
           is_expected.to contain_yumrepo('simp').with(
             :baseurl => "https://puppet.example.simp/yum/#{os_baseurl}\n    " +
                         "https://192.0.2.5/yum/#{os_baseurl}\n    " +
-                        arbitrary_url,
+                        "#{arbitrary_url}/simp",
             :gpgkey  => gpgkey
           )
         }
@@ -134,7 +134,7 @@ describe 'simp::yum::repo::local_simp' do
         it { is_expected.to compile.with_all_deps }
         it {
           is_expected.to contain_yumrepo('simp').with(
-            :baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates',
+            :baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates/simp',
             :gpgkey  => gpgkey_string,
           )
         }

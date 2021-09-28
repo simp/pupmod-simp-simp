@@ -94,18 +94,64 @@ class simp::yum::repo::local_simp (
   )
 ){
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
+  $_common_attrs = {
+    enabled             => $_enable_repo,
+    enablegroups        => 0,
+    gpgcheck            => 1,
+    gpgkey              => $gpgkey,
+    sslverify           => 0,
+    keepalive           => 0,
+    metadata_expire     => 3600,
+    tag                 => 'firstrun',
+    skip_if_unavailable => 1
+  }
+
+  $_descr_base = "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']}"
+
   yumrepo { 'simp':
-    baseurl         => $baseurl,
-    descr           => "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
-    enabled         => $_enable_repo,
-    enablegroups    => 0,
-    gpgcheck        => 1,
-    gpgkey          => $gpgkey,
-    sslverify       => 0,
-    keepalive       => 0,
-    metadata_expire => 3600,
-    tag             => 'firstrun'
+    baseurl => "${baseurl}/simp",
+    descr   => "${_descr_base} product packages",
+    *       => $_common_attrs
+  }
+
+  if $facts['package_provider'] == 'dnf' {
+    yumrepo { 'simp-puppet':
+      baseurl => "${baseurl}/puppet",
+      descr   => "${_descr_base} Puppet packages",
+      *       => $_common_attrs
+    }
+
+    yumrepo { 'simp-vendor-extras':
+      baseurl => "${baseurl}/extras",
+      descr   => "${_descr_base} Vendor extras required for correct application",
+      *       => $_common_attrs
+    }
+
+    yumrepo { 'simp-vendor-powertools':
+      baseurl => "${baseurl}/PowerTools",
+      descr   => "${_descr_base} Vendor power tools required for correct application",
+      *       => $_common_attrs
+    }
+
+    yumrepo { 'simp-epel':
+      baseurl => "${baseurl}/epel",
+      descr   => "${_descr_base} required packages from EPEL",
+      *       => $_common_attrs
+    }
+
+    yumrepo { 'simp-postgresql':
+      baseurl => "${baseurl}/postgresql",
+      descr   => "${_descr_base} postgresql packages",
+      *       => $_common_attrs
+    }
+
+    yumrepo { 'simp-epel-modular':
+      baseurl => "${baseurl}/epel-modular",
+      descr   => "${_descr_base} EPEL Modular packages",
+      *       => $_common_attrs
+    }
   }
 }
