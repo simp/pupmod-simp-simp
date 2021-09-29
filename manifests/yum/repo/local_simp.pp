@@ -111,13 +111,13 @@ class simp::yum::repo::local_simp (
 
   $_descr_base = "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']}"
 
-  yumrepo { 'simp':
-    baseurl => "${baseurl}/simp",
-    descr   => "${_descr_base} product packages",
-    *       => $_common_attrs
-  }
-
   if $facts['package_provider'] == 'dnf' {
+    yumrepo { 'simp':
+      baseurl => "${baseurl}/simp",
+      descr   => "${_descr_base} product packages",
+      *       => $_common_attrs
+    }
+
     yumrepo { 'simp-puppet':
       baseurl => "${baseurl}/puppet",
       descr   => "${_descr_base} Puppet packages",
@@ -151,6 +151,13 @@ class simp::yum::repo::local_simp (
     yumrepo { 'simp-epel-modular':
       baseurl => "${baseurl}/epel-modular",
       descr   => "${_descr_base} EPEL Modular packages",
+      *       => $_common_attrs
+    }
+  }
+  else {
+    yumrepo { 'simp':
+      baseurl => "${baseurl}",
+      descr   => "${_descr_base} product packages",
       *       => $_common_attrs
     }
   }
