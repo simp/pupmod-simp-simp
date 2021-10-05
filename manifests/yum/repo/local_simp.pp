@@ -113,7 +113,7 @@ class simp::yum::repo::local_simp (
 
   if $facts['package_provider'] == 'dnf' {
     yumrepo { 'simp':
-      baseurl => "${baseurl}/simp",
+      baseurl => "${baseurl}/SIMP",
       descr   => "${_descr_base} product packages",
       *       => $_common_attrs
     }
