@@ -49,7 +49,7 @@ describe 'simp::yum::repo::local_simp' do
 
           baseurl = "https://puppet.example.simp/yum/#{os_baseurl}"
           if facts[:package_provider] == 'dnf'
-            baseurl = "#{baseurl}/simp"
+            baseurl = "#{baseurl}/SIMP"
           end
 
           is_expected.to contain_yumrepo('simp').with(
@@ -68,7 +68,7 @@ describe 'simp::yum::repo::local_simp' do
 
             baseurl = "https://puppet.example.simp/yum/x/y/z/x86_64"
             if facts[:package_provider] == 'dnf'
-              baseurl = "#{baseurl}/simp"
+              baseurl = "#{baseurl}/SIMP"
             end
 
             is_expected.to contain_yumrepo('simp').with(
@@ -113,7 +113,7 @@ describe 'simp::yum::repo::local_simp' do
 
           arbitrary_baseurl = arbitrary_url.dup
           if facts[:package_provider] == 'dnf'
-            arbitrary_baseurl = "#{arbitrary_url}/simp"
+            arbitrary_baseurl = "#{arbitrary_url}/SIMP"
           end
 
           is_expected.to contain_yumrepo('simp').with(
@@ -150,7 +150,7 @@ describe 'simp::yum::repo::local_simp' do
         it {
           baseurl = 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates'
           if facts[:package_provider] == 'dnf'
-            baseurl = "#{baseurl}/simp"
+            baseurl = "#{baseurl}/SIMP"
           end
 
           is_expected.to contain_yumrepo('simp').with(
