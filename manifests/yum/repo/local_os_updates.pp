@@ -12,14 +12,6 @@
 # * For more complex scenarios, create a site-specific profile and use the native
 #   `yumrepo` type directly.
 #
-#  @example Describing a single server with specific URLs
-#    # This explicitly sets the `baseurl` and `gpgkey` keys in os_updates.repo.
-#    # (This overrides all other parameters and automagic URL logic.)
-#    simp::yum::repo::local_os_updates {
-#      baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates',
-#      gpgkey  => 'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
-#    }
-#
 #  @example Describing a single server by FQDN
 #    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
 #    # yumrepo with the `baseurl` "https://yum.test.simp/yum/CentOS/7/x86_64/Updates"
@@ -27,7 +19,7 @@
 #      servers => ['yum.test.simp']
 #    }
 #
-#  @example Describing a single server by FQDN
+#  @example Describing a several servers  with FQDN and full url.
 #    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
 #    # yumrepo with a 3-entry `baseurl` and a 3-entry `gpgkey`
 #    simp::yum::repo::local_os_updates {
@@ -61,8 +53,10 @@
 #   This parameter has no effect if the `baseurl` parameter is set directly.
 #
 # @param baseurl
+#   This parameter only works on EL7 systems.
 #   The URL for this repository. Set this to absent to remove it from the file completely.
 #   Set this parameter directly to completely skip all automated URL logic.
+#   files for non-simp repos.
 #
 # @param gpgkey
 #   The URL for the GPG key with which packages from this repository are signed.
@@ -72,7 +66,7 @@ class simp::yum::repo::local_os_updates (
   Boolean                $enable_repo        = true,
   Simp::Urls             $extra_gpgkey_urls  = [],
   String[1]              $relative_repo_path = "${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}",
-  Optional[String[1]]    $baseurl            = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates"),
+  Optional[String[1]]    $baseurl            = undef,
   Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
       $servers,
       simp::yum::repo::gpgkeys::os_updates(),
@@ -83,16 +77,65 @@ class simp::yum::repo::local_os_updates (
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
-  yumrepo { 'os_updates':
-    baseurl         => $baseurl,
-    descr           => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
-    enabled         => $_enable_repo,
-    enablegroups    => 0,
-    gpgcheck        => 1,
-    gpgkey          => $gpgkey,
-    sslverify       => 0,
-    keepalive       => 0,
-    metadata_expire => 3600,
-    tag             => 'firstrun'
+  if "${facts['os']['release']['major']}" > '7' {
+    if $baseurl {
+      $_os_updates_url = "$baseurl/BaseOS"
+    } else {
+      $_os_updates_url = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/BaseOS")
+    }
+    yumrepo { 'local_baseos':
+      baseurl             => "$_os_updates_url",
+      descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
+      enabled             => $_enable_repo,
+      enablegroups        => 1,
+      gpgcheck            => 1,
+      gpgkey              => $gpgkey,
+      sslverify           => 0,
+      keepalive           => 0,
+      metadata_expire     => 3600,
+      tag                 => 'firstrun',
+      skip_if_unavailable => 1
+    }
+
+    if $baseurl {
+      $_os_appstream_repo = "$baseurl/AppStream"
+    } else {
+      $_os_appstream_repo = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/AppStream")
+    }
+    yumrepo { 'local_appstream':
+      baseurl             => "$_os_appstream_repo",
+      descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} app stream packages",
+      enabled             => $_enable_repo,
+      enablegroups        => 1,
+      gpgcheck            => 1,
+      gpgkey              => $gpgkey,
+      sslverify           => 0,
+      keepalive           => 0,
+      metadata_expire     => 3600,
+      tag                 => 'firstrun',
+      skip_if_unavailable => 1
+    }
+
+  } else {
+
+    if $baseurl {
+      $_baseurl = $baseurl
+    } else {
+      $_baseurl = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates")
+    }
+
+    yumrepo { 'os_updates':
+      baseurl             => $_baseurl,
+      descr               => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']} base packages and updates",
+      enabled             => $_enable_repo,
+      enablegroups        => 0,
+      gpgcheck            => 1,
+      gpgkey              => $gpgkey,
+      sslverify           => 0,
+      keepalive           => 0,
+      metadata_expire     => 3600,
+      tag                 => 'firstrun',
+      skip_if_unavailable => 1
+    }
   }
 }

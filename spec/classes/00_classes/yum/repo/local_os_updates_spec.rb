@@ -17,6 +17,9 @@ describe 'simp::yum::repo::local_os_updates' do
         let(:os_maj_rel){ facts[:os][:release][:major] }
 
         it { is_expected.to compile.with_all_deps }
+
+
+
         it {
           os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:architecture]}"
 
@@ -30,10 +33,23 @@ describe 'simp::yum::repo::local_os_updates' do
             gpgkey = "https://puppet.example.simp/yum/#{os_yum_path}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
           end
 
-          is_expected.to contain_yumrepo('os_updates').with(
-            :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/Updates",
-            :gpgkey  => gpgkey
-          )
+          if os_maj_rel <= '7'
+
+            is_expected.to contain_yumrepo('os_updates').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/Updates",
+              :gpgkey  => gpgkey
+            )
+          else
+            is_expected.to contain_yumrepo('local_baseos').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/BaseOS",
+              :gpgkey  => gpgkey
+            )
+
+            is_expected.to contain_yumrepo('local_appstream').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/AppStream",
+              :gpgkey  => gpgkey
+            )
+          end
         }
 
         context 'with relative_repo_path = x/y/z' do
@@ -50,10 +66,22 @@ describe 'simp::yum::repo::local_os_updates' do
               gpgkey = "https://puppet.example.simp/yum/x/y/z/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
             end
 
-            is_expected.to contain_yumrepo('os_updates').with(
-              :baseurl => "https://puppet.example.simp/yum/x/y/z/Updates",
-              :gpgkey  => gpgkey
-            )
+            if os_maj_rel <= '7'
+              is_expected.to contain_yumrepo('os_updates').with(
+                :baseurl => "https://puppet.example.simp/yum/x/y/z/Updates",
+                :gpgkey  => gpgkey
+              )
+            else
+              is_expected.to contain_yumrepo('local_baseos').with(
+                :baseurl => "https://puppet.example.simp/yum/x/y/z/BaseOS",
+                :gpgkey  => gpgkey
+              )
+
+              is_expected.to contain_yumrepo('local_appstream').with(
+                :baseurl => "https://puppet.example.simp/yum/x/y/z/AppStream",
+                :gpgkey  => gpgkey
+              )
+            end
           }
         end
       end
@@ -97,32 +125,64 @@ describe 'simp::yum::repo::local_os_updates' do
           end
           gpgkey += "\n    #{arbitrary_url}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
 
-          is_expected.to contain_yumrepo('os_updates').with(
-            :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/Updates\n    " +
-                        "https://192.0.2.5/yum/#{os_yum_path}/Updates\n    " +
-                        arbitrary_url,
-            :gpgkey  => gpgkey
-          )
+          if os_maj_rel <= '7'
+            is_expected.to contain_yumrepo('os_updates').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/Updates\n    " +
+                          "https://192.0.2.5/yum/#{os_yum_path}/Updates\n    " +
+                          arbitrary_url,
+              :gpgkey  => gpgkey
+            )
+          else
+            is_expected.to contain_yumrepo('local_baseos').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/BaseOS\n    " +
+                          "https://192.0.2.5/yum/#{os_yum_path}/BaseOS\n    " +
+                          arbitrary_url,
+              :gpgkey  => gpgkey
+            )
+            is_expected.to contain_yumrepo('local_appstream').with(
+              :baseurl => "https://puppet.example.simp/yum/#{os_yum_path}/AppStream\n    " +
+                          "https://192.0.2.5/yum/#{os_yum_path}/AppStream\n    " +
+                          arbitrary_url,
+              :gpgkey  => gpgkey
+            )
+          end
+
         }
       end
 
       context 'with baseurl and gpgkey overrides' do
-        # No matter what OS we're testing, setting 'baseurl' and 'gpgkey'
+        # For EL7 and earlier,  setting 'baseurl' and 'gpgkey'
         # directly should result in exactly the string that was specified
-        # (in this case, repos for CentOS 8).
+        #  For EL8 it will add the two repos with BaseOS and AppStream appended
         let(:params) {{
             servers: ['puppet.example.simp'],
-            baseurl: 'https://yum.test1.simp/yum/CentOS/8/x86_64/Updates',
-            gpgkey:  'https://yum.test2.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
+            baseurl: 'https://yum.test1.simp/yum/foobar',
+            gpgkey:  'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
         }}
 
         it { is_expected.to compile.with_all_deps }
-        it {
-          is_expected.to contain_yumrepo('os_updates').with(
-            :baseurl => 'https://yum.test1.simp/yum/CentOS/8/x86_64/Updates',
-            :gpgkey  => 'https://yum.test2.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
-          )
-        }
+        if os_facts[:os][:release][:major] <= '7'
+          it {
+            is_expected.to contain_yumrepo('os_updates').with(
+              :baseurl => 'https://yum.test1.simp/yum/foobar',
+              :gpgkey  => 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
+            )
+          }
+        else
+          it {
+            is_expected.to contain_yumrepo('local_baseos').with(
+              :baseurl => 'https://yum.test1.simp/yum/foobar/BaseOS',
+              :gpgkey  => 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
+            )
+          }
+
+          it {
+            is_expected.to contain_yumrepo('local_appstream').with(
+              :baseurl => 'https://yum.test1.simp/yum/foobar/AppStream',
+              :gpgkey  => 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
+            )
+          }
+        end
       end
     end
   end
