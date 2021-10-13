@@ -2844,7 +2844,7 @@ Default value: `{}`
 
 ##### <a name="ldap_server_type"></a>`ldap_server_type`
 
-Data type: `Enum['plain','389ds']`
+Data type: `Variant[Boolean[false], Enum['plain','389ds']]`
 
 The type of LDAP server that the system is communicating with
 
@@ -2854,6 +2854,8 @@ The type of LDAP server that the system is communicating with
 * Use `389ds` for servers that are 'Netscape compatible'. This includes
   FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
 * Use `plain` for servers that are 'regular LDAP' like OpenLDAP
+
+Default value: `$ldap_domain`
 
 ##### <a name="ldap_provider_options"></a>`ldap_provider_options`
 
@@ -3897,14 +3899,6 @@ Generally, this is used by the ISO installation's SIMP agents.
 * For more complex scenarios, create a site-specific profile and use the native
   `yumrepo` type directly.
 
- @example Describing a single server with specific URLs
-   # This explicitly sets the `baseurl` and `gpgkey` keys in os_updates.repo.
-   # (This overrides all other parameters and automagic URL logic.)
-   simp::yum::repo::local_os_updates {
-     baseurl => 'https://yum.test.simp/yum/CentOS/8/x86_64/Updates',
-     gpgkey  => 'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-CentOS-8',
-   }
-
  @example Describing a single server by FQDN
    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
    # yumrepo with the `baseurl` "https://yum.test.simp/yum/CentOS/7/x86_64/Updates"
@@ -3912,7 +3906,7 @@ Generally, this is used by the ISO installation's SIMP agents.
      servers => ['yum.test.simp']
    }
 
- @example Describing a single server by FQDN
+ @example Describing a several servers  with FQDN and full url.
    # When classified to an CentOS 7 x86_64 host, this creates an os_updates
    # yumrepo with a 3-entry `baseurl` and a 3-entry `gpgkey`
    simp::yum::repo::local_os_updates {
@@ -3978,10 +3972,12 @@ Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${fac
 
 Data type: `Optional[String[1]]`
 
+This parameter only works on EL7 systems.
 The URL for this repository. Set this to absent to remove it from the file completely.
 Set this parameter directly to completely skip all automated URL logic.
+files for non-simp repos.
 
-Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates")`
+Default value: ``undef``
 
 ##### <a name="gpgkey"></a>`gpgkey`
 
