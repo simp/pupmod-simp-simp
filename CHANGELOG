@@ -1,3 +1,11 @@
+* Mon Oct 18 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.16.2
+- Updated simp::yum::repo::local_os_updates to use the GPGKEYS installed by
+  simp-gpgkeys and the iso install  into <yum directory>/SIMP/GPGKEYS.
+  This change was made because
+  EL8 distribution ISO no longer contains the GPG keys at the top level like
+  previous releases.  SIMP will put the keys into SIMP/GPGKEYS no matter what
+  the release is so this was the best fix.
+
 * Tue Sep 28 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.16.1
 - Fixed
   - Updated simp::yum::repo::local_simp to adjust for the EL8 ISO build

@@ -52,6 +52,11 @@
 #   The relative path to the yum repo relative to the URL(s) set in `$servers`.
 #   This parameter has no effect if the `baseurl` parameter is set directly.
 #
+# @param relative_gpgkey_path
+#   The relative path to the yum server to the GPGKEYS. It defaults to where both
+#   the ISO and smp-gpgkey rpm will install them: SIMP/GPGKEYS
+#   This parameter has no effect if the gpgkey parameter is set.
+#
 # @param baseurl
 #   This parameter only works on EL7 systems.
 #   The URL for this repository. Set this to absent to remove it from the file completely.
@@ -66,11 +71,12 @@ class simp::yum::repo::local_os_updates (
   Boolean                $enable_repo        = true,
   Simp::Urls             $extra_gpgkey_urls  = [],
   String[1]              $relative_repo_path = "${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}",
+  String[1]              $relative_gpgkey_path = "SIMP/GPGKEYS",
   Optional[String[1]]    $baseurl            = undef,
   Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
       $servers,
       simp::yum::repo::gpgkeys::os_updates(),
-      $relative_repo_path,
+      $relative_gpgkey_path,
       $extra_gpgkey_urls
   )
 ){
@@ -78,6 +84,7 @@ class simp::yum::repo::local_os_updates (
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
   if "${facts['os']['release']['major']}" > '7' {
+
     if $baseurl {
       $_os_updates_url = "$baseurl/BaseOS"
     } else {
