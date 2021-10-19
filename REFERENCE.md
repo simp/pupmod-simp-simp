@@ -3926,6 +3926,7 @@ The following parameters are available in the `simp::yum::repo::local_os_updates
 * [`enable_repo`](#enable_repo)
 * [`extra_gpgkey_urls`](#extra_gpgkey_urls)
 * [`relative_repo_path`](#relative_repo_path)
+* [`relative_gpgkey_path`](#relative_gpgkey_path)
 * [`baseurl`](#baseurl)
 * [`gpgkey`](#gpgkey)
 
@@ -3968,6 +3969,16 @@ This parameter has no effect if the `baseurl` parameter is set directly.
 
 Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}"`
 
+##### <a name="relative_gpgkey_path"></a>`relative_gpgkey_path`
+
+Data type: `String[1]`
+
+The relative path to the yum server to the GPGKEYS. It defaults to where both
+the ISO and smp-gpgkey rpm will install them: SIMP/GPGKEYS
+This parameter has no effect if the gpgkey parameter is set.
+
+Default value: `"SIMP/GPGKEYS"`
+
 ##### <a name="baseurl"></a>`baseurl`
 
 Data type: `Optional[String[1]]`
@@ -3989,7 +4000,7 @@ Set this parameter directly to completely skip default URL/path logic.
 Default value: `simp::yum::repo::gpgkey_string(
       $servers,
       simp::yum::repo::gpgkeys::os_updates(),
-      $relative_repo_path,
+      $relative_gpgkey_path,
       $extra_gpgkey_urls
   )`
 
