@@ -63,8 +63,7 @@ case "$1" in
 
       echo "Rebooting to complete the bootstrap."
       reboot;
-      # This is here to keep this script from interfering with upstart
-      # parallelism.
+      # This is here to keep this script from interfering with startup parallelism.
       sleep 999999999;
     elif [ $result -eq 2 ]; then
       echo -n "$servername bootstrapping has already completed."
@@ -77,8 +76,7 @@ case "$1" in
 
       echo "Rebooting to retry."
       reboot;
-      # This is here to keep this script from interfering with upstart
-      # parallelism.
+      # This is here to keep this script from interfering with startup parallelism.
       sleep 999999999;
     fi
     ;;

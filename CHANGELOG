@@ -1,3 +1,7 @@
+* Fri May 13 2022 Trevor Vaughan <trevor@sicura.us> - 4.16.3
+- Remove upstart as a dependency since it is not used on any of our supported
+  operating systems
+
 * Mon Oct 18 2021 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.16.2
 - Updated simp::yum::repo::local_os_updates to use the GPGKEYS installed by
   simp-gpgkeys and the iso install  into <yum directory>/SIMP/GPGKEYS.
