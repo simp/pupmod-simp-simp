@@ -25,15 +25,6 @@ describe 'simp::ctrl_alt_del' do
             }
           end
 
-          shared_examples_for "an upstart system" do
-            it { is_expected.to compile.with_all_deps }
-
-            it { is_expected.to create_class('simp::ctrl_alt_del') }
-            it { is_expected.to create_class('upstart') }
-
-            it { is_expected.to create_upstart__job('control-alt-delete').with_start_on('control-alt-delete') }
-          end
-
           if os_facts.fetch(:init_systems, []).include?('systemd')
             it_behaves_like 'a systemd system'
 
@@ -79,42 +70,6 @@ describe 'simp::ctrl_alt_del' do
 
               it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del.target').with_ensure('absent') }
               it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service').with_ensure('absent') }
-            end
-          elsif os_facts.fetch(:init_systems, []).include?('upstart')
-            it_behaves_like 'an upstart system'
-
-            it { is_expected.to create_upstart__job('control-alt-delete').with_main_process(
-              %{/bin/sh -c "/bin/logger -p local6.warning 'Ctrl-Alt-Del detected - Logged in users:' `/usr/bin/who | /bin/cut -f1 -d' ' | /bin/sort -u | /usr/bin/tr '\\n' ' '`"}
-            )}
-
-            context 'when not logging users' do
-              let(:params){{
-                :log_users => false
-              }}
-
-              it_behaves_like 'an upstart system'
-
-              it { is_expected.to create_upstart__job('control-alt-delete').with_main_process(%{/bin/sh -c "/bin/logger -p local6.warning 'Ctrl-Alt-Del detected'"}) }
-            end
-
-            context 'when not logging' do
-              let(:params){{
-                :log => false
-              }}
-
-              it_behaves_like 'an upstart system'
-
-              it { is_expected.to create_upstart__job('control-alt-delete').with_main_process('/bin/true') }
-            end
-
-            context 'when allowing ctrl-alt-del' do
-              let(:params){{
-                :enable => true
-              }}
-
-              it_behaves_like 'an upstart system'
-
-              it { is_expected.to create_upstart__job('control-alt-delete').with_main_process('/sbin/shutdown -r now "Control-Alt-Delete pressed"') }
             end
           else
             it {

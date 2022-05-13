@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.16.2",
+  "version": "4.16.3",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -178,10 +178,6 @@
     {
       "name": "simp/tuned",
       "version_requirement": ">= 0.1.0 < 1.0.0"
-    },
-    {
-      "name": "simp/upstart",
-      "version_requirement": ">= 6.0.3 < 7.0.0"
     },
     {
       "name": "simp/useradd",
