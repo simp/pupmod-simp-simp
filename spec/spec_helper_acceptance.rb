@@ -4,7 +4,6 @@ require 'yaml'
 require 'simp/beaker_helpers'
 include Simp::BeakerHelpers
 
-require 'beaker/puppet_install_helper'
 require 'beaker-windows'
 include BeakerWindows::Path
 include BeakerWindows::Powershell
