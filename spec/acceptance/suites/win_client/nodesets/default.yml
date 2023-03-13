@@ -1,29 +1,22 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   win:
     roles:
-      - windows
+    - windows
     platform: windows-server-amd64
     box: devopsgroup-io/windows_server-2012r2-standard-amd64-nocm
-    hypervisor: <%= hypervisor %>
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     vagrant_memsize: 2048
     vagrant_cpus: 2
     user: vagrant
     communicator: winrm
     is_cygwin: false
     ssh:
-      host_key: '+ssh-dss'
-
+      host_key: "+ssh-dss"
+    family: windows-cloud/windows-2012-r2
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
   type: aio
   vagrant_memsize: 256
-<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
-  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
-<% end -%>
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"

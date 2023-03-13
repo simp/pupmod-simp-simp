@@ -1,28 +1,22 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   server-el8.simp.beaker:
     roles:
-      - server
-      - default
-      - master
-      - simp_server
-    platform:   el-8-x86_64
-    box:        generic/centos8
-    hypervisor: <%= hypervisor %>
+    - server
+    - default
+    - master
+    - simp_server
+    platform: el-8-x86_64
+    box: generic/centos8
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     yum_repos:
       updates:
-        baseurl: 'http://mirror.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/'
+        baseurl: http://mirror.centos.org/$contentdir/$releasever/BaseOS/$basearch/os/
         gpgkeys:
-          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+        - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+    family: centos-cloud/centos-stream-8
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
   type: aio
-<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
-  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
-<% end -%>
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
