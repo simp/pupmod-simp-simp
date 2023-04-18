@@ -147,12 +147,6 @@ class simp::yum::repo::local_simp (
       descr   => "${_descr_base} postgresql packages",
       *       => $_common_attrs
     }
-
-    yumrepo { 'simp-epel-modular':
-      baseurl => "${baseurl}/epel-modular",
-      descr   => "${_descr_base} EPEL Modular packages",
-      *       => $_common_attrs
-    }
   }
   else {
     yumrepo { 'simp':
