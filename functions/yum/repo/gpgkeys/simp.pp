@@ -9,16 +9,13 @@ function simp::yum::repo::gpgkeys::simp() {
     'RPM-GPG-KEY-puppet-20250406',
     'RPM-GPG-KEY-puppet',
     'RPM-GPG-KEY-puppetlabs',
-    'RPM-GPG-KEY-SIMP',
     'RPM-GPG-KEY-SIMP-6',
     'RPM-GPG-KEY-PGDG-94',
-    'RPM-GPG-KEY-PGDG-96'
   ]
 
   # keys needed by specific OSes
   if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
     case $facts['os']['release']['major'] {
-      '6':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-6'] }
       '7':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-7'] }
       '8':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-8'] }
       default: { $_os_rel_gpgkeys = [] }

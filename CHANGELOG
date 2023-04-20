@@ -1,3 +1,6 @@
+* Thu Apr 20 2023 Mike Riddle <mike@sicura.us> - 4.16.6
+- Removed missing gpgkeys from the list of simp gpgkeys
+
 * Mon Apr 17 2023 Mike Riddle <mike@sicura.us> - 4.16.5
 - Removed the epel-modular repo from the list of client repos
 
