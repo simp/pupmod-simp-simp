@@ -19,10 +19,8 @@ describe 'simp::yum::repo::local_simp' do
           'RPM-GPG-KEY-puppet-20250406',
           'RPM-GPG-KEY-puppet',
           'RPM-GPG-KEY-puppetlabs',
-          'RPM-GPG-KEY-SIMP',
           'RPM-GPG-KEY-SIMP-6',
-          'RPM-GPG-KEY-PGDG-94',
-          'RPM-GPG-KEY-PGDG-96'
+          'RPM-GPG-KEY-PGDG-94'
         ]
       }
       let(:other_gpgkeys){
@@ -133,8 +131,6 @@ describe 'simp::yum::repo::local_simp' do
           [
             'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-EPEL-8',
             'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-94',
-            'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-PGDG-96',
-            'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP',
             'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-SIMP-6',
             'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppet',
             'https://yum.test.simp/yum/SIMP/GPGKEYS/RPM-GPG-KEY-puppetlabs',
