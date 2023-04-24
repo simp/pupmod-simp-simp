@@ -167,3 +167,4 @@ jobs:
         uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
+
