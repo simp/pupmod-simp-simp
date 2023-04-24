@@ -73,10 +73,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: 'Validate GLCI file syntax'
         id: validate-glci-file
-        uses: simp/github-action-gitlab-ci-syntax-check@main
+        uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: ${{ secrets.GITLAB_API_URL }}       # https://gitlab.com/api/v4
+            #gitlab_api_url: ${{ secrets.GITLAB_API_URL }}       # https://gitlab.com/api/v4
 
   contributor-permissions:
     name: 'PR contributor check'
