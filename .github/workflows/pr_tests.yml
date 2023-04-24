@@ -136,3 +136,16 @@ jobs:
 #          GITHUB_CONTEXT: ${{ toJson(github) }}
 #        run: echo "$GITHUB_CONTEXT"
 #
+  examine_contexts:
+    name: 'Examine Context contents'
+    if: always()
+    runs-on: ubuntu-latest
+      ###needs: [ glci-syntax, contributor-permissions ]
+    steps:
+      - name: Dump contexts
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump env vars
+        run: env | sort
+
