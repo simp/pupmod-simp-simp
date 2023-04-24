@@ -175,7 +175,7 @@ jobs:
     name: 'Examine Context contents'
     if: always()
     runs-on: ubuntu-latest
-    needs: [ glci-syntax, contributor-permissions ]
+      ###needs: [ glci-syntax, contributor-permissions ]
     steps:
       - name: Dump contexts
         env:
