@@ -153,3 +153,18 @@ jobs:
         run: env | sort
 
 
+  # The ONLY reason we can validate the PR HEAD's content safely here is that
+  # we restrict ourselves to sending data elsewhere.
+  glci-syntax:
+    name: '.gitlab-ci.yml Syntax'
+    runs-on: ubuntu-latest
+    outputs:
+      valid: ${{ steps.validate-glci-file.outputs.valid }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Validate GLCI file syntax'
+        id: validate-glci-file
+        uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
+        with:
+          gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
+            #gitlab_api_url: ${{ secrets.GITLAB_API_URL }}       # https://gitlab.com/api/v4
