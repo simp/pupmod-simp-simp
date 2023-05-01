@@ -154,15 +154,15 @@ jobs:
 
   api_input_is_empty:
     runs-on: ubuntu-latest
-    if: inputs.gitlab_api_private_token == ''
+    if: ${{ secrets.GITHUB_API_PRIVATE_TOKEN == '' }}
     steps:
-      - run: echo aaaaaagh
+      - echo aaaaaagh
 
   api_url_is_empty:
     runs-on: ubuntu-latest
-    if: inputs.gitlab_api_url == ''
+    if: ${{ secrets.GITHUB_API_URL == '' }}
     steps:
-      - run: echo aaaaaagh
+      - echo aaaaaagh
 
   # The ONLY reason we can validate the PR HEAD's content safely here is that
   # we restrict ourselves to sending data elsewhere.
