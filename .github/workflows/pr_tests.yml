@@ -148,7 +148,7 @@ jobs:
       - name: Dump contexts
         env:
           VARS_CONTEXT: ${{ toJson(vars) }}
-        run: echo "VARS_CONTEXT"
+        run: echo "$VARS_CONTEXT"
       - name: Dump env vars
         run: env | sort
 
