@@ -167,7 +167,7 @@ jobs:
         uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: ${{ secrets.GITLAB_API_URL }} #|| format('https://gitlab.com/api/v4/projects/{0}%2F{1}', github.event.organization.login, github.event.repository.name) }}
+          gitlab_api_url: ${{ vars.GITLAB_API_URL }} #|| format('https://gitlab.com/api/v4/projects/{0}%2F{1}', github.event.organization.login, github.event.repository.name) }}
 
 
 
