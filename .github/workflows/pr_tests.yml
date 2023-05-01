@@ -155,12 +155,14 @@ jobs:
   api_input_is_empty:
     runs-on: ubuntu-latest
     if: inputs.gitlab_api_private_token == ''
-    run: echo aaaaaagh
+    steps:
+      - run: echo aaaaaagh
 
   api_url_is_empty:
     runs-on: ubuntu-latest
     if: inputs.gitlab_api_url == ''
-    run: echo aaaaaagh
+    steps:
+      - run: echo aaaaaagh
 
   # The ONLY reason we can validate the PR HEAD's content safely here is that
   # we restrict ourselves to sending data elsewhere.
