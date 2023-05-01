@@ -147,8 +147,8 @@ jobs:
     steps:
       - name: Dump contexts
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: echo "VARS_CONTEXT"
       - name: Dump env vars
         run: env | sort
 
@@ -178,5 +178,6 @@ jobs:
         uses: simp/github-action-gitlab-ci-syntax-check@foo
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: https://gitlab.sicura.dev/api/v4/projects/694
+          gitlab_api_url: ${{ secrets.GITHUB_API_URL }}
+            #gitlab_api_url: https://gitlab.sicura.dev/api/v4/projects/694
 
