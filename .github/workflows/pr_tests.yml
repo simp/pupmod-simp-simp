@@ -25,6 +25,9 @@ name: PR Tests
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  push:
+    branches: [ '**' ]
+
 
 env:
   PUPPET_VERSION: '~> 7'
