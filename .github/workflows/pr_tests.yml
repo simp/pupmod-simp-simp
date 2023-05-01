@@ -164,7 +164,7 @@ jobs:
           _TOK: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
         run: |
           [[ -z $_API ]] && echo '::error ::vars.GITLAB_API_URL is empty!'
-          [[ -z $_TOK ]] && echo '::error ::vars.GITLAB_API_PRIVATE_TOKEN is empty!'
+          [[ -z $_TOK ]] && echo '::error ::secrets.GITLAB_API_PRIVATE_TOKEN is empty!'
           echo
 
 
