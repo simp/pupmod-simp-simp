@@ -145,10 +145,14 @@ jobs:
     runs-on: ubuntu-latest
       ###needs: [ glci-syntax, contributor-permissions ]
     steps:
-      - name: Dump contexts
+      - name: Dump context1
         env:
           VARS_CONTEXT: ${{ toJson(vars) }}
         run: echo "$VARS_CONTEXT"
+      - name: Dump context2
+        env:
+          VARS2_CONTEXT: ${{ toJson(secrets) }}
+        run: echo "$VARS2_CONTEXT"
       - name: Dump env vars
         run: env | sort
 
