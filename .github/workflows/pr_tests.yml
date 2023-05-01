@@ -152,17 +152,17 @@ jobs:
       - name: Dump env vars
         run: env | sort
 
-  api_input_is_empty:
-    runs-on: ubuntu-latest
-    if: secrets.GITHUB_API_PRIVATE_TOKEN == ''
-    steps:
-      - run: echo aaaaaagh
-
-  api_url_is_empty:
-    runs-on: ubuntu-latest
-    if: secrets.GITHUB_API_URL == ''
-    steps:
-      - run: echo aaaaaagh
+###  api_input_is_empty:
+###    runs-on: ubuntu-latest
+###    if: secrets.GITHUB_API_PRIVATE_TOKEN == ''
+###    steps:
+###      - run: echo aaaaaagh
+###
+###  api_url_is_empty:
+###    runs-on: ubuntu-latest
+###    if: secrets.GITHUB_API_URL == ''
+###    steps:
+###      - run: echo aaaaaagh
 
   # The ONLY reason we can validate the PR HEAD's content safely here is that
   # we restrict ourselves to sending data elsewhere.
