@@ -154,13 +154,13 @@ jobs:
 
   api_input_is_empty:
     runs-on: ubuntu-latest
-    if: ${{ secrets.GITHUB_API_PRIVATE_TOKEN == '' }}
+    if: secrets.GITHUB_API_PRIVATE_TOKEN == ''
     steps:
       - echo aaaaaagh
 
   api_url_is_empty:
     runs-on: ubuntu-latest
-    if: ${{ secrets.GITHUB_API_URL == '' }}
+    if: secrets.GITHUB_API_URL == ''
     steps:
       - echo aaaaaagh
 
