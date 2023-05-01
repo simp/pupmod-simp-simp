@@ -164,7 +164,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: vars check
         env:
-          - _TEST_VARS: ${{ vars.GITLAB_API_URL }}
+          - TEST__VARS: ${{ vars.GITLAB_API_URL }}
         run: env | sort
       - name: 'Validate GLCI file syntax'
         id: validate-glci-file
