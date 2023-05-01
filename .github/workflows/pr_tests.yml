@@ -163,8 +163,9 @@ jobs:
           _API: ${{ vars.GITLAB_API_URL }}
           _TOK: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
         run: |
-          [[ -z $_API ]] && printf '::error ::vars.GITLAB_API_URL is empty!'
-          [[ -z $_API ]] && printf '::error ::vars.GITLAB_API_URL is empty!'
+          [[ -z $_API ]] && echo '::error ::vars.GITLAB_API_URL is empty!'
+          [[ -z $_API ]] && echo '::error ::vars.GITLAB_API_PRIVATE_TOKEN is empty!'
+          echo
 
 
   # The ONLY reason we can validate the PR HEAD's content safely here is that
