@@ -162,6 +162,10 @@ jobs:
       valid: ${{ steps.validate-glci-file.outputs.valid }}
     steps:
       - uses: actions/checkout@v3
+      - name: vars check
+        env:
+          - _TEST_VARS: ${{ vars.GITLAB_API_URL }}
+        run: env | sort
       - name: 'Validate GLCI file syntax'
         id: validate-glci-file
         uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
