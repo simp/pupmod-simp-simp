@@ -158,18 +158,14 @@ jobs:
         run: echo "$VARS2_CONTEXT"
       - name: Dump env vars
         run: env | sort
+      - name: validate secrets and vars
+        env:
+          _API: ${{ vars.GITLAB_API_URL }}
+          _TOK: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
+        run: |
+          [[ -z $_API ]] && printf '::error ::vars.GITLAB_API_URL is empty!'
+          [[ -z $_API ]] && printf '::error ::vars.GITLAB_API_URL is empty!'
 
-###  api_input_is_empty:
-###    runs-on: ubuntu-latest
-###    if: secrets.GITHUB_API_PRIVATE_TOKEN == ''
-###    steps:
-###      - run: echo aaaaaagh
-###
-###  api_url_is_empty:
-###    runs-on: ubuntu-latest
-###    if: secrets.GITHUB_API_URL == ''
-###    steps:
-###      - run: echo aaaaaagh
 
   # The ONLY reason we can validate the PR HEAD's content safely here is that
   # we restrict ourselves to sending data elsewhere.
@@ -185,6 +181,6 @@ jobs:
         uses: simp/github-action-gitlab-ci-syntax-check@foo
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: ${{ secrets.GITHUB_API_URL }}
+          gitlab_api_url: ${{ secrets.GITLAB_API_URL }}
             #gitlab_api_url: https://gitlab.sicura.dev/api/v4/projects/694
 
