@@ -153,10 +153,12 @@ jobs:
         run: env | sort
 
   api_input_is_empty:
+    runs-on: ubuntu-latest
     if: inputs.gitlab_api_private_token == ''
     run: echo aaaaaagh
 
   api_url_is_empty:
+    runs-on: ubuntu-latest
     if: inputs.gitlab_api_url == ''
     run: echo aaaaaagh
 
