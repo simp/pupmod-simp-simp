@@ -23,144 +23,116 @@
 
 name: PR Tests
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize]
-  push:
-    branches: [ '**' ]
-
 
 env:
   PUPPET_VERSION: '~> 7'
 
 jobs:
-###  puppet-syntax:
-###    name: 'Puppet Syntax'
-###    runs-on: ubuntu-latest
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
-###        uses: ruby/setup-ruby@v1  # ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
-###        with:
-###          ruby-version: 2.5
-###          bundler-cache: true
-###      - run: "bundle exec rake syntax"
-###
-###  puppet-style:
-###    name: 'Puppet Style'
-###    runs-on: ubuntu-latest
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
-###        uses: ruby/setup-ruby@v1
-###        with:
-###          ruby-version: 2.5
-###          bundler-cache: true
-###      - run: "bundle exec rake lint"
-###      - run: "bundle exec rake metadata_lint"
-###
-###  ruby-style:
-###    if: false # TODO Modules will need: rubocop in Gemfile, .rubocop.yml
-###    name: 'Ruby Style (experimental)'
-###    runs-on: ubuntu-latest
-###    continue-on-error: true
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
-###        uses: ruby/setup-ruby@v1
-###        with:
-###          ruby-version: 2.5
-###          bundler-cache: true
-###      - run: |
-###          bundle show
-###          bundle exec rake rubocop
-###
-###  file-checks:
-###    name: 'File checks'
-###    runs-on: ubuntu-latest
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: 'Install Ruby 2.5'
-###        uses: ruby/setup-ruby@v1
-###        with:
-###          ruby-version: 2.5
-###          bundler-cache: true
-###      - run: bundle exec rake check:dot_underscore
-###      - run: bundle exec rake check:test_file
-###
-###  releng-checks:
-###    name: 'RELENG checks'
-###    runs-on: ubuntu-latest
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: 'Install Ruby ${{matrix.puppet.ruby_version}}'
-###        uses: ruby/setup-ruby@v1
-###        with:
-###          ruby-version: 2.5
-###          bundler-cache: true
-###      - name: 'Tags and changelogs'
-###        run: |
-###          bundle exec rake pkg:check_version
-###          bundle exec rake pkg:compare_latest_tag[,true]
-###          bundle exec rake pkg:create_tag_changelog
-###      - name: 'Test-build the Puppet module'
-###        run: 'bundle exec pdk build --force'
-###
-###  spec-tests:
-###    name: 'Puppet Spec'
-###    needs: [puppet-syntax]
-###    runs-on: ubuntu-latest
-###    strategy:
-###      matrix:
-###        puppet:
-###          - label: 'Puppet 6.22 [SIMP 6.6/PE 2019.8]'
-###            puppet_version: '~> 6.22.1'
-###            ruby_version: '2.5'
-###          - label: 'Puppet 7.x'
-###            puppet_version: '~> 7.0'
-###            ruby_version: '2.7'
-###    env:
-###      PUPPET_VERSION: '${{matrix.puppet.puppet_version}}'
-###    steps:
-###      - uses: actions/checkout@v3
-###      - name: 'Install Ruby ${{matrix.puppet.ruby_version}}'
-###        uses: ruby/setup-ruby@v1
-###        with:
-###          ruby-version: ${{matrix.puppet.ruby_version}}
-###          bundler-cache: true
-###      - run: 'command -v rpm || if command -v apt-get; then sudo apt-get update; sudo apt-get install -y rpm; fi ||:'
-###      - run: 'bundle exec rake spec'
-###
-####  dump_contexts:
-####    name: 'Examine Context contents'
-####    runs-on: ubuntu-latest
-####    steps:
-####      - name: Dump contexts
-####        env:
-####          GITHUB_CONTEXT: ${{ toJson(github) }}
-####        run: echo "$GITHUB_CONTEXT"
-###
-
-  # The ONLY reason we can validate the PR HEAD's content safely here is that
-  # we restrict ourselves to sending data elsewhere.
-  glci-syntax:
-    name: '.gitlab-ci.yml Syntax'
+  puppet-syntax:
+    name: 'Puppet Syntax'
     runs-on: ubuntu-latest
-    outputs:
-      valid: ${{ steps.validate-glci-file.outputs.valid }}
     steps:
       - uses: actions/checkout@v3
-      - name: Validate required secrets and vars
-        env:
-          _API: ${{ vars.GITLAB_API_URL }}
-          _TOK: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-        run: |
-          [[ -n $_API ]] || echo '::warning ::vars.GITLAB_API_URL is empty!'
-          [[ -n $_TOK ]] || echo '::error ::secrets.GITLAB_API_PRIVATE_TOKEN is empty!'
-          [[ -n $_TOK ]]
-      - name: 'Validate GLCI file syntax'
-        id: validate-glci-file
-        uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
+        uses: ruby/setup-ruby@v1  # ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
         with:
-          gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: ${{ vars.GITLAB_API_URL || format('https://gitlab.com/api/v4/projects/{0}%2F{1}', github.event.organization.login, github.event.repository.name) }}
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: "bundle exec rake syntax"
 
+  puppet-style:
+    name: 'Puppet Style'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: "bundle exec rake lint"
+      - run: "bundle exec rake metadata_lint"
+
+  ruby-style:
+    if: false # TODO Modules will need: rubocop in Gemfile, .rubocop.yml
+    name: 'Ruby Style (experimental)'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: |
+          bundle show
+          bundle exec rake rubocop
+
+  file-checks:
+    name: 'File checks'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Install Ruby 2.5'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - run: bundle exec rake check:dot_underscore
+      - run: bundle exec rake check:test_file
+
+  releng-checks:
+    name: 'RELENG checks'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Install Ruby ${{matrix.puppet.ruby_version}}'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+          bundler-cache: true
+      - name: 'Tags and changelogs'
+        run: |
+          bundle exec rake pkg:check_version
+          bundle exec rake pkg:compare_latest_tag[,true]
+          bundle exec rake pkg:create_tag_changelog
+      - name: 'Test-build the Puppet module'
+        run: 'bundle exec pdk build --force'
+
+  spec-tests:
+    name: 'Puppet Spec'
+    needs: [puppet-syntax]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        puppet:
+          - label: 'Puppet 6.22 [SIMP 6.6/PE 2019.8]'
+            puppet_version: '~> 6.22.1'
+            ruby_version: '2.5'
+          - label: 'Puppet 7.x'
+            puppet_version: '~> 7.0'
+            ruby_version: '2.7'
+    env:
+      PUPPET_VERSION: '${{matrix.puppet.puppet_version}}'
+    steps:
+      - uses: actions/checkout@v3
+      - name: 'Install Ruby ${{matrix.puppet.ruby_version}}'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{matrix.puppet.ruby_version}}
+          bundler-cache: true
+      - run: 'command -v rpm || if command -v apt-get; then sudo apt-get update; sudo apt-get install -y rpm; fi ||:'
+      - run: 'bundle exec rake spec'
+
+#  dump_contexts:
+#    name: 'Examine Context contents'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Dump contexts
+#        env:
+#          GITHUB_CONTEXT: ${{ toJson(github) }}
+#        run: echo "$GITHUB_CONTEXT"
+#
