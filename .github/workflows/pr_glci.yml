@@ -23,6 +23,15 @@
 #   The secure vars will be filtered in GitHub Actions log output, and aren't
 #   provided to untrusted builds (i.e, triggered by PR from another repository)
 #
+#
+# GitHub Action Variables available for this pipeline:
+#
+#   GitHub variable                   Notes
+#   ------------------------------    ----------------------------------------
+#   GITLAB_API_CI_LINT_PROJECT_URL    API url up to .../projects/:id
+#                                     if omitted, tries to use the identical
+#                                     org/project on gitlab.com
+#
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!V!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -58,7 +67,6 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-
   # The ONLY reason we can validate the PR HEAD's content safely here is that
   # we restrict ourselves to sending data elsewhere.
   glci-syntax:
@@ -68,15 +76,20 @@ jobs:
       valid: ${{ steps.validate-glci-file.outputs.valid }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Validate required secrets and vars
+        env:
+          _API: ${{ vars.GITLAB_API_CI_LINT_PROJECT_URL }}
+          _TOK: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
+        run: |
+          [[ -n $_API ]] || echo '::warning ::vars.GITLAB_API_CI_LINT_PROJECT_URL is empty!'
+          [[ -n $_TOK ]] || echo '::error ::secrets.GITLAB_API_PRIVATE_TOKEN is empty!'
+          [[ -n $_TOK ]]
       - name: 'Validate GLCI file syntax'
         id: validate-glci-file
-        uses: simp/github-action-gitlab-ci-syntax-check@main
+        uses: simp/github-action-gitlab-ci-syntax-check@tests/fix-gitlab-api
         with:
           gitlab_api_private_token: ${{ secrets.GITLAB_API_PRIVATE_TOKEN }}
-          gitlab_api_url: ${{ secrets.GITLAB_API_URL }}       # https://gitlab.com/api/v4
+          gitlab_api_url: ${{ vars.GITLAB_API_CI_LINT_PROJECT_URL || format('https://gitlab.com/api/v4/projects/{0}%2F{1}', github.event.organization.login, github.event.repository.name) }}
 
   contributor-permissions:
     name: 'PR contributor check'
