@@ -1,45 +1,38 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   oel7:
     roles:
-      - default
-    platform:   el-7-x86_64
-    box:        generic/oracle7
-    hypervisor: <%= hypervisor %>
+    - default
+    platform: el-7-x86_64
+    box: generic/oracle7
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     yum_repos:
       simp:
         baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/simp
         gpgkeys:
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-UNSTABLE
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-UNSTABLE
       simp_epel:
         baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/epel
         gpgkeys:
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-CentOS-$releasever
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-redhat-release
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-EPEL-$releasever
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-CentOS-$releasever
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-redhat-release
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-EPEL-$releasever
       simp_postgresql:
         baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/postgresql
         gpgkeys:
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-PGDG-96
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-PGDG-96
       simp_puppet:
         baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/puppet
         gpgkeys:
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppet
-          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlabs
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppet
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlabs
+    family: sicura-image-build/oracle-linux-7
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
-  type:      aio
+  type: aio
   vagrant_memsize: 256
   synced_folder: disabled
-<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
-  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
-<% end -%>
-  # vb_gui: true
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
