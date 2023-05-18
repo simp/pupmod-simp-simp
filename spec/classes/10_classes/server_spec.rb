@@ -4,6 +4,14 @@ describe 'simp::server' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
+
+        let(:pre_condition) { 
+          "class {
+            'simp_options':
+              authselect => false,
+          }"
+        }
+
         if os_facts[:kernel] == 'windows'
           let(:facts){ os_facts }
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
@@ -131,7 +139,24 @@ describe 'simp::server' do
                 end
               end
             end
+            
+            scenarios.each do |scenario, data|
+              context "'#{scenario}' with authselect" do
+                let(:params) {{
+                  :scenario => scenario
+                }}
+                
+                let(:pre_condition) { 
+                  "class {
+                    'simp_options':
+                      authselect => true,
+                  }"
+                }
 
+                it { is_expected.to compile.with_all_deps }
+                it { is_expected.to_not contain_class('nsswitch') }
+              end
+            end
           end
         end
       end
