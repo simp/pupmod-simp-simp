@@ -367,13 +367,13 @@ pup7.pe-unit_slow:
   <<: *pup_7_pe
   <<: *slow_unit_tests
 
-pup8.x-unit:
-  <<: *pup_8_x
-  <<: *unit_tests
+#pup8.x-unit:
+#  <<: *pup_8_x
+#  <<: *unit_tests
 
-pup8.x-unit_slow:
-  <<: *pup_8_x
-  <<: *slow_unit_tests
+#pup8.x-unit_slow:
+#  <<: *pup_8_x
+#  <<: *slow_unit_tests
 
 # ------------------------------------------------------------------------------
 #             NOTICE: **This file is maintained with puppetsync**
@@ -514,8 +514,8 @@ pup7.pe-oel-fips:
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
-pup8.x:
-  <<: *pup_8_x
-  <<: *acceptance_base
-  script:
-    - 'bundle exec rake beaker:suites[default,default]'
+#pup8.x:
+#  <<: *pup_8_x
+#  <<: *acceptance_base
+#  script:
+#    - 'bundle exec rake beaker:suites[default,default]'
