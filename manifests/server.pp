@@ -52,7 +52,7 @@ class simp::server (
         ($scenario_map[$scenario] - ['nsswitch', 'simp::nsswitch']),
         ($classes - ['nsswitch', 'simp::nsswitch']),
       ),
-      false => union(
+      default => union(
         $scenario_map[$scenario],
         $classes,
       )
