@@ -13,7 +13,7 @@ HOSTS:
     is_cygwin: false
     ssh:
       host_key: "+ssh-dss"
-    family: windows-cloud/windows-2012-r2
+    family: 
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose

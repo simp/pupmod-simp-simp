@@ -1,49 +1,45 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   server-oel7.simp.beaker:
     roles:
-      - server
-      - ldap_server
-      - openldap
-    platform:   el-7-x86_64
-    box:        generic/oracle7
-    hypervisor: <%= hypervisor %>
-
+    - server
+    - ldap_server
+    - openldap
+    platform: el-7-x86_64
+    box: generic/oracle7
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: sicura-image-build/oracle-linux-7
+    gce_machine_type: n1-standard-2
   server-oel8.simp.beaker:
     roles:
-      - server
-      - default
-      - ldap_server
-      - ds389
-    platform:   el-8-x86_64
-    box:        generic/oracle8
-    hypervisor: <%= hypervisor %>
-
+    - server
+    - default
+    - ldap_server
+    - ds389
+    platform: el-8-x86_64
+    box: generic/oracle8
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: sicura-image-build/oracle-linux-8
+    gce_machine_type: n1-standard-2
   client-oel7.simp.beaker:
     roles:
-      - client
-    platform:   el-7-x86_64
-    box:        generic/oracle7
-    hypervisor: <%= hypervisor %>
-
+    - client
+    platform: el-7-x86_64
+    box: generic/oracle7
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: sicura-image-build/oracle-linux-7
+    gce_machine_type: n1-standard-2
   client-oel8.simp.beaker:
     roles:
-      - client
-    platform:   el-8-x86_64
-    box:        generic/oracle8
-    hypervisor: <%= hypervisor %>
-
+    - client
+    platform: el-8-x86_64
+    box: generic/oracle8
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: sicura-image-build/oracle-linux-8
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
   type: aio
   vagrant_memsize: 2048
   synced_folder: disabled
-<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
-  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
-<% end -%>
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
