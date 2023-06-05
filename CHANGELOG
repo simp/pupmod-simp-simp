@@ -1,3 +1,9 @@
+* Wed May 31 2023 Mike Riddle <mike@sicura.us> - 4.16.8
+- Fixed a bug in the authselect nsswitch logic
+
+* Thu May 18 2023 Mike Riddle <mike@sicura.us> - 4.16.7
+- Stopped managing nsswitch when authselect is being used
+
 * Thu Apr 20 2023 Mike Riddle <mike@sicura.us> - 4.16.6
 - Removed missing gpgkeys from the list of simp gpgkeys
 

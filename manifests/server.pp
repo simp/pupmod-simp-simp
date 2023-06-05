@@ -42,25 +42,31 @@ class simp::server (
   String              $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
   Array[String]       $classes         = []
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $scenario_map.has_key($scenario) {
-    include simp::knockout(
-      union(
+    $_included_classes = $simp_options::authselect ? {
+      # In environments using authselect, we want to manage nsswitch.conf
+      # with the authselect class instead of the nsswitch class 
+      true => union(
+        ($scenario_map[$scenario] - ['nsswitch', 'simp::nsswitch']),
+        ($classes - ['nsswitch', 'simp::nsswitch']),
+      ),
+      default => union(
         $scenario_map[$scenario],
         $classes,
       )
-    )
+    }
+    include simp::knockout($_included_classes)
   } else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
 
   # This setting will be removed from future releases of simp.
   # See the simp-clamav module for information on how manage ClamAV
-  if $clamav  { include 'clamav' }
+  if $clamav { include 'clamav' }
 
-  if $auditd  { include 'auditd' }
+  if $auditd { include 'auditd' }
 
   if $allow_simp_user {
     if $pam {
@@ -69,14 +75,14 @@ class simp::server (
       pam::access::rule { 'allow_simp':
         users   => ['simp'],
         origins => ['ALL'],
-        comment => 'The SIMP user, used to remotely login to the system in the case of a lockout.'
+        comment => 'The SIMP user, used to remotely login to the system in the case of a lockout.',
       }
     }
 
     sudo::user_specification { 'default_simp':
       user_list => ['simp'],
       runas     => 'root',
-      cmnd      => ['/bin/su root', '/bin/su - root']
+      cmnd      => ['/bin/su root', '/bin/su - root'],
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.16.6",
+  "version": "4.16.8",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -134,6 +134,10 @@
     {
       "name": "simp/simp_openldap",
       "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/simp_options",
+      "version_requirement": ">= 1.6.1 < 2.0.0"
     },
     {
       "name": "simp/simp_rsyslog",
