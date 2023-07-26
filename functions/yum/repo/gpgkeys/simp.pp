@@ -3,7 +3,6 @@
 # @return [Array<String>]
 #
 function simp::yum::repo::gpgkeys::simp() {
-
   # Common keys, distributed in simp-gpgkeys
   $_simp_gpgkeys = [
     'RPM-GPG-KEY-puppet-20250406',
@@ -14,7 +13,7 @@ function simp::yum::repo::gpgkeys::simp() {
   ]
 
   # keys needed by specific OSes
-  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux'] {
+  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux','Rocky'] {
     case $facts['os']['release']['major'] {
       '7':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-7'] }
       '8':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-8'] }
@@ -24,6 +23,7 @@ function simp::yum::repo::gpgkeys::simp() {
     $_full_os_gpgkeys = case $facts['os']['name'] {
       'RedHat':      { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-redhat-release' ) }
       'OracleLinux': { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-oracle' ) }
+      'Rocky':       { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-rockyofficial' ) }
       default:       { $_os_rel_gpgkeys }
     }
   }
