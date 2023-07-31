@@ -42,7 +42,7 @@ for direct overall system modification and management.
 
 ## Setup
 
-### What simp affects
+### What SIMP affects
 
 The ``simp`` module is meant to be the central controller of all node
 configurations. The suggested usage is to place the following in your
