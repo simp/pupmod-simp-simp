@@ -20,7 +20,7 @@ describe 'simp::yum::repo::gpgkeys::os_updates' do
           else
             return_value = ["RPM-GPG-KEY-#{os_facts[:os][:name]}"]
           end
-
+        end
       end
     end
   end
