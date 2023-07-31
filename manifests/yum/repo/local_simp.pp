@@ -84,8 +84,8 @@ class simp::yum::repo::local_simp (
   Boolean                $enable_repo           = true,
   Simp::Urls             $extra_gpgkey_urls     = [],
   String[1]              $relative_repo_path    = "SIMP/${facts['os'][name]}/${facts['os']['release']['major']}",
-  String[1]              $relative_gpgkey_path  = "SIMP/GPGKEYS",
-  Optional[String[1]]    $baseurl               = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}"),
+  String[1]              $relative_gpgkey_path  = 'SIMP/GPGKEYS',
+  Optional[String[1]]    $baseurl               = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['os']['architecture']}"),
   Optional[String[1]]    $gpgkey                = simp::yum::repo::gpgkey_string(
     $servers,
     simp::yum::repo::gpgkeys::simp(),
@@ -109,7 +109,7 @@ class simp::yum::repo::local_simp (
     skip_if_unavailable => 1
   }
 
-  $_descr_base = "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['architecture']}"
+  $_descr_base = "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']}"
 
   if $facts['package_provider'] == 'dnf' {
     yumrepo { 'simp':
@@ -150,7 +150,7 @@ class simp::yum::repo::local_simp (
   }
   else {
     yumrepo { 'simp':
-      baseurl => "${baseurl}",
+      baseurl => $baseurl,
       descr   => "${_descr_base} product packages",
       *       => $_common_attrs
     }

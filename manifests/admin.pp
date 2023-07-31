@@ -246,7 +246,7 @@ class simp::admin (
   if $set_selinux_login {
     include selinux::install
 
-    if $facts['selinux_current_mode'] and ($facts['selinux_current_mode'] != 'disabled') {
+    if $facts['os']['selinux']['current_mode'] and ($facts['os']['selinux']['current_mode'] != 'disabled') {
       selinux_login { "%${admin_group}":
         seuser    => $selinux_user_context,
         mls_range => $selinux_user_mls_range
