@@ -103,7 +103,7 @@ jobs:
         run: 'bundle exec pdk build --force'
 
   spec-tests:
-    name: 'Puppet Spec'
+    name: 'Spec (${{matrix.test_suite.label}}, ${{matrix.puppet.label}})'
     needs: [puppet-syntax]
     runs-on: ubuntu-latest
     strategy:
@@ -117,6 +117,25 @@ jobs:
             puppet_version: '~> 8.0'
             ruby_version: 3.1
             experimental: true
+        test_suite:
+          - label: classes 01
+            run: bundle exec rspec spec/classes/01_classes
+          - label: classes 10
+            run: bundle exec rspec spec/classes/10_classes
+          - label: classes 20
+            run: bundle exec rspec spec/classes/20_classes
+          - label: classes 00
+            run: bundle exec rspec spec/classes/00_classes
+          - label: defines
+            run: bundle exec rspec spec/defines
+          - label: facter
+            run: bundle exec rspec spec/facter
+          - label: functions
+            run: bundle exec rspec spec/functions
+          - label: aliases
+            run: bundle exec rspec spec/type_aliases
+          - label: unit
+            run: bundle exec rspec spec/unit
       fail-fast: false
     env:
       PUPPET_VERSION: ${{matrix.puppet.puppet_version}}
@@ -128,7 +147,8 @@ jobs:
           ruby-version: ${{matrix.puppet.ruby_version}}
           bundler-cache: true
       - run: 'command -v rpm || if command -v apt-get; then sudo apt-get update; sudo apt-get install -y rpm; fi ||:'
-      - run: 'bundle exec rake spec'
+      - run: 'bundle exec rake spec_prep'
+      - run: ${{matrix.test_suite.run}}
         continue-on-error: ${{matrix.puppet.experimental}}
 
 #  dump_contexts:
