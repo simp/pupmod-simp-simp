@@ -367,10 +367,11 @@ pup7.pe-unit_slow:
   <<: *pup_7_pe
   <<: *slow_unit_tests
 
+# Commented until we are ready for puppet 8
 #pup8.x-unit:
 #  <<: *pup_8_x
 #  <<: *unit_tests
-
+#
 #pup8.x-unit_slow:
 #  <<: *pup_8_x
 #  <<: *slow_unit_tests

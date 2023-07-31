@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.16.8",
+  "version": "4.17.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -37,7 +37,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 6.6.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     },
     {
       "name": "saz/timezone",
@@ -232,6 +232,12 @@
         "7",
         "8.1",
         "10"
+      ]
+    },
+    {
+      "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
       ]
     }
   ]
