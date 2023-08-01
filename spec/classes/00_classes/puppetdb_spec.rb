@@ -19,7 +19,10 @@ describe 'simp::puppetdb' do
           it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
         else
           let(:facts) do
-            { :puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } }}.merge(os_facts)
+            {
+              :serversettings => Puppet.version,
+              :puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } }
+            }.merge(os_facts)
           end
 
           if os_facts[:os][:release][:major] == '7'
