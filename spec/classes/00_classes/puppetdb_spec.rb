@@ -21,6 +21,7 @@ describe 'simp::puppetdb' do
           let(:facts) do
             {
               :serversettings => Puppet.version,
+              :serverversion  => Puppet.version,
               :puppet_settings => { 'main' => { 'hostprivkey' => 'blah' } }
             }.merge(os_facts)
           end
