@@ -158,7 +158,7 @@ class simp (
   Hash                            $scenario_map,
   String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
-  Optional[Array]                 $classes                    = [],
+  Array                           $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = true,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::stunnel', { 'default_value' => true }),
   Boolean                         $use_ssh_global_known_hosts = false,

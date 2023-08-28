@@ -1,3 +1,6 @@
+* Mon Jul 31 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.17.0
+- Add RockyLinux 8 support
+
 * Wed May 31 2023 Mike Riddle <mike@sicura.us> - 4.16.8
 - Fixed a bug in the authselect nsswitch logic
 
