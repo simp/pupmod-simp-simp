@@ -7,66 +7,66 @@
 ### Classes
 
 * [`simp`](#simp): This class provides an entry point to configuring your systems to
-* [`simp::admin`](#simpadmin): Set up a host of common administrative functions including
-* [`simp::base_apps`](#simpbase_apps): This is a set of applications that you will want on most systems
-* [`simp::base_services`](#simpbase_services): Deprecated - This class will be removed in a future version of SIMP.
-* [`simp::ctrl_alt_del`](#simpctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
-* [`simp::kmod_blacklist`](#simpkmod_blacklist): This class provides a default set of blacklist entries per the SCAP
-* [`simp::kmod_blacklist::lock_modules`](#simpkmod_blacklistlock_modules): This class toggles the ability to load any further kernel modules
-* [`simp::mountpoints`](#simpmountpoints): Add security settings to several mounts on the system.
-* [`simp::mountpoints::proc`](#simpmountpointsproc): Mount ``/proc``
-* [`simp::mountpoints::tmp`](#simpmountpointstmp): Manages the various tmp mounts with optional security features.
-* [`simp::netconsole`](#simpnetconsole): Configure ``/etc/sysconfig/netconsole`` and the netconsole service
-* [`simp::nsswitch`](#simpnsswitch): A SIMP profile for using the nsswitch module to manage /etc/nsswitch
-* [`simp::one_shot`](#simpone_shot): Configure the system to disconnect from the Puppet server once it
-* [`simp::one_shot::finalize`](#simpone_shotfinalize): A 'last effort' script to clean up all of the SIMP material on the
-* [`simp::one_shot::user`](#simpone_shotuser): Configure a 'stand alone' system user
-* [`simp::pam_limits::max_logins`](#simppam_limitsmax_logins): Restrict the max logins on a system via PAM
-* [`simp::prelink`](#simpprelink): Manage prelinking
-* [`simp::puppetdb`](#simppuppetdb): This class enables a PuppetDB server with defaults set for SIMP
-* [`simp::rc_local`](#simprc_local): Manage the content of ``/etc/rc.d/rc.local``
-* [`simp::root_user`](#simproot_user): Manage resources related to the `root` user
-* [`simp::scenario::base`](#simpscenariobase): This class provides the basis of what a native SIMP system should
-* [`simp::scenario::poss`](#simpscenarioposs): The 'Puppet Open Source Software' Scenario
-* [`simp::server`](#simpserver): Set up a SIMP server in such a way that it will be ready to serve
-* [`simp::server::kickstart`](#simpserverkickstart): This class provides a working framework for providing a kickstart
-* [`simp::server::kickstart::simp_client_bootstrap`](#simpserverkickstartsimp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts
-* [`simp::server::ldap`](#simpserverldap): Sets up either a primary LDAP server or a consumer LDAP server.
-* [`simp::server::rsync_shares`](#simpserverrsync_shares): Set up various rsync services that are needed by the SIMP clients
-* [`simp::server::yum`](#simpserveryum): This class sets up a YUM site at `${data_dir}/yum` and is used by
-* [`simp::sssd::client`](#simpsssdclient): Set up an SSSD client based on the normal SIMP parameters
-* [`simp::sudoers`](#simpsudoers): Provide useful aliases that many people have wanted to use over
-* [`simp::sudoers::aliases`](#simpsudoersaliases): A set of default sudoers aliases
-* [`simp::sysctl`](#simpsysctl): Sets sysctl settings that are useful from a general 'modern system'
-* [`simp::version`](#simpversion): Places SIMP version related information on the filesystem
-* [`simp::yum::repo::internet_simp`](#simpyumrepointernet_simp): Configure yum to use the internet public repository for SIMP
-* [`simp::yum::repo::internet_simp_dependencies`](#simpyumrepointernet_simp_dependencies): DEPRECATED Configure yum to use the internet public repositories for SIMP dependencies
-* [`simp::yum::repo::internet_simp_server`](#simpyumrepointernet_simp_server): DEPRECATED Configure yum to use the internet public repository for SIMP servers
-* [`simp::yum::repo::local_os_updates`](#simpyumrepolocal_os_updates): Configure yum to use a (SIMP-managed) OS Updates repository for
+* [`simp::admin`](#simp--admin): Set up a host of common administrative functions including
+* [`simp::base_apps`](#simp--base_apps): This is a set of applications that you will want on most systems
+* [`simp::base_services`](#simp--base_services): Deprecated - This class will be removed in a future version of SIMP.
+* [`simp::ctrl_alt_del`](#simp--ctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
+* [`simp::kmod_blacklist`](#simp--kmod_blacklist): This class provides a default set of blacklist entries per the SCAP
+* [`simp::kmod_blacklist::lock_modules`](#simp--kmod_blacklist--lock_modules): This class toggles the ability to load any further kernel modules
+* [`simp::mountpoints`](#simp--mountpoints): Add security settings to several mounts on the system.
+* [`simp::mountpoints::proc`](#simp--mountpoints--proc): Mount ``/proc``
+* [`simp::mountpoints::tmp`](#simp--mountpoints--tmp): Manages the various tmp mounts with optional security features.
+* [`simp::netconsole`](#simp--netconsole): Configure ``/etc/sysconfig/netconsole`` and the netconsole service
+* [`simp::nsswitch`](#simp--nsswitch): A SIMP profile for using the nsswitch module to manage /etc/nsswitch
+* [`simp::one_shot`](#simp--one_shot): Configure the system to disconnect from the Puppet server once it
+* [`simp::one_shot::finalize`](#simp--one_shot--finalize): A 'last effort' script to clean up all of the SIMP material on the
+* [`simp::one_shot::user`](#simp--one_shot--user): Configure a 'stand alone' system user
+* [`simp::pam_limits::max_logins`](#simp--pam_limits--max_logins): Restrict the max logins on a system via PAM
+* [`simp::prelink`](#simp--prelink): Manage prelinking
+* [`simp::puppetdb`](#simp--puppetdb): This class enables a PuppetDB server with defaults set for SIMP
+* [`simp::rc_local`](#simp--rc_local): Manage the content of ``/etc/rc.d/rc.local``
+* [`simp::root_user`](#simp--root_user): Manage resources related to the `root` user
+* [`simp::scenario::base`](#simp--scenario--base): This class provides the basis of what a native SIMP system should
+* [`simp::scenario::poss`](#simp--scenario--poss): The 'Puppet Open Source Software' Scenario
+* [`simp::server`](#simp--server): Set up a SIMP server in such a way that it will be ready to serve
+* [`simp::server::kickstart`](#simp--server--kickstart): This class provides a working framework for providing a kickstart
+* [`simp::server::kickstart::simp_client_bootstrap`](#simp--server--kickstart--simp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts
+* [`simp::server::ldap`](#simp--server--ldap): Sets up either a primary LDAP server or a consumer LDAP server.
+* [`simp::server::rsync_shares`](#simp--server--rsync_shares): Set up various rsync services that are needed by the SIMP clients
+* [`simp::server::yum`](#simp--server--yum): This class sets up a YUM site at `${data_dir}/yum` and is used by
+* [`simp::sssd::client`](#simp--sssd--client): Set up an SSSD client based on the normal SIMP parameters
+* [`simp::sudoers`](#simp--sudoers): Provide useful aliases that many people have wanted to use over
+* [`simp::sudoers::aliases`](#simp--sudoers--aliases): A set of default sudoers aliases
+* [`simp::sysctl`](#simp--sysctl): Sets sysctl settings that are useful from a general 'modern system'
+* [`simp::version`](#simp--version): Places SIMP version related information on the filesystem
+* [`simp::yum::repo::internet_simp`](#simp--yum--repo--internet_simp): Configure yum to use the internet public repository for SIMP
+* [`simp::yum::repo::internet_simp_dependencies`](#simp--yum--repo--internet_simp_dependencies): DEPRECATED Configure yum to use the internet public repositories for SIMP dependencies
+* [`simp::yum::repo::internet_simp_server`](#simp--yum--repo--internet_simp_server): DEPRECATED Configure yum to use the internet public repository for SIMP servers
+* [`simp::yum::repo::local_os_updates`](#simp--yum--repo--local_os_updates): Configure yum to use a (SIMP-managed) OS Updates repository for
 network-isolated environments.
-* [`simp::yum::repo::local_simp`](#simpyumrepolocal_simp): Set up the local SIMP repositiories for network-isolated
+* [`simp::yum::repo::local_simp`](#simp--yum--repo--local_simp): Set up the local SIMP repositiories for network-isolated
 environments.
-* [`simp::yum::schedule`](#simpyumschedule): Set up a YUM update schedule.
+* [`simp::yum::schedule`](#simp--yum--schedule): Set up a YUM update schedule.
 
 ### Functions
 
-* [`simp::knockout`](#simpknockout): Deprecated knockout function, see simplib::knockout
-* [`simp::yum::repo::baseurl_string`](#simpyumrepobaseurl_string)
-* [`simp::yum::repo::gpgkey_string`](#simpyumrepogpgkey_string): A function to return a proper set of SIMP YUM repositories for the default build. Of limited use outside of an ISO install.
-* [`simp::yum::repo::gpgkeys::os_updates`](#simpyumrepogpgkeysos_updates): Build a list of GPG keys needed by a os_updates repo
-* [`simp::yum::repo::gpgkeys::simp`](#simpyumrepogpgkeyssimp): Build a list of GPG keys needed by a simp repo
-* [`simp::yum::repo::sanitize_simp_release_slug`](#simpyumreposanitize_simp_release_slug): DEPRECATED Sanitize the release slug in the SIMP repo URLs  The packagecloud repositories to which this release slug generated by this functi
-* [`simp::yum::repo::simp_release_version`](#simpyumreposimp_release_version): Returns the SIMP release version for use in SIMP internet yum repositories.  When `$simp_release_version` is specified, this value is simply 
+* [`simp::knockout`](#simp--knockout): Deprecated knockout function, see simplib::knockout
+* [`simp::yum::repo::baseurl_string`](#simp--yum--repo--baseurl_string)
+* [`simp::yum::repo::gpgkey_string`](#simp--yum--repo--gpgkey_string): A function to return a proper set of SIMP YUM repositories for the default build. Of limited use outside of an ISO install.
+* [`simp::yum::repo::gpgkeys::os_updates`](#simp--yum--repo--gpgkeys--os_updates): Build a list of GPG keys needed by a os_updates repo
+* [`simp::yum::repo::gpgkeys::simp`](#simp--yum--repo--gpgkeys--simp): Build a list of GPG keys needed by a simp repo
+* [`simp::yum::repo::sanitize_simp_release_slug`](#simp--yum--repo--sanitize_simp_release_slug): DEPRECATED Sanitize the release slug in the SIMP repo URLs  The packagecloud repositories to which this release slug generated by this functi
+* [`simp::yum::repo::simp_release_version`](#simp--yum--repo--simp_release_version): Returns the SIMP release version for use in SIMP internet yum repositories.  When `$simp_release_version` is specified, this value is simply 
 
 ### Data types
 
-* [`Simp::HostOrURL`](#simphostorurl): Shortcut for either hosts or URLs
-* [`Simp::PackageEnsure`](#simppackageensure): Valid package resource 'ensure' settings
-* [`Simp::Puppetdb::Ciphersuites`](#simppuppetdbciphersuites): Valid SSL Cipher Suites for puppetdb
-* [`Simp::Runlevel`](#simprunlevel): Valid system runlevel settings
-* [`Simp::Scenario`](#simpscenario): Valid SIMP scenarios  See the documentation for details on 'SIMP scenarios'
-* [`Simp::Urls`](#simpurls): URL shortcut for SIMP classes
-* [`Simp::Version`](#simpversion): Version of the form 'X', 'X.Y', 'X.Y.Z' or 'X.Y.Z-N'
+* [`Simp::HostOrURL`](#Simp--HostOrURL): Shortcut for either hosts or URLs
+* [`Simp::PackageEnsure`](#Simp--PackageEnsure): Valid package resource 'ensure' settings
+* [`Simp::Puppetdb::Ciphersuites`](#Simp--Puppetdb--Ciphersuites): Valid SSL Cipher Suites for puppetdb
+* [`Simp::Runlevel`](#Simp--Runlevel): Valid system runlevel settings
+* [`Simp::Scenario`](#Simp--Scenario): Valid SIMP scenarios  See the documentation for details on 'SIMP scenarios'
+* [`Simp::Urls`](#Simp--Urls): URL shortcut for SIMP classes
+* [`Simp::Version`](#Simp--Version): Version of the form 'X', 'X.Y', 'X.Y.Z' or 'X.Y.Z-N'
 
 ## Classes
 
@@ -84,42 +84,42 @@ class.
 
 The following parameters are available in the `simp` class:
 
-* [`scenario_map`](#scenario_map)
-* [`scenario`](#scenario)
-* [`enable_data_includes`](#enable_data_includes)
-* [`classes`](#classes)
-* [`mail_server`](#mail_server)
-* [`rsync_stunnel`](#rsync_stunnel)
-* [`use_ssh_global_known_hosts`](#use_ssh_global_known_hosts)
-* [`version_info`](#version_info)
-* [`puppet_server_hosts_entry`](#puppet_server_hosts_entry)
-* [`enable_filebucketing`](#enable_filebucketing)
-* [`filebucket_name`](#filebucket_name)
-* [`filebucket_server`](#filebucket_server)
-* [`filebucket_path`](#filebucket_path)
-* [`use_sudoers_aliases`](#use_sudoers_aliases)
-* [`runlevel`](#runlevel)
-* [`restrict_max_logins`](#restrict_max_logins)
-* [`manage_ctrl_alt_del`](#manage_ctrl_alt_del)
-* [`manage_root_metadata`](#manage_root_metadata)
-* [`manage_root_perms`](#manage_root_perms)
-* [`manage_rc_local`](#manage_rc_local)
-* [`pam`](#pam)
-* [`sssd`](#sssd)
-* [`ldap`](#ldap)
-* [`stock_sssd`](#stock_sssd)
-* [`classification_warning`](#classification_warning)
-* [`vardir_owner`](#vardir_owner)
-* [`vardir_group`](#vardir_group)
-* [`vardir_mode`](#vardir_mode)
+* [`scenario_map`](#-simp--scenario_map)
+* [`scenario`](#-simp--scenario)
+* [`enable_data_includes`](#-simp--enable_data_includes)
+* [`classes`](#-simp--classes)
+* [`mail_server`](#-simp--mail_server)
+* [`rsync_stunnel`](#-simp--rsync_stunnel)
+* [`use_ssh_global_known_hosts`](#-simp--use_ssh_global_known_hosts)
+* [`version_info`](#-simp--version_info)
+* [`puppet_server_hosts_entry`](#-simp--puppet_server_hosts_entry)
+* [`enable_filebucketing`](#-simp--enable_filebucketing)
+* [`filebucket_name`](#-simp--filebucket_name)
+* [`filebucket_server`](#-simp--filebucket_server)
+* [`filebucket_path`](#-simp--filebucket_path)
+* [`use_sudoers_aliases`](#-simp--use_sudoers_aliases)
+* [`runlevel`](#-simp--runlevel)
+* [`restrict_max_logins`](#-simp--restrict_max_logins)
+* [`manage_ctrl_alt_del`](#-simp--manage_ctrl_alt_del)
+* [`manage_root_metadata`](#-simp--manage_root_metadata)
+* [`manage_root_perms`](#-simp--manage_root_perms)
+* [`manage_rc_local`](#-simp--manage_rc_local)
+* [`pam`](#-simp--pam)
+* [`sssd`](#-simp--sssd)
+* [`ldap`](#-simp--ldap)
+* [`stock_sssd`](#-simp--stock_sssd)
+* [`classification_warning`](#-simp--classification_warning)
+* [`vardir_owner`](#-simp--vardir_owner)
+* [`vardir_group`](#-simp--vardir_group)
+* [`vardir_mode`](#-simp--vardir_mode)
 
-##### <a name="scenario_map"></a>`scenario_map`
+##### <a name="-simp--scenario_map"></a>`scenario_map`
 
 Data type: `Hash`
 
 An **internal use** parameter for configuring pre-defined maps
 
-##### <a name="scenario"></a>`scenario`
+##### <a name="-simp--scenario"></a>`scenario`
 
 Data type: `String`
 
@@ -133,7 +133,7 @@ The SIMP 'scenario' that you wish to apply to your system
 
 Default value: `'simp'`
 
-##### <a name="enable_data_includes"></a>`enable_data_includes`
+##### <a name="-simp--enable_data_includes"></a>`enable_data_includes`
 
 Data type: `Boolean`
 
@@ -141,11 +141,11 @@ Data type: `Boolean`
 
 * Will be removed in the next major release
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="classes"></a>`classes`
+##### <a name="-simp--classes"></a>`classes`
 
-Data type: `Optional[Array]`
+Data type: `Array`
 
 A list of classes that you wish to include in your SIMP stack in addition
 to the ``scenario`` selected above.
@@ -171,7 +171,7 @@ to the ``scenario`` selected above.
 
 Default value: `[]`
 
-##### <a name="mail_server"></a>`mail_server`
+##### <a name="-simp--mail_server"></a>`mail_server`
 
 Data type: `Variant[Boolean,Enum['remote']]`
 
@@ -183,9 +183,9 @@ Install a local mail service on the system
     * If you use a remote server, you'll need to set the appropriate
       parameters for the ``postfix`` class
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="rsync_stunnel"></a>`rsync_stunnel`
+##### <a name="-simp--rsync_stunnel"></a>`rsync_stunnel`
 
 Data type: `Variant[Boolean,Simplib::Host]`
 
@@ -196,7 +196,7 @@ The rsync server from which files should be retrieved
 
 Default value: `simplib::lookup('simp_options::stunnel', { 'default_value' => true })`
 
-##### <a name="use_ssh_global_known_hosts"></a>`use_ssh_global_known_hosts`
+##### <a name="-simp--use_ssh_global_known_hosts"></a>`use_ssh_global_known_hosts`
 
 Data type: `Boolean`
 
@@ -204,17 +204,17 @@ Boolean
 If true, use the ssh_global_known_hosts function to gather the various host
 SSH public keys and populate the /etc/ssh/known_hosts file.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="version_info"></a>`version_info`
+##### <a name="-simp--version_info"></a>`version_info`
 
 Data type: `Boolean`
 
 Add SIMP version information onto the client in ``/etc/simp``
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
+##### <a name="-simp--puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
 
 Data type: `Boolean`
 
@@ -222,17 +222,17 @@ Add a ``host`` entry for the Puppet server to the catalog
 
 * This has no effect if the ``$server_facts`` Hash is not populated
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="enable_filebucketing"></a>`enable_filebucketing`
+##### <a name="-simp--enable_filebucketing"></a>`enable_filebucketing`
 
 Data type: `Boolean`
 
 Enable the filebucket for all managed files
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="filebucket_name"></a>`filebucket_name`
+##### <a name="-simp--filebucket_name"></a>`filebucket_name`
 
 Data type: `String[1]`
 
@@ -240,15 +240,15 @@ The name of the filebucket that should be used
 
 Default value: `'simp'`
 
-##### <a name="filebucket_server"></a>`filebucket_server`
+##### <a name="-simp--filebucket_server"></a>`filebucket_server`
 
 Data type: `Optional[Simplib::Host]`
 
 Sets up a remote filebucket target if set
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="filebucket_path"></a>`filebucket_path`
+##### <a name="-simp--filebucket_path"></a>`filebucket_path`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -258,15 +258,15 @@ The local system path to use as the filebucket
 
 Default value: `"${facts['puppet_vardir']}/simp/filebucket"`
 
-##### <a name="use_sudoers_aliases"></a>`use_sudoers_aliases`
+##### <a name="-simp--use_sudoers_aliases"></a>`use_sudoers_aliases`
 
 Data type: `Boolean`
 
 If true, enable simp site sudoers aliases
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="runlevel"></a>`runlevel`
+##### <a name="-simp--runlevel"></a>`runlevel`
 
 Data type: `Simp::Runlevel`
 
@@ -274,7 +274,7 @@ The default runlevel to which the system should be set
 
 Default value: `3`
 
-##### <a name="restrict_max_logins"></a>`restrict_max_logins`
+##### <a name="-simp--restrict_max_logins"></a>`restrict_max_logins`
 
 Data type: `Boolean`
 
@@ -282,36 +282,36 @@ Enable restrictions of the number of simultaneous logins a user may have
 
 * Has no effect if ``$pam`` is ``false``
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_ctrl_alt_del"></a>`manage_ctrl_alt_del`
+##### <a name="-simp--manage_ctrl_alt_del"></a>`manage_ctrl_alt_del`
 
 Data type: `Boolean`
 
 Include the ``simp::ctrl_alt_del`` class, which, by default, disables the
 use of ctrl_alt_del and logs all instances of the event.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_root_metadata"></a>`manage_root_metadata`
+##### <a name="-simp--manage_root_metadata"></a>`manage_root_metadata`
 
 Data type: `Boolean`
 
 Include the ``simp::root_user`` class, which manages resources related to
 the ``root`` user
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_root_perms"></a>`manage_root_perms`
+##### <a name="-simp--manage_root_perms"></a>`manage_root_perms`
 
 Data type: `Boolean`
 
 Ensure that ``/root`` has restricted permissions and proper SELinux
 contexts
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_rc_local"></a>`manage_rc_local`
+##### <a name="-simp--manage_rc_local"></a>`manage_rc_local`
 
 Data type: `Boolean`
 
@@ -320,9 +320,9 @@ Include the ``simp::rc_local`` class
 * This **disables** rc.local by default but you may also use it to set
   custom content
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="pam"></a>`pam`
+##### <a name="-simp--pam"></a>`pam`
 
 Data type: `Boolean`
 
@@ -330,7 +330,7 @@ Enable management of PAM resources via SIMP modules
 
 Default value: `simplib::lookup('simp_options::pam',  { 'default_value' => false })`
 
-##### <a name="sssd"></a>`sssd`
+##### <a name="-simp--sssd"></a>`sssd`
 
 Data type: `Boolean`
 
@@ -338,7 +338,7 @@ Enable management of SSSD resources via SIMP modules
 
 Default value: `simplib::lookup('simp_options::sssd', { 'default_value' => true })`
 
-##### <a name="ldap"></a>`ldap`
+##### <a name="-simp--ldap"></a>`ldap`
 
 Data type: `Boolean`
 
@@ -346,7 +346,7 @@ Enable management of LDAP resources via SIMP modules
 
 Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
 
-##### <a name="stock_sssd"></a>`stock_sssd`
+##### <a name="-simp--stock_sssd"></a>`stock_sssd`
 
 Data type: `Boolean`
 
@@ -356,38 +356,38 @@ system
 
 * Has no effect if ``$sssd`` is ``false``
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="classification_warning"></a>`classification_warning`
+##### <a name="-simp--classification_warning"></a>`classification_warning`
 
 Data type: `Boolean`
 
 Create a warning notification if 'include simp' will not auto-classify a node.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="vardir_owner"></a>`vardir_owner`
+##### <a name="-simp--vardir_owner"></a>`vardir_owner`
 
 Data type: `String[1]`
 
 Owner for ${facts['puppet_vardir']}/simp directory
 Defaults to 'root' if a platform doesn't specify
 
-##### <a name="vardir_group"></a>`vardir_group`
+##### <a name="-simp--vardir_group"></a>`vardir_group`
 
 Data type: `String[1]`
 
 Group for ${facts['puppet_vardir]}/simp diorectory
 Defaults to 'root' if a platform doesn't specify
 
-##### <a name="vardir_mode"></a>`vardir_mode`
+##### <a name="-simp--vardir_mode"></a>`vardir_mode`
 
 Data type: `Stdlib::Filemode`
 
 Mode for ${facts['puppet_vardir])/simp directory
 Defaults to '0750' if a platform doesn't specify
 
-### <a name="simpadmin"></a>`simp::admin`
+### <a name="simp--admin"></a>`simp::admin`
 
 administrator group system access, auditor access, and default ``sudo`` rules
 
@@ -413,26 +413,26 @@ simp::admin::auditor_sudo_options:
 
 The following parameters are available in the `simp::admin` class:
 
-* [`admin_group`](#admin_group)
-* [`passwordless_admin_sudo`](#passwordless_admin_sudo)
-* [`auditor_group`](#auditor_group)
-* [`passwordless_auditor_sudo`](#passwordless_auditor_sudo)
-* [`admins_allowed_from`](#admins_allowed_from)
-* [`auditors_allowed_from`](#auditors_allowed_from)
-* [`force_logged_shell`](#force_logged_shell)
-* [`logged_shell`](#logged_shell)
-* [`default_admin_sudo_cmnds`](#default_admin_sudo_cmnds)
-* [`admin_sudo_options`](#admin_sudo_options)
-* [`auditor_sudo_options`](#auditor_sudo_options)
-* [`admin_runas`](#admin_runas)
-* [`auditor_runas`](#auditor_runas)
-* [`pam`](#pam)
-* [`set_polkit_admin_group`](#set_polkit_admin_group)
-* [`set_selinux_login`](#set_selinux_login)
-* [`selinux_user_context`](#selinux_user_context)
-* [`selinux_user_mls_range`](#selinux_user_mls_range)
+* [`admin_group`](#-simp--admin--admin_group)
+* [`passwordless_admin_sudo`](#-simp--admin--passwordless_admin_sudo)
+* [`auditor_group`](#-simp--admin--auditor_group)
+* [`passwordless_auditor_sudo`](#-simp--admin--passwordless_auditor_sudo)
+* [`admins_allowed_from`](#-simp--admin--admins_allowed_from)
+* [`auditors_allowed_from`](#-simp--admin--auditors_allowed_from)
+* [`force_logged_shell`](#-simp--admin--force_logged_shell)
+* [`logged_shell`](#-simp--admin--logged_shell)
+* [`default_admin_sudo_cmnds`](#-simp--admin--default_admin_sudo_cmnds)
+* [`admin_sudo_options`](#-simp--admin--admin_sudo_options)
+* [`auditor_sudo_options`](#-simp--admin--auditor_sudo_options)
+* [`admin_runas`](#-simp--admin--admin_runas)
+* [`auditor_runas`](#-simp--admin--auditor_runas)
+* [`pam`](#-simp--admin--pam)
+* [`set_polkit_admin_group`](#-simp--admin--set_polkit_admin_group)
+* [`set_selinux_login`](#-simp--admin--set_selinux_login)
+* [`selinux_user_context`](#-simp--admin--selinux_user_context)
+* [`selinux_user_mls_range`](#-simp--admin--selinux_user_mls_range)
 
-##### <a name="admin_group"></a>`admin_group`
+##### <a name="-simp--admin--admin_group"></a>`admin_group`
 
 Data type: `String`
 
@@ -443,7 +443,7 @@ The group name of the Administrators for the system
 
 Default value: `'administrators'`
 
-##### <a name="passwordless_admin_sudo"></a>`passwordless_admin_sudo`
+##### <a name="-simp--admin--passwordless_admin_sudo"></a>`passwordless_admin_sudo`
 
 Data type: `Boolean`
 
@@ -452,9 +452,9 @@ Allow administrators to use ``sudo`` without a password
 * This is on by default due to the expected use of SSH keys without local
   passwords
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="auditor_group"></a>`auditor_group`
+##### <a name="-simp--admin--auditor_group"></a>`auditor_group`
 
 Data type: `String`
 
@@ -465,7 +465,7 @@ The group name of the system auditors group
 
 Default value: `'security'`
 
-##### <a name="passwordless_auditor_sudo"></a>`passwordless_auditor_sudo`
+##### <a name="-simp--admin--passwordless_auditor_sudo"></a>`passwordless_auditor_sudo`
 
 Data type: `Boolean`
 
@@ -474,9 +474,9 @@ Allow auditors to use ``sudo`` without a password
 * This is on by default due to the expected use of SSH keys without local
   passwords
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="admins_allowed_from"></a>`admins_allowed_from`
+##### <a name="-simp--admin--admins_allowed_from"></a>`admins_allowed_from`
 
 Data type: `Simplib::Netlist`
 
@@ -484,7 +484,7 @@ The locations from which administrators are allowed to access the system
 
 Default value: `['ALL']`
 
-##### <a name="auditors_allowed_from"></a>`auditors_allowed_from`
+##### <a name="-simp--admin--auditors_allowed_from"></a>`auditors_allowed_from`
 
 Data type: `Simplib::Netlist`
 
@@ -492,15 +492,15 @@ The locations from which auditors are allowed to access the system
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] })`
 
-##### <a name="force_logged_shell"></a>`force_logged_shell`
+##### <a name="-simp--admin--force_logged_shell"></a>`force_logged_shell`
 
 Data type: `Boolean`
 
 Only allow ``sudo`` to a shell via a logging shell
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="logged_shell"></a>`logged_shell`
+##### <a name="-simp--admin--logged_shell"></a>`logged_shell`
 
 Data type: `Enum['sudosh','tlog']`
 
@@ -508,7 +508,7 @@ The name of the logged shell to use
 
 Default value: `'tlog'`
 
-##### <a name="default_admin_sudo_cmnds"></a>`default_admin_sudo_cmnds`
+##### <a name="-simp--admin--default_admin_sudo_cmnds"></a>`default_admin_sudo_cmnds`
 
 Data type: `Array[String[2]]`
 
@@ -516,7 +516,7 @@ The set of commands that ``$admin_group`` should be able to run by default
 
 Default value: `['/bin/su - root']`
 
-##### <a name="admin_sudo_options"></a>`admin_sudo_options`
+##### <a name="-simp--admin--admin_sudo_options"></a>`admin_sudo_options`
 
 Data type: `Hash`
 
@@ -525,7 +525,7 @@ commands
 
 Default value: `{ 'role' => 'unconfined_r' }`
 
-##### <a name="auditor_sudo_options"></a>`auditor_sudo_options`
+##### <a name="-simp--admin--auditor_sudo_options"></a>`auditor_sudo_options`
 
 Data type: `Hash`
 
@@ -533,7 +533,7 @@ A hash of sudo options to give to all specified auditor sudo commands
 
 Default value: `{}`
 
-##### <a name="admin_runas"></a>`admin_runas`
+##### <a name="-simp--admin--admin_runas"></a>`admin_runas`
 
 Data type: `String`
 
@@ -542,7 +542,7 @@ commands
 
 Default value: `'root'`
 
-##### <a name="auditor_runas"></a>`auditor_runas`
+##### <a name="-simp--admin--auditor_runas"></a>`auditor_runas`
 
 Data type: `String`
 
@@ -550,7 +550,7 @@ What to set the runas user for all specified auditor sudo commands
 
 Default value: `'root'`
 
-##### <a name="pam"></a>`pam`
+##### <a name="-simp--admin--pam"></a>`pam`
 
 Data type: `Boolean`
 
@@ -561,16 +561,16 @@ Allow SIMP management of the PAM stack
 
 Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
 
-##### <a name="set_polkit_admin_group"></a>`set_polkit_admin_group`
+##### <a name="-simp--admin--set_polkit_admin_group"></a>`set_polkit_admin_group`
 
 Data type: `Boolean`
 
 If the system has PolicyKit support, will register ``$admin_group`` as a
 valid administrative group on the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="set_selinux_login"></a>`set_selinux_login`
+##### <a name="-simp--admin--set_selinux_login"></a>`set_selinux_login`
 
 Data type: `Boolean`
 
@@ -581,9 +581,9 @@ Ensure that the SELinux login for ``$admin_group`` is set
 
 @see seusers(5)
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="selinux_user_context"></a>`selinux_user_context`
+##### <a name="-simp--admin--selinux_user_context"></a>`selinux_user_context`
 
 Data type: `String[1]`
 
@@ -593,7 +593,7 @@ The selinux user context to assign to ``$admin_group``
 
 Default value: `'staff_u'`
 
-##### <a name="selinux_user_mls_range"></a>`selinux_user_mls_range`
+##### <a name="-simp--admin--selinux_user_mls_range"></a>`selinux_user_mls_range`
 
 Data type: `String[1]`
 
@@ -603,7 +603,7 @@ The selinux MLS range to assign to ``$admin_group``
 
 Default value: `'s0-s0:c0.c1023'`
 
-### <a name="simpbase_apps"></a>`simp::base_apps`
+### <a name="simp--base_apps"></a>`simp::base_apps`
 
 Services this class manages:
   * irqbalance (enabled by default by vendor)
@@ -613,11 +613,11 @@ Services this class manages:
 
 The following parameters are available in the `simp::base_apps` class:
 
-* [`ensure`](#ensure)
-* [`extra_apps`](#extra_apps)
-* [`manage_elinks_config`](#manage_elinks_config)
+* [`ensure`](#-simp--base_apps--ensure)
+* [`extra_apps`](#-simp--base_apps--extra_apps)
+* [`manage_elinks_config`](#-simp--base_apps--manage_elinks_config)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-simp--base_apps--ensure"></a>`ensure`
 
 Data type: `Simp::PackageEnsure`
 
@@ -628,28 +628,28 @@ The ``$ensure`` status of all of the included packages
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### <a name="extra_apps"></a>`extra_apps`
+##### <a name="-simp--base_apps--extra_apps"></a>`extra_apps`
 
 Data type: `Optional[Array[String,1]]`
 
 A list of other applications that you wish to install
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="manage_elinks_config"></a>`manage_elinks_config`
+##### <a name="-simp--base_apps--manage_elinks_config"></a>`manage_elinks_config`
 
 Data type: `Optional[Boolean]`
 
 DEPRECATED: This functionality is not required for normal operation of the
 system and should be moved to external management.
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="simpbase_services"></a>`simp::base_services`
+### <a name="simp--base_services"></a>`simp::base_services`
 
 Deprecated - This class will be removed in a future version of SIMP.
 
-### <a name="simpctrl_alt_del"></a>`simp::ctrl_alt_del`
+### <a name="simp--ctrl_alt_del"></a>`simp::ctrl_alt_del`
 
 Manage the state of pressing ``ctrl-alt-del``
 
@@ -657,38 +657,38 @@ Manage the state of pressing ``ctrl-alt-del``
 
 The following parameters are available in the `simp::ctrl_alt_del` class:
 
-* [`enable`](#enable)
-* [`log`](#log)
-* [`log_users`](#log_users)
-* [`facility`](#facility)
-* [`severity`](#severity)
+* [`enable`](#-simp--ctrl_alt_del--enable)
+* [`log`](#-simp--ctrl_alt_del--log)
+* [`log_users`](#-simp--ctrl_alt_del--log_users)
+* [`facility`](#-simp--ctrl_alt_del--facility)
+* [`severity`](#-simp--ctrl_alt_del--severity)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-simp--ctrl_alt_del--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Allow ``ctrl-alt-del`` to restart the system
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="log"></a>`log`
+##### <a name="-simp--ctrl_alt_del--log"></a>`log`
 
 Data type: `Boolean`
 
 Instead of just disabling the command, set the system up to write a log
 entry when the key combination is pressed
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="log_users"></a>`log_users`
+##### <a name="-simp--ctrl_alt_del--log_users"></a>`log_users`
 
 Data type: `Boolean`
 
 Record all logged in users in the log message
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="facility"></a>`facility`
+##### <a name="-simp--ctrl_alt_del--facility"></a>`facility`
 
 Data type: `Simplib::Syslog::Facility`
 
@@ -696,7 +696,7 @@ The ``syslog`` facility to use for the log message
 
 Default value: `'local6'`
 
-##### <a name="severity"></a>`severity`
+##### <a name="-simp--ctrl_alt_del--severity"></a>`severity`
 
 Data type: `Simplib::Syslog::Severity`
 
@@ -704,7 +704,7 @@ The ``syslog`` severity to use for the log message
 
 Default value: `'warning'`
 
-### <a name="simpkmod_blacklist"></a>`simp::kmod_blacklist`
+### <a name="simp--kmod_blacklist"></a>`simp::kmod_blacklist`
 
 Security Guide
 
@@ -712,29 +712,32 @@ Security Guide
 
 The following parameters are available in the `simp::kmod_blacklist` class:
 
-* [`enable_defaults`](#enable_defaults)
-* [`blacklist`](#blacklist)
-* [`custom_blacklist`](#custom_blacklist)
-* [`allow_overrides`](#allow_overrides)
-* [`lock_modules`](#lock_modules)
-* [`notify_if_reboot_required`](#notify_if_reboot_required)
+* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
+* [`blacklist`](#-simp--kmod_blacklist--blacklist)
+* [`custom_blacklist`](#-simp--kmod_blacklist--custom_blacklist)
+* [`allow_overrides`](#-simp--kmod_blacklist--allow_overrides)
+* [`lock_modules`](#-simp--kmod_blacklist--lock_modules)
+* [`notify_if_reboot_required`](#-simp--kmod_blacklist--notify_if_reboot_required)
 
-##### <a name="enable_defaults"></a>`enable_defaults`
+##### <a name="-simp--kmod_blacklist--enable_defaults"></a>`enable_defaults`
 
 Data type: `Boolean`
 
 Enable to use the default blacklist, otherwise just the
 ``$custom_blacklist`` will be used
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="blacklist"></a>`blacklist`
+##### <a name="-simp--kmod_blacklist--blacklist"></a>`blacklist`
 
 Data type: `Array[String,1]`
 
 List of kernel modules to be blacklisted by default
 
-Default value: `[
+Default value:
+
+```puppet
+[
     'bluetooth',
     'cramfs',
     'dccp',
@@ -752,9 +755,10 @@ Default value: `[
     'tipc',
     'udf',
     'usb-storage'
-  ]`
+  ]
+```
 
-##### <a name="custom_blacklist"></a>`custom_blacklist`
+##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
 
 Data type: `Array[String]`
 
@@ -762,7 +766,7 @@ Additional kernel modules to be blacklisted
 
 Default value: `[]`
 
-##### <a name="allow_overrides"></a>`allow_overrides`
+##### <a name="-simp--kmod_blacklist--allow_overrides"></a>`allow_overrides`
 
 Data type: `Boolean`
 
@@ -773,9 +777,9 @@ can work properly
 * If this is not set, you will be unable to optionally override the
   disabling of the modules
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="lock_modules"></a>`lock_modules`
+##### <a name="-simp--kmod_blacklist--lock_modules"></a>`lock_modules`
 
 Data type: `Boolean`
 
@@ -783,18 +787,18 @@ Disallow all further modification to modules without a reboot
 
 * Requires that the ``kernel.modules_disabled`` sysctl option is available
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="notify_if_reboot_required"></a>`notify_if_reboot_required`
+##### <a name="-simp--kmod_blacklist--notify_if_reboot_required"></a>`notify_if_reboot_required`
 
 Data type: `Boolean`
 
 Trigger a 'reboot_notify' resource that will warn at every puppet run that
 a reboot is required if necessary.
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="simpkmod_blacklistlock_modules"></a>`simp::kmod_blacklist::lock_modules`
+### <a name="simp--kmod_blacklist--lock_modules"></a>`simp::kmod_blacklist::lock_modules`
 
 into the system until the system has been rebooted.
 
@@ -809,19 +813,19 @@ sysctl feature.
 
 The following parameters are available in the `simp::kmod_blacklist::lock_modules` class:
 
-* [`enable`](#enable)
-* [`notify_if_reboot_required`](#notify_if_reboot_required)
-* [`persist`](#persist)
+* [`enable`](#-simp--kmod_blacklist--lock_modules--enable)
+* [`notify_if_reboot_required`](#-simp--kmod_blacklist--lock_modules--notify_if_reboot_required)
+* [`persist`](#-simp--kmod_blacklist--lock_modules--persist)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-simp--kmod_blacklist--lock_modules--enable"></a>`enable`
 
 Data type: `Any`
 
 Lock all module loading abilities
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="notify_if_reboot_required"></a>`notify_if_reboot_required`
+##### <a name="-simp--kmod_blacklist--lock_modules--notify_if_reboot_required"></a>`notify_if_reboot_required`
 
 Data type: `Any`
 
@@ -829,17 +833,17 @@ If the change requires the system to be rebooted to take effect, a
 notification will be printed during puppet runs until the system has been
 rebooted.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="persist"></a>`persist`
+##### <a name="-simp--kmod_blacklist--lock_modules--persist"></a>`persist`
 
 Data type: `Any`
 
 Lock all modules at boot time.
 
-Default value: ``false``
+Default value: `false`
 
-### <a name="simpmountpoints"></a>`simp::mountpoints`
+### <a name="simp--mountpoints"></a>`simp::mountpoints`
 
 Add security settings to several mounts on the system.
 
@@ -847,38 +851,38 @@ Add security settings to several mounts on the system.
 
 The following parameters are available in the `simp::mountpoints` class:
 
-* [`manage_tmp_perms`](#manage_tmp_perms)
-* [`manage_proc`](#manage_proc)
-* [`manage_sys`](#manage_sys)
-* [`sys_options`](#sys_options)
-* [`manage_dev_pts`](#manage_dev_pts)
+* [`manage_tmp_perms`](#-simp--mountpoints--manage_tmp_perms)
+* [`manage_proc`](#-simp--mountpoints--manage_proc)
+* [`manage_sys`](#-simp--mountpoints--manage_sys)
+* [`sys_options`](#-simp--mountpoints--sys_options)
+* [`manage_dev_pts`](#-simp--mountpoints--manage_dev_pts)
 
-##### <a name="manage_tmp_perms"></a>`manage_tmp_perms`
+##### <a name="-simp--mountpoints--manage_tmp_perms"></a>`manage_tmp_perms`
 
 Data type: `Boolean`
 
 Ensure that  ``/tmp``, ``/var/tmp``, and ``/usr/tmp``, all have the proper
 permissions and SELinux contexts.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_proc"></a>`manage_proc`
+##### <a name="-simp--mountpoints--manage_proc"></a>`manage_proc`
 
 Data type: `Boolean`
 
 Manage the ``/proc`` mount on the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_sys"></a>`manage_sys`
+##### <a name="-simp--mountpoints--manage_sys"></a>`manage_sys`
 
 Data type: `Boolean`
 
 Manage the ``/sys`` mount on the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="sys_options"></a>`sys_options`
+##### <a name="-simp--mountpoints--sys_options"></a>`sys_options`
 
 Data type: `Array[String]`
 
@@ -886,15 +890,15 @@ The mountpoint options for ``/sys``
 
 Default value: `['rw','nodev','noexec']`
 
-##### <a name="manage_dev_pts"></a>`manage_dev_pts`
+##### <a name="-simp--mountpoints--manage_dev_pts"></a>`manage_dev_pts`
 
 Data type: `Boolean`
 
 Manage the ``/dev/pts`` mount on the system
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="simpmountpointsproc"></a>`simp::mountpoints::proc`
+### <a name="simp--mountpoints--proc"></a>`simp::mountpoints::proc`
 
 Mount ``/proc``
 
@@ -902,12 +906,12 @@ Mount ``/proc``
 
 The following parameters are available in the `simp::mountpoints::proc` class:
 
-* [`proc_hidepid`](#proc_hidepid)
-* [`manage_proc_group`](#manage_proc_group)
-* [`proc_group`](#proc_group)
-* [`proc_gid`](#proc_gid)
+* [`proc_hidepid`](#-simp--mountpoints--proc--proc_hidepid)
+* [`manage_proc_group`](#-simp--mountpoints--proc--manage_proc_group)
+* [`proc_group`](#-simp--mountpoints--proc--proc_group)
+* [`proc_gid`](#-simp--mountpoints--proc--proc_gid)
 
-##### <a name="proc_hidepid"></a>`proc_hidepid`
+##### <a name="-simp--mountpoints--proc--proc_hidepid"></a>`proc_hidepid`
 
 Data type: `Integer[0,2]`
 
@@ -923,7 +927,7 @@ Data type: `Integer[0,2]`
 
 Default value: `2`
 
-##### <a name="manage_proc_group"></a>`manage_proc_group`
+##### <a name="-simp--mountpoints--proc--manage_proc_group"></a>`manage_proc_group`
 
 Data type: `Boolean`
 
@@ -932,9 +936,9 @@ Enable management of the group that allows access to ``/proc``
 * This was added, and enabled by default, to fix issue with updates to
 ``polkit`` per the vendor recommended guidance
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="proc_group"></a>`proc_group`
+##### <a name="-simp--mountpoints--proc--proc_group"></a>`proc_group`
 
 Data type: `String[1]`
 
@@ -942,7 +946,7 @@ The group name to be associated with ``$proc_gid``
 
 Default value: `pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', '_gid__group'), 'simp_proc_read')`
 
-##### <a name="proc_gid"></a>`proc_gid`
+##### <a name="-simp--mountpoints--proc--proc_gid"></a>`proc_gid`
 
 Data type: `Integer[0]`
 
@@ -954,7 +958,7 @@ the ``$proc_hidepid`` setting
 
 Default value: `pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', 'gid'), 231)`
 
-### <a name="simpmountpointstmp"></a>`simp::mountpoints::tmp`
+### <a name="simp--mountpoints--tmp"></a>`simp::mountpoints::tmp`
 
 Manages the various tmp mounts with optional security features.
 
@@ -965,13 +969,13 @@ Manages the various tmp mounts with optional security features.
 
 The following parameters are available in the `simp::mountpoints::tmp` class:
 
-* [`secure`](#secure)
-* [`tmp_opts`](#tmp_opts)
-* [`var_tmp_opts`](#var_tmp_opts)
-* [`dev_shm_opts`](#dev_shm_opts)
-* [`tmp_service`](#tmp_service)
+* [`secure`](#-simp--mountpoints--tmp--secure)
+* [`tmp_opts`](#-simp--mountpoints--tmp--tmp_opts)
+* [`var_tmp_opts`](#-simp--mountpoints--tmp--var_tmp_opts)
+* [`dev_shm_opts`](#-simp--mountpoints--tmp--dev_shm_opts)
+* [`tmp_service`](#-simp--mountpoints--tmp--tmp_service)
 
-##### <a name="secure"></a>`secure`
+##### <a name="-simp--mountpoints--tmp--secure"></a>`secure`
 
 Data type: `Boolean`
 
@@ -985,9 +989,9 @@ Data type: `Boolean`
   because there is no way to know why you are changing these settings or
   what, exactly, you want them to be.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="tmp_opts"></a>`tmp_opts`
+##### <a name="-simp--mountpoints--tmp--tmp_opts"></a>`tmp_opts`
 
 Data type: `Array[String]`
 
@@ -1001,7 +1005,7 @@ directory
 
 Default value: `['noexec','nodev','nosuid']`
 
-##### <a name="var_tmp_opts"></a>`var_tmp_opts`
+##### <a name="-simp--mountpoints--tmp--var_tmp_opts"></a>`var_tmp_opts`
 
 Data type: `Array[String]`
 
@@ -1009,7 +1013,7 @@ Works the same way as ``$tmp_opts``
 
 Default value: `['noexec','nodev','nosuid']`
 
-##### <a name="dev_shm_opts"></a>`dev_shm_opts`
+##### <a name="-simp--mountpoints--tmp--dev_shm_opts"></a>`dev_shm_opts`
 
 Data type: `Array[String]`
 
@@ -1017,7 +1021,7 @@ Works the same way as ``$tmp_opts``
 
 Default value: `['noexec','nodev','nosuid']`
 
-##### <a name="tmp_service"></a>`tmp_service`
+##### <a name="-simp--mountpoints--tmp--tmp_service"></a>`tmp_service`
 
 Data type: `Boolean`
 
@@ -1030,9 +1034,9 @@ If on systemd system, enable and activate the tmp.mount service
   will probably need to reboot your system to start with a properly clean
   `/tmp` mount.
 
-Default value: `(`
+Default value: `(fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false`
 
-### <a name="simpnetconsole"></a>`simp::netconsole`
+### <a name="simp--netconsole"></a>`simp::netconsole`
 
 Configure ``/etc/sysconfig/netconsole`` and the netconsole service
 
@@ -1045,61 +1049,61 @@ https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/de
 
 The following parameters are available in the `simp::netconsole` class:
 
-* [`ensure`](#ensure)
-* [`target_ip`](#target_ip)
-* [`target_macaddr`](#target_macaddr)
-* [`target_port`](#target_port)
-* [`source_port`](#source_port)
-* [`source_device`](#source_device)
-* [`package_ensure`](#package_ensure)
+* [`ensure`](#-simp--netconsole--ensure)
+* [`target_ip`](#-simp--netconsole--target_ip)
+* [`target_macaddr`](#-simp--netconsole--target_macaddr)
+* [`target_port`](#-simp--netconsole--target_port)
+* [`source_port`](#-simp--netconsole--source_port)
+* [`source_device`](#-simp--netconsole--source_device)
+* [`package_ensure`](#-simp--netconsole--package_ensure)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-simp--netconsole--ensure"></a>`ensure`
 
 Data type: `Enum['present','absent']`
 
 Ensure 'present' or 'absent' on the kernel parameter
 
-##### <a name="target_ip"></a>`target_ip`
+##### <a name="-simp--netconsole--target_ip"></a>`target_ip`
 
 Data type: `Optional[Simplib::IP]`
 
 UDP syslog receiver IP address
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="target_macaddr"></a>`target_macaddr`
+##### <a name="-simp--netconsole--target_macaddr"></a>`target_macaddr`
 
 Data type: `Optional[Simplib::MacAddress]`
 
 UDP syslog receiver MAC address
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="target_port"></a>`target_port`
+##### <a name="-simp--netconsole--target_port"></a>`target_port`
 
 Data type: `Optional[Simplib::Port]`
 
 UDP syslog receiver port
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="source_port"></a>`source_port`
+##### <a name="-simp--netconsole--source_port"></a>`source_port`
 
 Data type: `Optional[Simplib::Port]`
 
 Port of the send logs from
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="source_device"></a>`source_device`
+##### <a name="-simp--netconsole--source_device"></a>`source_device`
 
 Data type: `Optional[String]`
 
 Network interface to broadcast logs from
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-simp--netconsole--package_ensure"></a>`package_ensure`
 
 Data type: `String[1]`
 
@@ -1107,7 +1111,7 @@ The `ensure` parameter for the netconsole package when applicable
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### <a name="simpnsswitch"></a>`simp::nsswitch`
+### <a name="simp--nsswitch"></a>`simp::nsswitch`
 
 A SIMP profile for using the nsswitch module to manage /etc/nsswitch
 
@@ -1117,14 +1121,14 @@ A SIMP profile for using the nsswitch module to manage /etc/nsswitch
 
 The following parameters are available in the `simp::nsswitch` class:
 
-* [`ldap`](#ldap)
-* [`sssd`](#sssd)
-* [`defaults`](#defaults)
-* [`sssd_options`](#sssd_options)
-* [`ldap_options`](#ldap_options)
-* [`overrides`](#overrides)
+* [`ldap`](#-simp--nsswitch--ldap)
+* [`sssd`](#-simp--nsswitch--sssd)
+* [`defaults`](#-simp--nsswitch--defaults)
+* [`sssd_options`](#-simp--nsswitch--sssd_options)
+* [`ldap_options`](#-simp--nsswitch--ldap_options)
+* [`overrides`](#-simp--nsswitch--overrides)
 
-##### <a name="ldap"></a>`ldap`
+##### <a name="-simp--nsswitch--ldap"></a>`ldap`
 
 Data type: `Boolean`
 
@@ -1132,7 +1136,7 @@ SIMP global catalyst to enable LDAP
 
 Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
 
-##### <a name="sssd"></a>`sssd`
+##### <a name="-simp--nsswitch--sssd"></a>`sssd`
 
 Data type: `Boolean`
 
@@ -1140,25 +1144,25 @@ SIMP global catalyst to enable sssd
 
 Default value: `simplib::lookup('simp_options::sssd', { 'default_value' => false })`
 
-##### <a name="defaults"></a>`defaults`
+##### <a name="-simp--nsswitch--defaults"></a>`defaults`
 
 Data type: `Hash`
 
 
 
-##### <a name="sssd_options"></a>`sssd_options`
+##### <a name="-simp--nsswitch--sssd_options"></a>`sssd_options`
 
 Data type: `Hash`
 
 
 
-##### <a name="ldap_options"></a>`ldap_options`
+##### <a name="-simp--nsswitch--ldap_options"></a>`ldap_options`
 
 Data type: `Hash`
 
 
 
-##### <a name="overrides"></a>`overrides`
+##### <a name="-simp--nsswitch--overrides"></a>`overrides`
 
 Data type: `Hash`
 
@@ -1166,7 +1170,7 @@ Data type: `Hash`
 
 Default value: `{}`
 
-### <a name="simpone_shot"></a>`simp::one_shot`
+### <a name="simp--one_shot"></a>`simp::one_shot`
 
 has successfully run
 
@@ -1177,33 +1181,33 @@ configuration
 
 The following parameters are available in the `simp::one_shot` class:
 
-* [`enable_user`](#enable_user)
-* [`user_name`](#user_name)
-* [`user_password`](#user_password)
-* [`user_uid`](#user_uid)
-* [`user_gid`](#user_gid)
-* [`user_home`](#user_home)
-* [`user_ssh_authorized_key`](#user_ssh_authorized_key)
-* [`user_ssh_authorized_key_type`](#user_ssh_authorized_key_type)
-* [`user_sudo_users`](#user_sudo_users)
-* [`user_sudo_commands`](#user_sudo_commands)
-* [`user_passwordless_sudo`](#user_passwordless_sudo)
-* [`user_allowed_from`](#user_allowed_from)
-* [`finalize_dry_run`](#finalize_dry_run)
-* [`finalize_remove_pki`](#finalize_remove_pki)
-* [`finalize_remove_puppet`](#finalize_remove_puppet)
-* [`finalize_remove_script`](#finalize_remove_script)
-* [`finalize_debug`](#finalize_debug)
+* [`enable_user`](#-simp--one_shot--enable_user)
+* [`user_name`](#-simp--one_shot--user_name)
+* [`user_password`](#-simp--one_shot--user_password)
+* [`user_uid`](#-simp--one_shot--user_uid)
+* [`user_gid`](#-simp--one_shot--user_gid)
+* [`user_home`](#-simp--one_shot--user_home)
+* [`user_ssh_authorized_key`](#-simp--one_shot--user_ssh_authorized_key)
+* [`user_ssh_authorized_key_type`](#-simp--one_shot--user_ssh_authorized_key_type)
+* [`user_sudo_users`](#-simp--one_shot--user_sudo_users)
+* [`user_sudo_commands`](#-simp--one_shot--user_sudo_commands)
+* [`user_passwordless_sudo`](#-simp--one_shot--user_passwordless_sudo)
+* [`user_allowed_from`](#-simp--one_shot--user_allowed_from)
+* [`finalize_dry_run`](#-simp--one_shot--finalize_dry_run)
+* [`finalize_remove_pki`](#-simp--one_shot--finalize_remove_pki)
+* [`finalize_remove_puppet`](#-simp--one_shot--finalize_remove_puppet)
+* [`finalize_remove_script`](#-simp--one_shot--finalize_remove_script)
+* [`finalize_debug`](#-simp--one_shot--finalize_debug)
 
-##### <a name="enable_user"></a>`enable_user`
+##### <a name="-simp--one_shot--enable_user"></a>`enable_user`
 
 Data type: `Boolean`
 
 Add a one_shot user account that will be able to login to the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="user_name"></a>`user_name`
+##### <a name="-simp--one_shot--user_name"></a>`user_name`
 
 Data type: `String`
 
@@ -1211,7 +1215,7 @@ The username to use for remote access
 
 Default value: `'simp_one_shot'`
 
-##### <a name="user_password"></a>`user_password`
+##### <a name="-simp--one_shot--user_password"></a>`user_password`
 
 Data type: `Optional[String[8]]`
 
@@ -1220,9 +1224,9 @@ The password for the user in **passwd-compatible salted hash** form
 * NOTE: Either ``user_password`` or ``user_ssh_public_key`` must be
   specified
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="user_uid"></a>`user_uid`
+##### <a name="-simp--one_shot--user_uid"></a>`user_uid`
 
 Data type: `Integer`
 
@@ -1230,7 +1234,7 @@ The UID of the user
 
 Default value: `1777`
 
-##### <a name="user_gid"></a>`user_gid`
+##### <a name="-simp--one_shot--user_gid"></a>`user_gid`
 
 Data type: `Integer`
 
@@ -1238,7 +1242,7 @@ The GID of the user
 
 Default value: `$user_uid`
 
-##### <a name="user_home"></a>`user_home`
+##### <a name="-simp--one_shot--user_home"></a>`user_home`
 
 Data type: `Pattern['^/']`
 
@@ -1246,7 +1250,7 @@ The full path to the user's home directory
 
 Default value: `"/var/local/${user_name}"`
 
-##### <a name="user_ssh_authorized_key"></a>`user_ssh_authorized_key`
+##### <a name="-simp--one_shot--user_ssh_authorized_key"></a>`user_ssh_authorized_key`
 
 Data type: `Optional[String[1]]`
 
@@ -1254,9 +1258,9 @@ The SSH authorized key for the user
 
 * See the native ``ssh_authorized_key`` resource definition for details
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="user_ssh_authorized_key_type"></a>`user_ssh_authorized_key_type`
+##### <a name="-simp--one_shot--user_ssh_authorized_key_type"></a>`user_ssh_authorized_key_type`
 
 Data type: `String[1]`
 
@@ -1266,7 +1270,7 @@ The type of the SSH authorized key for the user
 
 Default value: `'ssh-rsa'`
 
-##### <a name="user_sudo_users"></a>`user_sudo_users`
+##### <a name="-simp--one_shot--user_sudo_users"></a>`user_sudo_users`
 
 Data type: `String`
 
@@ -1274,7 +1278,7 @@ The users that the ``username`` user may escalate to
 
 Default value: `'root'`
 
-##### <a name="user_sudo_commands"></a>`user_sudo_commands`
+##### <a name="-simp--one_shot--user_sudo_commands"></a>`user_sudo_commands`
 
 Data type: `Array[String[1]]`
 
@@ -1283,7 +1287,7 @@ of the allowed users
 
 Default value: `['ALL']`
 
-##### <a name="user_passwordless_sudo"></a>`user_passwordless_sudo`
+##### <a name="-simp--one_shot--user_passwordless_sudo"></a>`user_passwordless_sudo`
 
 Data type: `Boolean`
 
@@ -1291,9 +1295,9 @@ Allow the user to use passwordless ``sudo``
 
 * If not set, the ``user_password`` must be specified
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="user_allowed_from"></a>`user_allowed_from`
+##### <a name="-simp--one_shot--user_allowed_from"></a>`user_allowed_from`
 
 Data type: `Array[String[1]]`
 
@@ -1304,48 +1308,48 @@ from
 
 Default value: `['ALL']`
 
-##### <a name="finalize_dry_run"></a>`finalize_dry_run`
+##### <a name="-simp--one_shot--finalize_dry_run"></a>`finalize_dry_run`
 
 Data type: `Boolean`
 
 Run the finalization script in 'dry run' mode and only print what would
 have been done
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="finalize_remove_pki"></a>`finalize_remove_pki`
+##### <a name="-simp--one_shot--finalize_remove_pki"></a>`finalize_remove_pki`
 
 Data type: `Boolean`
 
 Remove the SIMP installed host PKI certificates
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="finalize_remove_puppet"></a>`finalize_remove_puppet`
+##### <a name="-simp--one_shot--finalize_remove_puppet"></a>`finalize_remove_puppet`
 
 Data type: `Boolean`
 
 Remove the puppet packages from the system during finalization
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="finalize_remove_script"></a>`finalize_remove_script`
+##### <a name="-simp--one_shot--finalize_remove_script"></a>`finalize_remove_script`
 
 Data type: `Boolean`
 
 Remove the finalization script itself from the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="finalize_debug"></a>`finalize_debug`
+##### <a name="-simp--one_shot--finalize_debug"></a>`finalize_debug`
 
 Data type: `Boolean`
 
 Enable syslog output debugging on the one_shot finalization script
 
-Default value: ``false``
+Default value: `false`
 
-### <a name="simpone_shotfinalize"></a>`simp::one_shot::finalize`
+### <a name="simp--one_shot--finalize"></a>`simp::one_shot::finalize`
 
 NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
@@ -1355,13 +1359,13 @@ system that may cause issues
 
 The following parameters are available in the `simp::one_shot::finalize` class:
 
-* [`dry_run`](#dry_run)
-* [`remove_pki`](#remove_pki)
-* [`remove_puppet`](#remove_puppet)
-* [`remove_script`](#remove_script)
-* [`enable_debug`](#enable_debug)
+* [`dry_run`](#-simp--one_shot--finalize--dry_run)
+* [`remove_pki`](#-simp--one_shot--finalize--remove_pki)
+* [`remove_puppet`](#-simp--one_shot--finalize--remove_puppet)
+* [`remove_script`](#-simp--one_shot--finalize--remove_script)
+* [`enable_debug`](#-simp--one_shot--finalize--enable_debug)
 
-##### <a name="dry_run"></a>`dry_run`
+##### <a name="-simp--one_shot--finalize--dry_run"></a>`dry_run`
 
 Data type: `Boolean`
 
@@ -1369,7 +1373,7 @@ Run the finalization script in 'dry_run' mode and output all commands
 
 Default value: `$simp::one_shot::finalize_dry_run`
 
-##### <a name="remove_pki"></a>`remove_pki`
+##### <a name="-simp--one_shot--finalize--remove_pki"></a>`remove_pki`
 
 Data type: `Boolean`
 
@@ -1377,7 +1381,7 @@ Remove the SIMP installed host PKI certificates
 
 Default value: `$simp::one_shot::finalize_remove_pki`
 
-##### <a name="remove_puppet"></a>`remove_puppet`
+##### <a name="-simp--one_shot--finalize--remove_puppet"></a>`remove_puppet`
 
 Data type: `Boolean`
 
@@ -1385,7 +1389,7 @@ Remove the 'puppet' package from the system
 
 Default value: `$simp::one_shot::finalize_remove_puppet`
 
-##### <a name="remove_script"></a>`remove_script`
+##### <a name="-simp--one_shot--finalize--remove_script"></a>`remove_script`
 
 Data type: `Boolean`
 
@@ -1393,7 +1397,7 @@ Remove the finalization script itself from the system
 
 Default value: `$simp::one_shot::finalize_remove_script`
 
-##### <a name="enable_debug"></a>`enable_debug`
+##### <a name="-simp--one_shot--finalize--enable_debug"></a>`enable_debug`
 
 Data type: `Boolean`
 
@@ -1401,7 +1405,7 @@ Data type: `Boolean`
 
 Default value: `$simp::one_shot::finalize_debug`
 
-### <a name="simpone_shotuser"></a>`simp::one_shot::user`
+### <a name="simp--one_shot--user"></a>`simp::one_shot::user`
 
 NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
@@ -1409,20 +1413,20 @@ NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert
 
 The following parameters are available in the `simp::one_shot::user` class:
 
-* [`enable`](#enable)
-* [`username`](#username)
-* [`password`](#password)
-* [`home`](#home)
-* [`uid`](#uid)
-* [`gid`](#gid)
-* [`ssh_authorized_key`](#ssh_authorized_key)
-* [`ssh_authorized_key_type`](#ssh_authorized_key_type)
-* [`sudo_users`](#sudo_users)
-* [`passwordless_sudo`](#passwordless_sudo)
-* [`sudo_commands`](#sudo_commands)
-* [`allowed_from`](#allowed_from)
+* [`enable`](#-simp--one_shot--user--enable)
+* [`username`](#-simp--one_shot--user--username)
+* [`password`](#-simp--one_shot--user--password)
+* [`home`](#-simp--one_shot--user--home)
+* [`uid`](#-simp--one_shot--user--uid)
+* [`gid`](#-simp--one_shot--user--gid)
+* [`ssh_authorized_key`](#-simp--one_shot--user--ssh_authorized_key)
+* [`ssh_authorized_key_type`](#-simp--one_shot--user--ssh_authorized_key_type)
+* [`sudo_users`](#-simp--one_shot--user--sudo_users)
+* [`passwordless_sudo`](#-simp--one_shot--user--passwordless_sudo)
+* [`sudo_commands`](#-simp--one_shot--user--sudo_commands)
+* [`allowed_from`](#-simp--one_shot--user--allowed_from)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-simp--one_shot--user--enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -1430,7 +1434,7 @@ Enable the one_shot capabilities
 
 Default value: `$simp::one_shot::enable_user`
 
-##### <a name="username"></a>`username`
+##### <a name="-simp--one_shot--user--username"></a>`username`
 
 Data type: `String`
 
@@ -1438,7 +1442,7 @@ The username to use for remote access
 
 Default value: `$simp::one_shot::user_name`
 
-##### <a name="password"></a>`password`
+##### <a name="-simp--one_shot--user--password"></a>`password`
 
 Data type: `Optional[String]`
 
@@ -1446,7 +1450,7 @@ The password for the user in passwd-compatible salted hash form
 
 Default value: `$simp::one_shot::user_password`
 
-##### <a name="home"></a>`home`
+##### <a name="-simp--one_shot--user--home"></a>`home`
 
 Data type: `Pattern['^/']`
 
@@ -1454,7 +1458,7 @@ The full path to the user's home directory
 
 Default value: `$simp::one_shot::user_home`
 
-##### <a name="uid"></a>`uid`
+##### <a name="-simp--one_shot--user--uid"></a>`uid`
 
 Data type: `Integer`
 
@@ -1462,7 +1466,7 @@ The UID of the user
 
 Default value: `$simp::one_shot::user_uid`
 
-##### <a name="gid"></a>`gid`
+##### <a name="-simp--one_shot--user--gid"></a>`gid`
 
 Data type: `Integer`
 
@@ -1470,7 +1474,7 @@ The GID of the user
 
 Default value: `$simp::one_shot::user_gid`
 
-##### <a name="ssh_authorized_key"></a>`ssh_authorized_key`
+##### <a name="-simp--one_shot--user--ssh_authorized_key"></a>`ssh_authorized_key`
 
 Data type: `Optional[String[1]]`
 
@@ -1480,7 +1484,7 @@ The SSH public key for the user
 
 Default value: `$simp::one_shot::user_ssh_authorized_key`
 
-##### <a name="ssh_authorized_key_type"></a>`ssh_authorized_key_type`
+##### <a name="-simp--one_shot--user--ssh_authorized_key_type"></a>`ssh_authorized_key_type`
 
 Data type: `String[1]`
 
@@ -1490,7 +1494,7 @@ The SSH public key type
 
 Default value: `$simp::one_shot::user_ssh_authorized_key_type`
 
-##### <a name="sudo_users"></a>`sudo_users`
+##### <a name="-simp--one_shot--user--sudo_users"></a>`sudo_users`
 
 Data type: `String`
 
@@ -1498,7 +1502,7 @@ The users that the ``username`` user may escalate to
 
 Default value: `$simp::one_shot::user_sudo_users`
 
-##### <a name="passwordless_sudo"></a>`passwordless_sudo`
+##### <a name="-simp--one_shot--user--passwordless_sudo"></a>`passwordless_sudo`
 
 Data type: `Boolean`
 
@@ -1506,7 +1510,7 @@ Enable passwordless sudo for the user
 
 Default value: `$simp::one_shot::user_passwordless_sudo`
 
-##### <a name="sudo_commands"></a>`sudo_commands`
+##### <a name="-simp--one_shot--user--sudo_commands"></a>`sudo_commands`
 
 Data type: `Array[String]`
 
@@ -1515,7 +1519,7 @@ of the allowed users
 
 Default value: `$simp::one_shot::user_sudo_commands`
 
-##### <a name="allowed_from"></a>`allowed_from`
+##### <a name="-simp--one_shot--user--allowed_from"></a>`allowed_from`
 
 Data type: `Array[String]`
 
@@ -1526,7 +1530,7 @@ from
 
 Default value: `$simp::one_shot::user_allowed_from`
 
-### <a name="simppam_limitsmax_logins"></a>`simp::pam_limits::max_logins`
+### <a name="simp--pam_limits--max_logins"></a>`simp::pam_limits::max_logins`
 
 Restrict the max logins on a system via PAM
 
@@ -1534,9 +1538,9 @@ Restrict the max logins on a system via PAM
 
 The following parameters are available in the `simp::pam_limits::max_logins` class:
 
-* [`value`](#value)
+* [`value`](#-simp--pam_limits--max_logins--value)
 
-##### <a name="value"></a>`value`
+##### <a name="-simp--pam_limits--max_logins--value"></a>`value`
 
 Data type: `Pam::Limits::Value`
 
@@ -1546,7 +1550,7 @@ The maximum number of logins that a user may have simultaneously
 
 Default value: `10`
 
-### <a name="simpprelink"></a>`simp::prelink`
+### <a name="simp--prelink"></a>`simp::prelink`
 
 Manage prelinking
 
@@ -1554,10 +1558,10 @@ Manage prelinking
 
 The following parameters are available in the `simp::prelink` class:
 
-* [`enable`](#enable)
-* [`ensure`](#ensure)
+* [`enable`](#-simp--prelink--enable)
+* [`ensure`](#-simp--prelink--ensure)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-simp--prelink--enable"></a>`enable`
 
 Data type: `Boolean`
 
@@ -1574,9 +1578,9 @@ the server is *NOT* in FIPS mode.
   Security Guide's OVAL check
   xccdf_org.ssgproject.content_rule_disable_prelink.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-simp--prelink--ensure"></a>`ensure`
 
 Data type: `String`
 
@@ -1585,7 +1589,7 @@ is ``true`` and ``$facts['fips_enabled']`` is ``false``.
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### <a name="simppuppetdb"></a>`simp::puppetdb`
+### <a name="simp--puppetdb"></a>`simp::puppetdb`
 
 compatibility.
 
@@ -1598,38 +1602,38 @@ All other parameters are taken directly from ``puppetdb::server``
 
 The following parameters are available in the `simp::puppetdb` class:
 
-* [`trusted_nets`](#trusted_nets)
-* [`listen_address`](#listen_address)
-* [`listen_port`](#listen_port)
-* [`open_listen_port`](#open_listen_port)
-* [`ssl_deploy_certs`](#ssl_deploy_certs)
-* [`ssl_set_cert_paths`](#ssl_set_cert_paths)
-* [`ssl_listen_address`](#ssl_listen_address)
-* [`ssl_listen_port`](#ssl_listen_port)
-* [`cipher_suites`](#cipher_suites)
-* [`use_puppet_ssl_certs`](#use_puppet_ssl_certs)
-* [`disable_ssl`](#disable_ssl)
-* [`manage_package_repo`](#manage_package_repo)
-* [`database_password`](#database_password)
-* [`read_database_username`](#read_database_username)
-* [`read_database_password`](#read_database_password)
-* [`read_database_name`](#read_database_name)
-* [`read_database_ssl`](#read_database_ssl)
-* [`read_database_jdbc_ssl_properties`](#read_database_jdbc_ssl_properties)
-* [`manage_firewall`](#manage_firewall)
-* [`manage_puppetserver`](#manage_puppetserver)
-* [`java_max_memory`](#java_max_memory)
-* [`java_start_memory`](#java_start_memory)
-* [`java_tmpdir`](#java_tmpdir)
-* [`java_heapdump_on_oom`](#java_heapdump_on_oom)
-* [`java_prefer_ipv4`](#java_prefer_ipv4)
-* [`java_use_code_cache_flushing`](#java_use_code_cache_flushing)
-* [`automatic_dlo_cleanup`](#automatic_dlo_cleanup)
-* [`dlo_max_age`](#dlo_max_age)
-* [`disable_update_checking`](#disable_update_checking)
-* [`firewall`](#firewall)
+* [`trusted_nets`](#-simp--puppetdb--trusted_nets)
+* [`listen_address`](#-simp--puppetdb--listen_address)
+* [`listen_port`](#-simp--puppetdb--listen_port)
+* [`open_listen_port`](#-simp--puppetdb--open_listen_port)
+* [`ssl_deploy_certs`](#-simp--puppetdb--ssl_deploy_certs)
+* [`ssl_set_cert_paths`](#-simp--puppetdb--ssl_set_cert_paths)
+* [`ssl_listen_address`](#-simp--puppetdb--ssl_listen_address)
+* [`ssl_listen_port`](#-simp--puppetdb--ssl_listen_port)
+* [`cipher_suites`](#-simp--puppetdb--cipher_suites)
+* [`use_puppet_ssl_certs`](#-simp--puppetdb--use_puppet_ssl_certs)
+* [`disable_ssl`](#-simp--puppetdb--disable_ssl)
+* [`manage_package_repo`](#-simp--puppetdb--manage_package_repo)
+* [`database_password`](#-simp--puppetdb--database_password)
+* [`read_database_username`](#-simp--puppetdb--read_database_username)
+* [`read_database_password`](#-simp--puppetdb--read_database_password)
+* [`read_database_name`](#-simp--puppetdb--read_database_name)
+* [`read_database_ssl`](#-simp--puppetdb--read_database_ssl)
+* [`read_database_jdbc_ssl_properties`](#-simp--puppetdb--read_database_jdbc_ssl_properties)
+* [`manage_firewall`](#-simp--puppetdb--manage_firewall)
+* [`manage_puppetserver`](#-simp--puppetdb--manage_puppetserver)
+* [`java_max_memory`](#-simp--puppetdb--java_max_memory)
+* [`java_start_memory`](#-simp--puppetdb--java_start_memory)
+* [`java_tmpdir`](#-simp--puppetdb--java_tmpdir)
+* [`java_heapdump_on_oom`](#-simp--puppetdb--java_heapdump_on_oom)
+* [`java_prefer_ipv4`](#-simp--puppetdb--java_prefer_ipv4)
+* [`java_use_code_cache_flushing`](#-simp--puppetdb--java_use_code_cache_flushing)
+* [`automatic_dlo_cleanup`](#-simp--puppetdb--automatic_dlo_cleanup)
+* [`dlo_max_age`](#-simp--puppetdb--dlo_max_age)
+* [`disable_update_checking`](#-simp--puppetdb--disable_update_checking)
+* [`firewall`](#-simp--puppetdb--firewall)
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-simp--puppetdb--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -1645,7 +1649,7 @@ This is used to allow specific hosts access to PuppetDB
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value'            => ['127.0.0.1'] })`
 
-##### <a name="listen_address"></a>`listen_address`
+##### <a name="-simp--puppetdb--listen_address"></a>`listen_address`
 
 Data type: `Simplib::IP`
 
@@ -1653,7 +1657,7 @@ Data type: `Simplib::IP`
 
 Default value: `'127.0.0.1'`
 
-##### <a name="listen_port"></a>`listen_port`
+##### <a name="-simp--puppetdb--listen_port"></a>`listen_port`
 
 Data type: `Simplib::Port`
 
@@ -1661,31 +1665,31 @@ Data type: `Simplib::Port`
 
 Default value: `8138`
 
-##### <a name="open_listen_port"></a>`open_listen_port`
+##### <a name="-simp--puppetdb--open_listen_port"></a>`open_listen_port`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="ssl_deploy_certs"></a>`ssl_deploy_certs`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="ssl_set_cert_paths"></a>`ssl_set_cert_paths`
+##### <a name="-simp--puppetdb--ssl_deploy_certs"></a>`ssl_deploy_certs`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ssl_listen_address"></a>`ssl_listen_address`
+##### <a name="-simp--puppetdb--ssl_set_cert_paths"></a>`ssl_set_cert_paths`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-simp--puppetdb--ssl_listen_address"></a>`ssl_listen_address`
 
 Data type: `Simplib::IP`
 
@@ -1693,7 +1697,7 @@ Data type: `Simplib::IP`
 
 Default value: `'0.0.0.0'`
 
-##### <a name="ssl_listen_port"></a>`ssl_listen_port`
+##### <a name="-simp--puppetdb--ssl_listen_port"></a>`ssl_listen_port`
 
 Data type: `Simplib::Port`
 
@@ -1701,38 +1705,38 @@ Data type: `Simplib::Port`
 
 Default value: `8139`
 
-##### <a name="cipher_suites"></a>`cipher_suites`
+##### <a name="-simp--puppetdb--cipher_suites"></a>`cipher_suites`
 
 Data type: `Array[Simp::Puppetdb::Ciphersuites]`
 
 Cipher suites supported by PuppetDB's HTTP interface (jetty).
 Used to set ``puppetdb::cipher_suites``.
 
-##### <a name="use_puppet_ssl_certs"></a>`use_puppet_ssl_certs`
+##### <a name="-simp--puppetdb--use_puppet_ssl_certs"></a>`use_puppet_ssl_certs`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="disable_ssl"></a>`disable_ssl`
-
-Data type: `Boolean`
-
-
-
-Default value: ``false``
-
-##### <a name="manage_package_repo"></a>`manage_package_repo`
+##### <a name="-simp--puppetdb--disable_ssl"></a>`disable_ssl`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="database_password"></a>`database_password`
+##### <a name="-simp--puppetdb--manage_package_repo"></a>`manage_package_repo`
+
+Data type: `Boolean`
+
+
+
+Default value: `false`
+
+##### <a name="-simp--puppetdb--database_password"></a>`database_password`
 
 Data type: `String`
 
@@ -1740,7 +1744,7 @@ Data type: `String`
 
 Default value: `simplib::passgen('simp_puppetdb')`
 
-##### <a name="read_database_username"></a>`read_database_username`
+##### <a name="-simp--puppetdb--read_database_username"></a>`read_database_username`
 
 Data type: `String`
 
@@ -1748,7 +1752,7 @@ Data type: `String`
 
 Default value: `'simp_puppetdb'`
 
-##### <a name="read_database_password"></a>`read_database_password`
+##### <a name="-simp--puppetdb--read_database_password"></a>`read_database_password`
 
 Data type: `String`
 
@@ -1756,7 +1760,7 @@ Data type: `String`
 
 Default value: `simplib::passgen('simp_read_puppetdb')`
 
-##### <a name="read_database_name"></a>`read_database_name`
+##### <a name="-simp--puppetdb--read_database_name"></a>`read_database_name`
 
 Data type: `String`
 
@@ -1764,7 +1768,7 @@ Data type: `String`
 
 Default value: `'simp_puppetdb'`
 
-##### <a name="read_database_ssl"></a>`read_database_ssl`
+##### <a name="-simp--puppetdb--read_database_ssl"></a>`read_database_ssl`
 
 Data type: `Optional[Boolean]`
 
@@ -1773,9 +1777,9 @@ This parameter has been deprecated, because its corresponding
 ``puppetdb::server::read_database_jdbc_ssl_properties``.
 Use $read_database_jdbc_ssl_properties = '?ssl=true' instead.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="read_database_jdbc_ssl_properties"></a>`read_database_jdbc_ssl_properties`
+##### <a name="-simp--puppetdb--read_database_jdbc_ssl_properties"></a>`read_database_jdbc_ssl_properties`
 
 Data type: `String`
 
@@ -1783,23 +1787,23 @@ Data type: `String`
 
 Default value: `'?ssl=true'`
 
-##### <a name="manage_firewall"></a>`manage_firewall`
+##### <a name="-simp--puppetdb--manage_firewall"></a>`manage_firewall`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_puppetserver"></a>`manage_puppetserver`
+##### <a name="-simp--puppetdb--manage_puppetserver"></a>`manage_puppetserver`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="java_max_memory"></a>`java_max_memory`
+##### <a name="-simp--puppetdb--java_max_memory"></a>`java_max_memory`
 
 Data type: `String`
 
@@ -1807,15 +1811,15 @@ Data type: `String`
 
 Default value: `'40%'`
 
-##### <a name="java_start_memory"></a>`java_start_memory`
+##### <a name="-simp--puppetdb--java_start_memory"></a>`java_start_memory`
 
 Data type: `Optional[String]`
 
 
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="java_tmpdir"></a>`java_tmpdir`
+##### <a name="-simp--puppetdb--java_tmpdir"></a>`java_tmpdir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1823,39 +1827,39 @@ Data type: `Stdlib::Absolutepath`
 
 Default value: `'/opt/puppetlabs/puppet/cache/pdb_tmp'`
 
-##### <a name="java_heapdump_on_oom"></a>`java_heapdump_on_oom`
+##### <a name="-simp--puppetdb--java_heapdump_on_oom"></a>`java_heapdump_on_oom`
 
 Data type: `Boolean`
 
 
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="java_prefer_ipv4"></a>`java_prefer_ipv4`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="java_use_code_cache_flushing"></a>`java_use_code_cache_flushing`
+##### <a name="-simp--puppetdb--java_prefer_ipv4"></a>`java_prefer_ipv4`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="automatic_dlo_cleanup"></a>`automatic_dlo_cleanup`
+##### <a name="-simp--puppetdb--java_use_code_cache_flushing"></a>`java_use_code_cache_flushing`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="dlo_max_age"></a>`dlo_max_age`
+##### <a name="-simp--puppetdb--automatic_dlo_cleanup"></a>`automatic_dlo_cleanup`
+
+Data type: `Boolean`
+
+
+
+Default value: `true`
+
+##### <a name="-simp--puppetdb--dlo_max_age"></a>`dlo_max_age`
 
 Data type: `Integer`
 
@@ -1863,15 +1867,15 @@ Data type: `Integer`
 
 Default value: `90`
 
-##### <a name="disable_update_checking"></a>`disable_update_checking`
+##### <a name="-simp--puppetdb--disable_update_checking"></a>`disable_update_checking`
 
 Data type: `Boolean`
 
 
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="firewall"></a>`firewall`
+##### <a name="-simp--puppetdb--firewall"></a>`firewall`
 
 Data type: `Boolean`
 
@@ -1879,7 +1883,7 @@ Data type: `Boolean`
 
 Default value: `simplib::lookup('simp_options::firewall', { 'default_value' => false })`
 
-### <a name="simprc_local"></a>`simp::rc_local`
+### <a name="simp--rc_local"></a>`simp::rc_local`
 
 By default, this class will disable the file altogether
 
@@ -1887,11 +1891,11 @@ By default, this class will disable the file altogether
 
 The following parameters are available in the `simp::rc_local` class:
 
-* [`content`](#content)
-* [`shell`](#shell)
-* [`management_comment`](#management_comment)
+* [`content`](#-simp--rc_local--content)
+* [`shell`](#-simp--rc_local--shell)
+* [`management_comment`](#-simp--rc_local--management_comment)
 
-##### <a name="content"></a>`content`
+##### <a name="-simp--rc_local--content"></a>`content`
 
 Data type: `String`
 
@@ -1902,7 +1906,7 @@ Set to ``disable`` to disable the file completely
 
 Default value: `'disable'`
 
-##### <a name="shell"></a>`shell`
+##### <a name="-simp--rc_local--shell"></a>`shell`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -1910,15 +1914,15 @@ The shell to use to execute the ``rc.local`` file
 
 Default value: `'/bin/bash'`
 
-##### <a name="management_comment"></a>`management_comment`
+##### <a name="-simp--rc_local--management_comment"></a>`management_comment`
 
 Data type: `Boolean`
 
 Adds a 'managed by Puppet' comment to the top of the file
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="simproot_user"></a>`simp::root_user`
+### <a name="simp--root_user"></a>`simp::root_user`
 
 Manage resources related to the `root` user
 
@@ -1926,51 +1930,51 @@ Manage resources related to the `root` user
 
 The following parameters are available in the `simp::root_user` class:
 
-* [`manage_perms`](#manage_perms)
-* [`manage_user`](#manage_user)
-* [`manage_group`](#manage_group)
-* [`hashed_password`](#hashed_password)
-* [`password`](#password)
-* [`username`](#username)
-* [`uid`](#uid)
-* [`gid`](#gid)
-* [`shell`](#shell)
-* [`home`](#home)
+* [`manage_perms`](#-simp--root_user--manage_perms)
+* [`manage_user`](#-simp--root_user--manage_user)
+* [`manage_group`](#-simp--root_user--manage_group)
+* [`hashed_password`](#-simp--root_user--hashed_password)
+* [`password`](#-simp--root_user--password)
+* [`username`](#-simp--root_user--username)
+* [`uid`](#-simp--root_user--uid)
+* [`gid`](#-simp--root_user--gid)
+* [`shell`](#-simp--root_user--shell)
+* [`home`](#-simp--root_user--home)
 
-##### <a name="manage_perms"></a>`manage_perms`
+##### <a name="-simp--root_user--manage_perms"></a>`manage_perms`
 
 Data type: `Boolean`
 
 Ensure that `$home` has restricted permissions and proper SELinux contexts.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_user"></a>`manage_user`
+##### <a name="-simp--root_user--manage_user"></a>`manage_user`
 
 Data type: `Boolean`
 
 Ensure the `root` user has appropriate UIDs and groups, etc
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_group"></a>`manage_group`
+##### <a name="-simp--root_user--manage_group"></a>`manage_group`
 
 Data type: `Boolean`
 
 Ensure the `root` group has appropriate UIDs, etc
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="hashed_password"></a>`hashed_password`
+##### <a name="-simp--root_user--hashed_password"></a>`hashed_password`
 
 Data type: `Optional[Simplib::ShadowPass]`
 
 Validate the correctness of the password hash and then pass it through to
 the `User` resource for `root`
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="password"></a>`password`
+##### <a name="-simp--root_user--password"></a>`password`
 
 Data type: `Optional[String[1]]`
 
@@ -1978,9 +1982,9 @@ Pass this through untouched to the `User` resource for `root`
 
 * Please use `$hashed_password` if possible
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="username"></a>`username`
+##### <a name="-simp--root_user--username"></a>`username`
 
 Data type: `String[1]`
 
@@ -1988,7 +1992,7 @@ The username of the `root` user
 
 Default value: `'root'`
 
-##### <a name="uid"></a>`uid`
+##### <a name="-simp--root_user--uid"></a>`uid`
 
 Data type: `Integer[0]`
 
@@ -1996,7 +2000,7 @@ The UID of the `root` user
 
 Default value: `0`
 
-##### <a name="gid"></a>`gid`
+##### <a name="-simp--root_user--gid"></a>`gid`
 
 Data type: `Integer[0]`
 
@@ -2004,7 +2008,7 @@ The GID of the `root` user
 
 Default value: `0`
 
-##### <a name="shell"></a>`shell`
+##### <a name="-simp--root_user--shell"></a>`shell`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2012,7 +2016,7 @@ The shell to use for the `root` user
 
 Default value: `'/bin/bash'`
 
-##### <a name="home"></a>`home`
+##### <a name="-simp--root_user--home"></a>`home`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2020,7 +2024,7 @@ The home directory of the `root` user
 
 Default value: `"/${username}"`
 
-### <a name="simpscenariobase"></a>`simp::scenario::base`
+### <a name="simp--scenario--base"></a>`simp::scenario::base`
 
 **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
@@ -2031,23 +2035,23 @@ but this should be an effective starting place.
 
 The following parameters are available in the `simp::scenario::base` class:
 
-* [`mail_server`](#mail_server)
-* [`rsync_stunnel`](#rsync_stunnel)
-* [`use_ssh_global_known_hosts`](#use_ssh_global_known_hosts)
-* [`puppet_server_hosts_entry`](#puppet_server_hosts_entry)
-* [`use_sudoers_aliases`](#use_sudoers_aliases)
-* [`runlevel`](#runlevel)
-* [`restrict_max_logins`](#restrict_max_logins)
-* [`manage_ctrl_alt_del`](#manage_ctrl_alt_del)
-* [`manage_root_metadata`](#manage_root_metadata)
-* [`manage_root_perms`](#manage_root_perms)
-* [`manage_rc_local`](#manage_rc_local)
-* [`pam`](#pam)
-* [`sssd`](#sssd)
-* [`ldap`](#ldap)
-* [`stock_sssd`](#stock_sssd)
+* [`mail_server`](#-simp--scenario--base--mail_server)
+* [`rsync_stunnel`](#-simp--scenario--base--rsync_stunnel)
+* [`use_ssh_global_known_hosts`](#-simp--scenario--base--use_ssh_global_known_hosts)
+* [`puppet_server_hosts_entry`](#-simp--scenario--base--puppet_server_hosts_entry)
+* [`use_sudoers_aliases`](#-simp--scenario--base--use_sudoers_aliases)
+* [`runlevel`](#-simp--scenario--base--runlevel)
+* [`restrict_max_logins`](#-simp--scenario--base--restrict_max_logins)
+* [`manage_ctrl_alt_del`](#-simp--scenario--base--manage_ctrl_alt_del)
+* [`manage_root_metadata`](#-simp--scenario--base--manage_root_metadata)
+* [`manage_root_perms`](#-simp--scenario--base--manage_root_perms)
+* [`manage_rc_local`](#-simp--scenario--base--manage_rc_local)
+* [`pam`](#-simp--scenario--base--pam)
+* [`sssd`](#-simp--scenario--base--sssd)
+* [`ldap`](#-simp--scenario--base--ldap)
+* [`stock_sssd`](#-simp--scenario--base--stock_sssd)
 
-##### <a name="mail_server"></a>`mail_server`
+##### <a name="-simp--scenario--base--mail_server"></a>`mail_server`
 
 Data type: `Variant[Boolean,Enum['remote']]`
 
@@ -2061,7 +2065,7 @@ Install a local mail service on the system
 
 Default value: `$::simp::mail_server`
 
-##### <a name="rsync_stunnel"></a>`rsync_stunnel`
+##### <a name="-simp--scenario--base--rsync_stunnel"></a>`rsync_stunnel`
 
 Data type: `Variant[Boolean,Simplib::Host]`
 
@@ -2072,7 +2076,7 @@ The rsync server from which files should be retrieved
 
 Default value: `$::simp::rsync_stunnel`
 
-##### <a name="use_ssh_global_known_hosts"></a>`use_ssh_global_known_hosts`
+##### <a name="-simp--scenario--base--use_ssh_global_known_hosts"></a>`use_ssh_global_known_hosts`
 
 Data type: `Boolean`
 
@@ -2081,7 +2085,7 @@ SSH public keys and populate the /etc/ssh/known_hosts file.
 
 Default value: `$::simp::use_ssh_global_known_hosts`
 
-##### <a name="puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
+##### <a name="-simp--scenario--base--puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
 
 Data type: `Boolean`
 
@@ -2091,7 +2095,7 @@ Add a ``host`` entry for the Puppet server to the catalog
 
 Default value: `$::simp::puppet_server_hosts_entry`
 
-##### <a name="use_sudoers_aliases"></a>`use_sudoers_aliases`
+##### <a name="-simp--scenario--base--use_sudoers_aliases"></a>`use_sudoers_aliases`
 
 Data type: `Boolean`
 
@@ -2099,7 +2103,7 @@ If true, enable simp site sudoers aliases
 
 Default value: `$::simp::use_sudoers_aliases`
 
-##### <a name="runlevel"></a>`runlevel`
+##### <a name="-simp--scenario--base--runlevel"></a>`runlevel`
 
 Data type: `Simp::Runlevel`
 
@@ -2107,7 +2111,7 @@ The default runlevel to which the system should be set
 
 Default value: `$::simp::runlevel`
 
-##### <a name="restrict_max_logins"></a>`restrict_max_logins`
+##### <a name="-simp--scenario--base--restrict_max_logins"></a>`restrict_max_logins`
 
 Data type: `Boolean`
 
@@ -2117,7 +2121,7 @@ Enable restrictions of the number of simultaneous logins a user may have
 
 Default value: `$::simp::restrict_max_logins`
 
-##### <a name="manage_ctrl_alt_del"></a>`manage_ctrl_alt_del`
+##### <a name="-simp--scenario--base--manage_ctrl_alt_del"></a>`manage_ctrl_alt_del`
 
 Data type: `Boolean`
 
@@ -2126,7 +2130,7 @@ use of ctrl_alt_del and logs all instances of the event.
 
 Default value: `$::simp::manage_ctrl_alt_del`
 
-##### <a name="manage_root_metadata"></a>`manage_root_metadata`
+##### <a name="-simp--scenario--base--manage_root_metadata"></a>`manage_root_metadata`
 
 Data type: `Boolean`
 
@@ -2135,7 +2139,7 @@ the ``root`` user
 
 Default value: `$::simp::manage_root_metadata`
 
-##### <a name="manage_root_perms"></a>`manage_root_perms`
+##### <a name="-simp--scenario--base--manage_root_perms"></a>`manage_root_perms`
 
 Data type: `Boolean`
 
@@ -2144,7 +2148,7 @@ contexts
 
 Default value: `$::simp::manage_root_perms`
 
-##### <a name="manage_rc_local"></a>`manage_rc_local`
+##### <a name="-simp--scenario--base--manage_rc_local"></a>`manage_rc_local`
 
 Data type: `Boolean`
 
@@ -2155,7 +2159,7 @@ Include the ``simp::rc_local`` class
 
 Default value: `$::simp::manage_rc_local`
 
-##### <a name="pam"></a>`pam`
+##### <a name="-simp--scenario--base--pam"></a>`pam`
 
 Data type: `Boolean`
 
@@ -2163,7 +2167,7 @@ Enable management of PAM resources via SIMP modules
 
 Default value: `$::simp::pam`
 
-##### <a name="sssd"></a>`sssd`
+##### <a name="-simp--scenario--base--sssd"></a>`sssd`
 
 Data type: `Boolean`
 
@@ -2171,7 +2175,7 @@ Enable management of SSSD resources via SIMP modules
 
 Default value: `$::simp::sssd`
 
-##### <a name="ldap"></a>`ldap`
+##### <a name="-simp--scenario--base--ldap"></a>`ldap`
 
 Data type: `Boolean`
 
@@ -2179,7 +2183,7 @@ Enable management of LDAP resources via SIMP modules
 
 Default value: `$::simp::ldap`
 
-##### <a name="stock_sssd"></a>`stock_sssd`
+##### <a name="-simp--scenario--base--stock_sssd"></a>`stock_sssd`
 
 Data type: `Boolean`
 
@@ -2191,7 +2195,7 @@ system
 
 Default value: `$::simp::stock_sssd`
 
-### <a name="simpscenarioposs"></a>`simp::scenario::poss`
+### <a name="simp--scenario--poss"></a>`simp::scenario::poss`
 
 **NOTE: THIS IS A [PRIVATE](https://github.com/puppetlabs/puppetlabs-stdlib#assert_private) CLASS**
 
@@ -2206,9 +2210,9 @@ This class requires no additional configuration to function.
 
 The following parameters are available in the `simp::scenario::poss` class:
 
-* [`puppet_server_hosts_entry`](#puppet_server_hosts_entry)
+* [`puppet_server_hosts_entry`](#-simp--scenario--poss--puppet_server_hosts_entry)
 
-##### <a name="puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
+##### <a name="-simp--scenario--poss--puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
 
 Data type: `Boolean`
 
@@ -2218,7 +2222,7 @@ Add a ``host`` entry for the Puppet server to the catalog
 
 Default value: `$::simp::puppet_server_hosts_entry`
 
-### <a name="simpserver"></a>`simp::server`
+### <a name="simp--server"></a>`simp::server`
 
 configuration data appropriately to your clients.
 
@@ -2226,23 +2230,23 @@ configuration data appropriately to your clients.
 
 The following parameters are available in the `simp::server` class:
 
-* [`allow_simp_user`](#allow_simp_user)
-* [`pam`](#pam)
-* [`clamav`](#clamav)
-* [`auditd`](#auditd)
-* [`scenario`](#scenario)
-* [`classes`](#classes)
-* [`scenario_map`](#scenario_map)
+* [`allow_simp_user`](#-simp--server--allow_simp_user)
+* [`pam`](#-simp--server--pam)
+* [`clamav`](#-simp--server--clamav)
+* [`auditd`](#-simp--server--auditd)
+* [`scenario`](#-simp--server--scenario)
+* [`classes`](#-simp--server--classes)
+* [`scenario_map`](#-simp--server--scenario_map)
 
-##### <a name="allow_simp_user"></a>`allow_simp_user`
+##### <a name="-simp--server--allow_simp_user"></a>`allow_simp_user`
 
 Data type: `Boolean`
 
 Ensure that the ``simp`` user can login to the system
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="pam"></a>`pam`
+##### <a name="-simp--server--pam"></a>`pam`
 
 Data type: `Boolean`
 
@@ -2250,7 +2254,7 @@ Enable SIMP management of the PAM stack
 
 Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
 
-##### <a name="clamav"></a>`clamav`
+##### <a name="-simp--server--clamav"></a>`clamav`
 
 Data type: `Boolean`
 
@@ -2263,7 +2267,7 @@ from the `simp-clamav` module in the server's class list.
 
 Default value: `simplib::lookup('simp_options::clamav', { 'default_value' => false })`
 
-##### <a name="auditd"></a>`auditd`
+##### <a name="-simp--server--auditd"></a>`auditd`
 
 Data type: `Boolean`
 
@@ -2271,7 +2275,7 @@ Enable SIMP management of auditing
 
 Default value: `simplib::lookup('simp_options::auditd', { 'default_value' => false })`
 
-##### <a name="scenario"></a>`scenario`
+##### <a name="-simp--server--scenario"></a>`scenario`
 
 Data type: `String`
 
@@ -2281,7 +2285,7 @@ The SIMP scenario to apply to the server
 
 Default value: `simplib::lookup('simp::scenario', { 'default_value' => 'simp' })`
 
-##### <a name="classes"></a>`classes`
+##### <a name="-simp--server--classes"></a>`classes`
 
 Data type: `Array[String]`
 
@@ -2290,14 +2294,14 @@ in the ``scenario``
 
 Default value: `[]`
 
-##### <a name="scenario_map"></a>`scenario_map`
+##### <a name="-simp--server--scenario_map"></a>`scenario_map`
 
 Data type: `Hash[String, Array]`
 
 An **internal** parameter used for determining the correct classes to apply
 for the ``scenario``
 
-### <a name="simpserverkickstart"></a>`simp::server::kickstart`
+### <a name="simp--server--kickstart"></a>`simp::server::kickstart`
 
 server for your client hosts.
 
@@ -2308,15 +2312,15 @@ to work but you can use your own if you already have them.
 
 The following parameters are available in the `simp::server::kickstart` class:
 
-* [`data_dir`](#data_dir)
-* [`trusted_nets`](#trusted_nets)
-* [`manage_dhcp`](#manage_dhcp)
-* [`manage_tftpboot`](#manage_tftpboot)
-* [`manage_runpuppet`](#manage_runpuppet)
-* [`manage_simp_client_bootstrap`](#manage_simp_client_bootstrap)
-* [`sslverifyclient`](#sslverifyclient)
+* [`data_dir`](#-simp--server--kickstart--data_dir)
+* [`trusted_nets`](#-simp--server--kickstart--trusted_nets)
+* [`manage_dhcp`](#-simp--server--kickstart--manage_dhcp)
+* [`manage_tftpboot`](#-simp--server--kickstart--manage_tftpboot)
+* [`manage_runpuppet`](#-simp--server--kickstart--manage_runpuppet)
+* [`manage_simp_client_bootstrap`](#-simp--server--kickstart--manage_simp_client_bootstrap)
+* [`sslverifyclient`](#-simp--server--kickstart--sslverifyclient)
 
-##### <a name="data_dir"></a>`data_dir`
+##### <a name="-simp--server--kickstart--data_dir"></a>`data_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2325,7 +2329,7 @@ The location of the web root in which the kickstart directory,
 
 Default value: `'/var/www'`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-simp--server--kickstart--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -2333,23 +2337,23 @@ The networks to allow into the Kickstart server.
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] })`
 
-##### <a name="manage_dhcp"></a>`manage_dhcp`
+##### <a name="-simp--server--kickstart--manage_dhcp"></a>`manage_dhcp`
 
 Data type: `Boolean`
 
 If true, have this node act as a DHCP server.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_tftpboot"></a>`manage_tftpboot`
+##### <a name="-simp--server--kickstart--manage_tftpboot"></a>`manage_tftpboot`
 
 Data type: `Boolean`
 
 If true, have this node act as a TFTP server.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="manage_runpuppet"></a>`manage_runpuppet`
+##### <a name="-simp--server--kickstart--manage_runpuppet"></a>`manage_runpuppet`
 
 Data type: `Boolean`
 
@@ -2361,9 +2365,9 @@ script. See the bootstrap scripts in simp-core under build/distributions
 for examples.
 This parameter will be removed in later versions.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="manage_simp_client_bootstrap"></a>`manage_simp_client_bootstrap`
+##### <a name="-simp--server--kickstart--manage_simp_client_bootstrap"></a>`manage_simp_client_bootstrap`
 
 Data type: `Boolean`
 
@@ -2371,9 +2375,9 @@ If true, generate the simp_client_bootstrap sysv init
 script and simp_client_bootstrap.service systemd
 service unit file in $data_dir/ks.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="sslverifyclient"></a>`sslverifyclient`
+##### <a name="-simp--server--kickstart--sslverifyclient"></a>`sslverifyclient`
 
 Data type: `Enum['require','none']`
 
@@ -2382,7 +2386,7 @@ none, optional_no_ca.
 
 Default value: `'none'`
 
-### <a name="simpserverkickstartsimp_client_bootstrap"></a>`simp::server::kickstart::simp_client_bootstrap`
+### <a name="simp--server--kickstart--simp_client_bootstrap"></a>`simp::server::kickstart::simp_client_bootstrap`
 
 that can be run to bootstrap SIMP clients via Puppet, in a fashion similar to
 `simp bootstrap`, the bootstrap script for the SIMP server.
@@ -2405,26 +2409,26 @@ The three scripts managed by this class are as follows:
 
 The following parameters are available in the `simp::server::kickstart::simp_client_bootstrap` class:
 
-* [`data_dir`](#data_dir)
-* [`directory`](#directory)
-* [`service_root_name`](#service_root_name)
-* [`ntp_servers`](#ntp_servers)
-* [`set_static_hostname`](#set_static_hostname)
-* [`puppet_server`](#puppet_server)
-* [`puppet_ca`](#puppet_ca)
-* [`puppet_ca_port`](#puppet_ca_port)
-* [`puppet_digest_algorithm`](#puppet_digest_algorithm)
-* [`puppet_keylength`](#puppet_keylength)
-* [`puppet_print_stats`](#puppet_print_stats)
-* [`puppet_wait_for_cert`](#puppet_wait_for_cert)
-* [`num_puppet_runs`](#num_puppet_runs)
-* [`initial_retry_interval`](#initial_retry_interval)
-* [`retry_factor`](#retry_factor)
-* [`max_seconds`](#max_seconds)
-* [`reboot_on_failure`](#reboot_on_failure)
-* [`fips`](#fips)
+* [`data_dir`](#-simp--server--kickstart--simp_client_bootstrap--data_dir)
+* [`directory`](#-simp--server--kickstart--simp_client_bootstrap--directory)
+* [`service_root_name`](#-simp--server--kickstart--simp_client_bootstrap--service_root_name)
+* [`ntp_servers`](#-simp--server--kickstart--simp_client_bootstrap--ntp_servers)
+* [`set_static_hostname`](#-simp--server--kickstart--simp_client_bootstrap--set_static_hostname)
+* [`puppet_server`](#-simp--server--kickstart--simp_client_bootstrap--puppet_server)
+* [`puppet_ca`](#-simp--server--kickstart--simp_client_bootstrap--puppet_ca)
+* [`puppet_ca_port`](#-simp--server--kickstart--simp_client_bootstrap--puppet_ca_port)
+* [`puppet_digest_algorithm`](#-simp--server--kickstart--simp_client_bootstrap--puppet_digest_algorithm)
+* [`puppet_keylength`](#-simp--server--kickstart--simp_client_bootstrap--puppet_keylength)
+* [`puppet_print_stats`](#-simp--server--kickstart--simp_client_bootstrap--puppet_print_stats)
+* [`puppet_wait_for_cert`](#-simp--server--kickstart--simp_client_bootstrap--puppet_wait_for_cert)
+* [`num_puppet_runs`](#-simp--server--kickstart--simp_client_bootstrap--num_puppet_runs)
+* [`initial_retry_interval`](#-simp--server--kickstart--simp_client_bootstrap--initial_retry_interval)
+* [`retry_factor`](#-simp--server--kickstart--simp_client_bootstrap--retry_factor)
+* [`max_seconds`](#-simp--server--kickstart--simp_client_bootstrap--max_seconds)
+* [`reboot_on_failure`](#-simp--server--kickstart--simp_client_bootstrap--reboot_on_failure)
+* [`fips`](#-simp--server--kickstart--simp_client_bootstrap--fips)
 
-##### <a name="data_dir"></a>`data_dir`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--data_dir"></a>`data_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2433,7 +2437,7 @@ will reside.  Only used to compute the default for `directory`.
 
 Default value: `simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'})`
 
-##### <a name="directory"></a>`directory`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--directory"></a>`directory`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2442,7 +2446,7 @@ is a subdirectory within `data_dir`.
 
 Default value: `"${data_dir}/ks"`
 
-##### <a name="service_root_name"></a>`service_root_name`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--service_root_name"></a>`service_root_name`
 
 Data type: `String`
 
@@ -2450,7 +2454,7 @@ The root name of the sysv/systemd service scripts.
 
 Default value: `'simp_client_bootstrap'`
 
-##### <a name="ntp_servers"></a>`ntp_servers`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--ntp_servers"></a>`ntp_servers`
 
 Data type: `Variant[Array, Hash]`
 
@@ -2463,7 +2467,7 @@ simp_client_bootstrap scripts to fail to execute.
 
 Default value: `simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] })`
 
-##### <a name="set_static_hostname"></a>`set_static_hostname`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--set_static_hostname"></a>`set_static_hostname`
 
 Data type: `Boolean`
 
@@ -2472,9 +2476,9 @@ hostname.  This prevents problems that can arise when the DHCP
 lease expires in the middle of bootstrap puppet runs.  Is not
 applicable for RedHat/CentOS 6.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="puppet_server"></a>`puppet_server`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_server"></a>`puppet_server`
 
 Data type: `Optional[Simplib::Host]`
 
@@ -2485,7 +2489,7 @@ The FQDN of your Puppet server
 
 Default value: `simplib::lookup('simp_options::puppet::server', { 'default_value' => undef })`
 
-##### <a name="puppet_ca"></a>`puppet_ca`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_ca"></a>`puppet_ca`
 
 Data type: `Optional[Simplib::Host]`
 
@@ -2496,7 +2500,7 @@ The FQDN of your Puppet CA
 
 Default value: `simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef })`
 
-##### <a name="puppet_ca_port"></a>`puppet_ca_port`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_ca_port"></a>`puppet_ca_port`
 
 Data type: `Simplib::Port`
 
@@ -2504,7 +2508,7 @@ The port upon which the Puppet CA is listening.
 
 Default value: `simplib::lookup('simp_options::puppet::ca_port', { 'default_value' => 8141 })`
 
-##### <a name="puppet_digest_algorithm"></a>`puppet_digest_algorithm`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_digest_algorithm"></a>`puppet_digest_algorithm`
 
 Data type: `String`
 
@@ -2513,24 +2517,24 @@ The digest algorithm Puppet uses for file resources and the filebucket
 
 Default value: `'sha256'`
 
-##### <a name="puppet_keylength"></a>`puppet_keylength`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_keylength"></a>`puppet_keylength`
 
 Data type: `Optional[Integer[2048]]`
 
 Puppet certificate keylength.  When unset, value is determined based
 on `$fips`, to work around Puppet bugs in FIPS mode.  (See `$fips`.)
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="puppet_print_stats"></a>`puppet_print_stats`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_print_stats"></a>`puppet_print_stats`
 
 Data type: `Boolean`
 
 If true, print statistics for each client puppet run during bootstrap.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="puppet_wait_for_cert"></a>`puppet_wait_for_cert`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--puppet_wait_for_cert"></a>`puppet_wait_for_cert`
 
 Data type: `Variant[Integer[0],Boolean]`
 
@@ -2543,7 +2547,7 @@ certificate is not presented.
 
 Default value: `10`
 
-##### <a name="num_puppet_runs"></a>`num_puppet_runs`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--num_puppet_runs"></a>`num_puppet_runs`
 
 Data type: `Integer[1]`
 
@@ -2552,7 +2556,7 @@ in order to converge to a stable system configuration.
 
 Default value: `2`
 
-##### <a name="initial_retry_interval"></a>`initial_retry_interval`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--initial_retry_interval"></a>`initial_retry_interval`
 
 Data type: `Integer[1]`
 
@@ -2561,7 +2565,7 @@ agent run.
 
 Default value: `10`
 
-##### <a name="retry_factor"></a>`retry_factor`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--retry_factor"></a>`retry_factor`
 
 Data type: `Float[0.1]`
 
@@ -2574,7 +2578,7 @@ the third retry would occur 10*1.5*1.5 seconds after that, etc.
 
 Default value: `1.5`
 
-##### <a name="max_seconds"></a>`max_seconds`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--max_seconds"></a>`max_seconds`
 
 Data type: `Integer[1]`
 
@@ -2583,7 +2587,7 @@ Script will abort if it does not complete within this allotted time.
 
 Default value: `1800`
 
-##### <a name="reboot_on_failure"></a>`reboot_on_failure`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--reboot_on_failure"></a>`reboot_on_failure`
 
 Data type: `Boolean`
 
@@ -2594,9 +2598,9 @@ for sites containing a large number of clients, the repeated cycle
 of <multiple puppet agent attempts + reboot> may overtax the Puppet
 server.  In this case, disabling this feature may be most appropriate.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="fips"></a>`fips`
+##### <a name="-simp--server--kickstart--simp_client_bootstrap--fips"></a>`fips`
 
 Data type: `Boolean`
 
@@ -2606,7 +2610,7 @@ will be fixed, when Puppet fully supports FIPS mode.
 
 Default value: `simplib::lookup('simp_options::fips', { 'default_value' => false })`
 
-### <a name="simpserverldap"></a>`simp::server::ldap`
+### <a name="simp--server--ldap"></a>`simp::server::ldap`
 
 If you are setting up a consumer LDAP server, remember that the three
 digit RID must be unique or each consumer server that you attach to the
@@ -2616,22 +2620,22 @@ same master.
 
 The following parameters are available in the `simp::server::ldap` class:
 
-* [`is_slave`](#is_slave)
-* [`is_consumer`](#is_consumer)
-* [`rid`](#rid)
-* [`bind_dn`](#bind_dn)
-* [`sync_dn`](#sync_dn)
-* [`enable_lastbind`](#enable_lastbind)
+* [`is_slave`](#-simp--server--ldap--is_slave)
+* [`is_consumer`](#-simp--server--ldap--is_consumer)
+* [`rid`](#-simp--server--ldap--rid)
+* [`bind_dn`](#-simp--server--ldap--bind_dn)
+* [`sync_dn`](#-simp--server--ldap--sync_dn)
+* [`enable_lastbind`](#-simp--server--ldap--enable_lastbind)
 
-##### <a name="is_slave"></a>`is_slave`
+##### <a name="-simp--server--ldap--is_slave"></a>`is_slave`
 
 Data type: `Boolean`
 
 Deprecated in favor of vendor-aligned update: ``is_consumer``
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="is_consumer"></a>`is_consumer`
+##### <a name="-simp--server--ldap--is_consumer"></a>`is_consumer`
 
 Data type: `Boolean`
 
@@ -2645,7 +2649,7 @@ appropriate.
 
 Default value: `$is_slave`
 
-##### <a name="rid"></a>`rid`
+##### <a name="-simp--server--ldap--rid"></a>`rid`
 
 Data type: `Integer[0]`
 
@@ -2654,7 +2658,7 @@ additional information.
 
 Default value: `111`
 
-##### <a name="bind_dn"></a>`bind_dn`
+##### <a name="-simp--server--ldap--bind_dn"></a>`bind_dn`
 
 Data type: `String`
 
@@ -2662,7 +2666,7 @@ Used for setting up sync limits for the bind user.
 
 Default value: `simplib::lookup('simp_options::ldap::bind_dn', { 'default_value' => '' })`
 
-##### <a name="sync_dn"></a>`sync_dn`
+##### <a name="-simp--server--ldap--sync_dn"></a>`sync_dn`
 
 Data type: `String`
 
@@ -2670,7 +2674,7 @@ Used for setting up sync limits for consumer nodes.
 
 Default value: `simplib::lookup('simp_options::ldap::sync_dn', { 'default_value' => '' })`
 
-##### <a name="enable_lastbind"></a>`enable_lastbind`
+##### <a name="-simp--server--ldap--enable_lastbind"></a>`enable_lastbind`
 
 Data type: `Boolean`
 
@@ -2680,9 +2684,9 @@ if you have auditing enabled, this will cause an LDAP audit record
 every time someone logs into any system connected to the LDAP
 server.
 
-Default value: ``false``
+Default value: `false`
 
-### <a name="simpserverrsync_shares"></a>`simp::server::rsync_shares`
+### <a name="simp--server--rsync_shares"></a>`simp::server::rsync_shares`
 
 If you don't have these provided somewhere, many of the modules will not
 function properly.
@@ -2703,12 +2707,12 @@ directory structure is not properly discovered.
 
 The following parameters are available in the `simp::server::rsync_shares` class:
 
-* [`rsync_base`](#rsync_base)
-* [`rsync_environments`](#rsync_environments)
-* [`stunnel`](#stunnel)
-* [`trusted_nets`](#trusted_nets)
+* [`rsync_base`](#-simp--server--rsync_shares--rsync_base)
+* [`rsync_environments`](#-simp--server--rsync_shares--rsync_environments)
+* [`stunnel`](#-simp--server--rsync_shares--stunnel)
+* [`trusted_nets`](#-simp--server--rsync_shares--trusted_nets)
 
-##### <a name="rsync_base"></a>`rsync_base`
+##### <a name="-simp--server--rsync_shares--rsync_base"></a>`rsync_base`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2720,7 +2724,7 @@ a directory per environment that you want to serve to clients.
 
 Default value: `'/var/simp/environments'`
 
-##### <a name="rsync_environments"></a>`rsync_environments`
+##### <a name="-simp--server--rsync_shares--rsync_environments"></a>`rsync_environments`
 
 Data type: `Optional[Hash]`
 
@@ -2731,7 +2735,7 @@ default.
 
 Default value: `$facts['simp_rsync_environments']`
 
-##### <a name="stunnel"></a>`stunnel`
+##### <a name="-simp--server--rsync_shares--stunnel"></a>`stunnel`
 
 Data type: `Boolean`
 
@@ -2740,7 +2744,7 @@ the stunnel'd rsync will be used.
 
 Default value: `simplib::lookup('simp_options::stunnel', { 'default_value' => false })`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-simp--server--rsync_shares--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -2749,7 +2753,7 @@ no effect if ``$use_stunnel`` is ``true``.
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] })`
 
-### <a name="simpserveryum"></a>`simp::server::yum`
+### <a name="simp--server--yum"></a>`simp::server::yum`
 
 the default SIMP server.
 
@@ -2757,11 +2761,11 @@ the default SIMP server.
 
 The following parameters are available in the `simp::server::yum` class:
 
-* [`data_dir`](#data_dir)
-* [`trusted_nets`](#trusted_nets)
-* [`createrepo_ensure`](#createrepo_ensure)
+* [`data_dir`](#-simp--server--yum--data_dir)
+* [`trusted_nets`](#-simp--server--yum--trusted_nets)
+* [`createrepo_ensure`](#-simp--server--yum--createrepo_ensure)
 
-##### <a name="data_dir"></a>`data_dir`
+##### <a name="-simp--server--yum--data_dir"></a>`data_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -2769,7 +2773,7 @@ Data type: `Stdlib::Absolutepath`
 
 Default value: `'/var/www'`
 
-##### <a name="trusted_nets"></a>`trusted_nets`
+##### <a name="-simp--server--yum--trusted_nets"></a>`trusted_nets`
 
 Data type: `Simplib::Netlist`
 
@@ -2777,7 +2781,7 @@ The networks to allow into the YUM server.
 
 Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1','::1'] })`
 
-##### <a name="createrepo_ensure"></a>`createrepo_ensure`
+##### <a name="-simp--server--yum--createrepo_ensure"></a>`createrepo_ensure`
 
 Data type: `String`
 
@@ -2785,7 +2789,7 @@ Data type: `String`
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-### <a name="simpsssdclient"></a>`simp::sssd::client`
+### <a name="simp--sssd--client"></a>`simp::sssd::client`
 
 This should work for most out-of-the-box installations. Otherwise, it serves
 as an example of what you can do to make it work for your environment.
@@ -2794,29 +2798,29 @@ as an example of what you can do to make it work for your environment.
 
 The following parameters are available in the `simp::sssd::client` class:
 
-* [`local_domain`](#local_domain)
-* [`local_domain_options`](#local_domain_options)
-* [`ldap_domain`](#ldap_domain)
-* [`ldap_domain_options`](#ldap_domain_options)
-* [`ldap_server_type`](#ldap_server_type)
-* [`ldap_provider_options`](#ldap_provider_options)
-* [`enumerate_users`](#enumerate_users)
-* [`cache_credentials`](#cache_credentials)
-* [`min_id`](#min_id)
-* [`autofs`](#autofs)
-* [`sudo`](#sudo)
-* [`ssh`](#ssh)
-* [`enable_domain_warn`](#enable_domain_warn)
+* [`local_domain`](#-simp--sssd--client--local_domain)
+* [`local_domain_options`](#-simp--sssd--client--local_domain_options)
+* [`ldap_domain`](#-simp--sssd--client--ldap_domain)
+* [`ldap_domain_options`](#-simp--sssd--client--ldap_domain_options)
+* [`ldap_server_type`](#-simp--sssd--client--ldap_server_type)
+* [`ldap_provider_options`](#-simp--sssd--client--ldap_provider_options)
+* [`enumerate_users`](#-simp--sssd--client--enumerate_users)
+* [`cache_credentials`](#-simp--sssd--client--cache_credentials)
+* [`min_id`](#-simp--sssd--client--min_id)
+* [`autofs`](#-simp--sssd--client--autofs)
+* [`sudo`](#-simp--sssd--client--sudo)
+* [`ssh`](#-simp--sssd--client--ssh)
+* [`enable_domain_warn`](#-simp--sssd--client--enable_domain_warn)
 
-##### <a name="local_domain"></a>`local_domain`
+##### <a name="-simp--sssd--client--local_domain"></a>`local_domain`
 
 Data type: `Boolean`
 
 DEPRECATED:  This param does nothing.  It will be removed in the next version
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="local_domain_options"></a>`local_domain_options`
+##### <a name="-simp--sssd--client--local_domain_options"></a>`local_domain_options`
 
 Data type: `Hash`
 
@@ -2824,7 +2828,7 @@ DEPRECATED:  This param does nothing.  It will be removed in the next version
 
 Default value: `{}`
 
-##### <a name="ldap_domain"></a>`ldap_domain`
+##### <a name="-simp--sssd--client--ldap_domain"></a>`ldap_domain`
 
 Data type: `Boolean`
 
@@ -2834,7 +2838,7 @@ To Enable the LDAP domain you must include 'LDAP' sssd::domains via hiera
 
 Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
 
-##### <a name="ldap_domain_options"></a>`ldap_domain_options`
+##### <a name="-simp--sssd--client--ldap_domain_options"></a>`ldap_domain_options`
 
 Data type: `Hash`
 
@@ -2842,7 +2846,7 @@ A Hash of options to pass directly into the `sssd::domain` defined type
 
 Default value: `{}`
 
-##### <a name="ldap_server_type"></a>`ldap_server_type`
+##### <a name="-simp--sssd--client--ldap_server_type"></a>`ldap_server_type`
 
 Data type: `Variant[Boolean[false], Enum['plain','389ds']]`
 
@@ -2855,9 +2859,9 @@ The type of LDAP server that the system is communicating with
   FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
 * Use `plain` for servers that are 'regular LDAP' like OpenLDAP
 
-Default value: `$ldap_domain`
+Default value: `$ldap_domain ? { false => false, default => undef`
 
-##### <a name="ldap_provider_options"></a>`ldap_provider_options`
+##### <a name="-simp--sssd--client--ldap_provider_options"></a>`ldap_provider_options`
 
 Data type: `Hash`
 
@@ -2865,7 +2869,7 @@ A Hash of options to pass directly into the `sssd::provider::ldap` defined type
 
 Default value: `{}`
 
-##### <a name="enumerate_users"></a>`enumerate_users`
+##### <a name="-simp--sssd--client--enumerate_users"></a>`enumerate_users`
 
 Data type: `Boolean`
 
@@ -2873,17 +2877,17 @@ Have SSSD list and cache all the users that it can find on the remote system
 
 * Take care that you don't overwhelm your LDAP server if you enable this
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="cache_credentials"></a>`cache_credentials`
+##### <a name="-simp--sssd--client--cache_credentials"></a>`cache_credentials`
 
 Data type: `Boolean`
 
 Have SSSD cache the credentials of users that login to the system
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="min_id"></a>`min_id`
+##### <a name="-simp--sssd--client--min_id"></a>`min_id`
 
 Data type: `Integer`
 
@@ -2891,39 +2895,39 @@ The lowest user ID that SSSD should recognize from the remote server
 
 Default value: `500`
 
-##### <a name="autofs"></a>`autofs`
+##### <a name="-simp--sssd--client--autofs"></a>`autofs`
 
 Data type: `Boolean`
 
 Deprecated
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="sudo"></a>`sudo`
-
-Data type: `Boolean`
-
-Deprecated
-
-Default value: ``true``
-
-##### <a name="ssh"></a>`ssh`
+##### <a name="-simp--sssd--client--sudo"></a>`sudo`
 
 Data type: `Boolean`
 
 Deprecated
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="enable_domain_warn"></a>`enable_domain_warn`
+##### <a name="-simp--sssd--client--ssh"></a>`ssh`
+
+Data type: `Boolean`
+
+Deprecated
+
+Default value: `true`
+
+##### <a name="-simp--sssd--client--enable_domain_warn"></a>`enable_domain_warn`
 
 Data type: `Boolean`
 
 Set to true to enable local domain warning
 
-Default value: ``true``
+Default value: `true`
 
-### <a name="simpsudoers"></a>`simp::sudoers`
+### <a name="simp--sudoers"></a>`simp::sudoers`
 
 time.
 
@@ -2937,24 +2941,27 @@ the array together appropriately.
 
 The following parameters are available in the `simp::sudoers` class:
 
-* [`common_aliases`](#common_aliases)
-* [`default_entry`](#default_entry)
+* [`common_aliases`](#-simp--sudoers--common_aliases)
+* [`default_entry`](#-simp--sudoers--default_entry)
 
-##### <a name="common_aliases"></a>`common_aliases`
+##### <a name="-simp--sudoers--common_aliases"></a>`common_aliases`
 
 Data type: `Boolean`
 
 Enable the 'common' aliases from ``simp::suoders::aliases``
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="default_entry"></a>`default_entry`
+##### <a name="-simp--sudoers--default_entry"></a>`default_entry`
 
 Data type: `Array`
 
 The global default entry that should apply to **all** users
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '!visiblepw',
     'always_set_home',
     'match_group_by_gid',
@@ -2972,9 +2979,10 @@ Default value: `[
       LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC \
       LC_PAPER LC_TELEPHONE LC_TIME LC_ALL LANGUAGE LINGUAS \
       _XKB_CHARSET XAUTHORITY"'
-  ]`
+  ]
+```
 
-### <a name="simpsudoersaliases"></a>`simp::sudoers::aliases`
+### <a name="simp--sudoers--aliases"></a>`simp::sudoers::aliases`
 
 Take care not to add anything that can access a root shell
 
@@ -2982,25 +2990,28 @@ Take care not to add anything that can access a root shell
 
 The following parameters are available in the `simp::sudoers::aliases` class:
 
-* [`audit_alias`](#audit_alias)
-* [`delegating_alias`](#delegating_alias)
-* [`drivers_alias`](#drivers_alias)
-* [`locate_alias`](#locate_alias)
-* [`networking_alias`](#networking_alias)
-* [`processes_alias`](#processes_alias)
-* [`services_alias`](#services_alias)
-* [`selinux_alias`](#selinux_alias)
-* [`software_alias`](#software_alias)
-* [`storage_alias`](#storage_alias)
-* [`su_alias`](#su_alias)
+* [`audit_alias`](#-simp--sudoers--aliases--audit_alias)
+* [`delegating_alias`](#-simp--sudoers--aliases--delegating_alias)
+* [`drivers_alias`](#-simp--sudoers--aliases--drivers_alias)
+* [`locate_alias`](#-simp--sudoers--aliases--locate_alias)
+* [`networking_alias`](#-simp--sudoers--aliases--networking_alias)
+* [`processes_alias`](#-simp--sudoers--aliases--processes_alias)
+* [`services_alias`](#-simp--sudoers--aliases--services_alias)
+* [`selinux_alias`](#-simp--sudoers--aliases--selinux_alias)
+* [`software_alias`](#-simp--sudoers--aliases--software_alias)
+* [`storage_alias`](#-simp--sudoers--aliases--storage_alias)
+* [`su_alias`](#-simp--sudoers--aliases--su_alias)
 
-##### <a name="audit_alias"></a>`audit_alias`
+##### <a name="-simp--sudoers--aliases--audit_alias"></a>`audit_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Commands useful for auditing the system
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/bin/cat',
     '/bin/ls',
     '/usr/bin/rvim',
@@ -3017,48 +3028,64 @@ Default value: `[
     '/sbin/route -[venC]',
     '/usr/bin/getent',
     '/usr/bin/tail'
-  ]`
+  ]
+```
 
-##### <a name="delegating_alias"></a>`delegating_alias`
+##### <a name="-simp--sudoers--aliases--delegating_alias"></a>`delegating_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Common system delegation activities
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/usr/sbin/visudo',
     '/bin/chown',
     '/bin/chmod',
     '/bin/chgrp'
-  ]`
+  ]
+```
 
-##### <a name="drivers_alias"></a>`drivers_alias`
+##### <a name="-simp--sudoers--aliases--drivers_alias"></a>`drivers_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Provides the ability to load and unload kernel modules
 
-Default value: `[
-    '/sbin/modprobe'
-  ]`
+Default value:
 
-##### <a name="locate_alias"></a>`locate_alias`
+```puppet
+[
+    '/sbin/modprobe'
+  ]
+```
+
+##### <a name="-simp--sudoers--aliases--locate_alias"></a>`locate_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow a user to update the ``mlocate`` database
 
-Default value: `[
-    '/usr/sbin/updatedb'
-  ]`
+Default value:
 
-##### <a name="networking_alias"></a>`networking_alias`
+```puppet
+[
+    '/usr/sbin/updatedb'
+  ]
+```
+
+##### <a name="-simp--sudoers--aliases--networking_alias"></a>`networking_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow a user to perform common network control activities
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/sbin/route',
     '/sbin/ifconfig',
     '/bin/ping',
@@ -3069,75 +3096,96 @@ Default value: `[
     '/usr/bin/wvdial',
     '/sbin/iwconfig',
     '/sbin/mii-tool'
-  ]`
+  ]
+```
 
-##### <a name="processes_alias"></a>`processes_alias`
+##### <a name="-simp--sudoers--aliases--processes_alias"></a>`processes_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow a user to manage system processes
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/bin/nice',
     '/bin/kill',
     '/usr/bin/kill',
     '/usr/bin/killall'
-  ]`
+  ]
+```
 
-##### <a name="services_alias"></a>`services_alias`
+##### <a name="-simp--sudoers--aliases--services_alias"></a>`services_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow a user to manage system services
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/sbin/service',
     '/sbin/chkconfig'
-  ]`
+  ]
+```
 
-##### <a name="selinux_alias"></a>`selinux_alias`
+##### <a name="-simp--sudoers--aliases--selinux_alias"></a>`selinux_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow a user to modify and debug SELinux
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/sbin/restorecon',
     '/usr/bin/audit2why',
     '/usr/bin/audit2allow',
     '/usr/sbin/getenforce',
     '/usr/sbin/setenforce',
     '/usr/sbin/setsebool'
-  ]`
+  ]
+```
 
-##### <a name="software_alias"></a>`software_alias`
+##### <a name="-simp--sudoers--aliases--software_alias"></a>`software_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow for system software management
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/bin/rpm',
     '/usr/bin/up2date',
     '/usr/bin/yum'
-  ]`
+  ]
+```
 
-##### <a name="storage_alias"></a>`storage_alias`
+##### <a name="-simp--sudoers--aliases--storage_alias"></a>`storage_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow for storage management
 
-Default value: `[
+Default value:
+
+```puppet
+[
     '/sbin/fdisk',
     '/sbin/sfdisk',
     '/sbin/parted',
     '/sbin/partprobe',
     '/bin/mount',
     '/bin/umount'
-  ]`
+  ]
+```
 
-##### <a name="su_alias"></a>`su_alias`
+##### <a name="-simp--sudoers--aliases--su_alias"></a>`su_alias`
 
 Data type: `Array[Stdlib::AbsolutePath]`
 
@@ -3145,7 +3193,7 @@ Allow unfettered access to ``su``
 
 Default value: `[ '/bin/su' ]`
 
-### <a name="simpsysctl"></a>`simp::sysctl`
+### <a name="simp--sysctl"></a>`simp::sysctl`
 
 point of view.
 
@@ -3161,74 +3209,74 @@ Security Related Settings:
 
 The following parameters are available in the `simp::sysctl` class:
 
-* [`net__netfilter__nf_conntrack_max`](#net__netfilter__nf_conntrack_max)
-* [`net__unix__max_dgram_qlen`](#net__unix__max_dgram_qlen)
-* [`net__ipv4__neigh__default__gc_thresh3`](#net__ipv4__neigh__default__gc_thresh3)
-* [`net__ipv4__neigh__default__gc_thresh2`](#net__ipv4__neigh__default__gc_thresh2)
-* [`net__ipv4__neigh__default__gc_thresh1`](#net__ipv4__neigh__default__gc_thresh1)
-* [`net__ipv4__neigh__default__proxy_qlen`](#net__ipv4__neigh__default__proxy_qlen)
-* [`net__ipv4__neigh__default__unres_qlen`](#net__ipv4__neigh__default__unres_qlen)
-* [`net__ipv4__tcp_rmem`](#net__ipv4__tcp_rmem)
-* [`net__ipv4__tcp_wmem`](#net__ipv4__tcp_wmem)
-* [`net__ipv4__tcp_fin_timeout`](#net__ipv4__tcp_fin_timeout)
-* [`net__ipv4__tcp_rfc1337`](#net__ipv4__tcp_rfc1337)
-* [`net__ipv4__tcp_keepalive_time`](#net__ipv4__tcp_keepalive_time)
-* [`net__ipv4__tcp_mtu_probing`](#net__ipv4__tcp_mtu_probing)
-* [`net__ipv4__tcp_no_metrics_save`](#net__ipv4__tcp_no_metrics_save)
-* [`net__core__rmem_max`](#net__core__rmem_max)
-* [`net__core__wmem_max`](#net__core__wmem_max)
-* [`net__core__optmem_max`](#net__core__optmem_max)
-* [`net__core__netdev_max_backlog`](#net__core__netdev_max_backlog)
-* [`net__core__somaxconn`](#net__core__somaxconn)
-* [`net__ipv4__tcp_tw_reuse`](#net__ipv4__tcp_tw_reuse)
-* [`fs__inotify__max_user_watches`](#fs__inotify__max_user_watches)
-* [`fs__suid_dumpable`](#fs__suid_dumpable)
-* [`kernel__core_pattern`](#kernel__core_pattern)
-* [`kernel__core_pipe_limit`](#kernel__core_pipe_limit)
-* [`kernel__core_uses_pid`](#kernel__core_uses_pid)
-* [`kernel__dmesg_restrict`](#kernel__dmesg_restrict)
-* [`kernel__exec_shield`](#kernel__exec_shield)
-* [`kernel__panic`](#kernel__panic)
-* [`kernel__randomize_va_space`](#kernel__randomize_va_space)
-* [`kernel__sysrq`](#kernel__sysrq)
-* [`net__ipv4__conf__all__accept_redirects`](#net__ipv4__conf__all__accept_redirects)
-* [`net__ipv4__conf__all__accept_source_route`](#net__ipv4__conf__all__accept_source_route)
-* [`net__ipv4__conf__all__log_martians`](#net__ipv4__conf__all__log_martians)
-* [`net__ipv4__conf__all__rp_filter`](#net__ipv4__conf__all__rp_filter)
-* [`net__ipv4__conf__all__secure_redirects`](#net__ipv4__conf__all__secure_redirects)
-* [`net__ipv4__conf__all__send_redirects`](#net__ipv4__conf__all__send_redirects)
-* [`net__ipv4__conf__default__accept_redirects`](#net__ipv4__conf__default__accept_redirects)
-* [`net__ipv4__conf__default__accept_source_route`](#net__ipv4__conf__default__accept_source_route)
-* [`net__ipv4__conf__default__log_martians`](#net__ipv4__conf__default__log_martians)
-* [`net__ipv4__conf__default__rp_filter`](#net__ipv4__conf__default__rp_filter)
-* [`net__ipv4__conf__default__secure_redirects`](#net__ipv4__conf__default__secure_redirects)
-* [`net__ipv4__conf__default__send_redirects`](#net__ipv4__conf__default__send_redirects)
-* [`net__ipv4__icmp_echo_ignore_broadcasts`](#net__ipv4__icmp_echo_ignore_broadcasts)
-* [`net__ipv4__icmp_ignore_bogus_error_responses`](#net__ipv4__icmp_ignore_bogus_error_responses)
-* [`net__ipv4__tcp_challenge_ack_limit`](#net__ipv4__tcp_challenge_ack_limit)
-* [`net__ipv4__tcp_max_syn_backlog`](#net__ipv4__tcp_max_syn_backlog)
-* [`net__ipv4__tcp_syncookies`](#net__ipv4__tcp_syncookies)
-* [`net__ipv6__conf__all__accept_redirects`](#net__ipv6__conf__all__accept_redirects)
-* [`net__ipv6__conf__all__accept_source_route`](#net__ipv6__conf__all__accept_source_route)
-* [`net__ipv6__conf__all__autoconf`](#net__ipv6__conf__all__autoconf)
-* [`net__ipv6__conf__all__forwarding`](#net__ipv6__conf__all__forwarding)
-* [`net__ipv6__conf__all__accept_ra`](#net__ipv6__conf__all__accept_ra)
-* [`net__ipv6__conf__default__accept_ra`](#net__ipv6__conf__default__accept_ra)
-* [`net__ipv6__conf__default__accept_ra_defrtr`](#net__ipv6__conf__default__accept_ra_defrtr)
-* [`net__ipv6__conf__default__accept_ra_pinfo`](#net__ipv6__conf__default__accept_ra_pinfo)
-* [`net__ipv6__conf__default__accept_ra_rtr_pref`](#net__ipv6__conf__default__accept_ra_rtr_pref)
-* [`net__ipv6__conf__default__accept_redirects`](#net__ipv6__conf__default__accept_redirects)
-* [`net__ipv6__conf__default__accept_source_route`](#net__ipv6__conf__default__accept_source_route)
-* [`net__ipv6__conf__default__autoconf`](#net__ipv6__conf__default__autoconf)
-* [`net__ipv6__conf__default__dad_transmits`](#net__ipv6__conf__default__dad_transmits)
-* [`net__ipv6__conf__default__max_addresses`](#net__ipv6__conf__default__max_addresses)
-* [`net__ipv6__conf__default__router_solicitations`](#net__ipv6__conf__default__router_solicitations)
-* [`core_dumps`](#core_dumps)
-* [`core_dump_dir`](#core_dump_dir)
-* [`pam`](#pam)
-* [`ipv6`](#ipv6)
+* [`net__netfilter__nf_conntrack_max`](#-simp--sysctl--net__netfilter__nf_conntrack_max)
+* [`net__unix__max_dgram_qlen`](#-simp--sysctl--net__unix__max_dgram_qlen)
+* [`net__ipv4__neigh__default__gc_thresh3`](#-simp--sysctl--net__ipv4__neigh__default__gc_thresh3)
+* [`net__ipv4__neigh__default__gc_thresh2`](#-simp--sysctl--net__ipv4__neigh__default__gc_thresh2)
+* [`net__ipv4__neigh__default__gc_thresh1`](#-simp--sysctl--net__ipv4__neigh__default__gc_thresh1)
+* [`net__ipv4__neigh__default__proxy_qlen`](#-simp--sysctl--net__ipv4__neigh__default__proxy_qlen)
+* [`net__ipv4__neigh__default__unres_qlen`](#-simp--sysctl--net__ipv4__neigh__default__unres_qlen)
+* [`net__ipv4__tcp_rmem`](#-simp--sysctl--net__ipv4__tcp_rmem)
+* [`net__ipv4__tcp_wmem`](#-simp--sysctl--net__ipv4__tcp_wmem)
+* [`net__ipv4__tcp_fin_timeout`](#-simp--sysctl--net__ipv4__tcp_fin_timeout)
+* [`net__ipv4__tcp_rfc1337`](#-simp--sysctl--net__ipv4__tcp_rfc1337)
+* [`net__ipv4__tcp_keepalive_time`](#-simp--sysctl--net__ipv4__tcp_keepalive_time)
+* [`net__ipv4__tcp_mtu_probing`](#-simp--sysctl--net__ipv4__tcp_mtu_probing)
+* [`net__ipv4__tcp_no_metrics_save`](#-simp--sysctl--net__ipv4__tcp_no_metrics_save)
+* [`net__core__rmem_max`](#-simp--sysctl--net__core__rmem_max)
+* [`net__core__wmem_max`](#-simp--sysctl--net__core__wmem_max)
+* [`net__core__optmem_max`](#-simp--sysctl--net__core__optmem_max)
+* [`net__core__netdev_max_backlog`](#-simp--sysctl--net__core__netdev_max_backlog)
+* [`net__core__somaxconn`](#-simp--sysctl--net__core__somaxconn)
+* [`net__ipv4__tcp_tw_reuse`](#-simp--sysctl--net__ipv4__tcp_tw_reuse)
+* [`fs__inotify__max_user_watches`](#-simp--sysctl--fs__inotify__max_user_watches)
+* [`fs__suid_dumpable`](#-simp--sysctl--fs__suid_dumpable)
+* [`kernel__core_pattern`](#-simp--sysctl--kernel__core_pattern)
+* [`kernel__core_pipe_limit`](#-simp--sysctl--kernel__core_pipe_limit)
+* [`kernel__core_uses_pid`](#-simp--sysctl--kernel__core_uses_pid)
+* [`kernel__dmesg_restrict`](#-simp--sysctl--kernel__dmesg_restrict)
+* [`kernel__exec_shield`](#-simp--sysctl--kernel__exec_shield)
+* [`kernel__panic`](#-simp--sysctl--kernel__panic)
+* [`kernel__randomize_va_space`](#-simp--sysctl--kernel__randomize_va_space)
+* [`kernel__sysrq`](#-simp--sysctl--kernel__sysrq)
+* [`net__ipv4__conf__all__accept_redirects`](#-simp--sysctl--net__ipv4__conf__all__accept_redirects)
+* [`net__ipv4__conf__all__accept_source_route`](#-simp--sysctl--net__ipv4__conf__all__accept_source_route)
+* [`net__ipv4__conf__all__log_martians`](#-simp--sysctl--net__ipv4__conf__all__log_martians)
+* [`net__ipv4__conf__all__rp_filter`](#-simp--sysctl--net__ipv4__conf__all__rp_filter)
+* [`net__ipv4__conf__all__secure_redirects`](#-simp--sysctl--net__ipv4__conf__all__secure_redirects)
+* [`net__ipv4__conf__all__send_redirects`](#-simp--sysctl--net__ipv4__conf__all__send_redirects)
+* [`net__ipv4__conf__default__accept_redirects`](#-simp--sysctl--net__ipv4__conf__default__accept_redirects)
+* [`net__ipv4__conf__default__accept_source_route`](#-simp--sysctl--net__ipv4__conf__default__accept_source_route)
+* [`net__ipv4__conf__default__log_martians`](#-simp--sysctl--net__ipv4__conf__default__log_martians)
+* [`net__ipv4__conf__default__rp_filter`](#-simp--sysctl--net__ipv4__conf__default__rp_filter)
+* [`net__ipv4__conf__default__secure_redirects`](#-simp--sysctl--net__ipv4__conf__default__secure_redirects)
+* [`net__ipv4__conf__default__send_redirects`](#-simp--sysctl--net__ipv4__conf__default__send_redirects)
+* [`net__ipv4__icmp_echo_ignore_broadcasts`](#-simp--sysctl--net__ipv4__icmp_echo_ignore_broadcasts)
+* [`net__ipv4__icmp_ignore_bogus_error_responses`](#-simp--sysctl--net__ipv4__icmp_ignore_bogus_error_responses)
+* [`net__ipv4__tcp_challenge_ack_limit`](#-simp--sysctl--net__ipv4__tcp_challenge_ack_limit)
+* [`net__ipv4__tcp_max_syn_backlog`](#-simp--sysctl--net__ipv4__tcp_max_syn_backlog)
+* [`net__ipv4__tcp_syncookies`](#-simp--sysctl--net__ipv4__tcp_syncookies)
+* [`net__ipv6__conf__all__accept_redirects`](#-simp--sysctl--net__ipv6__conf__all__accept_redirects)
+* [`net__ipv6__conf__all__accept_source_route`](#-simp--sysctl--net__ipv6__conf__all__accept_source_route)
+* [`net__ipv6__conf__all__autoconf`](#-simp--sysctl--net__ipv6__conf__all__autoconf)
+* [`net__ipv6__conf__all__forwarding`](#-simp--sysctl--net__ipv6__conf__all__forwarding)
+* [`net__ipv6__conf__all__accept_ra`](#-simp--sysctl--net__ipv6__conf__all__accept_ra)
+* [`net__ipv6__conf__default__accept_ra`](#-simp--sysctl--net__ipv6__conf__default__accept_ra)
+* [`net__ipv6__conf__default__accept_ra_defrtr`](#-simp--sysctl--net__ipv6__conf__default__accept_ra_defrtr)
+* [`net__ipv6__conf__default__accept_ra_pinfo`](#-simp--sysctl--net__ipv6__conf__default__accept_ra_pinfo)
+* [`net__ipv6__conf__default__accept_ra_rtr_pref`](#-simp--sysctl--net__ipv6__conf__default__accept_ra_rtr_pref)
+* [`net__ipv6__conf__default__accept_redirects`](#-simp--sysctl--net__ipv6__conf__default__accept_redirects)
+* [`net__ipv6__conf__default__accept_source_route`](#-simp--sysctl--net__ipv6__conf__default__accept_source_route)
+* [`net__ipv6__conf__default__autoconf`](#-simp--sysctl--net__ipv6__conf__default__autoconf)
+* [`net__ipv6__conf__default__dad_transmits`](#-simp--sysctl--net__ipv6__conf__default__dad_transmits)
+* [`net__ipv6__conf__default__max_addresses`](#-simp--sysctl--net__ipv6__conf__default__max_addresses)
+* [`net__ipv6__conf__default__router_solicitations`](#-simp--sysctl--net__ipv6__conf__default__router_solicitations)
+* [`core_dumps`](#-simp--sysctl--core_dumps)
+* [`core_dump_dir`](#-simp--sysctl--core_dump_dir)
+* [`pam`](#-simp--sysctl--pam)
+* [`ipv6`](#-simp--sysctl--ipv6)
 
-##### <a name="net__netfilter__nf_conntrack_max"></a>`net__netfilter__nf_conntrack_max`
+##### <a name="-simp--sysctl--net__netfilter__nf_conntrack_max"></a>`net__netfilter__nf_conntrack_max`
 
 Data type: `Integer[0]`
 
@@ -3236,7 +3284,7 @@ Data type: `Integer[0]`
 
 Default value: `655360`
 
-##### <a name="net__unix__max_dgram_qlen"></a>`net__unix__max_dgram_qlen`
+##### <a name="-simp--sysctl--net__unix__max_dgram_qlen"></a>`net__unix__max_dgram_qlen`
 
 Data type: `Integer[0]`
 
@@ -3244,7 +3292,7 @@ Data type: `Integer[0]`
 
 Default value: `50`
 
-##### <a name="net__ipv4__neigh__default__gc_thresh3"></a>`net__ipv4__neigh__default__gc_thresh3`
+##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh3"></a>`net__ipv4__neigh__default__gc_thresh3`
 
 Data type: `Integer[0]`
 
@@ -3252,7 +3300,7 @@ Data type: `Integer[0]`
 
 Default value: `2048`
 
-##### <a name="net__ipv4__neigh__default__gc_thresh2"></a>`net__ipv4__neigh__default__gc_thresh2`
+##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh2"></a>`net__ipv4__neigh__default__gc_thresh2`
 
 Data type: `Integer[0]`
 
@@ -3260,7 +3308,7 @@ Data type: `Integer[0]`
 
 Default value: `1024`
 
-##### <a name="net__ipv4__neigh__default__gc_thresh1"></a>`net__ipv4__neigh__default__gc_thresh1`
+##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh1"></a>`net__ipv4__neigh__default__gc_thresh1`
 
 Data type: `Integer[0]`
 
@@ -3268,7 +3316,7 @@ Data type: `Integer[0]`
 
 Default value: `32`
 
-##### <a name="net__ipv4__neigh__default__proxy_qlen"></a>`net__ipv4__neigh__default__proxy_qlen`
+##### <a name="-simp--sysctl--net__ipv4__neigh__default__proxy_qlen"></a>`net__ipv4__neigh__default__proxy_qlen`
 
 Data type: `Integer[0]`
 
@@ -3276,7 +3324,7 @@ Data type: `Integer[0]`
 
 Default value: `92`
 
-##### <a name="net__ipv4__neigh__default__unres_qlen"></a>`net__ipv4__neigh__default__unres_qlen`
+##### <a name="-simp--sysctl--net__ipv4__neigh__default__unres_qlen"></a>`net__ipv4__neigh__default__unres_qlen`
 
 Data type: `Integer[0]`
 
@@ -3284,7 +3332,7 @@ Data type: `Integer[0]`
 
 Default value: `6`
 
-##### <a name="net__ipv4__tcp_rmem"></a>`net__ipv4__tcp_rmem`
+##### <a name="-simp--sysctl--net__ipv4__tcp_rmem"></a>`net__ipv4__tcp_rmem`
 
 Data type: `Array[Integer,3,3]`
 
@@ -3292,7 +3340,7 @@ Data type: `Array[Integer,3,3]`
 
 Default value: `[4096,98304,16777216]`
 
-##### <a name="net__ipv4__tcp_wmem"></a>`net__ipv4__tcp_wmem`
+##### <a name="-simp--sysctl--net__ipv4__tcp_wmem"></a>`net__ipv4__tcp_wmem`
 
 Data type: `Array[Integer,3,3]`
 
@@ -3300,7 +3348,7 @@ Data type: `Array[Integer,3,3]`
 
 Default value: `[4096,65535,16777216]`
 
-##### <a name="net__ipv4__tcp_fin_timeout"></a>`net__ipv4__tcp_fin_timeout`
+##### <a name="-simp--sysctl--net__ipv4__tcp_fin_timeout"></a>`net__ipv4__tcp_fin_timeout`
 
 Data type: `Integer[0]`
 
@@ -3308,7 +3356,7 @@ Data type: `Integer[0]`
 
 Default value: `30`
 
-##### <a name="net__ipv4__tcp_rfc1337"></a>`net__ipv4__tcp_rfc1337`
+##### <a name="-simp--sysctl--net__ipv4__tcp_rfc1337"></a>`net__ipv4__tcp_rfc1337`
 
 Data type: `Integer[0,1]`
 
@@ -3316,7 +3364,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__tcp_keepalive_time"></a>`net__ipv4__tcp_keepalive_time`
+##### <a name="-simp--sysctl--net__ipv4__tcp_keepalive_time"></a>`net__ipv4__tcp_keepalive_time`
 
 Data type: `Integer[0]`
 
@@ -3324,7 +3372,7 @@ Data type: `Integer[0]`
 
 Default value: `3600`
 
-##### <a name="net__ipv4__tcp_mtu_probing"></a>`net__ipv4__tcp_mtu_probing`
+##### <a name="-simp--sysctl--net__ipv4__tcp_mtu_probing"></a>`net__ipv4__tcp_mtu_probing`
 
 Data type: `Integer[0,2]`
 
@@ -3332,7 +3380,7 @@ Data type: `Integer[0,2]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__tcp_no_metrics_save"></a>`net__ipv4__tcp_no_metrics_save`
+##### <a name="-simp--sysctl--net__ipv4__tcp_no_metrics_save"></a>`net__ipv4__tcp_no_metrics_save`
 
 Data type: `Integer[0,1]`
 
@@ -3340,7 +3388,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__core__rmem_max"></a>`net__core__rmem_max`
+##### <a name="-simp--sysctl--net__core__rmem_max"></a>`net__core__rmem_max`
 
 Data type: `Integer[0]`
 
@@ -3348,7 +3396,7 @@ Data type: `Integer[0]`
 
 Default value: `16777216`
 
-##### <a name="net__core__wmem_max"></a>`net__core__wmem_max`
+##### <a name="-simp--sysctl--net__core__wmem_max"></a>`net__core__wmem_max`
 
 Data type: `Integer[0]`
 
@@ -3356,7 +3404,7 @@ Data type: `Integer[0]`
 
 Default value: `16777216`
 
-##### <a name="net__core__optmem_max"></a>`net__core__optmem_max`
+##### <a name="-simp--sysctl--net__core__optmem_max"></a>`net__core__optmem_max`
 
 Data type: `Integer[0]`
 
@@ -3364,7 +3412,7 @@ Data type: `Integer[0]`
 
 Default value: `20480`
 
-##### <a name="net__core__netdev_max_backlog"></a>`net__core__netdev_max_backlog`
+##### <a name="-simp--sysctl--net__core__netdev_max_backlog"></a>`net__core__netdev_max_backlog`
 
 Data type: `Integer[0]`
 
@@ -3372,7 +3420,7 @@ Data type: `Integer[0]`
 
 Default value: `2048`
 
-##### <a name="net__core__somaxconn"></a>`net__core__somaxconn`
+##### <a name="-simp--sysctl--net__core__somaxconn"></a>`net__core__somaxconn`
 
 Data type: `Integer[0]`
 
@@ -3380,7 +3428,7 @@ Data type: `Integer[0]`
 
 Default value: `2048`
 
-##### <a name="net__ipv4__tcp_tw_reuse"></a>`net__ipv4__tcp_tw_reuse`
+##### <a name="-simp--sysctl--net__ipv4__tcp_tw_reuse"></a>`net__ipv4__tcp_tw_reuse`
 
 Data type: `Integer[0,1]`
 
@@ -3388,7 +3436,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="fs__inotify__max_user_watches"></a>`fs__inotify__max_user_watches`
+##### <a name="-simp--sysctl--fs__inotify__max_user_watches"></a>`fs__inotify__max_user_watches`
 
 Data type: `Integer[8912]`
 
@@ -3397,7 +3445,7 @@ systemctl error: "Not Enough Disk Space" caused when it reaches limit.
 
 Default value: `102400`
 
-##### <a name="fs__suid_dumpable"></a>`fs__suid_dumpable`
+##### <a name="-simp--sysctl--fs__suid_dumpable"></a>`fs__suid_dumpable`
 
 Data type: `Integer[0,1]`
 
@@ -3405,7 +3453,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="kernel__core_pattern"></a>`kernel__core_pattern`
+##### <a name="-simp--sysctl--kernel__core_pattern"></a>`kernel__core_pattern`
 
 Data type: `String`
 
@@ -3413,7 +3461,7 @@ If you change this, make sure you create the leading directories!
 
 Default value: `'/var/core/%u_%g_%p_%t_%h_%e.core'`
 
-##### <a name="kernel__core_pipe_limit"></a>`kernel__core_pipe_limit`
+##### <a name="-simp--sysctl--kernel__core_pipe_limit"></a>`kernel__core_pipe_limit`
 
 Data type: `Integer[0]`
 
@@ -3421,7 +3469,7 @@ Data type: `Integer[0]`
 
 Default value: `0`
 
-##### <a name="kernel__core_uses_pid"></a>`kernel__core_uses_pid`
+##### <a name="-simp--sysctl--kernel__core_uses_pid"></a>`kernel__core_uses_pid`
 
 Data type: `Integer[0,1]`
 
@@ -3429,7 +3477,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="kernel__dmesg_restrict"></a>`kernel__dmesg_restrict`
+##### <a name="-simp--sysctl--kernel__dmesg_restrict"></a>`kernel__dmesg_restrict`
 
 Data type: `Integer[0,1]`
 
@@ -3437,7 +3485,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="kernel__exec_shield"></a>`kernel__exec_shield`
+##### <a name="-simp--sysctl--kernel__exec_shield"></a>`kernel__exec_shield`
 
 Data type: `Integer[0,1]`
 
@@ -3445,7 +3493,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="kernel__panic"></a>`kernel__panic`
+##### <a name="-simp--sysctl--kernel__panic"></a>`kernel__panic`
 
 Data type: `Integer[0]`
 
@@ -3453,7 +3501,7 @@ Data type: `Integer[0]`
 
 Default value: `10`
 
-##### <a name="kernel__randomize_va_space"></a>`kernel__randomize_va_space`
+##### <a name="-simp--sysctl--kernel__randomize_va_space"></a>`kernel__randomize_va_space`
 
 Data type: `Integer[0,2]`
 
@@ -3461,7 +3509,7 @@ Data type: `Integer[0,2]`
 
 Default value: `2`
 
-##### <a name="kernel__sysrq"></a>`kernel__sysrq`
+##### <a name="-simp--sysctl--kernel__sysrq"></a>`kernel__sysrq`
 
 Data type: `Integer[0]`
 
@@ -3469,7 +3517,7 @@ Data type: `Integer[0]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__all__accept_redirects"></a>`net__ipv4__conf__all__accept_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__accept_redirects"></a>`net__ipv4__conf__all__accept_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3477,7 +3525,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__all__accept_source_route"></a>`net__ipv4__conf__all__accept_source_route`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__accept_source_route"></a>`net__ipv4__conf__all__accept_source_route`
 
 Data type: `Integer[0,1]`
 
@@ -3485,7 +3533,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__all__log_martians"></a>`net__ipv4__conf__all__log_martians`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__log_martians"></a>`net__ipv4__conf__all__log_martians`
 
 Data type: `Integer[0,1]`
 
@@ -3493,7 +3541,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__conf__all__rp_filter"></a>`net__ipv4__conf__all__rp_filter`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__rp_filter"></a>`net__ipv4__conf__all__rp_filter`
 
 Data type: `Integer[0,2]`
 
@@ -3501,7 +3549,7 @@ Data type: `Integer[0,2]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__conf__all__secure_redirects"></a>`net__ipv4__conf__all__secure_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__secure_redirects"></a>`net__ipv4__conf__all__secure_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3509,7 +3557,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__all__send_redirects"></a>`net__ipv4__conf__all__send_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__all__send_redirects"></a>`net__ipv4__conf__all__send_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3517,7 +3565,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__default__accept_redirects"></a>`net__ipv4__conf__default__accept_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__accept_redirects"></a>`net__ipv4__conf__default__accept_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3525,7 +3573,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__default__accept_source_route"></a>`net__ipv4__conf__default__accept_source_route`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__accept_source_route"></a>`net__ipv4__conf__default__accept_source_route`
 
 Data type: `Integer[0,1]`
 
@@ -3533,7 +3581,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__default__log_martians"></a>`net__ipv4__conf__default__log_martians`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__log_martians"></a>`net__ipv4__conf__default__log_martians`
 
 Data type: `Integer[0,1]`
 
@@ -3541,7 +3589,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__conf__default__rp_filter"></a>`net__ipv4__conf__default__rp_filter`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__rp_filter"></a>`net__ipv4__conf__default__rp_filter`
 
 Data type: `Integer[0,2]`
 
@@ -3549,7 +3597,7 @@ Data type: `Integer[0,2]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__conf__default__secure_redirects"></a>`net__ipv4__conf__default__secure_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__secure_redirects"></a>`net__ipv4__conf__default__secure_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3557,7 +3605,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__conf__default__send_redirects"></a>`net__ipv4__conf__default__send_redirects`
+##### <a name="-simp--sysctl--net__ipv4__conf__default__send_redirects"></a>`net__ipv4__conf__default__send_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3565,7 +3613,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv4__icmp_echo_ignore_broadcasts"></a>`net__ipv4__icmp_echo_ignore_broadcasts`
+##### <a name="-simp--sysctl--net__ipv4__icmp_echo_ignore_broadcasts"></a>`net__ipv4__icmp_echo_ignore_broadcasts`
 
 Data type: `Integer[0,1]`
 
@@ -3573,7 +3621,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__icmp_ignore_bogus_error_responses"></a>`net__ipv4__icmp_ignore_bogus_error_responses`
+##### <a name="-simp--sysctl--net__ipv4__icmp_ignore_bogus_error_responses"></a>`net__ipv4__icmp_ignore_bogus_error_responses`
 
 Data type: `Integer[0,1]`
 
@@ -3581,7 +3629,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv4__tcp_challenge_ack_limit"></a>`net__ipv4__tcp_challenge_ack_limit`
+##### <a name="-simp--sysctl--net__ipv4__tcp_challenge_ack_limit"></a>`net__ipv4__tcp_challenge_ack_limit`
 
 Data type: `Integer[0]`
 
@@ -3589,7 +3637,7 @@ Data type: `Integer[0]`
 
 Default value: `2147483647`
 
-##### <a name="net__ipv4__tcp_max_syn_backlog"></a>`net__ipv4__tcp_max_syn_backlog`
+##### <a name="-simp--sysctl--net__ipv4__tcp_max_syn_backlog"></a>`net__ipv4__tcp_max_syn_backlog`
 
 Data type: `Integer[1]`
 
@@ -3597,7 +3645,7 @@ Data type: `Integer[1]`
 
 Default value: `4096`
 
-##### <a name="net__ipv4__tcp_syncookies"></a>`net__ipv4__tcp_syncookies`
+##### <a name="-simp--sysctl--net__ipv4__tcp_syncookies"></a>`net__ipv4__tcp_syncookies`
 
 Data type: `Integer[0,1]`
 
@@ -3605,7 +3653,7 @@ Data type: `Integer[0,1]`
 
 Default value: `1`
 
-##### <a name="net__ipv6__conf__all__accept_redirects"></a>`net__ipv6__conf__all__accept_redirects`
+##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_redirects"></a>`net__ipv6__conf__all__accept_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3613,7 +3661,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__all__accept_source_route"></a>`net__ipv6__conf__all__accept_source_route`
+##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_source_route"></a>`net__ipv6__conf__all__accept_source_route`
 
 Data type: `Integer[0,1]`
 
@@ -3621,7 +3669,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__all__autoconf"></a>`net__ipv6__conf__all__autoconf`
+##### <a name="-simp--sysctl--net__ipv6__conf__all__autoconf"></a>`net__ipv6__conf__all__autoconf`
 
 Data type: `Integer[0,1]`
 
@@ -3629,7 +3677,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__all__forwarding"></a>`net__ipv6__conf__all__forwarding`
+##### <a name="-simp--sysctl--net__ipv6__conf__all__forwarding"></a>`net__ipv6__conf__all__forwarding`
 
 Data type: `Integer[0,1]`
 
@@ -3637,7 +3685,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__all__accept_ra"></a>`net__ipv6__conf__all__accept_ra`
+##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_ra"></a>`net__ipv6__conf__all__accept_ra`
 
 Data type: `Integer[0,1]`
 
@@ -3645,7 +3693,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_ra"></a>`net__ipv6__conf__default__accept_ra`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra"></a>`net__ipv6__conf__default__accept_ra`
 
 Data type: `Integer[0,1]`
 
@@ -3653,7 +3701,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_ra_defrtr"></a>`net__ipv6__conf__default__accept_ra_defrtr`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_defrtr"></a>`net__ipv6__conf__default__accept_ra_defrtr`
 
 Data type: `Integer[0,1]`
 
@@ -3661,7 +3709,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_ra_pinfo"></a>`net__ipv6__conf__default__accept_ra_pinfo`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_pinfo"></a>`net__ipv6__conf__default__accept_ra_pinfo`
 
 Data type: `Integer[0,1]`
 
@@ -3669,7 +3717,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_ra_rtr_pref"></a>`net__ipv6__conf__default__accept_ra_rtr_pref`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_rtr_pref"></a>`net__ipv6__conf__default__accept_ra_rtr_pref`
 
 Data type: `Integer[0,1]`
 
@@ -3677,7 +3725,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_redirects"></a>`net__ipv6__conf__default__accept_redirects`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_redirects"></a>`net__ipv6__conf__default__accept_redirects`
 
 Data type: `Integer[0,1]`
 
@@ -3685,7 +3733,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__accept_source_route"></a>`net__ipv6__conf__default__accept_source_route`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_source_route"></a>`net__ipv6__conf__default__accept_source_route`
 
 Data type: `Integer[0,1]`
 
@@ -3693,7 +3741,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__autoconf"></a>`net__ipv6__conf__default__autoconf`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__autoconf"></a>`net__ipv6__conf__default__autoconf`
 
 Data type: `Integer[0,1]`
 
@@ -3701,7 +3749,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__dad_transmits"></a>`net__ipv6__conf__default__dad_transmits`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__dad_transmits"></a>`net__ipv6__conf__default__dad_transmits`
 
 Data type: `Integer[0,1]`
 
@@ -3709,7 +3757,7 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="net__ipv6__conf__default__max_addresses"></a>`net__ipv6__conf__default__max_addresses`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__max_addresses"></a>`net__ipv6__conf__default__max_addresses`
 
 Data type: `Integer[0]`
 
@@ -3717,7 +3765,7 @@ Data type: `Integer[0]`
 
 Default value: `1`
 
-##### <a name="net__ipv6__conf__default__router_solicitations"></a>`net__ipv6__conf__default__router_solicitations`
+##### <a name="-simp--sysctl--net__ipv6__conf__default__router_solicitations"></a>`net__ipv6__conf__default__router_solicitations`
 
 Data type: `Integer[0,1]`
 
@@ -3725,15 +3773,15 @@ Data type: `Integer[0,1]`
 
 Default value: `0`
 
-##### <a name="core_dumps"></a>`core_dumps`
+##### <a name="-simp--sysctl--core_dumps"></a>`core_dumps`
 
 Data type: `Boolean`
 
 If true, enable core dumps on the system.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="core_dump_dir"></a>`core_dump_dir`
+##### <a name="-simp--sysctl--core_dump_dir"></a>`core_dump_dir`
 
 Data type: `Stdlib::AbsolutePath`
 
@@ -3741,7 +3789,7 @@ Directory to place core dumps
 
 Default value: `'/var/core'`
 
-##### <a name="pam"></a>`pam`
+##### <a name="-simp--sysctl--pam"></a>`pam`
 
 Data type: `Boolean`
 
@@ -3750,19 +3798,19 @@ As set, meets CCE-27033-0
 
 Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
 
-##### <a name="ipv6"></a>`ipv6`
+##### <a name="-simp--sysctl--ipv6"></a>`ipv6`
 
 Data type: `Optional[Boolean]`
 
 Set to ``false`` to disable IPv6 on your system via ``sysctl``
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="simpversion"></a>`simp::version`
+### <a name="simp--version"></a>`simp::version`
 
 Places SIMP version related information on the filesystem
 
-### <a name="simpyumrepointernet_simp"></a>`simp::yum::repo::internet_simp`
+### <a name="simp--yum--repo--internet_simp"></a>`simp::yum::repo::internet_simp`
 
 Configure yum to use the internet public repository for SIMP
 
@@ -3770,13 +3818,13 @@ Configure yum to use the internet public repository for SIMP
 
 The following parameters are available in the `simp::yum::repo::internet_simp` class:
 
-* [`simp_repos_package`](#simp_repos_package)
-* [`simp_repos_package_url`](#simp_repos_package_url)
-* [`package_ensure`](#package_ensure)
-* [`simp_release_version`](#simp_release_version)
-* [`simp_release_type`](#simp_release_type)
+* [`simp_repos_package`](#-simp--yum--repo--internet_simp--simp_repos_package)
+* [`simp_repos_package_url`](#-simp--yum--repo--internet_simp--simp_repos_package_url)
+* [`package_ensure`](#-simp--yum--repo--internet_simp--package_ensure)
+* [`simp_release_version`](#-simp--yum--repo--internet_simp--simp_release_version)
+* [`simp_release_type`](#-simp--yum--repo--internet_simp--simp_release_type)
 
-##### <a name="simp_repos_package"></a>`simp_repos_package`
+##### <a name="-simp--yum--repo--internet_simp--simp_repos_package"></a>`simp_repos_package`
 
 Data type: `String[1]`
 
@@ -3785,7 +3833,7 @@ yum repository files for SIMP Puppet modules and their dependencies.
 
 Default value: `'simp-release-community'`
 
-##### <a name="simp_repos_package_url"></a>`simp_repos_package_url`
+##### <a name="-simp--yum--repo--internet_simp--simp_repos_package_url"></a>`simp_repos_package_url`
 
 Data type: `String[1]`
 
@@ -3793,7 +3841,7 @@ URL to the SIMP yum repository package
 
 Default value: `"https://download.simp-project.com/${simp_repos_package}.rpm"`
 
-##### <a name="package_ensure"></a>`package_ensure`
+##### <a name="-simp--yum--repo--internet_simp--package_ensure"></a>`package_ensure`
 
 Data type: `Simp::PackageEnsure`
 
@@ -3801,7 +3849,7 @@ The ``$ensure`` status of ``$simp_repos_package``.
 
 Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })`
 
-##### <a name="simp_release_version"></a>`simp_release_version`
+##### <a name="-simp--yum--repo--internet_simp--simp_release_version"></a>`simp_release_version`
 
 Data type: `Optional[Simp::Version]`
 
@@ -3824,9 +3872,9 @@ The Major(X), Minor(Y), or Patch(Z) release of SIMP you want.
 * When not set, this class will attempt to detect the version of SIMP installed
   on the system and fail if the version cannot be detected.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="simp_release_type"></a>`simp_release_type`
+##### <a name="-simp--yum--repo--internet_simp--simp_release_type"></a>`simp_release_type`
 
 Data type: `String`
 
@@ -3842,7 +3890,7 @@ Type of release you want:
 
 Default value: `'releases'`
 
-### <a name="simpyumrepointernet_simp_dependencies"></a>`simp::yum::repo::internet_simp_dependencies`
+### <a name="simp--yum--repo--internet_simp_dependencies"></a>`simp::yum::repo::internet_simp_dependencies`
 
 The packagecloud yum repository that used to be configured by this class is
 no longer maintained. As an interim workaround, this class now uses
@@ -3854,17 +3902,17 @@ class will be removed in a future release.
 
 The following parameters are available in the `simp::yum::repo::internet_simp_dependencies` class:
 
-* [`simp_release_slug`](#simp_release_slug)
+* [`simp_release_slug`](#-simp--yum--repo--internet_simp_dependencies--simp_release_slug)
 
-##### <a name="simp_release_slug"></a>`simp_release_slug`
+##### <a name="-simp--yum--repo--internet_simp_dependencies--simp_release_slug"></a>`simp_release_slug`
 
 Data type: `Optional[String]`
 
 The unique release URL "slug" of SIMP for the target release.
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="simpyumrepointernet_simp_server"></a>`simp::yum::repo::internet_simp_server`
+### <a name="simp--yum--repo--internet_simp_server"></a>`simp::yum::repo::internet_simp_server`
 
 The packagecloud yum repository that used to be configured by this class is
 no longer maintained. As an interim workaround, this class now uses
@@ -3876,17 +3924,17 @@ class will be removed in a future release.
 
 The following parameters are available in the `simp::yum::repo::internet_simp_server` class:
 
-* [`simp_release_slug`](#simp_release_slug)
+* [`simp_release_slug`](#-simp--yum--repo--internet_simp_server--simp_release_slug)
 
-##### <a name="simp_release_slug"></a>`simp_release_slug`
+##### <a name="-simp--yum--repo--internet_simp_server--simp_release_slug"></a>`simp_release_slug`
 
 Data type: `Optional[String]`
 
 The unique release URL "slug" of SIMP for the target release.
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="simpyumrepolocal_os_updates"></a>`simp::yum::repo::local_os_updates`
+### <a name="simp--yum--repo--local_os_updates"></a>`simp::yum::repo::local_os_updates`
 
 Generally, this is used by the ISO installation's SIMP agents.
 
@@ -3922,15 +3970,15 @@ Generally, this is used by the ISO installation's SIMP agents.
 
 The following parameters are available in the `simp::yum::repo::local_os_updates` class:
 
-* [`servers`](#servers)
-* [`enable_repo`](#enable_repo)
-* [`extra_gpgkey_urls`](#extra_gpgkey_urls)
-* [`relative_repo_path`](#relative_repo_path)
-* [`relative_gpgkey_path`](#relative_gpgkey_path)
-* [`baseurl`](#baseurl)
-* [`gpgkey`](#gpgkey)
+* [`servers`](#-simp--yum--repo--local_os_updates--servers)
+* [`enable_repo`](#-simp--yum--repo--local_os_updates--enable_repo)
+* [`extra_gpgkey_urls`](#-simp--yum--repo--local_os_updates--extra_gpgkey_urls)
+* [`relative_repo_path`](#-simp--yum--repo--local_os_updates--relative_repo_path)
+* [`relative_gpgkey_path`](#-simp--yum--repo--local_os_updates--relative_gpgkey_path)
+* [`baseurl`](#-simp--yum--repo--local_os_updates--baseurl)
+* [`gpgkey`](#-simp--yum--repo--local_os_updates--gpgkey)
 
-##### <a name="servers"></a>`servers`
+##### <a name="-simp--yum--repo--local_os_updates--servers"></a>`servers`
 
 Data type: `Array[Simp::HostOrURL]`
 
@@ -3943,15 +3991,15 @@ An Array of FQDNs, IPs, or URLs containing the yum server(s) to use.
 
 This parameter has no effect if the `baseurl` parameter is set directly.
 
-##### <a name="enable_repo"></a>`enable_repo`
+##### <a name="-simp--yum--repo--local_os_updates--enable_repo"></a>`enable_repo`
 
 Data type: `Boolean`
 
 Enables or disables the Yum repo
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="extra_gpgkey_urls"></a>`extra_gpgkey_urls`
+##### <a name="-simp--yum--repo--local_os_updates--extra_gpgkey_urls"></a>`extra_gpgkey_urls`
 
 Data type: `Simp::Urls`
 
@@ -3960,16 +4008,16 @@ This parameter has no effect if the `gpgkey` parameter is set directly.
 
 Default value: `[]`
 
-##### <a name="relative_repo_path"></a>`relative_repo_path`
+##### <a name="-simp--yum--repo--local_os_updates--relative_repo_path"></a>`relative_repo_path`
 
 Data type: `String[1]`
 
 The relative path to the yum repo relative to the URL(s) set in `$servers`.
 This parameter has no effect if the `baseurl` parameter is set directly.
 
-Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${facts['architecture']}"`
+Default value: `"${facts['os']['name']}/${facts['os']['release']['major']}/${facts['os']['architecture']}"`
 
-##### <a name="relative_gpgkey_path"></a>`relative_gpgkey_path`
+##### <a name="-simp--yum--repo--local_os_updates--relative_gpgkey_path"></a>`relative_gpgkey_path`
 
 Data type: `String[1]`
 
@@ -3977,9 +4025,9 @@ The relative path to the yum server to the GPGKEYS. It defaults to where both
 the ISO and smp-gpgkey rpm will install them: SIMP/GPGKEYS
 This parameter has no effect if the gpgkey parameter is set.
 
-Default value: `"SIMP/GPGKEYS"`
+Default value: `'SIMP/GPGKEYS'`
 
-##### <a name="baseurl"></a>`baseurl`
+##### <a name="-simp--yum--repo--local_os_updates--baseurl"></a>`baseurl`
 
 Data type: `Optional[String[1]]`
 
@@ -3988,23 +4036,27 @@ The URL for this repository. Set this to absent to remove it from the file compl
 Set this parameter directly to completely skip all automated URL logic.
 files for non-simp repos.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="gpgkey"></a>`gpgkey`
+##### <a name="-simp--yum--repo--local_os_updates--gpgkey"></a>`gpgkey`
 
 Data type: `Optional[String[1]]`
 
 The URL for the GPG key with which packages from this repository are signed.
 Set this parameter directly to completely skip default URL/path logic.
 
-Default value: `simp::yum::repo::gpgkey_string(
+Default value:
+
+```puppet
+simp::yum::repo::gpgkey_string(
       $servers,
       simp::yum::repo::gpgkeys::os_updates(),
       $relative_gpgkey_path,
       $extra_gpgkey_urls
-  )`
+  )
+```
 
-### <a name="simpyumrepolocal_simp"></a>`simp::yum::repo::local_simp`
+### <a name="simp--yum--repo--local_simp"></a>`simp::yum::repo::local_simp`
 
 Generally, this is used by the ISO installation's SIMP agents.
 
@@ -4055,15 +4107,15 @@ Generally, this is used by the ISO installation's SIMP agents.
 
 The following parameters are available in the `simp::yum::repo::local_simp` class:
 
-* [`servers`](#servers)
-* [`enable_repo`](#enable_repo)
-* [`extra_gpgkey_urls`](#extra_gpgkey_urls)
-* [`relative_repo_path`](#relative_repo_path)
-* [`relative_gpgkey_path`](#relative_gpgkey_path)
-* [`baseurl`](#baseurl)
-* [`gpgkey`](#gpgkey)
+* [`servers`](#-simp--yum--repo--local_simp--servers)
+* [`enable_repo`](#-simp--yum--repo--local_simp--enable_repo)
+* [`extra_gpgkey_urls`](#-simp--yum--repo--local_simp--extra_gpgkey_urls)
+* [`relative_repo_path`](#-simp--yum--repo--local_simp--relative_repo_path)
+* [`relative_gpgkey_path`](#-simp--yum--repo--local_simp--relative_gpgkey_path)
+* [`baseurl`](#-simp--yum--repo--local_simp--baseurl)
+* [`gpgkey`](#-simp--yum--repo--local_simp--gpgkey)
 
-##### <a name="servers"></a>`servers`
+##### <a name="-simp--yum--repo--local_simp--servers"></a>`servers`
 
 Data type: `Array[Simp::HostOrURL]`
 
@@ -4076,15 +4128,15 @@ An Array of FQDNs, IPs, or URLs containing the yum server(s) to use.
 
 This parameter has no effect if the `baseurl` parameter is set directly.
 
-##### <a name="enable_repo"></a>`enable_repo`
+##### <a name="-simp--yum--repo--local_simp--enable_repo"></a>`enable_repo`
 
 Data type: `Boolean`
 
 Enables or disables the Yum repo
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="extra_gpgkey_urls"></a>`extra_gpgkey_urls`
+##### <a name="-simp--yum--repo--local_simp--extra_gpgkey_urls"></a>`extra_gpgkey_urls`
 
 Data type: `Simp::Urls`
 
@@ -4093,7 +4145,7 @@ This parameter has no effect if the `gpgkey` parameter is set directly.
 
 Default value: `[]`
 
-##### <a name="relative_repo_path"></a>`relative_repo_path`
+##### <a name="-simp--yum--repo--local_simp--relative_repo_path"></a>`relative_repo_path`
 
 Data type: `String[1]`
 
@@ -4103,39 +4155,43 @@ This parameter has no effect if the `baseurl` parameter is set directly.
 
 Default value: `"SIMP/${facts['os'][name]}/${facts['os']['release']['major']}"`
 
-##### <a name="relative_gpgkey_path"></a>`relative_gpgkey_path`
+##### <a name="-simp--yum--repo--local_simp--relative_gpgkey_path"></a>`relative_gpgkey_path`
 
 Data type: `String[1]`
 
 The relative path to the GPGKEYS for the SIMP repo.  It defaults
 to the directory where simp-gpgkeys installs the gpgkeys.
 
-Default value: `"SIMP/GPGKEYS"`
+Default value: `'SIMP/GPGKEYS'`
 
-##### <a name="baseurl"></a>`baseurl`
+##### <a name="-simp--yum--repo--local_simp--baseurl"></a>`baseurl`
 
 Data type: `Optional[String[1]]`
 
 The URL for this repository. Set this to absent to remove it from the file completely.
 Set this parameter directly to completely skip all automated URL logic.
 
-Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['architecture']}")`
+Default value: `simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/${facts['os']['architecture']}")`
 
-##### <a name="gpgkey"></a>`gpgkey`
+##### <a name="-simp--yum--repo--local_simp--gpgkey"></a>`gpgkey`
 
 Data type: `Optional[String[1]]`
 
 The URL for the GPG key with which packages from this repository are signed.
 Set this parameter directly to completely skip default URL/path logic.
 
-Default value: `simp::yum::repo::gpgkey_string(
+Default value:
+
+```puppet
+simp::yum::repo::gpgkey_string(
     $servers,
     simp::yum::repo::gpgkeys::simp(),
     $relative_gpgkey_path,
     $extra_gpgkey_urls
-  )`
+  )
+```
 
-### <a name="simpyumschedule"></a>`simp::yum::schedule`
+### <a name="simp--yum--schedule"></a>`simp::yum::schedule`
 
 Set up a YUM update schedule.
 
@@ -4143,27 +4199,27 @@ Set up a YUM update schedule.
 
 The following parameters are available in the `simp::yum::schedule` class:
 
-* [`enable`](#enable)
-* [`minute`](#minute)
-* [`hour`](#hour)
-* [`monthday`](#monthday)
-* [`month`](#month)
-* [`weekday`](#weekday)
-* [`repos`](#repos)
-* [`disable`](#disable)
-* [`exclude_pkgs`](#exclude_pkgs)
-* [`randomize`](#randomize)
-* [`quiet`](#quiet)
+* [`enable`](#-simp--yum--schedule--enable)
+* [`minute`](#-simp--yum--schedule--minute)
+* [`hour`](#-simp--yum--schedule--hour)
+* [`monthday`](#-simp--yum--schedule--monthday)
+* [`month`](#-simp--yum--schedule--month)
+* [`weekday`](#-simp--yum--schedule--weekday)
+* [`repos`](#-simp--yum--schedule--repos)
+* [`disable`](#-simp--yum--schedule--disable)
+* [`exclude_pkgs`](#-simp--yum--schedule--exclude_pkgs)
+* [`randomize`](#-simp--yum--schedule--randomize)
+* [`quiet`](#-simp--yum--schedule--quiet)
 
-##### <a name="enable"></a>`enable`
+##### <a name="-simp--yum--schedule--enable"></a>`enable`
 
 Data type: `Boolean`
 
 Enable or disable the update schedule
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="minute"></a>`minute`
+##### <a name="-simp--yum--schedule--minute"></a>`minute`
 
 Data type: `Simplib::Cron::Minute`
 
@@ -4171,7 +4227,7 @@ String Cron minute
 
 Default value: `'12'`
 
-##### <a name="hour"></a>`hour`
+##### <a name="-simp--yum--schedule--hour"></a>`hour`
 
 Data type: `Simplib::Cron::Hour`
 
@@ -4179,7 +4235,7 @@ String Cron hour
 
 Default value: `'0'`
 
-##### <a name="monthday"></a>`monthday`
+##### <a name="-simp--yum--schedule--monthday"></a>`monthday`
 
 Data type: `Simplib::Cron::MonthDay`
 
@@ -4187,7 +4243,7 @@ String Cron monthday
 
 Default value: `'*'`
 
-##### <a name="month"></a>`month`
+##### <a name="-simp--yum--schedule--month"></a>`month`
 
 Data type: `Simplib::Cron::Month`
 
@@ -4195,7 +4251,7 @@ String Cron month
 
 Default value: `'*'`
 
-##### <a name="weekday"></a>`weekday`
+##### <a name="-simp--yum--schedule--weekday"></a>`weekday`
 
 Data type: `Simplib::Cron::Weekday`
 
@@ -4203,7 +4259,7 @@ String Cron weekday
 
 Default value: `'*'`
 
-##### <a name="repos"></a>`repos`
+##### <a name="-simp--yum--schedule--repos"></a>`repos`
 
 Data type: `Array[String]`
 
@@ -4212,7 +4268,7 @@ variable to an Array with those repo names
 
 Default value: `['all']`
 
-##### <a name="disable"></a>`disable`
+##### <a name="-simp--yum--schedule--disable"></a>`disable`
 
 Data type: `Array[String]`
 
@@ -4221,7 +4277,7 @@ variable to an Array with those repo names
 
 Default value: `[]`
 
-##### <a name="exclude_pkgs"></a>`exclude_pkgs`
+##### <a name="-simp--yum--schedule--exclude_pkgs"></a>`exclude_pkgs`
 
 Data type: `Array[String]`
 
@@ -4229,7 +4285,7 @@ Packages to exclude from the update
 
 Default value: `[]`
 
-##### <a name="randomize"></a>`randomize`
+##### <a name="-simp--yum--schedule--randomize"></a>`randomize`
 
 Data type: `Integer`
 
@@ -4238,17 +4294,17 @@ running
 
 Default value: `5`
 
-##### <a name="quiet"></a>`quiet`
+##### <a name="-simp--yum--schedule--quiet"></a>`quiet`
 
 Data type: `Boolean`
 
 Set to false if you want to see the chatter from yum
 
-Default value: ``true``
+Default value: `true`
 
 ## Functions
 
-### <a name="simpknockout"></a>`simp::knockout`
+### <a name="simp--knockout"></a>`simp::knockout`
 
 Type: Puppet Language
 
@@ -4266,7 +4322,7 @@ Data type: `Array`
 
 The array to knock out
 
-### <a name="simpyumrepobaseurl_string"></a>`simp::yum::repo::baseurl_string`
+### <a name="simp--yum--repo--baseurl_string"></a>`simp::yum::repo::baseurl_string`
 
 Type: Puppet Language
 
@@ -4290,7 +4346,7 @@ Data type: `String`
 
 
 
-### <a name="simpyumrepogpgkey_string"></a>`simp::yum::repo::gpgkey_string`
+### <a name="simp--yum--repo--gpgkey_string"></a>`simp::yum::repo::gpgkey_string`
 
 Type: Puppet Language
 
@@ -4328,7 +4384,7 @@ Data type: `Simp::Urls`
 
 Additional GPG keys that need to be included
 
-### <a name="simpyumrepogpgkeysos_updates"></a>`simp::yum::repo::gpgkeys::os_updates`
+### <a name="simp--yum--repo--gpgkeys--os_updates"></a>`simp::yum::repo::gpgkeys::os_updates`
 
 Type: Puppet Language
 
@@ -4340,7 +4396,7 @@ Build a list of GPG keys needed by a os_updates repo
 
 Returns: `Array<String>`
 
-### <a name="simpyumrepogpgkeyssimp"></a>`simp::yum::repo::gpgkeys::simp`
+### <a name="simp--yum--repo--gpgkeys--simp"></a>`simp::yum::repo::gpgkeys::simp`
 
 Type: Puppet Language
 
@@ -4352,7 +4408,7 @@ Build a list of GPG keys needed by a simp repo
 
 Returns: `Array<String>`
 
-### <a name="simpyumreposanitize_simp_release_slug"></a>`simp::yum::repo::sanitize_simp_release_slug`
+### <a name="simp--yum--repo--sanitize_simp_release_slug"></a>`simp::yum::repo::sanitize_simp_release_slug`
 
 Type: Puppet Language
 
@@ -4376,7 +4432,7 @@ Data type: `Optional[String]`
 
 The ``slug`` to sanitize
 
-### <a name="simpyumreposimp_release_version"></a>`simp::yum::repo::simp_release_version`
+### <a name="simp--yum--repo--simp_release_version"></a>`simp::yum::repo::simp_release_version`
 
 Type: Puppet Language
 
@@ -4406,75 +4462,47 @@ Optional desired SIMP release version.
 
 ## Data types
 
-### <a name="simphostorurl"></a>`Simp::HostOrURL`
+### <a name="Simp--HostOrURL"></a>`Simp::HostOrURL`
 
 Shortcut for either hosts or URLs
 
-Alias of
+Alias of `Variant[Simplib::Host, Simplib::Host::Port, Simplib::Hostname, Simplib::Hostname::Port, Simplib::IP::V4, Simplib::IP::V4::Port, Simplib::IP::V6, Simplib::IP::V6::Port, Stdlib::HTTPSUrl, Stdlib::HTTPUrl]`
 
-```puppet
-Variant[Simplib::Host, Simplib::Host::Port, Simplib::Hostname, Simplib::Hostname::Port, Simplib::IP::V4, Simplib::IP::V4::Port, Simplib::IP::V6, Simplib::IP::V6::Port, Stdlib::HTTPSUrl, Stdlib::HTTPUrl]
-```
-
-### <a name="simppackageensure"></a>`Simp::PackageEnsure`
+### <a name="Simp--PackageEnsure"></a>`Simp::PackageEnsure`
 
 Valid package resource 'ensure' settings
 
-Alias of
+Alias of `Enum['latest', 'absent', 'present', 'installed']`
 
-```puppet
-Enum['latest', 'absent', 'present', 'installed']
-```
-
-### <a name="simppuppetdbciphersuites"></a>`Simp::Puppetdb::Ciphersuites`
+### <a name="Simp--Puppetdb--Ciphersuites"></a>`Simp::Puppetdb::Ciphersuites`
 
 Valid SSL Cipher Suites for puppetdb
 
-Alias of
+Alias of `Enum['TLS_RSA_WITH_AES_256_GCM_SHA384', 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_GCM_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA', 'TLS_EMPTY_RENEGOTIATION_INFO_SCSV']`
 
-```puppet
-Enum['TLS_RSA_WITH_AES_256_GCM_SHA384', 'TLS_RSA_WITH_AES_256_CBC_SHA256', 'TLS_RSA_WITH_AES_256_CBC_SHA', 'TLS_RSA_WITH_AES_128_GCM_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA256', 'TLS_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384', 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA', 'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256', 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA', 'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256', 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA', 'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256', 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA', 'TLS_EMPTY_RENEGOTIATION_INFO_SCSV']
-```
-
-### <a name="simprunlevel"></a>`Simp::Runlevel`
+### <a name="Simp--Runlevel"></a>`Simp::Runlevel`
 
 Valid system runlevel settings
 
-Alias of
+Alias of `Variant[Enum['rescue','multi-user','graphical'], Integer[1,5]]`
 
-```puppet
-Variant[Enum['rescue','multi-user','graphical'], Integer[1,5]]
-```
-
-### <a name="simpscenario"></a>`Simp::Scenario`
+### <a name="Simp--Scenario"></a>`Simp::Scenario`
 
 Valid SIMP scenarios
 
 See the documentation for details on 'SIMP scenarios'
 
-Alias of
+Alias of `Enum['simp', 'simp_lite', 'poss', 'none', 'remote_access']`
 
-```puppet
-Enum['simp', 'simp_lite', 'poss', 'none', 'remote_access']
-```
-
-### <a name="simpurls"></a>`Simp::Urls`
+### <a name="Simp--Urls"></a>`Simp::Urls`
 
 URL shortcut for SIMP classes
 
-Alias of
+Alias of `Array[Variant[Stdlib::HTTPSUrl,Stdlib::HTTPUrl]]`
 
-```puppet
-Array[Variant[Stdlib::HTTPSUrl,Stdlib::HTTPUrl]]
-```
-
-### <a name="simpversion"></a>`Simp::Version`
+### <a name="Simp--Version"></a>`Simp::Version`
 
 Version of the form 'X', 'X.Y', 'X.Y.Z' or 'X.Y.Z-N'
 
-Alias of
-
-```puppet
-Pattern['^[0-9]+(((\.[0-9]+){1,2})|((\.[0-9]+){2}\-[0-9]+))?$']
-```
+Alias of `Pattern['^[0-9]+(((\.[0-9]+){1,2})|((\.[0-9]+){2}\-[0-9]+))?$']`
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "SIMP Rsync Environments" do
   after :each do
-    Facter.clear
+    LegacyFacter.clear
   end
 
   rsync_env_dir = '/var/simp/environments'
@@ -25,11 +25,11 @@ describe "SIMP Rsync Environments" do
         'simp/rsync/Global/clamav'
       ])
 
-      Facter.collection.load(:simp_rsync_environments)
+      LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
     it 'should return a Hash of environments' do
-      expect(Facter.fact(:simp_rsync_environments).value).to eql({
+      expect(LegacyFacter.fact(:simp_rsync_environments).value).to eql({
           'simp' => {
             'id' => 'simp',
             'rsync' => {
@@ -51,11 +51,11 @@ describe "SIMP Rsync Environments" do
     before :each do
       File.stubs(:directory?).returns(false)
 
-      Facter.collection.load(:simp_rsync_environments)
+      LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
     it 'should be empty' do
-      expect(Facter.fact(:simp_rsync_environments)).to be_nil
+      expect(LegacyFacter.fact(:simp_rsync_environments)).to be_nil
     end
   end
 
@@ -68,11 +68,11 @@ describe "SIMP Rsync Environments" do
 
       Facter::Core::Execution.expects(:exec).with("find -L simp -name '.shares'").at_least_once.returns('')
 
-      Facter.collection.load(:simp_rsync_environments)
+      LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
     it 'should be empty' do
-      expect(Facter.fact(:simp_rsync_environments).value).to be_empty
+      expect(LegacyFacter.fact(:simp_rsync_environments).value).to be_empty
     end
   end
 end
