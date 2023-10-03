@@ -44,7 +44,7 @@ class simp::server (
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  if $scenario_map.has_key($scenario) {
+  if $scenario in $scenario_map {
     $_included_classes = $simp_options::authselect ? {
       # In environments using authselect, we want to manage nsswitch.conf
       # with the authselect class instead of the nsswitch class 
