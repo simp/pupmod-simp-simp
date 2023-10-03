@@ -3,31 +3,18 @@
 # @return [Array<String>]
 #
 function simp::yum::repo::gpgkeys::simp() {
-  # Common keys, distributed in simp-gpgkeys
-  $_simp_gpgkeys = [
+  if $facts['os']['family'] != 'RedHat' or ($facts['os']['name'] in ['Fedora','Amazon']) {
+    fail("There are no Yumrepo GPG keys for OS '${facts['os']['name']}'")
+  }
+
+  [
+    # Common keys, distributed in simp-gpgkeys
     'RPM-GPG-KEY-puppet-20250406',
     'RPM-GPG-KEY-puppet',
     'RPM-GPG-KEY-puppetlabs',
     'RPM-GPG-KEY-SIMP-6',
     'RPM-GPG-KEY-PGDG-94',
-  ]
-
-  # keys needed by specific OSes
-  if $facts['os']['name'] in ['RedHat','CentOS','OracleLinux','Rocky'] {
-    case $facts['os']['release']['major'] {
-      '7':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-7'] }
-      '8':     { $_os_rel_gpgkeys = ['RPM-GPG-KEY-EPEL-8'] }
-      default: { $_os_rel_gpgkeys = [] }
-    }
-
-    $_full_os_gpgkeys = case $facts['os']['name'] {
-      'RedHat':      { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-redhat-release' ) }
-      'OracleLinux': { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-oracle' ) }
-      'Rocky':       { concat( $_os_rel_gpgkeys, 'RPM-GPG-KEY-rockyofficial' ) }
-      default:       { $_os_rel_gpgkeys }
-    }
-  }
-  else { fail("There are no Yumrepo GPG keys for OS '${facts['os']['name']}'") }
-
-  concat( $_simp_gpgkeys, $_full_os_gpgkeys )
+    # keys needed by specific OSes
+    "RPM-GPG-KEY-EPEL-${facts['os']['release']['major']}",
+  ] + simp::yum::repo::gpgkeys::os_updates()
 }
