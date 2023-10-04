@@ -30,8 +30,10 @@ describe 'simp::yum::repo::local_os_updates' do
             gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-oracle"
           elsif os_name  == 'Rocky'
             gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-rockyofficial"
-          else
+          elsif os_name  == 'CentOS'
             gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
+          else
+            gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-#{os_name}"
           end
 
           if os_maj_rel <= '7'
@@ -64,9 +66,10 @@ describe 'simp::yum::repo::local_os_updates' do
               gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-oracle"
             elsif os_name  == 'Rocky'
               gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-rockyofficial"
-            else
-              #it should be CentOS.
+            elsif os_name  == 'CentOS'
               gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
+            else
+              gpgkey = "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-#{os_name}"
             end
 
             if os_maj_rel <= '7'
@@ -124,8 +127,10 @@ describe 'simp::yum::repo::local_os_updates' do
             gpgkey = gpg_prefixes.map{|x| "#{x}/RPM-GPG-KEY-oracle" }.join("\n    ")
           elsif os_name  == 'Rocky'
             gpgkey = gpg_prefixes.map{|x| "#{x}/RPM-GPG-KEY-rockyofficial" }.join("\n    ")
-          else
+          elsif os_name  == 'CentOS'
             gpgkey = gpg_prefixes.map{|x| "#{x}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}" }.join("\n    ")
+          else
+            gpgkey = gpg_prefixes.map{|x| "#{x}/RPM-GPG-KEY-#{os_name}" }.join("\n    ")
           end
           gpgkey += "\n    #{arbitrary_url}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
 

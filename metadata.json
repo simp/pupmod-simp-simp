@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.17.0",
+  "version": "4.18.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -17,19 +17,19 @@
   "dependencies": [
     {
       "name": "puppet/kmod",
-      "version_requirement": ">= 2.1.0 < 4.0.0"
+      "version_requirement": ">= 2.1.0 < 5.0.0"
     },
     {
-      "name": "herculesteam/augeasproviders_sysctl",
-      "version_requirement": ">= 2.2.0 < 3.0.0"
+      "name": "puppet/augeasproviders_sysctl",
+      "version_requirement": ">= 2.2.0 < 4.0.0"
     },
     {
       "name": "puppet/chrony",
-      "version_requirement": ">= 1.0.0 < 3.0.0"
+      "version_requirement": ">= 1.0.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 6.4.0 < 8.0.0"
+      "version_requirement": ">= 6.4.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
@@ -37,7 +37,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     },
     {
       "name": "saz/timezone",
@@ -195,7 +195,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 6.22.1 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -236,6 +236,12 @@
     },
     {
       "operatingsystem": "Rocky",
+      "operatingsystemrelease": [
+        "8"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
         "8"
       ]

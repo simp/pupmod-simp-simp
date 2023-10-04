@@ -198,7 +198,7 @@ class simp (
   #
   # in order to permit-non-SIMP OSes to use the `poss` scenario
 
-  if $scenario_map.has_key($scenario) {
+  if $scenario in $scenario_map {
     $_classlist = simp::knockout(union($scenario_map[$scenario], $classes))
     if ($_classlist.empty) {
       if ($classification_warning) {
