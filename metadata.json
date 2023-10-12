@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.18.0",
+  "version": "4.19.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -21,7 +21,7 @@
     },
     {
       "name": "puppet/augeasproviders_sysctl",
-      "version_requirement": ">= 2.2.0 < 4.0.0"
+      "version_requirement": ">= 2.4.0 < 4.0.0"
     },
     {
       "name": "puppet/chrony",
@@ -85,7 +85,7 @@
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.5.3 < 7.0.0"
     },
     {
       "name": "simp/issue",
@@ -97,7 +97,7 @@
     },
     {
       "name": "simp/pam",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.8.3 < 7.0.0"
     },
     {
       "name": "simp/polkit",
@@ -105,7 +105,7 @@
     },
     {
       "name": "simp/postfix",
-      "version_requirement": ">= 5.0.0 < 6.0.0"
+      "version_requirement": ">= 5.5.0 < 6.0.0"
     },
     {
       "name": "simp/pupmod",
@@ -121,7 +121,7 @@
     },
     {
       "name": "simp/rsync",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.1.1 < 7.0.0"
     },
     {
       "name": "simp/selinux",
@@ -145,11 +145,11 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 4.5.0 < 5.0.0"
+      "version_requirement": ">= 4.9.0 < 5.0.0"
     },
     {
       "name": "simp/ssh",
-      "version_requirement": ">= 6.5.1 < 7.0.0"
+      "version_requirement": ">= 6.11.0 < 7.0.0"
     },
     {
       "name": "simp/sssd",
@@ -157,7 +157,7 @@
     },
     {
       "name": "simp/sudo",
-      "version_requirement": ">= 5.1.0 < 6.0.0"
+      "version_requirement": ">= 5.1.1 < 6.0.0"
     },
     {
       "name": "simp/sudosh",
