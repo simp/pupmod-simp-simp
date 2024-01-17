@@ -1,3 +1,6 @@
+* Wed Jan 17 2024 Richard Gardner <rick@sicura.us> - 4.19.1
+- Updated hiera.yaml facts to support puppet 8
+
 * Wed Oct 11 2023 Steven Pritchard <steve@sicura.us> - 4.19.0
 - [puppetsync] Updates for Puppet 8
   - These updates may include the following:
