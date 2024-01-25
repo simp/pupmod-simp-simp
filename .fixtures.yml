@@ -52,7 +52,7 @@ fixtures:
     mount_core: https://github.com/simp/pupmod-puppetlabs-mount_core.git
     named: https://github.com/simp/pupmod-simp-named.git
     nfs: https://github.com/simp/pupmod-simp-nfs.git
-    nsswitch: https://github.com/simp/puppet-nsswitch.git
+    nsswitch: https://github.com/simp/pupmod-puppet-nsswitch.git
     ntpd: https://github.com/simp/pupmod-simp-ntpd.git
     oddjob: https://github.com/simp/pupmod-simp-oddjob.git
     pam: https://github.com/simp/pupmod-simp-pam.git
