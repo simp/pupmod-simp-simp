@@ -1,3 +1,6 @@
+* Wed Feb 07 2024 Steven Pritchard <steve@sicura.us> - 4.21.0
+- [puppetsync] Add EL9 support
+
 * Thu Jan 25 2024 Steven Pritchard <steve@sicura.us> - 4.20.0
 - Switch from `trlinkin-nsswitch` to `puppet-nsswitch`
 
