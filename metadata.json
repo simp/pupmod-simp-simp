@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.20.0",
+  "version": "4.21.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -97,7 +97,7 @@
     },
     {
       "name": "simp/pam",
-      "version_requirement": ">= 6.8.3 < 7.0.0"
+      "version_requirement": ">= 6.8.3 < 8.0.0"
     },
     {
       "name": "simp/polkit",
@@ -185,7 +185,7 @@
     },
     {
       "name": "simp/useradd",
-      "version_requirement": ">= 0.2.2 < 1.0.0"
+      "version_requirement": ">= 0.2.2 < 2.0.0"
     },
     {
       "name": "puppet/nsswitch",
@@ -203,21 +203,24 @@
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
@@ -237,13 +240,15 @@
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     }
   ]
