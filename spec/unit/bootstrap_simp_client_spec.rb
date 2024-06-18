@@ -119,8 +119,8 @@ EOM
 
   describe '#fix_file_contexts' do
     it 'does not execute fixfiles when selinux is not installed' do
-      Facter.stubs(:value).with(:selinux).returns(false)
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns({
+      allow(Facter).to receive(:value).with(:selinux).and_return(false)
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some fixfile error'})
@@ -131,9 +131,9 @@ EOM
     end
 
     it 'does not execute fixfiles when selinux mode is disabled' do
-      Facter.stubs(:value).with(:selinux).returns(true)
-      Facter.stubs(:value).with(:selinux_current_mode).returns('disabled')
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns({
+      allow(Facter).to receive(:value).with(:selinux).and_return(true)
+      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('disabled')
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some fixfile error'})
@@ -144,9 +144,9 @@ EOM
     end
 
     it 'executes fixfiles when selinux mode is not disabled' do
-      Facter.stubs(:value).with(:selinux).returns(true)
-      Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns(success_result)
+      allow(Facter).to receive(:value).with(:selinux).and_return(true)
+      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return(success_result)
       bootstrap.parse_command_line(@test_args)
 
       # success means nothing is raised
@@ -154,9 +154,9 @@ EOM
     end
 
     it 'fail when fixfiles fails' do
-      Facter.stubs(:value).with(:selinux).returns(true)
-      Facter.stubs(:value).with(:selinux_current_mode).returns('permissive')
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns({
+      allow(Facter).to receive(:value).with(:selinux).and_return(true)
+      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('permissive')
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some fixfile error'})
@@ -236,7 +236,7 @@ EOM
     end
 
     it 'uses configured options when non-conflicting options are specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       test_args = [
         '-s', 'puppet.test.local',
         '-c', 'puppetca.test.local',
@@ -323,24 +323,24 @@ EOM
     end
 
     it 'returns 0 when processing succeeds' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns(uname_result)
-      bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
+      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(uname_result)
+      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return(success_result)
       puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
-      bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd1).and_return(success_result)
 
       puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
-      bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
 
-      Facter.stubs(:value).with(:selinux).returns(true)
-      Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns(success_result)
+      allow(Facter).to receive(:value).with(:selinux).and_return(true)
+      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return(success_result)
 
-      bootstrap.stubs(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").returns(success_result)
-      bootstrap.stubs(:execute).with("#{puppet_command} resource service puppet enable=true").returns(success_result)
+      allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").and_return(success_result)
+      allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service puppet enable=true").and_return(success_result)
 
       expect( bootstrap.run(@test_args + [ '-n', 'ntpserver1,ntpserver2' ]) ).to eq 0
 
@@ -363,16 +363,16 @@ EOM
       puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
-      bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd1).and_return(success_result)
 
       puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
-      bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
-      Facter.stubs(:value).with(:selinux).returns(false)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
+      allow(Facter).to receive(:value).with(:selinux).and_return(false)
 
-      bootstrap.stubs(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").returns(success_result)
-      bootstrap.stubs(:execute).with("#{puppet_command} resource service puppet enable=true").returns(success_result)
+      allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").and_return(success_result)
+      allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service puppet enable=true").and_return(success_result)
 
       expect( bootstrap.run(@test_args + [ '-r', '4' ]) ).to eq 0
 
@@ -391,16 +391,16 @@ EOM
       puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
-      bootstrap.stubs(:execute).with(puppet_cmd1).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd1).and_return(success_result)
 
       puppet_cmd2 = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
-      bootstrap.stubs(:execute).with(puppet_cmd2).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
 
-      Facter.stubs(:value).with(:selinux).returns(true)
-      Facter.stubs(:value).with(:selinux_current_mode).returns('enforcing')
-      bootstrap.stubs(:execute).with("fixfiles -l #{@log_file} -f relabel").returns({
+      allow(Facter).to receive(:value).with(:selinux).and_return(true)
+      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some fixfile error'})
@@ -417,7 +417,7 @@ EOM
       puppet_cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
-      bootstrap.stubs(:execute).with(puppet_cmd).returns({
+      allow(bootstrap).to receive(:execute).with(puppet_cmd).and_return({
         :exitstatus => 1,
         :stdout => '',
         :stderr => "Could not request certificate: The certificate retrieved from the master does not match the agent's private key."
@@ -439,7 +439,7 @@ EOM
       cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
-      bootstrap.stubs(:execute).with(cmd).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(cmd).and_return(success_result)
       bootstrap.parse_command_line(@test_args)
       bootstrap.run_puppet_agent
       expect( File.read(@log_file) ).to match(/puppet agent run/)
@@ -449,7 +449,7 @@ EOM
       cmd = "#{puppet_command} agent --onetime --no-daemonize" +
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
-      bootstrap.stubs(:execute).with(cmd).returns(success_result)
+      allow(bootstrap).to receive(:execute).with(cmd).and_return(success_result)
       bootstrap.parse_command_line(@test_args)
       bootstrap.run_puppet_agent('--tags pupmod,simp', 'tagged run')
       expect( File.read(@log_file) ).to match(/tagged run/)
@@ -466,7 +466,7 @@ EOM
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       results = [failed_result, failed_result, success_result]
-      bootstrap.stubs(:execute).with(cmd).returns(*results)
+      allow(bootstrap).to receive(:execute).with(cmd).and_return(*results)
       bootstrap.parse_command_line(@test_args + ['-i', '1'])
       bootstrap.run_puppet_agent
       log = File.read(@log_file)
@@ -479,13 +479,13 @@ EOM
 
   describe '#set_static_hostname' do
     it 'when enabled and valid hostname is set it runs hostnamectl' do
-      File.stubs(:exist?).returns(true)
-      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+      allow(File).to receive(:exist?).and_return(true)
+      allow(bootstrap).to receive(:execute).with('/usr/bin/hostname -f').and_return({
         :exitstatus => 0,
         :stdout => 'client1.test.local',
         :stderr => ''})
 
-      bootstrap.stubs(:execute).with('/usr/bin/hostnamectl set-hostname --static client1.test.local').returns({
+      allow(bootstrap).to receive(:execute).with('/usr/bin/hostnamectl set-hostname --static client1.test.local').and_return({
         :exitstatus => 1,
         :stdout => '',
         :stderr => 'Could not set property: Connection timed out'})
@@ -495,8 +495,8 @@ EOM
     end
 
     it "fails if 'hostname -f' returns an empty string" do
-      File.stubs(:exist?).returns(true)
-      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+      allow(File).to receive(:exist?).and_return(true)
+      allow(bootstrap).to receive(:execute).with('/usr/bin/hostname -f').and_return({
         :exitstatus => 1,
         :stdout => '',
         :stderr => ''})
@@ -506,8 +506,8 @@ EOM
     end
 
     it "fails if 'hostname -f' returns 'localhost.localdomain'" do
-      File.stubs(:exist?).returns(true)
-      bootstrap.stubs(:execute).with('/usr/bin/hostname -f').returns({
+      allow(File).to receive(:exist?).and_return(true)
+      allow(bootstrap).to receive(:execute).with('/usr/bin/hostname -f').and_return({
         :exitstatus => 0,
         :stdout => 'localhost.localdomain',
         :stderr => ''})
@@ -519,7 +519,7 @@ EOM
 
   describe '#set_system_time' do
     it 'does nothing if no ntp servers are configured' do
-      bootstrap.stubs(:execute).returns({
+      allow(bootstrap).to receive(:execute).and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some ntpdate error'})
@@ -530,28 +530,28 @@ EOM
     end
 
     it 'when ntp servers are configured it runs ntpdate for kernel < 4' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns(uname_result)
-      bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns(success_result)
+      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(uname_result)
+      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return(success_result)
       bootstrap.parse_command_line(@test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
     end
 
     it 'when ntp servers are configured it runs chronyd for kernel >= 4 ' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return({
         :exitstatus => 0,
         :stdout => '4.14.5',
         :stderr => ''})
-      bootstrap.stubs(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").returns(success_result)
+      allow(bootstrap).to receive(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").and_return(success_result)
       bootstrap.parse_command_line(@test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
     end
 
     it 'logs error when ntpdate fails' do
-      bootstrap.stubs(:execute).with('/usr/bin/uname -r').returns({
+      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return({
         :exitstatus => 0,
         :stdout => '3.14.5',
         :stderr => ''})
-      bootstrap.stubs(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').returns({
+      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return({
         :exitstatus => -1,
         :stdout => '',
         :stderr => 'some ntpdate error'})
@@ -589,61 +589,61 @@ EOM
     end
 
     it 'fails when puppet server is not specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line([]) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /No Puppet server specified/)
     end
 
     it 'fails when puppet CA is not specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(['-s', 'puppet.test.local']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /No Puppet CA specified/)
     end
 
     it 'fails when invalid puppet CA port is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-p', '65536']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet CA port '65536': /)
     end
 
     it 'fails when invalid number of puppet agent runs is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-r', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid number of puppet agent runs '0': /)
     end
 
     it 'fails when invalid puppet keylength is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-k', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet keylength '0': /)
     end
 
     it 'fails when invalid puppet wait for cert is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-w', '-10']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid Puppet wait for cert '-10': /)
     end
 
     it 'fails when invalid initial retry interval is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-i', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid initial retry interval '0': /)
     end
 
     it 'fails when invalid retry factor is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-f', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid retry factor '0.0': /)
     end
 
     it 'fails when invalid max seconds is specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['-m', '0']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /Invalid max seconds '0': /)
     end
 
     it 'fails when both --quiet and --debug are specified' do
-      File.stubs(:exist?).returns(true)
+      allow(File).to receive(:exist?).and_return(true)
       expect { bootstrap.parse_command_line(@test_args + ['--quiet', '--debug']) }.to raise_error(
         BootstrapSimpClient::ConfigurationError, /--quiet and --debug cannot be used together/)
     end
@@ -734,7 +734,7 @@ EOM
     # rest of functionality is completely tested by the other log methods
     it 'prepends message with a timestamp and process id' do
       bootstrap.parse_command_line(@test_args)
-      Time.stubs(:now).returns(Time.new(2017, 1, 13, 11, 42, 3, '-05:00'))
+      allow(Time).to receive(:now).and_return(Time.new(2017, 1, 13, 11, 42, 3, '-05:00'))
       bootstrap.info('This is an info message')
       expected = "2017-01-13 11:42:03 -0500 bootstrap_simp_client.rb (info): This is an info message\n"
       expect( File.read(@log_file) ).to eq expected
@@ -742,7 +742,7 @@ EOM
 
     it 'logs array input in one message with embedded newlines' do
       bootstrap.parse_command_line(@test_args)
-      Time.stubs(:now).returns(Time.new(2017, 1, 13, 11, 42, 3, '-05:00'))
+      allow(Time).to receive(:now).and_return(Time.new(2017, 1, 13, 11, 42, 3, '-05:00'))
       bootstrap.info(['message1', 'message2'])
       expected = "2017-01-13 11:42:03 -0500 bootstrap_simp_client.rb (info): message1\nmessage2\n"
       expect( File.read(@log_file) ).to eq expected
