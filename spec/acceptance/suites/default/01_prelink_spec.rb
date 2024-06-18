@@ -12,7 +12,7 @@ describe 'simp::prelink class' do
   }
 
   hosts.each do |host|
-    os_major = fact_on(host, 'operatingsystemmajrelease')
+    os_major = fact_on(host, 'os.release.major')
 
     if os_major == '7'
       context 'with default parameters' do

@@ -9,13 +9,13 @@ simp_options::dns::servers :
   - 1.2.3.4
 # simp_options::ldap : true
 simp_options::ldap::base_dn : 'ou=foo,dc=bar,dc=baz'
-simp_options::ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
+simp_options::ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{lookup('ldap::base_dn')}"
 simp_options::ldap::bind_pw : 's00per sekr3t!'
 simp_options::ldap::bind_hash : '{SSHA}foobarbaz!!!!'
-simp_options::ldap::sync_dn : "cn=sync,ou=Hosts,%{hiera('ldap::base_dn')}"
+simp_options::ldap::sync_dn : "cn=sync,ou=Hosts,%{lookup('ldap::base_dn')}"
 simp_options::ldap::sync_pw : 's00per sekr3t!'
 simp_options::ldap::sync_hash : '{SSHA}foobarbaz!!!!'
-simp_options::ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
+simp_options::ldap::root_dn : "cn=LDAPAdmin,ou=People,%{lookup('ldap::base_dn')}"
 simp_options::ldap::root_hash : '{SSHA}foobarbaz!!!!'
 simp_options::ldap::uri :
   - 'ldap://server1.bar.baz'

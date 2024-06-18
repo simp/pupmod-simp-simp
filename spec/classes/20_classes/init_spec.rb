@@ -14,8 +14,8 @@ describe 'simp' do
   context 'on unsupported operating systems' do
 
     facterdb_queries = [
-      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '16.04'},
-    ].map{|q| q.merge({:hardwaremodel => 'x86_64', :facterversion => '3.5.1'})}
+      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '20.04'},
+    ].map{|q| q.merge({:hardwaremodel => 'x86_64'})}
 
     facterdb_queries.each do |facterdb_query|
 
@@ -73,7 +73,7 @@ describe 'simp' do
           _facts = Marshal.load(Marshal.dump(os_facts))
 
           _facts[:openssh_version] = '5.8'
-          _facts[:augeasversion] = '1.2.3'
+          _facts[:augeas] = { 'version' => '1.2.3' }
 
           if _facts[:kernel] == 'windows'
             _facts[:puppet_vardir] = 'C:/Program Data/PuppetLabs/puppet/cache'

@@ -21,8 +21,8 @@ describe 'simp yum configuration' do
       YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
         {
           'simp::yum::repo::simp::servers'             => nil,
-          'simp::yum::repo::local_os_updates::servers' => ["%{facts.hostname}"],
-          'simp::yum::repo::local_simp::servers'       => ["%{facts.hostname}"]
+          'simp::yum::repo::local_os_updates::servers' => ["%{facts.networking.hostname}"],
+          'simp::yum::repo::local_simp::servers'       => ["%{facts.networking.hostname}"]
         }
       )
     }

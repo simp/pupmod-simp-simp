@@ -39,7 +39,7 @@ describe 'simp::yum::repo::local_simp' do
       context 'with a single server name' do
         let(:params) {{ :servers => ['puppet.example.simp'] }}
         let(:os_yum_path){ "SIMP/#{facts[:os][:name]}/#{facts[:os][:release][:major]}"}
-        let(:os_baseurl){ "#{os_yum_path}/#{facts[:architecture]}" }
+        let(:os_baseurl){ "#{os_yum_path}/#{facts[:os]['architecture']}" }
         let(:os_gpgkey){ "SIMP/GPGKEYS" }
 
         it { is_expected.to compile.with_all_deps }
@@ -82,7 +82,7 @@ describe 'simp::yum::repo::local_simp' do
       context 'with multiple servers and extra gpgkey URLs' do
         let(:params) {
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
-                          "SIMP/6/#{facts[:architecture]}"
+                          "SIMP/6/#{facts[:os]['architecture']}"
           {
           :servers => [
             'puppet.example.simp',
@@ -99,11 +99,11 @@ describe 'simp::yum::repo::local_simp' do
           os_maj_rel  = facts[:os][:release][:major]
           os_name     = facts[:os][:name]
           os_yum_path =  "SIMP/#{os_name}/#{os_maj_rel}"
-          os_baseurl  = "#{os_yum_path}/#{facts[:architecture]}"
+          os_baseurl  = "#{os_yum_path}/#{facts[:os]['architecture']}"
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
-                          "SIMP/6/#{facts[:architecture]}"
+                          "SIMP/6/#{facts[:os]['architecture']}"
 
-          os_baseurl  = "#{os_yum_path}/#{facts[:architecture]}"
+          os_baseurl  = "#{os_yum_path}/#{facts[:os]['architecture']}"
           os_gpgkey   = "SIMP/GPGKEYS"
           _keys = base_gpgkeys + other_gpgkeys.fetch( "#{facts[:os][:name]}-#{facts[:os][:release][:major]}" )
           _gpgkey = ['puppet.example.simp', '192.0.2.5']
