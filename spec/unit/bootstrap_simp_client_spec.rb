@@ -45,8 +45,8 @@ describe 'BootstrapSimpClient' do
     FileUtils.touch(@puppet_conf_file)
     ENV['LOCKED'] = nil
 
-    BootstrapSimpClient.expects(:puppet_exe_path).returns(puppet_command)
-    BootstrapSimpClient.expects(:puppet_config_path).returns(@puppet_conf_file)
+    allow(BootstrapSimpClient).to receive(:puppet_exe_path).and_return(puppet_command)
+    allow(BootstrapSimpClient).to receive(:puppet_config_path).and_return(@puppet_conf_file)
   end
 
   after :each do
