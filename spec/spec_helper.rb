@@ -98,7 +98,7 @@ RSpec.configure do |c|
   c.trusted_server_facts = true if c.respond_to?(:trusted_server_facts)
 
   c.mock_framework = :rspec
-  c.mock_with :mocha
+  c.mock_with :rspec
 
   c.module_path = File.join(fixture_path, 'modules')
   c.manifest_dir = File.join(fixture_path, 'manifests') if c.respond_to?(:manifest_dir)
