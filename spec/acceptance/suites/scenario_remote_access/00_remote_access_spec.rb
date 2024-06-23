@@ -44,7 +44,7 @@ describe 'remote_access scenario' do
       let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map{ |d| "dc=#{d}" }.join(',') }
       # For now default to openldap server until test includes a 389DS server
       let(:ldap_type) {
-        if fact_on(ldap_server,'operatingsystemmajrelease') == '7'
+        if fact_on(ldap_server,'os.release.major') == '7'
           'plain'
         else
           '389ds'
@@ -64,7 +64,7 @@ describe 'remote_access scenario' do
          set_hieradata_on(ldap_server, ERB.new(hieradata).result(binding))
       end
 
-      if fact_on(ldap_server,'operatingsystemmajrelease') == '7'
+      if fact_on(ldap_server,'os.release.major') == '7'
         context 'on el7 install openldap server and create users' do
           let(:add_testuser_to_admin) { File.read(File.expand_path("templates/#{ldap_type}/add_testuser_to_admin.erb", File.dirname(__FILE__))) }
 
@@ -129,7 +129,7 @@ describe 'remote_access scenario' do
 
           # FIXME: SIMP-9136
           #  Still needed for tlog on el7.
-          if fact_on(ldap_server,'operatingsystemmajrelease') == '7'
+          if fact_on(ldap_server,'os.release.major') == '7'
             it 'should set up needed repositories' do
               on(client, 'yum -y install https://download.simp-project.com/simp-release-community.rpm')
             end

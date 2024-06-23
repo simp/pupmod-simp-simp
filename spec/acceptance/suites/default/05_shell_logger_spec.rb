@@ -27,7 +27,7 @@ describe 'simp_admin' do
           end
         end
 
-        os_major = fact_on(host, 'operatingsystemmajrelease')
+        os_major = fact_on(host, 'os.release.major')
 
         if os_major == '7'
           context 'switching to sudosh' do

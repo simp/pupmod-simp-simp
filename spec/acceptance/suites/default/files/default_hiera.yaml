@@ -1,7 +1,7 @@
 ---
 # Mandatory Settings
-simp_options::puppet::server: "%{facts.fqdn}"
-simp_options::puppet::ca: "%{facts.fqdn}"
+simp_options::puppet::server: "%{facts.networking.fqdn}"
+simp_options::puppet::ca: "%{facts.networking.fqdn}"
 simp_options::dns::servers: ['8.8.8.8']
 simp_options::ntpd::servers: ['time.nist.gov']
 simp_options::ldap::bind_pw: 's00per sekr3t!'
@@ -23,7 +23,7 @@ simp_options::trusted_nets: ['0.0.0.0/0']
 sssd::enable_files_domain: true
 # YUM Settings
 simp::yum::repo::simp::servers:
-  - "%{facts.fqdn}"
+  - "%{facts.networking.fqdn}"
 
 # Settings to make beaker happy
 sudo::user_specifications:

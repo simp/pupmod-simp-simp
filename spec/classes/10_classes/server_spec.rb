@@ -26,7 +26,7 @@ describe 'simp::server' do
                 'server' => 'puppet.bar.baz'
               }
             })
-            my_facts[:augeasversion] = '1.4.0'
+            my_facts[:augeas] = { 'version' => '1.2.3' }
             my_facts[:openssh_version] = '5.7'
             my_facts
           end

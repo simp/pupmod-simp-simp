@@ -21,7 +21,7 @@ describe 'simp' do
       let(:facts) do
         facts = os_facts.dup
         facts[:openssh_version] = '5.8'
-        facts[:augeasversion] = '1.2.3'
+        facts[:augeas] = { 'version' => '1.2.3' }
         facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
         facts[:puppet_settings] = os_facts[:puppet_settings].merge({
           'main' => {

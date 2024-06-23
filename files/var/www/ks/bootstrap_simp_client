@@ -165,8 +165,10 @@ EOM
   # If selinux is enabled, relabel the filesystem.
   # raises RuntimeError if fixfiles fails
   def fix_file_contexts
-    if Facter.value(:selinux) && !Facter.value(:selinux_current_mode).nil? &&
-        (Facter.value(:selinux_current_mode) != 'disabled')
+    selinux_enabled = Facter.value(:os).dig('selinux', 'enabled')
+    selinux_current_mode = Facter.value(:os).dig('selinux', 'current_mode')
+    if selinux_enabled && !selinux_current_mode.nil? &&
+        (selinux_current_mode != 'disabled')
       info(title('Relabeling filesystem for selinux', 2))
 
       # fixfiles will append to the specified log file
