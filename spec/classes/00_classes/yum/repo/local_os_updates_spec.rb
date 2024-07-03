@@ -93,20 +93,21 @@ describe 'simp::yum::repo::local_os_updates' do
       end
 
       context 'with multiple servers and extra gpgkey URLs' do
-        let(:params) {
+        let(:params) do
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
                           "#{facts[:os][:name]}_#{facts[:os][:release][:major]}" +
                           "_#{facts[:os][:architecture]}"
           {
-          :servers => [
-            'puppet.example.simp',
-            '192.0.2.5',
-            arbitrary_url,
-          ],
-          :extra_gpgkey_urls => [
-            "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}"
-          ]
-        }}
+            servers: [
+              'puppet.example.simp',
+              '192.0.2.5',
+              arbitrary_url,
+            ],
+            extra_gpgkey_urls: [
+              "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}",
+            ],
+          }
+        end
 
         it { is_expected.to compile.with_all_deps }
         it {
