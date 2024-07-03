@@ -954,8 +954,8 @@ checks:
       - CCI-001744
       - SRG-OS-000363-GPOS-00150
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.simp.ctrl_alt_del.log:
     settings:
       parameter: simp::ctrl_alt_del::log
@@ -972,8 +972,8 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
     oval-ids:
     - xccdf_org:ssgproject:content_rule_disable_ctrlaltdel_reboot
     - disable_ctrlaltdel_reboot
@@ -993,8 +993,8 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.simp.sysctl.net__ipv4__conf__default__send_redirects:
     settings:
       parameter: simp::sysctl::net__ipv4__conf__default__send_redirects
@@ -1011,8 +1011,8 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.simp.sysctl.net__ipv6__conf__all__accept_source_route:
     settings:
       parameter: simp::sysctl::net__ipv6__conf__all__accept_source_route
@@ -1029,8 +1029,8 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.simp.yum.schedule.hour:
     settings:
       parameter: simp::yum::schedule::hour
@@ -1047,8 +1047,8 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'
   oval:com.puppet.forge.simp.simp.yum.schedule.minute:
     settings:
       parameter: simp::yum::schedule::minute
@@ -1065,5 +1065,5 @@ checks:
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
     confine:
-      osfamily: RedHat
-      operatingsystemmajrelease: '7'
+      os.family: RedHat
+      os.release.major: '7'

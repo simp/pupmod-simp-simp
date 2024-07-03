@@ -25,6 +25,35 @@ describe 'BootstrapSimpClient' do
     :stderr => ''
   }}
 
+  let(:selinux_off) { { 'selinux' => { 'enabled' => false } } }
+
+  let(:selinux_disabled) do
+    {
+      'selinux' => {
+        'enabled' => true,
+        'current_mode' => 'disabled',
+      }
+    }
+  end
+
+  let(:selinux_permissive) do
+    {
+      'selinux' => {
+        'enabled' => true,
+        'current_mode' => 'permissive',
+      }
+    }
+  end
+
+  let(:selinux_enforcing) do
+    {
+      'selinux' => {
+        'enabled' => true,
+        'current_mode' => 'enforcing',
+      }
+    }
+  end
+
   before :each do
     @tmp_dir = Dir.mktmpdir( File.basename( __FILE__ ) )
     @puppet_conf_file = File.join(@tmp_dir, 'puppet.conf')
@@ -119,7 +148,7 @@ EOM
 
   describe '#fix_file_contexts' do
     it 'does not execute fixfiles when selinux is not installed' do
-      allow(Facter).to receive(:value).with(:selinux).and_return(false)
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_off)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
@@ -131,8 +160,7 @@ EOM
     end
 
     it 'does not execute fixfiles when selinux mode is disabled' do
-      allow(Facter).to receive(:value).with(:selinux).and_return(true)
-      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('disabled')
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_disabled)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
@@ -144,8 +172,7 @@ EOM
     end
 
     it 'executes fixfiles when selinux mode is not disabled' do
-      allow(Facter).to receive(:value).with(:selinux).and_return(true)
-      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_enforcing)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return(success_result)
       bootstrap.parse_command_line(@test_args)
 
@@ -154,8 +181,7 @@ EOM
     end
 
     it 'fail when fixfiles fails' do
-      allow(Facter).to receive(:value).with(:selinux).and_return(true)
-      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('permissive')
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_permissive)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',
@@ -335,8 +361,7 @@ EOM
             ' --waitforcert 10 --evaltrace --summarize '
       allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
 
-      allow(Facter).to receive(:value).with(:selinux).and_return(true)
-      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_enforcing)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return(success_result)
 
       allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").and_return(success_result)
@@ -369,7 +394,7 @@ EOM
             " --no-show_diff --no-splay --verbose --logdest #{@log_file}" +
             ' --waitforcert 10 --evaltrace --summarize '
       allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
-      allow(Facter).to receive(:value).with(:selinux).and_return(false)
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_off)
 
       allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service simp_client_bootstrap enable=false").and_return(success_result)
       allow(bootstrap).to receive(:execute).with("#{puppet_command} resource service puppet enable=true").and_return(success_result)
@@ -398,8 +423,7 @@ EOM
             ' --waitforcert 10 --evaltrace --summarize '
       allow(bootstrap).to receive(:execute).with(puppet_cmd2).and_return(success_result)
 
-      allow(Facter).to receive(:value).with(:selinux).and_return(true)
-      allow(Facter).to receive(:value).with(:selinux_current_mode).and_return('enforcing')
+      allow(Facter).to receive(:value).with(:os).and_return(selinux_enforcing)
       allow(bootstrap).to receive(:execute).with("fixfiles -l #{@log_file} -f relabel").and_return({
         :exitstatus => -1,
         :stdout => '',

@@ -1,3 +1,6 @@
+* Tue Jul 02 2024 Steven Pritchard <steve@sicura.us> - 4.21.0
+- Clean up use of legacy facts to better support Puppet 8
+
 * Thu Jan 25 2024 Steven Pritchard <steve@sicura.us> - 4.20.0
 - Switch from `trlinkin-nsswitch` to `puppet-nsswitch`
 

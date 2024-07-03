@@ -21,7 +21,7 @@ describe 'simp::yum::repo::local_os_updates' do
 
 
         it {
-          os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:architecture]}"
+          os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:os][:architecture]}"
           gpgkey_path =  "SIMP/GPGKEYS"
 
           if os_name  == 'RedHat'
@@ -93,30 +93,31 @@ describe 'simp::yum::repo::local_os_updates' do
       end
 
       context 'with multiple servers and extra gpgkey URLs' do
-        let(:params) {
+        let(:params) do
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
                           "#{facts[:os][:name]}_#{facts[:os][:release][:major]}" +
-                          "_#{facts[:architecture]}"
+                          "_#{facts[:os][:architecture]}"
           {
-          :servers => [
-            'puppet.example.simp',
-            '192.0.2.5',
-            arbitrary_url,
-          ],
-          :extra_gpgkey_urls => [
-            "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}"
-          ]
-        }}
+            servers: [
+              'puppet.example.simp',
+              '192.0.2.5',
+              arbitrary_url,
+            ],
+            extra_gpgkey_urls: [
+              "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}",
+            ],
+          }
+        end
 
         it { is_expected.to compile.with_all_deps }
         it {
           os_maj_rel  = facts[:os][:release][:major]
           os_name     = facts[:os][:name]
-          os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:architecture]}"
+          os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:os][:architecture]}"
           gpgkey_path = "SIMP/GPGKEYS"
           arbitrary_url = 'https://yum.test.simp:4433/repos/' +
                           "#{facts[:os][:name]}_#{facts[:os][:release][:major]}" +
-                          "_#{facts[:architecture]}"
+                          "_#{facts[:os][:architecture]}"
 
           gpg_prefixes = ['puppet.example.simp', '192.0.2.5']
             .map{|x| "https://#{x}/yum/#{gpgkey_path}" }
