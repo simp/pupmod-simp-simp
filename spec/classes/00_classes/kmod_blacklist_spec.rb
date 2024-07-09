@@ -189,7 +189,7 @@ describe 'simp::kmod_blacklist' do
             }}
 
             it 'should blacklist all the default kmods and point to /bin/false' do
-              is_expected.to create_file("/etc/modprobe.d/00_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/false" }.join("\n") + "\n")
+              is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/false" }.join("\n") + "\n")
             end
           end
 

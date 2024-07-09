@@ -88,7 +88,7 @@ class simp::kmod_blacklist (
 
   $_produce_error = $produce_error ? {
     true  => '/bin/false',
-    false => '/bin/true'
+    false => '/bin/true',
   }
 
   $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} ${_produce_error}" }, "\n")
