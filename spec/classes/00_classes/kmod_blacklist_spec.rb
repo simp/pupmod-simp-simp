@@ -183,6 +183,16 @@ describe 'simp::kmod_blacklist' do
 
           end
 
+          context 'when producing an error on module load' do
+            let(:params){{
+              :produce_error => true
+            }}
+
+            it 'should blacklist all the default kmods and point to /bin/false' do
+              is_expected.to create_file("/etc/modprobe.d/zz_simp_disable.conf").with_content(stock_blacklist.map{|x| x = "install #{x} /bin/false" }.join("\n") + "\n")
+            end
+          end
+
         end
       end
     end

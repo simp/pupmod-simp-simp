@@ -1,3 +1,6 @@
+* Tue Jul 09 2024 Mike Riddle <mike@sicura.us> - 4.22.0
+- Added ability for users to switch between '/bin/true' and '/bin/false' when disabling kernel modules via the kmod_blacklist class
+
 * Tue Jul 02 2024 Steven Pritchard <steve@sicura.us> - 4.21.0
 - Clean up use of legacy facts to better support Puppet 8
 
