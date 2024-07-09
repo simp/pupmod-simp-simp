@@ -714,6 +714,7 @@ The following parameters are available in the `simp::kmod_blacklist` class:
 
 * [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
 * [`blacklist`](#-simp--kmod_blacklist--blacklist)
+* [`produce_error`](#-simp--kmod_blacklist--produce_error)
 * [`custom_blacklist`](#-simp--kmod_blacklist--custom_blacklist)
 * [`allow_overrides`](#-simp--kmod_blacklist--allow_overrides)
 * [`lock_modules`](#-simp--kmod_blacklist--lock_modules)
@@ -757,6 +758,16 @@ Default value:
     'usb-storage'
   ]
 ```
+
+##### <a name="-simp--kmod_blacklist--produce_error"></a>`produce_error`
+
+Data type: `Boolean`
+
+If set to true, any disabled modules will point to '/bin/false', which will
+produce an error when anyone attempts to load the module. Default is false,
+which will point to '/bin/true', which will not produce any error.
+
+Default value: `false`
 
 ##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
 
