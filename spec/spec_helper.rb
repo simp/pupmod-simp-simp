@@ -1,35 +1,36 @@
+# frozen_string_literal: true
+#
+# ------------------------------------------------------------------------------
+#         NOTICE: **This file is maintained with puppetsync**
+#
+# This file is automatically updated as part of a puppet module baseline.
+# The next baseline sync will overwrite any local changes made to this file.
+# ------------------------------------------------------------------------------
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet'
 require 'simp/rspec-puppet-facts'
-require 'super_diff/rspec'
 include Simp::RspecPuppetFacts
 
 require 'pathname'
 
-# Load additional stub stuff when tests are not running on Windows
-unless RUBY_PLATFORM =~ /mswin|mingw32|windows/
-  $LOAD_PATH.unshift(
-    File.expand_path(
-      File.join(File.dirname(__FILE__), 'stubs')
-    )
-  )
-end
-
 # RSpec Material
 fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
-module_name = File.basename(File.expand_path(File.join(__FILE__,'../..')))
+module_name = File.basename(File.expand_path(File.join(__FILE__, '../..')))
 
-if !ENV.key?( 'TRUSTED_NODE_DATA' )
-  warn '== WARNING: TRUSTED_NODE_DATA is unset, using TRUSTED_NODE_DATA=yes'
-  ENV['TRUSTED_NODE_DATA']='yes'
+if ENV['PUPPET_DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
 end
 
-default_hiera_config =<<-EOM
+default_hiera_config = <<~HIERA_CONFIG
 ---
 version: 5
 hierarchy:
   - name: SIMP Compliance Engine
     lookup_key: compliance_markup::enforcement
+    options:
+      enabled_sce_versions: [2]
   - name: Custom Test Hiera
     path: "%{custom_hiera}.yaml"
   - name: "%{module_name}"
@@ -39,7 +40,7 @@ hierarchy:
 defaults:
   data_hash: yaml_data
   datadir: "stub"
-EOM
+HIERA_CONFIG
 
 # This can be used from inside your spec tests to set the testable environment.
 # You can use this to stub out an ENC.
@@ -77,25 +78,23 @@ def set_hieradata(hieradata)
   RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
 end
 
-if not File.directory?(File.join(fixture_path,'hieradata')) then
-  FileUtils.mkdir_p(File.join(fixture_path,'hieradata'))
+unless File.directory?(File.join(fixture_path, 'hieradata'))
+  FileUtils.mkdir_p(File.join(fixture_path, 'hieradata'))
 end
 
-if not File.directory?(File.join(fixture_path,'modules',module_name)) then
-  FileUtils.mkdir_p(File.join(fixture_path,'modules',module_name))
+unless File.directory?(File.join(fixture_path, 'modules', module_name))
+  FileUtils.mkdir_p(File.join(fixture_path, 'modules', module_name))
 end
 
 RSpec.configure do |c|
   # If nothing else...
   c.default_facts = {
-    :production => {
+    production: {
       #:fqdn           => 'production.rspec.test.localdomain',
-      :path           => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
-      :concat_basedir => '/tmp'
+      path: '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
+      concat_basedir: '/tmp'
     }
   }
-
-  c.trusted_server_facts = true if c.respond_to?(:trusted_server_facts)
 
   c.mock_framework = :rspec
   c.mock_with :rspec
@@ -103,12 +102,12 @@ RSpec.configure do |c|
   c.module_path = File.join(fixture_path, 'modules')
   c.manifest_dir = File.join(fixture_path, 'manifests') if c.respond_to?(:manifest_dir)
 
-  c.hiera_config = File.join(fixture_path,'hieradata','hiera.yaml')
+  c.hiera_config = File.join(fixture_path, 'hieradata', 'hiera.yaml')
 
   # Useless backtrace noise
   backtrace_exclusion_patterns = [
-    /spec_helper/,
-    /gems/
+    %r{spec_helper},
+    %r{gems},
   ]
 
   if c.respond_to?(:backtrace_exclusion_patterns)
@@ -117,9 +116,10 @@ RSpec.configure do |c|
     c.backtrace_clean_patterns = backtrace_exclusion_patterns
   end
 
+  # rubocop:disable RSpec/BeforeAfterAll
   c.before(:all) do
-    data = YAML.load(default_hiera_config)
-    data.keys.each do |key|
+    data = YAML.safe_load(default_hiera_config)
+    data.each_key do |key|
       next unless data[key].is_a?(Hash)
 
       if data[key][:datadir] == 'stub'
@@ -133,13 +133,14 @@ RSpec.configure do |c|
       f.write data.to_yaml
     end
   end
+  # rubocop:enable RSpec/BeforeAfterAll
 
   c.before(:each) do
     @spec_global_env_temp = Dir.mktmpdir('simpspec')
 
     if defined?(environment)
       set_environment(environment)
-      FileUtils.mkdir_p(File.join(@spec_global_env_temp,environment.to_s))
+      FileUtils.mkdir_p(File.join(@spec_global_env_temp, environment.to_s))
     end
 
     # ensure the user running these tests has an accessible environmentpath
@@ -150,9 +151,9 @@ RSpec.configure do |c|
 
     # sanitize hieradata
     if defined?(hieradata)
-      set_hieradata(hieradata.gsub(':','_'))
+      set_hieradata(hieradata.gsub(':', '_'))
     elsif defined?(class_name)
-      set_hieradata(class_name.gsub(':','_'))
+      set_hieradata(class_name.gsub(':', '_'))
     end
   end
 
@@ -161,34 +162,12 @@ RSpec.configure do |c|
     FileUtils.rm_rf(@spec_global_env_temp)
     @spec_global_env_temp = nil
   end
-
-  if ENV['RSPEC_TIME']
-    c.before(:all) do
-      @suite_start_time = Time.now
-    end
-
-    c.before(:context) do
-      @context_start_time = Time.now
-    end
-
-    c.before(:example) do
-      @example_start_time = Time.now
-    end
-
-    c.after(:all) do
-      puts("TIME FOR SUITE '#{self.class.description}': #{Time.now - @suite_start_time}")
-    end
-
-    c.after(:context) do
-      puts("TIME FOR CONTEXT '#{self.class.description}': #{Time.now - @context_start_time}")
-    end
-  end
 end
 
 Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|
   begin
     Pathname.new(dir).realpath
-  rescue
-    fail "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
+  rescue StandardError
+    raise "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
   end
 end
