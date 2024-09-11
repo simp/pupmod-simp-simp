@@ -1,3 +1,6 @@
+* Wed Sep 11 2024 Steven Pritchard <steve@sicura.us> - 4.23.0
+- [puppetsync] Update module dependencies to support simp-iptables 7.x
+
 * Tue Jul 09 2024 Mike Riddle <mike@sicura.us> - 4.22.0
 - Added ability for users to switch between '/bin/true' and '/bin/false' when disabling kernel modules via the kmod_blacklist class
 

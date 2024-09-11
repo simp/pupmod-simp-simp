@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.22.0",
+  "version": "4.23.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -33,7 +33,7 @@
     },
     {
       "name": "puppetlabs/puppetdb",
-      "version_requirement": ">= 7.1.0 < 8.0.0"
+      "version_requirement": ">= 7.1.0 < 9.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -41,7 +41,7 @@
     },
     {
       "name": "saz/timezone",
-      "version_requirement": ">= 5.1.1 < 7.0.0"
+      "version_requirement": ">= 5.1.1 < 8.0.0"
     },
     {
       "name": "simp/aide",
@@ -85,7 +85,7 @@
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 6.5.3 < 7.0.0"
+      "version_requirement": ">= 6.5.3 < 8.0.0"
     },
     {
       "name": "simp/issue",
@@ -97,7 +97,7 @@
     },
     {
       "name": "simp/pam",
-      "version_requirement": ">= 6.8.3 < 7.0.0"
+      "version_requirement": ">= 6.8.3 < 8.0.0"
     },
     {
       "name": "simp/polkit",
@@ -185,7 +185,7 @@
     },
     {
       "name": "simp/useradd",
-      "version_requirement": ">= 0.2.2 < 1.0.0"
+      "version_requirement": ">= 0.2.2 < 2.0.0"
     },
     {
       "name": "puppet/nsswitch",
