@@ -4,41 +4,40 @@ test_name 'simp "one_shot" scenario'
 
 describe 'simp "one_shot" scenario' do
   def has_puppet(host)
-    on(host, 'test -f /opt/puppetlabs/bin/puppet', :accept_all_exit_codes => true).exit_code == 0
+    on(host, 'test -f /opt/puppetlabs/bin/puppet', accept_all_exit_codes: true).exit_code == 0
   end
 
   def finalize_running?(host)
-    puppet_running = on(host, 'pgrep -x puppet', :accept_all_exit_codes => true).exit_code == 0
+    puppet_running = on(host, 'pgrep -x puppet', accept_all_exit_codes: true).exit_code == 0
 
     return puppet_running if puppet_running
 
-    return (on(host, 'pgrep simp_one_shot_finalize', :accept_all_exit_codes => true).exit_code == 0)
+    (on(host, 'pgrep simp_one_shot_finalize', accept_all_exit_codes: true).exit_code == 0)
   end
 
-  def wait_for_finalize(host, timeout=500)
+  def wait_for_finalize(host, timeout = 500)
     begin
       Timeout.timeout(timeout) do
-        while finalize_running?(host) do
-          sleep(5)
-        end
+        sleep(5) while finalize_running?(host)
       end
     rescue Timeout::Error
-      fail("Error: finalize did not finish within #{timeout} seconds")
+      raise("Error: finalize did not finish within #{timeout} seconds")
     end
 
     # Allow a little more time before hitting the system again
     sleep(5)
   end
 
-  let(:manifest) {
+  let(:manifest) do
     <<-EOS
       # This would be in site.pp, or an ENC or classifier
       include 'simp_options'
       include 'simp'
     EOS
-  }
+  end
 
-  let(:hieradata) {<<-EOF
+  let(:hieradata) do
+    <<-EOF
 # Mandatory Settings
 simp_options::dns::servers: ['8.8.8.8']
 simp_options::puppet::server: #{host_fqdn}
@@ -92,27 +91,27 @@ sudo::user_specifications:
 useradd::securetty:
   - ANY_SHELL
     EOF
-  }
+  end
 
   hosts.each do |host|
     let(:host_fqdn) { fact_on(host, 'fqdn') }
-    let(:ssh_authorized_key) {
-      on(host, 'cat ~/.ssh/authorized_keys').stdout.strip.lines.first.split(/\s+/)[1]
-    }
+    let(:ssh_authorized_key) do
+      on(host, 'cat ~/.ssh/authorized_keys').stdout.strip.lines.first.split(%r{\s+})[1]
+    end
 
-    it 'should set up simp_options through hiera' do
+    it 'sets up simp_options through hiera' do
       set_hieradata_on(host, hieradata)
     end
 
     # These boxes have no root password by default...
-    it 'should set the root password' do
+    it 'sets the root password' do
       on(host, "sed -i 's/enforce_for_root//g' /etc/pam.d/*")
       on(host, 'echo "root:password" | chpasswd --crypt-method SHA256')
     end
 
-    it 'should bootstrap in a few runs' do
+    it 'bootstraps in a few runs' do
       if has_puppet(host)
-        apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
+        apply_manifest_on(host, manifest, accept_all_exit_codes: true)
         wait_for_finalize(host)
       end
 
@@ -120,24 +119,24 @@ useradd::securetty:
       host.reboot
 
       if has_puppet(host)
-        apply_manifest_on(host, manifest, :accept_all_exit_codes => true)
+        apply_manifest_on(host, manifest, accept_all_exit_codes: true)
         wait_for_finalize(host)
       end
     end
 
-    it 'should wait for finalization' do
-        wait_for_finalize(host)
+    it 'waits for finalization' do
+      wait_for_finalize(host)
     end
 
-    it 'should no longer have puppet installed' do
+    it 'noes longer have puppet installed' do
       on(host, 'test ! -d /opt/puppetlabs')
     end
 
-    it 'should no longer have the SIMP PKI keys installed' do
+    it 'noes longer have the SIMP PKI keys installed' do
       on(host, 'test ! -d /etc/pki/simp')
     end
 
-    it 'should no longer have the finalization script installed' do
+    it 'noes longer have the finalization script installed' do
       on(host, 'test ! -f /usr/local/sbin/simp_one_shot_finalize.sh')
     end
   end

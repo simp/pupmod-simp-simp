@@ -7,19 +7,19 @@ end
 describe 'simp::knockout' do
   context 'when a simple array is passed' do
     it_behaves_like 'simp::knockout()',
-                    %w(socrates plato aristotle),
-                    %w(socrates plato aristotle)
+                    ['socrates', 'plato', 'aristotle'],
+                    ['socrates', 'plato', 'aristotle']
   end
 
   context 'when passed a mixed array' do
     it_behaves_like 'simp::knockout()',
-                    %w(socrates plato aristotle --socrates),
-                    %w(plato aristotle)
+                    ['socrates', 'plato', 'aristotle', '--socrates'],
+                    ['plato', 'aristotle']
   end
 
   context 'when passed a mixed array where everything is knocked out' do
     it_behaves_like 'simp::knockout()',
-                    %w(socrates plato aristotle --plato --aristotle --socrates),
+                    ['socrates', 'plato', 'aristotle', '--plato', '--aristotle', '--socrates'],
                     []
   end
 end

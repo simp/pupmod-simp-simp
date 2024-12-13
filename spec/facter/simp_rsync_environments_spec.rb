@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "SIMP Rsync Environments" do
+describe 'SIMP Rsync Environments' do
   after :each do
     LegacyFacter.clear
   end
@@ -18,32 +18,32 @@ describe "SIMP Rsync Environments" do
 
       allow(Dir).to receive(:glob).with('*/rsync').at_least(:once).and_return(['simp/rsync'])
 
-      allow(Facter::Core::Execution).to receive(:exec).with("find -L simp -name '.shares'").at_least(:once).and_return("simp/rsync/.shares")
+      allow(Facter::Core::Execution).to receive(:exec).with("find -L simp -name '.shares'").at_least(:once).and_return('simp/rsync/.shares')
 
       allow(Dir).to receive(:glob).with('simp/rsync/*').at_least(:once).and_return([
-        'simp/rsync/Global/mcafee',
-        'simp/rsync/Global/clamav'
-      ])
+                                                                                     'simp/rsync/Global/mcafee',
+                                                                                     'simp/rsync/Global/clamav',
+                                                                                   ])
 
       LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
-    it 'should return a Hash of environments' do
+    it 'returns a Hash of environments' do
       expect(LegacyFacter.fact(:simp_rsync_environments).value).to eql({
-          'simp' => {
-            'id' => 'simp',
-            'rsync' => {
-              'id' => 'rsync',
-              'global' => {
-                'id' => 'Global',
-                'shares' => [
-                  'mcafee',
-                  'clamav'
-                ]
-              }
-            }
-          }
-        })
+                                                                         'simp' => {
+                                                                           'id' => 'simp',
+                                                                           'rsync' => {
+                                                                             'id' => 'rsync',
+                                                                             'global' => {
+                                                                               'id' => 'Global',
+                                                                               'shares' => [
+                                                                                 'mcafee',
+                                                                                 'clamav',
+                                                                               ]
+                                                                             }
+                                                                           }
+                                                                         }
+                                                                       })
     end
   end
 
@@ -54,7 +54,7 @@ describe "SIMP Rsync Environments" do
       LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
-    it 'should be empty' do
+    it 'is empty' do
       expect(LegacyFacter.fact(:simp_rsync_environments)).to be_nil
     end
   end
@@ -71,7 +71,7 @@ describe "SIMP Rsync Environments" do
       LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
-    it 'should be empty' do
+    it 'is empty' do
       expect(LegacyFacter.fact(:simp_rsync_environments).value).to be_empty
     end
   end

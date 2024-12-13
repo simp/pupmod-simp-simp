@@ -5,15 +5,15 @@ describe 'simp::mountpoints::tmp' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
-          let(:facts){ os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          let(:facts) { os_facts }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           let(:facts) do
             if os_facts.fetch(:init_systems, []).include?('systemd')
               os_facts.merge({
-                # This replicates a normal EL7 default installation
-                :tmp_mount_fstype_tmp => 'tmpfs'
-              })
+                               # This replicates a normal EL7 default installation
+                               tmp_mount_fstype_tmp: 'tmpfs'
+                             })
             else
               os_facts
             end
@@ -21,88 +21,106 @@ describe 'simp::mountpoints::tmp' do
 
           shared_examples_for 'a legacy system' do
             context 'with default parameters' do
-              it { is_expected.to contain_mount('/tmp').with({
-                :options => 'bind,nodev,noexec,nosuid',
-                :device  => '/tmp'
-              }) }
-              it { is_expected.to contain_mount('/var/tmp').with({
-                :options => 'bind,nodev,noexec,nosuid',
-                :device  => '/tmp'
-              }) }
+              it {
+                is_expected.to contain_mount('/tmp').with({
+                                                            options: 'bind,nodev,noexec,nosuid',
+                device: '/tmp'
+                                                          })
+              }
+              it {
+                is_expected.to contain_mount('/var/tmp').with({
+                                                                options: 'bind,nodev,noexec,nosuid',
+                device: '/tmp'
+                                                              })
+              }
               it { is_expected.to create_file('/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
               it { is_expected.to create_file('/var/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
               it { is_expected.to create_file('/usr/tmp').with_ensure('symlink') }
             end
 
             context 'tmp_is_partition' do
-              let(:facts) do os_facts.merge({
-                  :tmp_mount_tmp        => 'rw,seclabel,relatime,data=ordered',
-                  :tmp_mount_fstype_tmp => 'ext4',
-                  :tmp_mount_path_tmp   => '/dev/sda3',
-                })
+              let(:facts) do
+                os_facts.merge({
+                                 tmp_mount_tmp: 'rw,seclabel,relatime,data=ordered',
+                  tmp_mount_fstype_tmp: 'ext4',
+                  tmp_mount_path_tmp: '/dev/sda3',
+                               })
               end
-              it { is_expected.to contain_mount('/tmp').with({
-                :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-                :device  => '/dev/sda3'
-              })}
+
+              it {
+                is_expected.to contain_mount('/tmp').with({
+                                                            options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
+                device: '/dev/sda3'
+                                                          })
+              }
             end
 
             context 'tmp_is_already_bind_mounted' do
-              let(:facts) { os_facts.merge({
-                  :tmp_mount_tmp        => 'bind,foo',
-                  :tmp_mount_fstype_tmp => 'ext4',
-                  :tmp_mount_path_tmp   => '/tmp',
-              })}
-              it { is_expected.to contain_mount('/tmp').with({
-                :options => "bind,nodev,noexec,nosuid",
-                :device  => '/tmp'
-              })}
+              let(:facts) do
+                os_facts.merge({
+                                 tmp_mount_tmp: 'bind,foo',
+                  tmp_mount_fstype_tmp: 'ext4',
+                  tmp_mount_path_tmp: '/tmp',
+                               })
+              end
+
+              it {
+                is_expected.to contain_mount('/tmp').with({
+                                                            options: 'bind,nodev,noexec,nosuid',
+                device: '/tmp'
+                                                          })
+              }
             end
           end
 
           if os_facts.fetch(:init_systems, []).include?('systemd')
             context 'with default parameters' do
-              it { is_expected.to_not create_file('/tmp') }
+              it { is_expected.not_to create_file('/tmp') }
               it { is_expected.to create_file('/var/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
               it { is_expected.to create_file('/usr/tmp').with_ensure('symlink') }
-              it { is_expected.to_not create_service('tmp.mounts').with_ensure('running') }
-              it { is_expected.to_not create_service('tmp.mounts').with_enable(true) }
+              it { is_expected.not_to create_service('tmp.mounts').with_ensure('running') }
+              it { is_expected.not_to create_service('tmp.mounts').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
               it {
-                is_expected.to contain_systemd__unit_file('tmp.mount').
-                  with_content(
-                  <<-EOM
+                is_expected.to contain_systemd__unit_file('tmp.mount')
+                  .with_content(
+                  <<-EOM,
 [Mount]
 What=tmpfs
 Where=/tmp
 Type=tmpfs
 Options=mode=1777,nodev,noexec,nosuid
                   EOM
-                  )
+                )
               }
             end
 
             context 'tmp_is_partition' do
-              let(:facts) do os_facts.merge({
-                  :tmp_mount_tmp        => 'rw,seclabel,relatime,data=ordered',
-                  :tmp_mount_fstype_tmp => 'ext4',
-                  :tmp_mount_path_tmp   => '/dev/sda3',
-                })
+              let(:facts) do
+                os_facts.merge({
+                                 tmp_mount_tmp: 'rw,seclabel,relatime,data=ordered',
+                  tmp_mount_fstype_tmp: 'ext4',
+                  tmp_mount_path_tmp: '/dev/sda3',
+                               })
               end
 
-              it { is_expected.to contain_mount('/tmp').with({
-                :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-                :device  => '/dev/sda3'
-              })}
+              it {
+                is_expected.to contain_mount('/tmp').with({
+                                                            options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
+                device: '/dev/sda3'
+                                                          })
+              }
 
-              it { is_expected.to_not contain_systemd__unit_file('tmp.mount') }
+              it { is_expected.not_to contain_systemd__unit_file('tmp.mount') }
             end
 
             context 'tmp_service == false' do
-              let(:params) {{
-                :tmp_service => false
-              }}
+              let(:params) do
+                {
+                  tmp_service: false
+                }
+              end
 
               it_behaves_like 'a legacy system'
             end
@@ -111,39 +129,54 @@ Options=mode=1777,nodev,noexec,nosuid
           end
 
           context 'var_tmp_is_partition' do
-            let(:facts) { os_facts.merge({
-                :tmp_mount_var_tmp        => 'rw,seclabel,relatime,data=ordered',
-                :tmp_mount_fstype_var_tmp => 'ext4',
-                :tmp_mount_path_var_tmp   => '/dev/sda3',
-            })}
-            it { is_expected.to contain_mount('/var/tmp').with({
-              :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-              :device  => '/dev/sda3'
-            })}
+            let(:facts) do
+              os_facts.merge({
+                               tmp_mount_var_tmp: 'rw,seclabel,relatime,data=ordered',
+                tmp_mount_fstype_var_tmp: 'ext4',
+                tmp_mount_path_var_tmp: '/dev/sda3',
+                             })
+            end
+
+            it {
+              is_expected.to contain_mount('/var/tmp').with({
+                                                              options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
+              device: '/dev/sda3'
+                                                            })
+            }
           end
 
           context 'var_tmp_is_already_bind_mounted' do
-            let(:facts) { os_facts.merge({
-                :tmp_mount_var_tmp        => 'bind,foo',
-                :tmp_mount_fstype_var_tmp => 'ext4',
-                :tmp_mount_path_var_tmp   => '/var/tmp',
-            })}
-            it { is_expected.to contain_mount('/var/tmp').with({
-              :options => "bind,nodev,noexec,nosuid",
-              :device  => '/var/tmp'
-            })}
+            let(:facts) do
+              os_facts.merge({
+                               tmp_mount_var_tmp: 'bind,foo',
+                tmp_mount_fstype_var_tmp: 'ext4',
+                tmp_mount_path_var_tmp: '/var/tmp',
+                             })
+            end
+
+            it {
+              is_expected.to contain_mount('/var/tmp').with({
+                                                              options: 'bind,nodev,noexec,nosuid',
+              device: '/var/tmp'
+                                                            })
+            }
           end
 
           context 'tmp_mount_dev_shm_mounted' do
-            let(:facts) { os_facts.merge({
-                :tmp_mount_dev_shm        => 'rw,seclabel,nosuid,nodev',
-                :tmp_mount_fstype_dev_shm => 'tmpfs',
-                :tmp_mount_path_dev_shm   => 'tmpfs',
-            })}
-            it { is_expected.to contain_mount('/dev/shm').with({
-              :options => 'nodev,noexec,nosuid,rw,seclabel',
-              :device  => 'tmpfs'
-            })}
+            let(:facts) do
+              os_facts.merge({
+                               tmp_mount_dev_shm: 'rw,seclabel,nosuid,nodev',
+                tmp_mount_fstype_dev_shm: 'tmpfs',
+                tmp_mount_path_dev_shm: 'tmpfs',
+                             })
+            end
+
+            it {
+              is_expected.to contain_mount('/dev/shm').with({
+                                                              options: 'nodev,noexec,nosuid,rw,seclabel',
+              device: 'tmpfs'
+                                                            })
+            }
           end
         end
       end

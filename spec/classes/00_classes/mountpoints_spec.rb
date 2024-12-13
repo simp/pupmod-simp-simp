@@ -7,7 +7,7 @@ describe 'simp::mountpoints' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           context 'with default parameters' do
             it { is_expected.to compile.with_all_deps }
@@ -18,7 +18,8 @@ describe 'simp::mountpoints' do
           end
 
           context 'and manage_tmp_perms => false' do
-            let(:params) {{ :manage_tmp_perms => false }}
+            let(:params) { { manage_tmp_perms: false } }
+
             it { is_expected.to compile.with_all_deps }
             it { is_expected.not_to contain_mount('/tmp') }
             it { is_expected.not_to contain_mount('/var/tmp') }

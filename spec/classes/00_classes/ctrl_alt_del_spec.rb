@@ -7,9 +7,9 @@ describe 'simp::ctrl_alt_del' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
-          shared_examples_for "a systemd system" do
+          shared_examples_for 'a systemd system' do
             it { is_expected.to compile.with_all_deps }
 
             it { is_expected.to create_class('simp::ctrl_alt_del') }
@@ -17,11 +17,11 @@ describe 'simp::ctrl_alt_del' do
             it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del.target') }
             it {
               is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service')
-                .with_content(/SyslogFacility=local6/)
+                .with_content(%r{SyslogFacility=local6})
             }
             it {
               is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service')
-                .with_content(/SyslogLevel=warning/)
+                .with_content(%r{SyslogLevel=warning})
             }
           end
 
@@ -31,29 +31,33 @@ describe 'simp::ctrl_alt_del' do
             it {
               is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service')
                 .with_content(
-                  %r{ExecStart=/bin/sh -c "/bin/echo -n 'Ctrl-Alt-Del detected - Logged in users:' `/usr/bin/who | /bin/cut -f1 -d' ' | /bin/sort -u | /usr/bin/tr '\\n' ' '`"\n}
+                  %r{ExecStart=/bin/sh -c "/bin/echo -n 'Ctrl-Alt-Del detected - Logged in users:' `/usr/bin/who | /bin/cut -f1 -d' ' | /bin/sort -u | /usr/bin/tr '\\n' ' '`"\n},
                 )
             }
 
             context 'when not logging users' do
-              let(:params){{
-                :log_users => false
-              }}
+              let(:params) do
+                {
+                  log_users: false
+                }
+              end
 
               it_behaves_like 'a systemd system'
 
               it {
                 is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service')
                   .with_content(
-                    %r{ExecStart=/bin/sh -c "/bin/echo -n 'Ctrl-Alt-Del detected'"\n}
+                    %r{ExecStart=/bin/sh -c "/bin/echo -n 'Ctrl-Alt-Del detected'"\n},
                   )
               }
             end
 
             context 'when not logging' do
-              let(:params){{
-                :log => false
-              }}
+              let(:params) do
+                {
+                  log: false
+                }
+              end
 
               it { is_expected.to compile.with_all_deps }
 
@@ -62,9 +66,11 @@ describe 'simp::ctrl_alt_del' do
             end
 
             context 'when allowing ctrl-alt-del' do
-              let(:params){{
-                :enable => true
-              }}
+              let(:params) do
+                {
+                  enable: true
+                }
+              end
 
               it { is_expected.to compile.with_all_deps }
 
@@ -75,7 +81,7 @@ describe 'simp::ctrl_alt_del' do
             it {
               expect {
                 is_expected.to compile.with_all_deps
-              }.to raise_error(/not find supported init/)
+              }.to raise_error(%r{not find supported init})
             }
           end
         end

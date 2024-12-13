@@ -4,12 +4,8 @@
 # It is safe to check in changes to this file.  Unlike the Gemfile, changes
 # made to this file will not be overwritten during standardized asset syncs.
 group :test do
-  gem 'rubocop'
-  gem 'rubocop-rake'
-  gem 'rubocop-rspec'
-  gem 'rubocop-i18n'
   gem 'super_diff'
-  gem 'facterdb', '< 2'
+  gem 'facterdb', '~> 3'
 end
 
 group :system_tests do

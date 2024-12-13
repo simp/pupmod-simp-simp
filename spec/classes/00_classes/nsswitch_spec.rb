@@ -7,7 +7,7 @@ describe 'simp::nsswitch' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           context 'with default parameters' do
             it { is_expected.to compile.with_all_deps }
@@ -35,9 +35,10 @@ describe 'simp::nsswitch' do
           end
 
           context 'with sssd => true' do
-            let(:params) {{ :sssd => true }}
+            let(:params) { { sssd: true } }
 
-            let(:content){ <<~EOM
+            let(:content) do
+              <<~EOM
               # This file is controlled by Puppet
 
               passwd:     files [!NOTFOUND=return] sss mymachines systemd
@@ -57,13 +58,14 @@ describe 'simp::nsswitch' do
               automount:  files
               aliases:    files
               EOM
-            }
+            end
 
             it { is_expected.to create_file('nsswitch.conf').with_content(content) }
           end
 
           context 'with ldap => true' do
-            let(:params) {{ :ldap => true }}
+            let(:params) { { ldap: true } }
+
             it { is_expected.to create_file('nsswitch.conf').with_content(<<~EOM) }
               # This file is controlled by Puppet
 

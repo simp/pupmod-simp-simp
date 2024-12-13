@@ -4,28 +4,27 @@ describe 'simp::server' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-
-        let(:pre_condition) { 
+        let(:pre_condition) do
           "class {
             'simp_options':
               authselect => false,
           }"
-        }
+        end
 
         if os_facts[:kernel] == 'windows'
-          let(:facts){ os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          let(:facts) { os_facts }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           let(:facts) do
             my_facts = os_facts.dup
             my_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-              'main' => {
-                'ssldir' => '/opt/puppetlabs/puppet/vardir',
-              },
+                                                                            'main' => {
+                                                                              'ssldir' => '/opt/puppetlabs/puppet/vardir',
+                                                                            },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            })
+                                                                          })
             my_facts[:augeas] = { 'version' => '1.2.3' }
             my_facts[:openssh_version] = '5.7'
             my_facts
@@ -39,10 +38,12 @@ describe 'simp::server' do
           end
 
           context 'with allow_simp_user => true' do
-            let(:params){{
-              :pam => true,
-              :allow_simp_user => true
-            }}
+            let(:params) do
+              {
+                pam: true,
+             allow_simp_user: true
+              }
+            end
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::server') }
@@ -73,20 +74,20 @@ describe 'simp::server' do
               'simp::mountpoints',
               'simp::prelink',
               'simp::sysctl',
-              'ssh'
+              'ssh',
             ]
-            case os_facts[:os][:release][:major]
-            when '7'
-              simp_lite_os_spec = [
-                'rkhunter',
-                'ntpd'
-              ]
-            else
-              simp_lite_os_spec = [
-                'rkhunter',
-                'chrony'
-              ]
-            end
+            simp_lite_os_spec = case os_facts[:os][:release][:major]
+                                when '7'
+                                  [
+                                    'rkhunter',
+                                    'ntpd',
+                                  ]
+                                else
+                                  [
+                                    'rkhunter',
+                                    'chrony',
+                                  ]
+                                end
             simp = [
               'pam::wheel',
               'svckill',
@@ -107,7 +108,7 @@ describe 'simp::server' do
                   simp_lite_os_spec,
                   simp_lite,
                   poss,
-                  simp
+                  simp,
                 ],
                 'does_not_contain' => [
                 ]
@@ -126,35 +127,39 @@ describe 'simp::server' do
 
             scenarios.each do |scenario, data|
               context "'#{scenario}'" do
-                let(:params) {{
-                  :scenario => scenario
-                }}
+                let(:params) do
+                  {
+                    scenario: scenario
+                  }
+                end
 
                 it { is_expected.to compile.with_all_deps }
                 data['contains'].flatten.each do |class_name|
-                  it { is_expected.to contain_class("#{class_name}") }
+                  it { is_expected.to contain_class(class_name.to_s) }
                 end
                 data['does_not_contain'].flatten.each do |class_name|
-                  it { is_expected.to_not contain_class("#{class_name}") }
+                  it { is_expected.not_to contain_class(class_name.to_s) }
                 end
               end
             end
-            
-            scenarios.each do |scenario, data|
+
+            scenarios.each_key do |scenario|
               context "'#{scenario}' with authselect" do
-                let(:params) {{
-                  :scenario => scenario
-                }}
-                
-                let(:pre_condition) { 
+                let(:params) do
+                  {
+                    scenario: scenario
+                  }
+                end
+
+                let(:pre_condition) do
                   "class {
                     'simp_options':
                       authselect => true,
                   }"
-                }
+                end
 
                 it { is_expected.to compile.with_all_deps }
-                it { is_expected.to_not contain_class('nsswitch') }
+                it { is_expected.not_to contain_class('nsswitch') }
               end
             end
           end

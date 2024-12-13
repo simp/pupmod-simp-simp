@@ -6,24 +6,24 @@ describe 'simp::rc_local' do
       let(:facts) { os_facts }
 
       if os_facts[:kernel] == 'windows'
-        it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+        it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
       else
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it do
-            is_expected.to contain_file('/etc/rc.d').with( {
-              :ensure => 'directory',
-              :owner  => 'root',
-              :group  => 'root',
-              :mode   => '0644'
-            } )
+            is_expected.to contain_file('/etc/rc.d').with({
+                                                            ensure: 'directory',
+              owner: 'root',
+              group: 'root',
+              mode: '0644'
+                                                          })
           end
 
           it do
-            is_expected.to contain_file('/etc/rc.local').with( {
-              :ensure => 'link',
-              :target => '/etc/rc.d/rc.local'
-            } )
+            is_expected.to contain_file('/etc/rc.local').with({
+                                                                ensure: 'link',
+              target: '/etc/rc.d/rc.local'
+                                                              })
           end
 
           it do
@@ -33,19 +33,18 @@ describe 'simp::rc_local' do
 # This file managed by Puppet, manual changes will be erased!
 # This file Disabled via Puppet
 EOM
-            is_expected.to contain_file('/etc/rc.d/rc.local').with( {
-              :ensure  => 'file',
-              :owner   => 'root',
-              :group   => 'root',
-              :mode    => '0755',
-              :content => expected.strip
-            } )
+            is_expected.to contain_file('/etc/rc.d/rc.local').with({
+                                                                     ensure: 'file',
+              owner: 'root',
+              group: 'root',
+              mode: '0755',
+              content: expected.strip
+                                                                   })
           end
-
         end
 
         context 'with custom content' do
-          let(:params) {{ :content => '# My comment' }}
+          let(:params) { { content: '# My comment' } }
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -56,12 +55,13 @@ EOM
 # My comment
 EOM
             is_expected.to contain_file('/etc/rc.d/rc.local').with_content(
-              expected.strip)
+              expected.strip,
+            )
           end
         end
 
         context 'with management_comment = false' do
-          let(:params) {{ :management_comment => false }}
+          let(:params) { { management_comment: false } }
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -70,7 +70,8 @@ EOM
 # This file Disabled via Puppet
 EOM
             is_expected.to contain_file('/etc/rc.d/rc.local').with_content(
-              expected.strip)
+              expected.strip,
+            )
           end
         end
       end

@@ -3,37 +3,36 @@ require 'spec_helper_acceptance'
 test_name 'simp::base_apps and simp::base_services class'
 
 describe 'simp::base_apps class' do
-  let(:hieradata) {
+  let(:hieradata) do
     <<-EOS
 ---
 simp_options::firewall: true
 simp_options::trusted_nets:
   - 'ALL'
     EOS
-  }
+  end
 
-  let(:manifest) {
+  let(:manifest) do
     <<-EOS
 include 'simp::base_apps'
 include 'simp::base_services'
     EOS
-  }
+  end
 
   context 'default parameters' do
     hosts.each do |host|
-      it "should prepare #{host}" do
+      it "prepares #{host}" do
         # Set up base modules and hieradata
-        set_hieradata_on( host, hieradata )
+        set_hieradata_on(host, hieradata)
       end
 
-      it 'should apply with no errors' do
-        apply_manifest_on( host, manifest, :catch_failures => true )
+      it 'applies with no errors' do
+        apply_manifest_on(host, manifest, catch_failures: true)
       end
 
-      it 'should be idempotent' do
-        apply_manifest_on( host, manifest, :catch_changes  => true )
+      it 'is idempotent' do
+        apply_manifest_on(host, manifest, catch_changes: true)
       end
-
     end
   end
 end

@@ -5,8 +5,8 @@ describe 'simp::server::rsync_shares' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         if os_facts[:kernel] == 'windows'
-          let(:facts){ os_facts }
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          let(:facts) { os_facts }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           let(:facts) do
             os_facts[:simp_rsync_environments] = {
@@ -69,14 +69,14 @@ describe 'simp::server::rsync_shares' do
                       '7' => {
                         'id' => '7',
                         'shares' => [
-                          'bind_dns'
+                          'bind_dns',
                         ]
                       },
                       'global' => {
                         'id' => 'Global',
                         'shares' => [
                           'apache',
-                          'tftpboot'
+                          'tftpboot',
                         ]
                       }
                     }
@@ -90,15 +90,15 @@ describe 'simp::server::rsync_shares' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::server::rsync_shares') }
             it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
-            it { is_expected.to_not create_rsync__server__section("mcafee_#{environment}") }
-            it { is_expected.to_not create_rsync__server__section("jenkins_plugins_#{environment}") }
+            it { is_expected.not_to create_rsync__server__section("mcafee_#{environment}") }
+            it { is_expected.not_to create_rsync__server__section("jenkins_plugins_#{environment}") }
             it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
-            it { is_expected.to_not create_rsync__server__section("bind_dns_default_#{environment}_RedHat_8") }
+            it { is_expected.not_to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_8") }
             it { is_expected.to create_rsync__server__section("apache_#{environment}_RedHat") }
             it { is_expected.to create_rsync__server__section("tftpboot_#{environment}_RedHat") }
-            it { is_expected.to_not create_rsync__server__section("dhcpd_#{environment}_RedHat") }
-            it { is_expected.to_not create_rsync__server__section("snmp_#{environment}_RedHat") }
-            it { is_expected.to_not create_rsync__server__section("freeradius_#{environment}_RedHat") }
+            it { is_expected.not_to create_rsync__server__section("dhcpd_#{environment}_RedHat") }
+            it { is_expected.not_to create_rsync__server__section("snmp_#{environment}_RedHat") }
+            it { is_expected.not_to create_rsync__server__section("freeradius_#{environment}_RedHat") }
           end
         end
       end

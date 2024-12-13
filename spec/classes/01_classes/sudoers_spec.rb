@@ -7,7 +7,7 @@ describe 'simp::sudoers' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           context 'with default parameters' do
             it { is_expected.to compile.with_all_deps }
@@ -18,7 +18,8 @@ describe 'simp::sudoers' do
           end
 
           context 'with common_aliases => false' do
-            let(:params) {{ :common_aliases => false }}
+            let(:params) { { common_aliases: false } }
+
             it { is_expected.to contain_sudo__default_entry('00_main') }
             it { is_expected.not_to create_class('::simp::sudoers::aliases') }
           end

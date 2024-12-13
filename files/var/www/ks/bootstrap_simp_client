@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 #
+require 'English'
 require 'facter'
 require 'fileutils'
 require 'optparse'
@@ -10,12 +11,12 @@ class BootstrapSimpClient
 
   class ConfigurationError < RuntimeError; end
 
-  DEFAULT_BOOTSTRAP_SERVICE     = 'simp_client_bootstrap'
-  DEFAULT_SERVICE_CONFIG_DIR    = '/etc/sysconfig'
+  DEFAULT_BOOTSTRAP_SERVICE     = 'simp_client_bootstrap'.freeze
+  DEFAULT_SERVICE_CONFIG_DIR    = '/etc/sysconfig'.freeze
   DEFAULT_SET_STATIC_HOSTNAME   = false
 
   DEFAULT_PUPPET_CA_PORT        = 8141
-  DEFAULT_DIGEST_ALGORITHM      = 'sha256'
+  DEFAULT_DIGEST_ALGORITHM      = 'sha256'.freeze
   DEFAULT_PUPPET_KEYLENGTH      = 4096
   DEFAULT_PUPPET_WAIT_FOR_CERT  = 10
   DEFAULT_PRINT_STATS           = true
@@ -24,25 +25,23 @@ class BootstrapSimpClient
   DEFAULT_NUM_PUPPET_RUNS       = 2
   DEFAULT_INITIAL_RETRY_SECONDS = 10
   DEFAULT_RETRY_FACTOR          = 1.5
-  DEFAULT_MAX_SECONDS           = 30*60 # 30 minutes
+  DEFAULT_MAX_SECONDS           = 30 * 60 # 30 minutes
 
   # general program config
-  DEFAULT_LOG_FILE              = '/root/puppet.bootstrap.log'
+  DEFAULT_LOG_FILE              = '/root/puppet.bootstrap.log'.freeze
   DEFAULT_QUIET                 = false
   DEFAULT_DEBUG                 = false
 
-  DELIM = '='*80
+  DELIM = '=' * 80
 
   def self.puppet_exe_path
     return @puppet_exe if @puppet_exe
 
-    puppet_exe = nil
-
-    if File.exist?('/opt/puppetlabs/bin/puppet')
-      puppet_exe = '/opt/puppetlabs/bin/puppet'
-    else
-      puppet_exe = %x{which puppet}.strip
-    end
+    puppet_exe = if File.exist?('/opt/puppetlabs/bin/puppet')
+                   '/opt/puppetlabs/bin/puppet'
+                 else
+                   `which puppet`.strip
+                 end
 
     raise 'Error: Could not find a puppet executable on the system' unless File.exist?(puppet_exe)
 
@@ -52,7 +51,7 @@ class BootstrapSimpClient
   end
 
   def self.puppet_config_path
-    %x{#{puppet_exe_path} config print config}.strip
+    `#{puppet_exe_path} config print config`.strip
   end
 
   attr_reader :options
@@ -60,23 +59,23 @@ class BootstrapSimpClient
 
   def initialize
     @options = {
-      :bootstrap_service      => DEFAULT_BOOTSTRAP_SERVICE,
-      :set_static_hostname    => DEFAULT_SET_STATIC_HOSTNAME,
-      :ntp_servers            => [],
-      :puppet_conf_file       => self.class.puppet_config_path,
-      :puppet_ca_port         => DEFAULT_PUPPET_CA_PORT,
-      :digest_algorithm       => DEFAULT_DIGEST_ALGORITHM,
-      :puppet_keylength       => DEFAULT_PUPPET_KEYLENGTH,
-      :puppet_wait_for_cert   => DEFAULT_PUPPET_WAIT_FOR_CERT,
-      :print_stats            => DEFAULT_PRINT_STATS,
-      :num_puppet_runs        => DEFAULT_NUM_PUPPET_RUNS,
-      :initial_retry_interval => DEFAULT_INITIAL_RETRY_SECONDS,
-      :retry_factor           => DEFAULT_RETRY_FACTOR,
-      :max_seconds            => DEFAULT_MAX_SECONDS,
-      :log_file               => DEFAULT_LOG_FILE,
-      :quiet                  => DEFAULT_QUIET,
-      :debug                  => DEFAULT_DEBUG,
-      :help_requested         => false
+      bootstrap_service: DEFAULT_BOOTSTRAP_SERVICE,
+      set_static_hostname: DEFAULT_SET_STATIC_HOSTNAME,
+      ntp_servers: [],
+      puppet_conf_file: self.class.puppet_config_path,
+      puppet_ca_port: DEFAULT_PUPPET_CA_PORT,
+      digest_algorithm: DEFAULT_DIGEST_ALGORITHM,
+      puppet_keylength: DEFAULT_PUPPET_KEYLENGTH,
+      puppet_wait_for_cert: DEFAULT_PUPPET_WAIT_FOR_CERT,
+      print_stats: DEFAULT_PRINT_STATS,
+      num_puppet_runs: DEFAULT_NUM_PUPPET_RUNS,
+      initial_retry_interval: DEFAULT_INITIAL_RETRY_SECONDS,
+      retry_factor: DEFAULT_RETRY_FACTOR,
+      max_seconds: DEFAULT_MAX_SECONDS,
+      log_file: DEFAULT_LOG_FILE,
+      quiet: DEFAULT_QUIET,
+      debug: DEFAULT_DEBUG,
+      help_requested: false
     }
     @retry_interval = nil
     @hostnamectl = '/usr/bin/hostnamectl'
@@ -91,18 +90,15 @@ class BootstrapSimpClient
   # returns true if the system has already been bootstrapped, as
   # indicated by the LOCKED environment variable
   def bootstrap_locked?
-    if (ENV['LOCKED'] == 'true')
-      lock_msg =  <<EOM
+    return false unless ENV['LOCKED'] == 'true'
+    lock_msg = <<EOM
 NOTICE: The server has already been successfully bootstrapped for
 Puppet.  To re-run bootstrap, unlock the service per the instructions
 in #{@options[:service_env_file]}
 EOM
-      # don't have the logger yet, so write to stdout
-      puts lock_msg unless @options[:quiet]
-      return true
-    else
-      return false
-    end
+    # don't have the logger yet, so write to stdout
+    puts lock_msg unless @options[:quiet]
+    true
   end
 
   def configure_puppet
@@ -148,18 +144,18 @@ EOM
     debug("Executing: #{command}")
     out_pipe_r, out_pipe_w = IO.pipe
     err_pipe_r, err_pipe_w = IO.pipe
-    pid = spawn(command, :out => out_pipe_w, :err => err_pipe_w)
+    pid = spawn(command, out: out_pipe_w, err: err_pipe_w)
     out_pipe_w.close
     err_pipe_w.close
 
     Process.wait(pid)
-    exitstatus = $?.nil? ? 1 : $?.exitstatus
+    exitstatus = $CHILD_STATUS.nil? ? 1 : $CHILD_STATUS.exitstatus
     stdout = out_pipe_r.read
     out_pipe_r.close
     stderr = err_pipe_r.read
     err_pipe_r.close
 
-    return {:exitstatus => exitstatus, :stdout => stdout, :stderr => stderr}
+    { exitstatus: exitstatus, stdout: stdout, stderr: stderr }
   end
 
   # If selinux is enabled, relabel the filesystem.
@@ -168,7 +164,7 @@ EOM
     selinux_enabled = Facter.value(:os).dig('selinux', 'enabled')
     selinux_current_mode = Facter.value(:os).dig('selinux', 'current_mode')
     if selinux_enabled && !selinux_current_mode.nil? &&
-        (selinux_current_mode != 'disabled')
+       (selinux_current_mode != 'disabled')
       info(title('Relabeling filesystem for selinux', 2))
 
       # fixfiles will append to the specified log file
@@ -181,14 +177,13 @@ EOM
   end
 
   def get_retry_interval
-    if @retry_interval.nil?
-      @retry_interval = @options[:initial_retry_interval]
-    else
-      @retry_interval = (@retry_interval * @options[:retry_factor]).round
-    end
+    @retry_interval = if @retry_interval.nil?
+                        @options[:initial_retry_interval]
+                      else
+                        (@retry_interval * @options[:retry_factor]).round
+                      end
     @retry_interval
   end
-
 
   def lock_bootstrap
     info(title('Locking bootstrap service to prevent inadvertent re-bootstrap', 2))
@@ -207,10 +202,10 @@ EOM
 
   def not_nil_or_empty?(x)
     return false if x.nil?
-    if x.respond_to?(:empty?) and x.empty?
+    if x.respond_to?(:empty?) && x.empty?
       return false
     end
-    return true
+    true
   end
 
   def parse_command_line(args)
@@ -372,13 +367,13 @@ EOM
         @options[:bootstrap_service] = bootstrap_service
       end
 
-       opts.on(
-        '-e', '--bootstrap-env-file FILE',
-        'Bootstrap service environment file. Defaults to',
-        "#{DEFAULT_SERVICE_CONFIG_DIR}/<bootstrap service name>"
-      ) do |service_env_file|
-        @options[:service_env_file] = service_env_file
-      end
+      opts.on(
+       '-e', '--bootstrap-env-file FILE',
+       'Bootstrap service environment file. Defaults to',
+       "#{DEFAULT_SERVICE_CONFIG_DIR}/<bootstrap service name>"
+     ) do |service_env_file|
+       @options[:service_env_file] = service_env_file
+     end
 
       opts.on(
         '-l', '--log-file LOGFILE',
@@ -406,7 +401,7 @@ EOM
         @options[:debug] = true
       end
 
-      opts.on( '-h', '--help', 'Print this help message') do
+      opts.on('-h', '--help', 'Print this help message') do
         @options[:help_requested] = true
         puts opts
       end
@@ -438,9 +433,8 @@ EOM
       cmd += [ '--evaltrace', '--summarize' ] if @options[:print_stats]
       @options[:puppet_cmd] = cmd.join(' ')
       reset_retry_interval
-
     rescue OptionParser::ParseError => e
-      raise ConfigurationError.new("#{e.message}\n#{opt_parser.banner}")
+      raise ConfigurationError, "#{e.message}\n#{opt_parser.banner}"
     end
   end
 
@@ -450,19 +444,18 @@ EOM
 
   # Run a puppet agent command until it succeeds, where success
   # is defined to be any exit code that is not 1.
-  def run_puppet_agent(extra_args=nil, title='puppet agent run')
+  def run_puppet_agent(extra_args = nil, title = 'puppet agent run')
     reset_retry_interval
     info(title)
     cmd = "#{@options[:puppet_cmd]} #{extra_args}"
-    result = { :exitstatus => 1 }
+    result = { exitstatus: 1 }
     while result[:exitstatus] == 1
       result = execute(cmd)
-      if result[:exitstatus] == 1
-        error(result[:stderr])
-        retry_interval = get_retry_interval
-        debug(">>>>>> Command failed.  Retrying in #{retry_interval} seconds")
-        sleep(retry_interval)
-      end
+      next unless result[:exitstatus] == 1
+      error(result[:stderr])
+      retry_interval = get_retry_interval
+      debug(">>>>>> Command failed.  Retrying in #{retry_interval} seconds")
+      sleep(retry_interval)
     end
   end
 
@@ -473,7 +466,7 @@ EOM
     return unless @options[:set_static_hostname]
 
     hostname = execute('/usr/bin/hostname -f')[:stdout].strip
-    if hostname.empty? or hostname == 'localhost.localdomain'
+    if hostname.empty? || (hostname == 'localhost.localdomain')
       msg = "Cannot set static hostname: '#{hostname}' is not a valid hostname"
       raise(msg)
     end
@@ -486,15 +479,15 @@ EOM
   end
 
   def set_system_time
-    return if @options[:ntp_servers].nil? or @options[:ntp_servers].empty?
+    return if @options[:ntp_servers].nil? || @options[:ntp_servers].empty?
     info(title("Setting the system time against #{@options[:ntp_servers].join(' ')}", 2))
     # this can fail if the time service is up and running, so only log any failures
-    kernelversion = execute("/usr/bin/uname -r")[:stdout].split(".")[0]
-    case  kernelversion
-    when '2','3'
+    kernelversion = execute('/usr/bin/uname -r')[:stdout].split('.')[0]
+    case kernelversion
+    when '2', '3'
       result = execute("/usr/sbin/ntpdate -b #{@options[:ntp_servers].join(' ')}")
     else
-      serverlist = @options[:ntp_servers].map {|s| "\'server #{s} iburst\'" }.join(' ')
+      serverlist = @options[:ntp_servers].map { |s| "\'server #{s} iburst\'" }.join(' ')
       result = execute("/usr/sbin/chronyd -q #{serverlist}")
     end
     warn(result[:stderr]) if result[:exitstatus] != 0
@@ -503,13 +496,13 @@ EOM
   def set_up_log
     log_file = @options[:log_file]
     if File.exist?(log_file)
-      timestamp = File.stat(log_file).mtime.strftime("%Y-%m-%dT%H%M%S")
+      timestamp = File.stat(log_file).mtime.strftime('%Y-%m-%dT%H%M%S')
       log_backup = "#{log_file}.#{timestamp}"
       debug("Backing up #{log_file} to #{log_backup}")
       FileUtils.mv(log_file, log_backup)
     end
 
-    # Note: If the ownership of this file is root:root, puppet agent
+    # NOTE: If the ownership of this file is root:root, puppet agent
     # will complain in an 'err'-level message, but not fail, when it
     # writes to the file. However, since there is no puppet user
     # on the client, this can't be fixed...
@@ -519,61 +512,60 @@ EOM
   # raises ConfigurationError upon validation failure
   def validate_options
     unless File.exist?(@options[:puppet_conf_file])
-      msg = "Could not find puppet.conf at '#{@options[:puppet_conf_file]}'." +
-        " Please check your puppet installation and try again."
-      raise ConfigurationError.new(msg)
+      msg = "Could not find puppet.conf at '#{@options[:puppet_conf_file]}'." \
+            ' Please check your puppet installation and try again.'
+      raise ConfigurationError, msg
     end
 
     unless not_nil_or_empty?(@options[:puppet_server])
-      raise ConfigurationError.new('No Puppet server specified')
+      raise ConfigurationError, 'No Puppet server specified'
     end
 
     unless not_nil_or_empty?(@options[:puppet_ca])
-      raise ConfigurationError.new('No Puppet CA specified')
+      raise ConfigurationError, 'No Puppet CA specified'
     end
 
-    if @options[:set_static_hostname] and !File.exist?(@hostnamectl)
-      raise ConfigurationError.new("static hostname cannot be set: #{@hostnamectl} does not exist")
+    if @options[:set_static_hostname] && !File.exist?(@hostnamectl)
+      raise ConfigurationError, "static hostname cannot be set: #{@hostnamectl} does not exist"
     end
 
-    if (@options[:puppet_ca_port] < 1) or (@options[:puppet_ca_port] > 65535)
+    if (@options[:puppet_ca_port] < 1) || (@options[:puppet_ca_port] > 65_535)
       msg = "Invalid Puppet CA port '#{@options[:puppet_ca_port]}': must be in [0,65535]"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:num_puppet_runs] > 0
       msg = "Invalid number of puppet agent runs '#{@options[:num_puppet_runs]}': must be > 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:puppet_keylength] > 0
       msg = "Invalid Puppet keylength '#{@options[:puppet_keylength]}': must be > 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:puppet_wait_for_cert] >= 0
       msg = "Invalid Puppet wait for cert '#{@options[:puppet_wait_for_cert]}': must be >= 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:initial_retry_interval] > 0
       msg = "Invalid initial retry interval '#{@options[:initial_retry_interval]}': must be > 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:retry_factor] > 0
       msg = "Invalid retry factor '#{@options[:retry_factor]}': must be > 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
     unless @options[:max_seconds] > 0
       msg = "Invalid max seconds '#{@options[:max_seconds]}': must be > 0"
-      raise ConfigurationError.new(msg)
+      raise ConfigurationError, msg
     end
 
-    if @options[:quiet] and @options[:debug]
-      raise ConfigurationError.new('--quiet and --debug cannot be used together')
-    end
+    return unless @options[:quiet] && @options[:debug]
+    raise ConfigurationError, '--quiet and --debug cannot be used together'
   end
 
   #####################################################################
@@ -583,40 +575,40 @@ EOM
   def title(msg, level)
     case level
     when 1
-       "*** #{msg} ***"
+      "*** #{msg} ***"
     when 2
-       "------ #{msg} ------"
+      "------ #{msg} ------"
     when 3
-       "......... #{msg} ........."
+      "......... #{msg} ........."
     else
-       msg
+      msg
     end
   end
 
   def error(msg)
-   log(:err, msg, true)
+    log(:err, msg, true)
   end
 
   def warn(msg)
-   log(:warning, msg, true)
+    log(:warning, msg, true)
   end
 
-  def info(msg='')
-   log(:info, msg, false)
+  def info(msg = '')
+    log(:info, msg, false)
   end
 
-  def debug(msg='')
-   log(:debug, msg, false)
+  def debug(msg = '')
+    log(:debug, msg, false)
   end
 
   def log(level, msg, suppress_empty_msgs)
-    if msg.is_a?(Array)
-      message = msg.join("\n")
-    else
-      message = msg
-    end
+    message = if msg.is_a?(Array)
+                msg.join("\n")
+              else
+                msg
+              end
 
-    if suppress_empty_msgs and (message.nil? or message.strip.empty?)
+    if suppress_empty_msgs && (message.nil? || message.strip.empty?)
       return
     end
 
@@ -624,23 +616,22 @@ EOM
     # writing to the log file, although never at the same time.  So,
     # we can't keep the log file open. Instead, we append to it with
     # each log message.
-    prefix = "#{Time.now} #{File.basename(__FILE__)} (#{level.to_s}):"
+    prefix = "#{Time.now} #{File.basename(__FILE__)} (#{level}):"
     File.open(@options[:log_file], 'a') do |file|
       file.puts "#{prefix} #{message}"
     end
 
-    unless @options[:quiet]
-      case level
-      when :err
-        # insert newline to help error message stand out, especially when
-        # the error has left the cursor at the end of the line
-        $stderr.puts
-        $stderr.puts(message)
-      when :warning, :info
-        $stdout.puts(message)
-      when :debug
-        $stdout.puts(message) if @options[:debug]
-      end
+    return if @options[:quiet]
+    case level
+    when :err
+      # insert newline to help error message stand out, especially when
+      # the error has left the cursor at the end of the line
+      $stderr.puts
+      $stderr.puts(message)
+    when :warning, :info
+      $stdout.puts(message)
+    when :debug
+      $stdout.puts(message) if @options[:debug]
     end
   end
 
@@ -651,13 +642,13 @@ EOM
   def run(args)
     parse_command_line(args)
     return 0 if @options[:help_requested] # already have printed help
-    return 2 if bootstrap_locked?  # already have printed lock info
+    return 2 if bootstrap_locked? # already have printed lock info
 
     set_up_log
 
     info('Starting Puppet bootstrap')
     info(DELIM)
-    Timeout::timeout(@options[:max_seconds]) do
+    Timeout.timeout(@options[:max_seconds]) do
       info(title('Setting up system for Puppet bootstrap', 1))
       info("    Detailed log written to #{@options[:log_file]}")
       debug("#{File.basename(__FILE__)} options: #{@options}")
@@ -666,9 +657,9 @@ EOM
       set_system_time
 
       info(title('Running Puppet bootstrap (This may take some time)', 1))
-      info()
+      info
       info(">>> Be sure to sign this client's Puppet cert request when it comes in! <<<")
-      info()
+      info
 
       run_puppet_agent('--tags pupmod,simp',
         title('Initial puppet agent run with pupmod,simp tags', 2))
@@ -699,36 +690,34 @@ EOM
   rescue SignalException => e
     info(DELIM)
     if e.inspect == 'Interrupt'
-      error("Processing interrupted! Exiting.")
+      error('Processing interrupted! Exiting.')
     else
       error("Process received signal #{e.message}. Exiting!")
       error(e.backtrace.first(10))
     end
-    return 1
+    1
   rescue ConfigurationError => e
     # don't have a log file yet so just send to stderr
     $stderr.puts "ERROR: #{e.message}"
-    return 1
+    1
   rescue Timeout::Error
     info(DELIM)
     error("ERROR: Failed to complete Puppet bootstrap within #{@options[:max_seconds]} seconds")
-    return 1
+    1
   rescue RuntimeError => e
     info(DELIM)
     error("ERROR: #{e.message}")
-    return 1
+    1
   rescue => e
     info(DELIM)
     error("ERROR: #{e.message}")
     error(e.backtrace.first(10))
-    return 1
+    1
   end
-
 end
 
 ########################################################################
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   bootstrap = BootstrapSimpClient.new
   exit bootstrap.run(ARGV)
 end
-

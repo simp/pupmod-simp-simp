@@ -27,19 +27,18 @@ Facter.add('simp_rsync_environments') do
     Dir.chdir(environments)
 
     Dir.glob('*/rsync').each do |env_dir|
-
       # Using this instead of Ruby's Find for symlink support
       share_dirs = Facter::Core::Execution.exec("find -L #{File.dirname(env_dir)} -name '.shares'").split("\n").sort
 
       share_dirs.each do |share_dir|
-        Dir.glob(File.join(File.dirname(share_dir),'*')).each do |share|
+        Dir.glob(File.join(File.dirname(share_dir), '*')).each do |share|
           dir_parts = share.split('/')
 
           last = nil
-          dir_parts.each_with_index do |p,i|
+          dir_parts.each_with_index do |p, i|
             key = p.downcase
 
-            if dir_parts[i+2]
+            if dir_parts[i + 2]
               if last
                 if last.is_a?(Hash)
                   last[key] ||= {}
@@ -58,7 +57,7 @@ Facter.add('simp_rsync_environments') do
                 last[key] ||= {}
                 last[key]['id'] = p
                 last[key]['shares'] ||= []
-                last[key]['shares'] << dir_parts[i+1]
+                last[key]['shares'] << dir_parts[i + 1]
               end
 
               break

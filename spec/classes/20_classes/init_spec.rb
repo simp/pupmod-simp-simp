@@ -3,7 +3,7 @@ require 'facterdb'
 
 describe 'simp' do
   def server_facts_hash
-    return {
+    {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
       'serverip'      => '1.2.3.4'
@@ -12,17 +12,15 @@ describe 'simp' do
 
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
-
     facterdb_queries = [
-      {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '20.04'},
-    ].map{|q| q.merge({:hardwaremodel => 'x86_64'})}
+      { operatingsystem: 'Ubuntu', operatingsystemmajrelease: '20.04' },
+    ].map { |q| q.merge({ hardwaremodel: 'x86_64' }) }
 
     facterdb_queries.each do |facterdb_query|
-
       os_facts = FacterDB.get_facts(facterdb_query).first
-      os     = "#{os_facts[:os]['name'].downcase}-" +
-               "#{os_facts[:os]['release']['major']}-" +
-               "#{os_facts[:os]['hardware']}"
+      os = "#{os_facts[:os]['name'].downcase}-" \
+           "#{os_facts[:os]['release']['major']}-" \
+           "#{os_facts[:os]['hardware']}"
 
       context "on #{os}" do
         let(:facts) do
@@ -45,7 +43,7 @@ describe 'simp' do
 
         context 'with scenario "poss"' do
           let :params do
-            { :scenario => 'poss' }
+            { scenario: 'poss' }
           end
 
           it { is_expected.to compile }
@@ -53,13 +51,13 @@ describe 'simp' do
 
         context 'with scenario "none"' do
           let :params do
-            { :scenario => 'none' }
+            { scenario: 'none' }
           end
 
           it { is_expected.to compile.with_all_deps }
 
           it { is_expected.to create_class('simp') }
-          it { is_expected.to_not create_class('pupmod') }
+          it { is_expected.not_to create_class('pupmod') }
         end
       end
     end
@@ -68,7 +66,6 @@ describe 'simp' do
   context 'on supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-
         let(:facts) do
           _facts = Marshal.load(Marshal.dump(os_facts))
 
@@ -78,23 +75,23 @@ describe 'simp' do
           if _facts[:kernel] == 'windows'
             _facts[:puppet_vardir] = 'C:/Program Data/PuppetLabs/puppet/cache'
             _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-              'main' => {
-                'ssldir' => 'C:/Program Data/PuppetLabs/puppet/cache/ssl'
-              },
+                                                                          'main' => {
+                                                                            'ssldir' => 'C:/Program Data/PuppetLabs/puppet/cache/ssl'
+                                                                          },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            })
+                                                                        })
           else
             _facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
             _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-              'main' => {
-                'ssldir' => '/opt/puppetlabs/puppet/cache/ssl',
-              },
+                                                                          'main' => {
+                                                                            'ssldir' => '/opt/puppetlabs/puppet/cache/ssl',
+                                                                          },
               'agent' => {
                 'server' => 'puppet.bar.baz'
               }
-            })
+                                                                        })
           end
 
           _facts
@@ -104,7 +101,7 @@ describe 'simp' do
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_file("#{facts[:puppet_vardir]}/simp") }
-          it { is_expected.to_not create_filebucket('simp') }
+          it { is_expected.not_to create_filebucket('simp') }
 
           unless os_facts[:kernel] == 'windows'
             it { is_expected.to create_host('puppet.bar.baz').with_ip('1.2.3.4') }
@@ -114,11 +111,11 @@ describe 'simp' do
 
         context 'with an invalid scenario' do
           let :params do
-            { :scenario => 'invalid' }
+            { scenario: 'invalid' }
           end
 
           it do
-            is_expected.to compile.and_raise_error(/ERROR - Invalid scenario 'invalid'/)
+            is_expected.to compile.and_raise_error(%r{ERROR - Invalid scenario 'invalid'})
           end
         end
 
@@ -126,10 +123,12 @@ describe 'simp' do
           let(:environment) { 'bolt_catalog' }
 
           context 'will not create a filebucket' do
-            let(:params) {{
-              :enable_filebucketing => true,
-              :filebucket_server    => 'my.puppet.server'
-            }}
+            let(:params) do
+              {
+                enable_filebucketing: true,
+              filebucket_server: 'my.puppet.server'
+              }
+            end
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.not_to create_filebucket('simp') }
@@ -145,7 +144,7 @@ describe 'simp' do
           context 'when scenario is set to' do
             poss = [
               'pupmod',
-              'deferred_resources'
+              'deferred_resources',
             ]
             simp_lite = [
               'aide',
@@ -167,26 +166,25 @@ describe 'simp' do
               'simp::mountpoints',
               'simp::prelink',
               'simp::sysctl',
-              'ssh'
+              'ssh',
             ]
-            if ['RedHat','CentOS','OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
-              simp_lite << 'rkhunter'
-              simp_lite << 'ntpd'
-            else
-              simp_lite << 'rkhunter'
-              simp_lite << 'chrony'
-            end
+            simp_lite << 'rkhunter'
+            simp_lite << if ['RedHat', 'CentOS', 'OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
+                           'ntpd'
+                         else
+                           'chrony'
+                         end
             simp = [
               'pam::wheel',
               'selinux',
-              'svckill'
+              'svckill',
             ]
             scenarios = {
               'simp' => {
                 'contains' => [
                   simp,
                   simp_lite,
-                  poss
+                  poss,
                 ],
                 'does_not_contain' => [
                 ]
@@ -194,35 +192,37 @@ describe 'simp' do
               'simp_lite' => {
                 'contains' => [
                   simp_lite,
-                  poss
+                  poss,
                 ],
                 'does_not_contain' => [
-                  simp
+                  simp,
                 ]
               },
               'poss' => {
                 'contains' => [
-                  poss
+                  poss,
                 ],
                 'does_not_contain' => [
                   simp_lite,
-                  simp
+                  simp,
                 ]
               }
             }
 
             scenarios.each do |scenario, data|
               context "'#{scenario}'" do
-                let(:params) {{
-                  :scenario => scenario
-                }}
+                let(:params) do
+                  {
+                    scenario: scenario
+                  }
+                end
 
                 it { is_expected.to compile.with_all_deps }
                 data['contains'].flatten.each do |class_name|
-                  it { is_expected.to contain_class("#{class_name}") }
+                  it { is_expected.to contain_class(class_name.to_s) }
                 end
                 data['does_not_contain'].flatten.each do |class_name|
-                  it { is_expected.to_not contain_class("#{class_name}") }
+                  it { is_expected.not_to contain_class(class_name.to_s) }
                 end
               end
             end
@@ -230,7 +230,8 @@ describe 'simp' do
 
           context 'with filebucketing' do
             context 'with local path' do
-              let(:params) {{ :enable_filebucketing => true }}
+              let(:params) { { enable_filebucketing: true } }
+
               let(:pre_condition) { "File { backup => 'simp' }" } if Puppet.version >= '5'
 
               it { is_expected.to compile.with_all_deps }
@@ -239,10 +240,13 @@ describe 'simp' do
             end
 
             context 'with remote server' do
-              let(:params) {{
-                :enable_filebucketing => true,
-                :filebucket_server    => 'my.puppet.server'
-              }}
+              let(:params) do
+                {
+                  enable_filebucketing: true,
+                filebucket_server: 'my.puppet.server'
+                }
+              end
+
               let(:pre_condition) { "File { backup => 'simp' }" } if Puppet.version >= '5'
 
               it { is_expected.to compile.with_all_deps }
@@ -253,18 +257,19 @@ describe 'simp' do
 
           context 'when removing classes using a knockout in simp::classes' do
             {
-              "when classes are just added" => {
-                :params => {
-                  "classes" => [ 'simp::yum::schedule' ]
+              'when classes are just added' => {
+                params: {
+                  'classes' => [ 'simp::yum::schedule' ]
                 },
-                :contains => [ 'simp::yum::schedule'],
-                :not_contains => [ ],
+                contains: [ 'simp::yum::schedule'],
+                not_contains: [ ],
               }
-            }.each do |ctxt, hash |
+            }.each do |ctxt, hash|
               context ctxt do
-                let (:params) do
+                let(:params) do
                   hash[:params]
                 end
+
                 it { is_expected.to compile.with_all_deps }
 
                 hash[:contains].each do |klass|
@@ -276,68 +281,78 @@ describe 'simp' do
 
           context 'rsync_stunnel logic' do
             context 'with rsync_stunnel => false' do
-              let(:params) {{ :rsync_stunnel => false }}
+              let(:params) { { rsync_stunnel: false } }
 
               it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to create_stunnel__connection('rsync') }
             end
             context 'with rsync_stunnel => true' do
-              let(:params) {{ :rsync_stunnel => true }}
+              let(:params) { { rsync_stunnel: true } }
 
               it { is_expected.to compile.with_all_deps }
-              it { is_expected.to create_stunnel__connection('rsync').with({
-                :connect => ['1.2.3.4:8730'],
-                :accept  => '127.0.0.1:873'
-              }) }
+              it {
+                is_expected.to create_stunnel__connection('rsync').with({
+                                                                          connect: ['1.2.3.4:8730'],
+                accept: '127.0.0.1:873'
+                                                                        })
+              }
             end
             context 'with rsync_stunnel => Simplib::Host' do
-              let(:params) {{ :rsync_stunnel => 'other.test.host' }}
+              let(:params) { { rsync_stunnel: 'other.test.host' } }
 
               it { is_expected.to compile.with_all_deps }
-              it { is_expected.to create_stunnel__connection('rsync').with({
-                :connect => ['other.test.host:8730'],
-                :accept  => '127.0.0.1:873'
-              }) }
+              it {
+                is_expected.to create_stunnel__connection('rsync').with({
+                                                                          connect: ['other.test.host:8730'],
+                accept: '127.0.0.1:873'
+                                                                        })
+              }
             end
 
             context 'without $server_facts' do
               # We can't return nil or rspec-puppet dies
               def server_facts_hash
-                return {}
+                {}
               end
 
               # We have to switch something away from the defaults so that the
               # catalog will recompile
-              let(:params) {{
-                :rsync_stunnel => true,
-                :stock_sssd => false
-              }}
+              let(:params) do
+                {
+                  rsync_stunnel: true,
+                stock_sssd: false
+                }
+              end
 
               it { is_expected.to compile.with_all_deps }
               it {
                 is_expected.to create_stunnel__connection('rsync').with({
-                :connect => ["#{facts[:puppet_settings]['agent']['server']}:8730"],
-                :accept  => '127.0.0.1:873'
-              }) }
+                                                                          connect: ["#{facts[:puppet_settings]['agent']['server']}:8730"],
+                accept: '127.0.0.1:873'
+                                                                        })
+              }
             end
           end
 
           context 'when the host is a member of an IPA domain' do
-            let(:facts) {
+            let(:facts) do
               super().merge!(
                 ipa: {
                   domain: 'test.local',
                   server: 'ipaserver.test.local'
-                }
+                },
               )
-            }
+            end
+
             context 'ldap => true' do
-              let(:params) {{ ldap: true }}
+              let(:params) { { ldap: true } }
+
               it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to contain_class('simp_openldap::client') }
             end
             context 'ldap => false' do
-              let(:params) {{ ldap: false }}
+              let(:params) { { ldap: false } }
+
               it { is_expected.to compile.with_all_deps }
               it { is_expected.not_to contain_class('simp_openldap::client') }
             end

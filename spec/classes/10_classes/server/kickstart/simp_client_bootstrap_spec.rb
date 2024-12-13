@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'simp::server::kickstart::simp_client_bootstrap' do
   def server_facts_hash
-    return {
+    {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
       'serverip'      => '1.2.3.4'
@@ -14,22 +14,22 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
       let(:facts) { os_facts }
 
       if os_facts[:kernel] == 'windows'
-        it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+        it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
       else
         context 'default parameters (using fixtures/hieradata/default.yaml)' do
           it { is_expected.to compile.with_all_deps }
           it do
-             expected_content = File.read(File.join(File.dirname(__FILE__),
-               '..', '..', '..', '..', '..', 'files', 'var', 'www', 'ks',
-               'bootstrap_simp_client'))
+            expected_content = File.read(File.join(File.dirname(__FILE__),
+              '..', '..', '..', '..', '..', 'files', 'var', 'www', 'ks',
+              'bootstrap_simp_client'))
 
             is_expected.to create_file('/var/www/ks/bootstrap_simp_client').with({
-              :ensure  => 'file',
-              :owner   => 'root',
-              :group   => 'apache',
-              :mode    => '0640',
-              :content => expected_content
-            })
+                                                                                   ensure: 'file',
+              owner: 'root',
+              group: 'apache',
+              mode: '0640',
+              content: expected_content
+                                                                                 })
           end
 
           it do
@@ -46,9 +46,11 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         end
 
         context 'with reboot_on_failure=false' do
-          let(:params) {{
-            :reboot_on_failure => false
-          }}
+          let(:params) do
+            {
+              reboot_on_failure: false
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -65,19 +67,23 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         end
 
         context 'with fips=true' do
-          let(:params) {{
-            :fips => true
-          }}
+          let(:params) do
+            {
+              fips: true
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap').with_content(/--puppet-keylength 2048/) }
-          it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap.service').with_content(/--puppet-keylength 2048/) }
+          it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap').with_content(%r{--puppet-keylength 2048}) }
+          it { is_expected.to create_file('/var/www/ks/simp_client_bootstrap.service').with_content(%r{--puppet-keylength 2048}) }
         end
 
         context 'ntp_servers array' do
-          let(:params) {{
-            :ntp_servers => ['1.2.3.4','5.6.7.8']
-          }}
+          let(:params) do
+            {
+              ntp_servers: ['1.2.3.4', '5.6.7.8']
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -94,12 +100,14 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         end
 
         context 'ntp_servers hash' do
-          let (:params) {{
-            :ntp_servers => {
-              '1.2.3.4' => ['foo, bar'],
-              '5.6.7.8' => ['baz']
+          let(:params) do
+            {
+              ntp_servers: {
+                '1.2.3.4' => ['foo, bar'],
+                '5.6.7.8' => ['baz']
+              }
             }
-          }}
+          end
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -116,9 +124,11 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         end
 
         context 'print_stats=false' do
-          let(:params) {{
-            :puppet_print_stats => false
-          }}
+          let(:params) do
+            {
+              puppet_print_stats: false
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it do
@@ -135,9 +145,11 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         end
 
         context 'wait_for_cert=false' do
-          let(:params) {{
-            :puppet_wait_for_cert => false
-          }}
+          let(:params) do
+            {
+              puppet_wait_for_cert: false
+            }
+          end
 
           it { is_expected.to compile.with_all_deps }
           it do
