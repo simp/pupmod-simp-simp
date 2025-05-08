@@ -1,14 +1,14 @@
 ---
 HOSTS:
-  oel8:
+  el8:
     roles:
     - server
     - master
     - simp_server
     platform: el-8-x86_64
-    box: generic/oracle8
+    box: generic/rocky8
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: sicura-image-build/oracle-linux-8
+    family: rocky-linux-cloud/rocky-linux-8
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose

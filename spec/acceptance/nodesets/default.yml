@@ -1,44 +1,44 @@
 ---
 HOSTS:
-  server-el7.simp.beaker:
+  server-el8.simp.beaker:
     roles:
     - server
-    - default
     - master
     - simp_server
-    - el7
-    platform: el-7-x86_64
-    box: centos/7
+    platform: el-8-x86_64
+    box: generic/rocky8
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: rocky-linux-cloud/rocky-linux-8
+    gce_machine_type: n1-standard-2
     yum_repos:
       updates:
-        baseurl: http://mirror.centos.org/centos/$releasever/os/$basearch/
+        baseurl: https://dl.rockylinux.org/pub/rocky/8/BaseOS/x86_64/os/
         gpgkeys:
-        - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-7
+        - https://dl.rockylinux.org/pub/rocky/8/BaseOS/x86_64/os/RPM-GPG-KEY-rockyofficial
       simp:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/simp
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/simp
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-UNSTABLE
       simp_epel:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/epel
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/epel
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-CentOS-$releasever
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-redhat-release
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-EPEL-$releasever
       simp_postgresql:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/postgresql
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/postgresql
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-PGDG-96
       simp_puppet:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/puppet
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/puppet
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppet
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlabs
-    family: centos-cloud/centos-7
-    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
+  synced_folder: disabled
   type: aio
-  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
+  vagrant_memsize: 256
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet8') %>"

@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.23.0",
+  "version": "5.0.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -200,23 +200,14 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
         "8"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
         "8"
       ]
     },
@@ -229,7 +220,6 @@
         "2012 R2",
         "2016",
         "2019",
-        "7",
         "8.1",
         "10"
       ]

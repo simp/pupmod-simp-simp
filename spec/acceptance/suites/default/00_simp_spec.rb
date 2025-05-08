@@ -36,6 +36,7 @@ describe 'simp class' do
       end
 
       it 'should be idempotent' do
+        apply_manifest_on(host, manifest, :catch_changes => false)
         apply_manifest_on(host, manifest, :catch_changes => true)
       end
     end

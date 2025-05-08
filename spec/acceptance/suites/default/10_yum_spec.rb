@@ -67,16 +67,14 @@ describe 'simp yum configuration' do
   context 'reset the yum repo back to normal' do
     it 'should set up hiera' do
       block_on(hosts, parallel) do |host|
-        yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
-
+        yum_updates_url = host['yum_repos']['updates']['baseurl']
         hieradata = YAML.load(File.read(File.expand_path('files/default_hiera.yaml', __dir__))).merge(
           {
             'simp::yum::repo::local_simp::enable_repo'   => false,
-            'simp::yum::repo::local_simp::servers'       => [],
+            'simp::yum::repo::local_simp::servers'       => [yum_updates_url],
             'simp::yum::repo::local_os_updates::servers' => [yum_updates_url]
           }
         )
-
         set_hieradata_on(host, hieradata)
         apply_manifest_on(host, manifest, :catch_failures => true)
       end
