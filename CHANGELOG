@@ -1,3 +1,8 @@
+* Thu May 08 2025 Richard Gardner <rick@sicura-us> - 5.0.0
+- Remove EOL OS's support (EL7, CentOS)
+- Stardardize beaker nodesets
+- beaker test improvements
+
 * Wed Sep 11 2024 Steven Pritchard <steve@sicura.us> - 4.23.0
 - [puppetsync] Update module dependencies to support simp-iptables 7.x
 

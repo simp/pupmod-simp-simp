@@ -22,7 +22,7 @@ Alias <%= t_dir %> /var/www<%= t_dir %>
 <% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
-    Allow from <%= @facts['domain'] %>
+    Allow from <%= @facts.dig('networking', 'domain') || 'localhost' %>
 </Location>
 
 <% end -%>

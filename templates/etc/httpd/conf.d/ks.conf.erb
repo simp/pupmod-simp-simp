@@ -15,7 +15,7 @@ Alias /ks /var/www/ks
 <% if t_allowroot -%>
 <%= t_allowroot %>
 <% end -%>
-    Allow from <%= @facts['domain'] %>
+    Allow from  <%= @facts.dig('networking', 'domain') || 'localhost' %>
     <IfModule mod_ssl>
       SSLVerifyClient <%= @sslverifyclient %>
     </IfModule>

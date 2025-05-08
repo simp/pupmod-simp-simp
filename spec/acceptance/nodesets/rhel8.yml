@@ -1,39 +1,42 @@
 ---
 HOSTS:
-  server-el8.simp.beaker:
+  el8:
     roles:
     - server
-    - default
     - master
     - simp_server
     platform: el-8-x86_64
     box: generic/rhel8
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: rhel-cloud/rhel-8
+    gce_machine_type: n1-standard-2
     yum_repos:
+      updates:
+        baseurl: https://cdn.redhat.com/content/dist/rhel8/$releasever/x86_64/baseos/os
       simp:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/simp
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/simp
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-UNSTABLE
       simp_epel:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/epel
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/epel
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-CentOS-$releasever
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-redhat-release
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-EPEL-$releasever
       simp_postgresql:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/postgresql
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/postgresql
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-PGDG-96
       simp_puppet:
-        baseurl: https://download.simp-project.com/simp/yum/rolling/6/el/$releasever/$basearch/puppet
+        baseurl: https://download.simp-project.com/simp/yum/unstable/6/el/8/$basearch/puppet
         gpgkeys:
         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppet
-        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlabs
-    family: rhel-cloud/rhel-8
-    gce_machine_type: n1-standard-2
+        - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-puppetlab
 CONFIG:
   log_level: verbose
+  synced_folder: disabled
   type: aio
-  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
+  vagrant_memsize: 256
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet8') %>"

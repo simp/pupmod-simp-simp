@@ -29,6 +29,7 @@ lookup_options:
       knockout_prefix: "--"
       sort_merged_arrays: true
 
+simp::srv_domain: "%{facts.networking.fqdn}"
 simp::vardir_owner: 'root'
 simp::vardir_group: 'root'
 simp::vardir_mode: '0750'
