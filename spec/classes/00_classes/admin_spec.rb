@@ -9,15 +9,15 @@ describe 'simp::admin' do
           it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           let(:facts) do
-            _facts = Marshal.load(Marshal.dump(os_facts))
+            updated_facts = Marshal.load(Marshal.dump(os_facts))
 
-            _facts[:puppet_settings] = {
+            updated_facts[:puppet_settings] = {
               main: {
-                ssldir: '/opt/puppet/somewhere/ssl'
+                ssldir: '/opt/puppet/somewhere/ssl',
               }
             }
 
-            _facts
+            updated_facts
           end
 
           context 'with common aliases in place' do
@@ -34,46 +34,46 @@ describe 'simp::admin' do
               it { is_expected.to create_file('/etc/profile.d/sudosh2.sh').with_ensure('absent') }
               it { is_expected.to create_class('tlog::rec_session') }
               it {
-                is_expected.to create_sudo__user_specification('admin global').with({
-                                                                                      user_list: ['%administrators'],
-                cmnd: ['/bin/su - root'],
-                runas: 'root',
-                passwd: false,
-                options: {
-                  'role' => 'unconfined_r'
-                },
-                                                                                    })
+                is_expected.to create_sudo__user_specification('admin global').with(
+                  user_list: ['%administrators'],
+                  cmnd: ['/bin/su - root'],
+                  runas: 'root',
+                  passwd: false,
+                  options: {
+                    'role' => 'unconfined_r',
+                  },
+                )
               }
               it {
-                is_expected.to create_sudo__user_specification('auditors').with({
-                                                                                  user_list: ['%security'],
-                cmnd: ['AUDIT'],
-                runas: 'root',
-                options: {},
-                passwd: false
-                                                                                })
+                is_expected.to create_sudo__user_specification('auditors').with(
+                  user_list: ['%security'],
+                  cmnd: ['AUDIT'],
+                  runas: 'root',
+                  options: {},
+                  passwd: false,
+                )
               }
               it {
-                is_expected.to create_sudo__user_specification('admin clean puppet certs').with({
-                                                                                                  user_list: ['%administrators'],
-                cmnd: ['/bin/rm -rf /opt/puppet/somewhere/ssl'],
-                runas: 'root',
-                passwd: false,
-                options: {
-                  'role' => 'unconfined_r'
-                },
-                                                                                                })
+                is_expected.to create_sudo__user_specification('admin clean puppet certs').with(
+                  user_list: ['%administrators'],
+                  cmnd: ['/bin/rm -rf /opt/puppet/somewhere/ssl'],
+                  runas: 'root',
+                  passwd: false,
+                  options: {
+                    'role' => 'unconfined_r',
+                  },
+                )
               }
               it {
-                is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
-                                                                                                                                  ensure: 'present',
-                priority: 10,
-                content: <<~EOF
-                  polkit.addAdminRule(function(action, subject) {
-                    return ["unix-group:administrators"];
-                  });
-                EOF
-                                                                                                                                })
+                is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with(
+                  ensure: 'present',
+                  priority: 10,
+                  content: <<~EOF,
+                    polkit.addAdminRule(function(action, subject) {
+                      return ["unix-group:administrators"];
+                    });
+                  EOF
+                )
               }
 
               it { is_expected.not_to create_selinux_login('%administrators') }
@@ -82,7 +82,7 @@ describe 'simp::admin' do
             context 'when setting tlog as the logged shell' do
               let(:params) do
                 {
-                  logged_shell: 'tlog'
+                  logged_shell: 'tlog',
                 }
               end
 
@@ -90,18 +90,18 @@ describe 'simp::admin' do
               it { is_expected.not_to create_class('sudosh') }
 
               it {
-                is_expected.to create_sudo__user_specification('admin global').with({
-                                                                                      user_list: ['%administrators'],
-                cmnd: ['/bin/su - root'],
-                passwd: false
-                                                                                    })
+                is_expected.to create_sudo__user_specification('admin global').with(
+                  user_list: ['%administrators'],
+                  cmnd: ['/bin/su - root'],
+                  passwd: false,
+                )
               }
             end
 
             context 'when setting sudosh as the logged shell' do
               let(:params) do
                 {
-                  logged_shell: 'sudosh'
+                  logged_shell: 'sudosh',
                 }
               end
 
@@ -109,11 +109,11 @@ describe 'simp::admin' do
               it { is_expected.not_to create_class('tlog::rec_session') }
 
               it {
-                is_expected.to create_sudo__user_specification('admin global').with({
-                                                                                      user_list: ['%administrators'],
-                cmnd: ['/usr/bin/sudosh'],
-                passwd: false
-                                                                                    })
+                is_expected.to create_sudo__user_specification('admin global').with(
+                  user_list: ['%administrators'],
+                  cmnd: ['/usr/bin/sudosh'],
+                  passwd: false,
+                )
               }
             end
 
@@ -121,26 +121,26 @@ describe 'simp::admin' do
               let(:params) do
                 {
                   admin_group: 'devs',
-                 passwordless_admin_sudo: false,
-                 auditor_group: 'auditors',
-                 passwordless_auditor_sudo: false,
-                 force_logged_shell: false
+                  passwordless_admin_sudo: false,
+                  auditor_group: 'auditors',
+                  passwordless_auditor_sudo: false,
+                  force_logged_shell: false,
                 }
               end
 
               it {
-                is_expected.to create_sudo__user_specification('admin global').with({
-                                                                                      user_list: ['%devs'],
-                cmnd: ['/bin/su - root'],
-                passwd: true
-                                                                                    })
+                is_expected.to create_sudo__user_specification('admin global').with(
+                  user_list: ['%devs'],
+                  cmnd: ['/bin/su - root'],
+                  passwd: true,
+                )
               }
               it {
-                is_expected.to create_sudo__user_specification('auditors').with({
-                                                                                  user_list: ['%auditors'],
-                cmnd: ['AUDIT'],
-                passwd: true
-                                                                                })
+                is_expected.to create_sudo__user_specification('auditors').with(
+                  user_list: ['%auditors'],
+                  cmnd: ['AUDIT'],
+                  passwd: true,
+                )
               }
             end
 
@@ -148,73 +148,71 @@ describe 'simp::admin' do
               let(:params) do
                 {
                   admin_group: 'admins',
-                 auditor_group: 'auditors',
-                 admin_sudo_options: {
-                   'role' => 'unconfined_r'
-                 },
-                 auditor_sudo_options: {
-                   'role' => 'staff_r'
-                 },
-                 passwordless_auditor_sudo: false,
-                 force_logged_shell: false
+                  auditor_group: 'auditors',
+                  admin_sudo_options: {
+                    'role' => 'unconfined_r'
+                  },
+                  auditor_sudo_options: {
+                    'role' => 'staff_r'
+                  },
+                  passwordless_auditor_sudo: false,
+                  force_logged_shell: false,
                 }
               end
 
               it {
-                is_expected.to create_sudo__user_specification('admin global').with({
-                                                                                      user_list: ['%admins'],
-                cmnd: ['/bin/su - root'],
-                options: {
-                  'role' => 'unconfined_r'
-                },
-                passwd: false
-                                                                                    })
+                is_expected.to create_sudo__user_specification('admin global').with(
+                  user_list: ['%admins'],
+                  cmnd: ['/bin/su - root'],
+                  options: {
+                    'role' => 'unconfined_r'
+                  },
+                  passwd: false,
+                )
               }
               it {
-                is_expected.to create_sudo__user_specification('auditors').with({
-                                                                                  user_list: ['%auditors'],
-                cmnd: ['AUDIT'],
-                options: {
-                  'role' => 'staff_r'
-                },
-                passwd: true
-                                                                                })
+                is_expected.to create_sudo__user_specification('auditors').with(
+                  user_list: ['%auditors'],
+                  cmnd: ['AUDIT'],
+                  options: {
+                    'role' => 'staff_r'
+                  },
+                  passwd: true,
+                )
               }
             end
 
             context "when $facts['puppet_settings'] isn't available" do
               let(:facts) do
-                _facts = Marshal.load(Marshal.dump(os_facts))
-                _facts[:puppet_settings] = nil
+                updated_facts = Marshal.load(Marshal.dump(os_facts))
+                updated_facts[:puppet_settings] = nil
 
-                _facts
+                updated_facts
               end
 
               it {
-                is_expected.to create_sudo__user_specification('admin clean puppet certs').with({
-                                                                                                  user_list: ['%administrators'],
-                cmnd: ['/bin/rm -rf /etc/puppetlabs/puppet/ssl'],
-                passwd: false
-                                                                                                })
+                is_expected.to create_sudo__user_specification('admin clean puppet certs').with(
+                  user_list: ['%administrators'],
+                  cmnd: ['/bin/rm -rf /etc/puppetlabs/puppet/ssl'],
+                  passwd: false,
+                )
               }
             end
 
             context 'polkit settings' do
               it {
-                is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
-                                                                                                                                  ensure: 'present',
-                priority: 10,
-                content: %r{unix-group:administrators}
-                                                                                                                                })
+                is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with(
+                  ensure: 'present',
+                  priority: 10,
+                  content: %r{unix-group:administrators},
+                )
               }
 
               context 'with set_polkit_admin_group => false' do
                 let(:params) { { set_polkit_admin_group: false } }
 
                 it {
-                  is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with({
-                                                                                                                                    ensure: 'absent',
-                                                                                                                                  })
+                  is_expected.to create_polkit__authorization__rule('Set administrators group to a policykit administrator').with(ensure: 'absent')
                 }
               end
 
@@ -222,11 +220,11 @@ describe 'simp::admin' do
                 let(:params) { { admin_group: 'coolkids' } }
 
                 it {
-                  is_expected.to create_polkit__authorization__rule('Set coolkids group to a policykit administrator').with({
-                                                                                                                              ensure: 'present',
-                  priority: 10,
-                  content: %r{unix-group:coolkids}
-                                                                                                                            })
+                  is_expected.to create_polkit__authorization__rule('Set coolkids group to a policykit administrator').with(
+                    ensure: 'present',
+                    priority: 10,
+                    content: %r{unix-group:coolkids},
+                  )
                 }
               end
             end
@@ -235,10 +233,10 @@ describe 'simp::admin' do
               let(:params) { { set_selinux_login: true } }
 
               it {
-                is_expected.to create_selinux_login('%administrators').with({
-                                                                              seuser: 'staff_u',
-                  mls_range: 's0-s0:c0.c1023'
-                                                                            })
+                is_expected.to create_selinux_login('%administrators').with(
+                  seuser: 'staff_u',
+                  mls_range: 's0-s0:c0.c1023',
+                )
               }
             end
           end

@@ -38,7 +38,7 @@ describe 'simp::one_shot' do
           context 'with user_password defined' do
             let(:params) do
               {
-                user_password: '$2$blahthing'
+                user_password: '$2$blahthing',
               }
             end
 
@@ -49,7 +49,9 @@ describe 'simp::one_shot' do
           context 'with user SSH key defined' do
             let(:params) do
               {
-                user_ssh_authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDGUpa76k+ehDp1VHtm844RZsVQtMDKk8Md4bM1fGM2Ro7OX3GEUhKcabioaAZq7W6mO+0O679w22b8J7rf7sBTKVxuh1AWWsTln2oKKGHqFDErAyXw0jT5imdycGaemoQeBDanjfbY2OlmzAZQqYDeMV1iJ+06b05WrnR3hsUZ+jVBBBd6t5+a5pwm1Ng2DRCsO47nzMr1SDm3+TwJ2PPMUyMotaJzE3zMCDtf3OvLJb2+zxApastaXZ0Gkboqxy4TEcZqgTcf1Ac05k45By/2NZ0CiYsW7SCN6/8jR2G8CB5f2qD0GAxzuXmsue/2Yrt63BXyCbThxzwocu1Ebmsp'
+                # rubocop:disable Layout/LineLength
+                user_ssh_authorized_key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDGUpa76k+ehDp1VHtm844RZsVQtMDKk8Md4bM1fGM2Ro7OX3GEUhKcabioaAZq7W6mO+0O679w22b8J7rf7sBTKVxuh1AWWsTln2oKKGHqFDErAyXw0jT5imdycGaemoQeBDanjfbY2OlmzAZQqYDeMV1iJ+06b05WrnR3hsUZ+jVBBBd6t5+a5pwm1Ng2DRCsO47nzMr1SDm3+TwJ2PPMUyMotaJzE3zMCDtf3OvLJb2+zxApastaXZ0Gkboqxy4TEcZqgTcf1Ac05k45By/2NZ0CiYsW7SCN6/8jR2G8CB5f2qD0GAxzuXmsue/2Yrt63BXyCbThxzwocu1Ebmsp',
+                # rubocop:enable Layout/LineLength
               }
             end
 

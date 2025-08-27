@@ -31,7 +31,7 @@ describe 'simp::kmod_blacklist' do
           context 'when disabling overrides' do
             let(:params) do
               {
-                allow_overrides: false
+                allow_overrides: false,
               }
             end
 
@@ -63,7 +63,7 @@ describe 'simp::kmod_blacklist' do
             let(:params) do
               {
                 enable_defaults: false,
-              custom_blacklist: custom_list
+                custom_blacklist: custom_list,
               }
             end
 
@@ -85,18 +85,18 @@ describe 'simp::kmod_blacklist' do
           context 'when locking modules' do
             let(:params) do
               {
-                lock_modules: true
+                lock_modules: true,
               }
             end
 
             context 'when able to find kernel.modules_disabled' do
               let(:facts) do
-                _facts = Marshal.load(Marshal.dump(os_facts))
-                _facts['simplib_sysctl'] = {
-                  'kernel.modules_disabled' => 0
+                updated_facts = Marshal.load(Marshal.dump(os_facts))
+                updated_facts['simplib_sysctl'] = {
+                  'kernel.modules_disabled' => 0,
                 }
 
-                _facts
+                updated_facts
               end
 
               it 'safelies lock the modules' do
@@ -108,12 +108,12 @@ describe 'simp::kmod_blacklist' do
 
             context 'when unable to find kernel.modules_disabled' do
               let(:facts) do
-                _facts = Marshal.load(Marshal.dump(os_facts))
-                _facts['simplib_sysctl'] = {
-                  'kernel.modules_disabled' => nil
+                updated_facts = Marshal.load(Marshal.dump(os_facts))
+                updated_facts['simplib_sysctl'] = {
+                  'kernel.modules_disabled' => nil,
                 }
 
-                _facts
+                updated_facts
               end
 
               it 'warns that it cannot lock the modules' do
@@ -128,16 +128,16 @@ describe 'simp::kmod_blacklist' do
           context 'when unlocking modules on an unlocked system' do
             let(:params) do
               {
-                lock_modules: false
+                lock_modules: false,
               }
             end
             let(:facts) do
-              _facts = Marshal.load(Marshal.dump(os_facts))
-              _facts['simplib_sysctl'] = {
-                'kernel.modules_disabled' => 0
+              updated_facts = Marshal.load(Marshal.dump(os_facts))
+              updated_facts['simplib_sysctl'] = {
+                'kernel.modules_disabled' => 0,
               }
 
-              _facts
+              updated_facts
             end
 
             it 'does not lock the modules or change the settings' do
@@ -151,16 +151,16 @@ describe 'simp::kmod_blacklist' do
           context 'when unlocking modules on a locked system' do
             let(:params) do
               {
-                lock_modules: false
+                lock_modules: false,
               }
             end
             let(:facts) do
-              _facts = Marshal.load(Marshal.dump(os_facts))
-              _facts['simplib_sysctl'] = {
-                'kernel.modules_disabled' => 1
+              updated_facts = Marshal.load(Marshal.dump(os_facts))
+              updated_facts['simplib_sysctl'] = {
+                'kernel.modules_disabled' => 1,
               }
 
-              _facts
+              updated_facts
             end
 
             it 'unlocks the modules and notify for reboot' do
@@ -175,16 +175,16 @@ describe 'simp::kmod_blacklist' do
             let(:params) do
               {
                 lock_modules: false,
-              notify_if_reboot_required: false
+                notify_if_reboot_required: false,
               }
             end
             let(:facts) do
-              _facts = Marshal.load(Marshal.dump(os_facts))
-              _facts['simplib_sysctl'] = {
-                'kernel.modules_disabled' => 1
+              updated_facts = Marshal.load(Marshal.dump(os_facts))
+              updated_facts['simplib_sysctl'] = {
+                'kernel.modules_disabled' => 1,
               }
 
-              _facts
+              updated_facts
             end
 
             it 'unlocks the modules but not notify for reboot' do
@@ -198,7 +198,7 @@ describe 'simp::kmod_blacklist' do
           context 'when producing an error on module load' do
             let(:params) do
               {
-                produce_error: true
+                produce_error: true,
               }
             end
 

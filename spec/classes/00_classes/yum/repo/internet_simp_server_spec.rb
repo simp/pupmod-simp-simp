@@ -28,12 +28,12 @@ describe 'simp::yum::repo::internet_simp_server' do
         end
 
         context 'when `simp_release_slug` is undef' do
-          ['4.0.0', 'unknown', ''].each do |_version|
-            context "when `simplib::simp_version() returns an unsupported value (#{_version})" do
+          ['4.0.0', 'unknown', ''].each do |version|
+            context "when `simplib::simp_version() returns an unsupported value (#{version})" do
               let(:params) { {} }
 
               let(:pre_condition) do
-                "function simplib::simp_version() { '#{_version}' }"
+                "function simplib::simp_version() { '#{version}' }"
               end
 
               it do
@@ -42,12 +42,12 @@ describe 'simp::yum::repo::internet_simp_server' do
             end
           end
 
-          ['6.0.0', '6.1.0-0'].each do |_version|
-            describe "when `simplib::simp_version() is valid (#{_version})" do
+          ['6.0.0', '6.1.0-0'].each do |version|
+            describe "when `simplib::simp_version() is valid (#{version})" do
               let(:params) { {} }
 
               let(:pre_condition) do
-                "function simplib::simp_version() { '#{_version}' }"
+                "function simplib::simp_version() { '#{version}' }"
               end
 
               it { is_expected.to compile.with_all_deps }
