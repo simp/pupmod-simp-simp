@@ -6,6 +6,7 @@ require 'fileutils'
 require 'optparse'
 require 'timeout'
 
+# Bootstrap the SIMP client
 class BootstrapSimpClient
   attr_reader :options
 
@@ -54,7 +55,6 @@ class BootstrapSimpClient
     `#{puppet_exe_path} config print config`.strip
   end
 
-  attr_reader :options
   attr_reader :puppet_exe
 
   def initialize

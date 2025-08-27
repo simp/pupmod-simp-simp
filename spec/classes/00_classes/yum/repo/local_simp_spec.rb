@@ -43,8 +43,8 @@ describe 'simp::yum::repo::local_simp' do
 
         it { is_expected.to compile.with_all_deps }
         it {
-          _keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
-          gpgkey = _keys.map { |x| "https://puppet.example.simp/yum/#{os_gpgkey}/#{x}" }.join("\n    ")
+          keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
+          gpgkey = keys.map { |x| "https://puppet.example.simp/yum/#{os_gpgkey}/#{x}" }.join("\n    ")
 
           baseurl = "https://puppet.example.simp/yum/#{os_baseurl}"
           if facts[:package_provider] == 'dnf'
@@ -65,8 +65,8 @@ describe 'simp::yum::repo::local_simp' do
 
           it { is_expected.to compile.with_all_deps }
           it {
-            _keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
-            gpgkey = _keys.map { |x| "https://puppet.example.simp/yum/x/y/z/GPGKEYS/#{x}" }.join("\n    ")
+            keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
+            gpgkey = keys.map { |x| "https://puppet.example.simp/yum/x/y/z/GPGKEYS/#{x}" }.join("\n    ")
 
             baseurl = 'https://puppet.example.simp/yum/x/y/z/x86_64'
             if facts[:package_provider] == 'dnf'
@@ -91,9 +91,9 @@ describe 'simp::yum::repo::local_simp' do
               '192.0.2.5',
               arbitrary_url,
             ],
-          extra_gpgkey_urls: [
-            "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}",
-          ]
+            extra_gpgkey_urls: [
+              "#{arbitrary_url}/RPM-GPG-KEY-#{facts[:os][:name]}-#{facts[:os][:release][:major]}",
+            ],
           }
         end
 
@@ -107,10 +107,10 @@ describe 'simp::yum::repo::local_simp' do
 
           os_baseurl  = "#{os_yum_path}/#{facts[:os][:architecture]}"
           os_gpgkey   = 'SIMP/GPGKEYS'
-          _keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
-          _gpgkey = ['puppet.example.simp', '192.0.2.5']
-                    .map { |y| _keys.map { |x| "https://#{y}/yum/#{os_gpgkey}/#{x}" } }
-          gpgkey = _gpgkey.join("\n    ")
+          keys = base_gpgkeys + other_gpgkeys.fetch("#{facts[:os][:name]}-#{facts[:os][:release][:major]}")
+          gpgkey = ['puppet.example.simp', '192.0.2.5']
+                   .map { |y| keys.map { |x| "https://#{y}/yum/#{os_gpgkey}/#{x}" } }
+                   .join("\n    ")
           gpgkey += "\n    #{arbitrary_url}/RPM-GPG-KEY-#{os_name}-#{os_maj_rel}"
 
           arbitrary_baseurl = arbitrary_url.dup

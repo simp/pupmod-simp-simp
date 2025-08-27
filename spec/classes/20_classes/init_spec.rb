@@ -67,34 +67,34 @@ describe 'simp' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
         let(:facts) do
-          _facts = Marshal.load(Marshal.dump(os_facts))
+          updated_facts = Marshal.load(Marshal.dump(os_facts))
 
-          _facts[:openssh_version] = '5.8'
-          _facts[:augeas] = { 'version' => '1.2.3' }
+          updated_facts[:openssh_version] = '5.8'
+          updated_facts[:augeas] = { 'version' => '1.2.3' }
 
-          if _facts[:kernel] == 'windows'
-            _facts[:puppet_vardir] = 'C:/Program Data/PuppetLabs/puppet/cache'
-            _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-                                                                          'main' => {
-                                                                            'ssldir' => 'C:/Program Data/PuppetLabs/puppet/cache/ssl'
-                                                                          },
+          if updated_facts[:kernel] == 'windows'
+            updated_facts[:puppet_vardir] = 'C:/Program Data/PuppetLabs/puppet/cache'
+            updated_facts[:puppet_settings] = os_facts[:puppet_settings].merge(
+              'main' => {
+                'ssldir' => 'C:/Program Data/PuppetLabs/puppet/cache/ssl',
+              },
               'agent' => {
-                'server' => 'puppet.bar.baz'
-              }
-                                                                        })
+                'server' => 'puppet.bar.baz',
+              },
+            )
           else
-            _facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-            _facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-                                                                          'main' => {
-                                                                            'ssldir' => '/opt/puppetlabs/puppet/cache/ssl',
-                                                                          },
+            updated_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+            updated_facts[:puppet_settings] = os_facts[:puppet_settings].merge(
+              'main' => {
+                'ssldir' => '/opt/puppetlabs/puppet/cache/ssl',
+              },
               'agent' => {
-                'server' => 'puppet.bar.baz'
-              }
-                                                                        })
+                'server' => 'puppet.bar.baz',
+              },
+            )
           end
 
-          _facts
+          updated_facts
         end
         let(:hieradata) { "sssd::domains: ['LDAP']" }
 
