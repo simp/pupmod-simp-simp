@@ -13,11 +13,12 @@ describe 'simp' do
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
     facterdb_queries = [
-      { operatingsystem: 'Ubuntu', operatingsystemmajrelease: '20.04' },
-    ].map { |q| q.merge({ hardwaremodel: 'x86_64' }) }
+      { 'os.name': 'Ubuntu', 'os.release.major': '20.04' },
+    ].map { |q| q.merge({ 'os.hardware': 'x86_64' }) }
 
     facterdb_queries.each do |facterdb_query|
       os_facts = FacterDB.get_facts(facterdb_query).first
+      raise "No facts found for #{facterdb_query}" if os_facts.nil? || os_facts.empty?
       os = "#{os_facts[:os]['name'].downcase}-" \
            "#{os_facts[:os]['release']['major']}-" \
            "#{os_facts[:os]['hardware']}"
