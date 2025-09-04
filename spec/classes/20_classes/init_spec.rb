@@ -12,9 +12,15 @@ describe 'simp' do
 
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
-    facterdb_queries = [
-      { 'os.name': 'Ubuntu', 'os.release.major': '20.04' },
-    ].map { |q| q.merge({ 'os.hardware': 'x86_64' }) }
+    facterdb_queries = if Gem::Version.new(Puppet.version) < Gem::Version.new('8.0.0')
+                         [
+                           {:operatingsystem => 'Ubuntu',:operatingsystemmajrelease => '20.04'},
+                         ].map{|q| q.merge({:hardwaremodel => 'x86_64'})}
+                       else
+                         [
+                           { 'os.name': 'Ubuntu', 'os.release.major': '20.04' },
+                         ].map { |q| q.merge({ 'os.hardware': 'x86_64' }) }
+                       end
 
     facterdb_queries.each do |facterdb_query|
       os_facts = FacterDB.get_facts(facterdb_query).first
