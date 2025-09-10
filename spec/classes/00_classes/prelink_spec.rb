@@ -10,9 +10,9 @@ describe 'simp::prelink' do
         context 'with default parameters' do
           context 'when prelink is not installed' do
             let(:facts) do
-              os_facts.merge({
-                               prelink: nil,
-                             })
+              os_facts.merge(
+                prelink: nil,
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
@@ -22,18 +22,18 @@ describe 'simp::prelink' do
 
           context 'when prelink is installed and disabled' do
             let(:facts) do
-              os_facts.merge({
-                               prelink: { enabled: false },
-                             })
+              os_facts.merge(
+                prelink: { enabled: false },
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
             it {
-              is_expected.to contain_exec('remove prelinking').with({
-                                                                      command: '/etc/cron.daily/prelink',
+              is_expected.to contain_exec('remove prelinking').with(
+                command: '/etc/cron.daily/prelink',
                 before: 'Package[prelink]',
-                                                                    })
+              )
             }
 
             it { is_expected.to contain_package('prelink').with_ensure('absent') }
@@ -41,32 +41,32 @@ describe 'simp::prelink' do
 
           context 'when prelink is installed and enabled' do
             let(:facts) do
-              os_facts.merge({
-                               prelink: { enabled: true },
+              os_facts.merge(
+                prelink: { enabled: true },
                 # if prelink is on, FIPS cannot be enabled, because the
                 # system would be broken in that configuration
                 fips_enabled: false,
-                             })
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
             it {
-              is_expected.to contain_augeas('disable prelink').with({
-                                                                      lens: 'Shellvars.lns',
+              is_expected.to contain_augeas('disable prelink').with(
+                lens: 'Shellvars.lns',
                 incl: '/etc/sysconfig/prelink',
                 changes: [
                   'set PRELINKING "no"',
                 ],
                 before: 'Exec[remove prelinking]',
-                                                                    })
+              )
             }
 
             it {
-              is_expected.to contain_exec('remove prelinking').with({
-                                                                      command: '/etc/cron.daily/prelink',
+              is_expected.to contain_exec('remove prelinking').with(
+                command: '/etc/cron.daily/prelink',
                 before: 'Package[prelink]',
-                                                                    })
+              )
             }
 
             it { is_expected.to contain_package('prelink').with_ensure('absent') }
@@ -76,7 +76,7 @@ describe 'simp::prelink' do
         context 'when enable=true' do
           context 'when FIPS mode is not enabled' do
             let(:facts) do
-              os_facts.merge({ fips_enabled: false })
+              os_facts.merge(fips_enabled: false)
             end
 
             let(:params) { { enable: true } }
@@ -84,32 +84,32 @@ describe 'simp::prelink' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
             it {
-              is_expected.to contain_augeas('enable prelink').with({
-                                                                     lens: 'Shellvars.lns',
+              is_expected.to contain_augeas('enable prelink').with(
+                lens: 'Shellvars.lns',
                 incl: '/etc/sysconfig/prelink',
                 changes: [
                   'set PRELINKING "yes"',
                 ],
                 subscribe: 'Package[prelink]',
-                                                                   })
+              )
             }
           end
 
           context 'when FIPS mode is enabled and prelink is installed' do
             let(:facts) do
-              os_facts.merge({
-                               prelink: { enabled: false },
+              os_facts.merge(
+                prelink: { enabled: false },
                 fips_enabled: true,
-                             })
+              )
             end
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::prelink') }
             it {
-              is_expected.to contain_exec('remove prelinking').with({
-                                                                      command: '/etc/cron.daily/prelink',
+              is_expected.to contain_exec('remove prelinking').with(
+                command: '/etc/cron.daily/prelink',
                 before: 'Package[prelink]',
-                                                                    })
+              )
             }
 
             it { is_expected.to contain_package('prelink').with_ensure('absent') }

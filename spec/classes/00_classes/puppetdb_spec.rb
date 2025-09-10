@@ -103,27 +103,27 @@ describe 'simp::puppetdb' do
             it { is_expected.to contain_class('simp::puppetdb') }
             it {
               is_expected.to contain_class('puppetdb').with(
-              listen_address: '127.0.0.1',
-              listen_port: 8138,
-              open_listen_port: false,
-              ssl_deploy_certs: true,
-              ssl_set_cert_paths: true,
-              ssl_listen_address: '0.0.0.0',
-              ssl_listen_port: 8139,
-              cipher_suites: expected_ciphers,
-              disable_ssl: false,
-              manage_package_repo: false,
-              #            :database_password      => varies from run-to-run
-              read_database_username: 'simp_puppetdb',
-              #            :read_database_password => varies from run-to-run
-              read_database_name: 'simp_puppetdb',
-              read_database_jdbc_ssl_properties: '?ssl=true',
-              manage_firewall: false,
-              #            :java_args              => Xmx & Xms vary because of OS memory differences in facts
-              automatic_dlo_cleanup: true,
-              disable_update_checking: true,
-              dlo_max_age: 90,
-            )
+                listen_address: '127.0.0.1',
+                listen_port: 8138,
+                open_listen_port: false,
+                ssl_deploy_certs: true,
+                ssl_set_cert_paths: true,
+                ssl_listen_address: '0.0.0.0',
+                ssl_listen_port: 8139,
+                cipher_suites: expected_ciphers,
+                disable_ssl: false,
+                manage_package_repo: false,
+                #            :database_password      => varies from run-to-run
+                read_database_username: 'simp_puppetdb',
+                #            :read_database_password => varies from run-to-run
+                read_database_name: 'simp_puppetdb',
+                read_database_jdbc_ssl_properties: '?ssl=true',
+                manage_firewall: false,
+                #            :java_args              => Xmx & Xms vary because of OS memory differences in facts
+                automatic_dlo_cleanup: true,
+                disable_update_checking: true,
+                dlo_max_age: 90,
+              )
             }
 
             unless os_facts[:systemd]
@@ -132,11 +132,11 @@ describe 'simp::puppetdb' do
 
             it { is_expected.to contain_class('puppetdb::master::config') }
             it {
-              is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with({
-                                                                                      owner: 'root',
+              is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with(
+                owner: 'root',
                 group: 'root',
                 mode: '0644',
-                                                                                    })
+              )
             }
           end
 
@@ -170,11 +170,11 @@ describe 'simp::puppetdb' do
             it { is_expected.to contain_class('pupmod::master::base') }
             it { is_expected.to contain_class('puppetdb::master::puppetdb_conf') }
             it {
-              is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with({
-                                                                                      owner: 'root',
+              is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with(
+                owner: 'root',
                 group: 'root',
                 mode: '0644',
-                                                                                    })
+              )
             }
             it { is_expected.to contain_class('puppetdb::master::puppetdb_conf').that_notifies('Class[pupmod::master::base]') }
           end

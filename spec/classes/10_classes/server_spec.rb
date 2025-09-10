@@ -17,14 +17,14 @@ describe 'simp::server' do
         else
           let(:facts) do
             my_facts = os_facts.dup
-            my_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-                                                                            'main' => {
-                                                                              'ssldir' => '/opt/puppetlabs/puppet/vardir',
-                                                                            },
+            my_facts[:puppet_settings] = os_facts[:puppet_settings].merge(
+              'main' => {
+                'ssldir' => '/opt/puppetlabs/puppet/vardir',
+              },
               'agent' => {
                 'server' => 'puppet.bar.baz',
               },
-                                                                          })
+            )
             my_facts[:augeas] = { 'version' => '1.2.3' }
             my_facts[:openssh_version] = '5.7'
             my_facts

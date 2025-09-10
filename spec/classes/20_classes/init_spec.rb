@@ -292,10 +292,10 @@ describe 'simp' do
 
               it { is_expected.to compile.with_all_deps }
               it {
-                is_expected.to create_stunnel__connection('rsync').with({
-                                                                          connect: ['1.2.3.4:8730'],
-                accept: '127.0.0.1:873',
-                                                                        })
+                is_expected.to create_stunnel__connection('rsync').with(
+                  connect: ['1.2.3.4:8730'],
+                  accept: '127.0.0.1:873',
+                )
               }
             end
             context 'with rsync_stunnel => Simplib::Host' do
@@ -303,10 +303,10 @@ describe 'simp' do
 
               it { is_expected.to compile.with_all_deps }
               it {
-                is_expected.to create_stunnel__connection('rsync').with({
-                                                                          connect: ['other.test.host:8730'],
-                accept: '127.0.0.1:873',
-                                                                        })
+                is_expected.to create_stunnel__connection('rsync').with(
+                  connect: ['other.test.host:8730'],
+                  accept: '127.0.0.1:873',
+                )
               }
             end
 
@@ -327,10 +327,10 @@ describe 'simp' do
 
               it { is_expected.to compile.with_all_deps }
               it {
-                is_expected.to create_stunnel__connection('rsync').with({
-                                                                          connect: ["#{facts[:puppet_settings]['agent']['server']}:8730"],
-                accept: '127.0.0.1:873',
-                                                                        })
+                is_expected.to create_stunnel__connection('rsync').with(
+                  connect: ["#{facts[:puppet_settings]['agent']['server']}:8730"],
+                  accept: '127.0.0.1:873',
+                )
               }
             end
           end

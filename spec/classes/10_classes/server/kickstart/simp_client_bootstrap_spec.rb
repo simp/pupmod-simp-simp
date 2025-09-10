@@ -23,13 +23,13 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
               '..', '..', '..', '..', '..', 'files', 'var', 'www', 'ks',
               'bootstrap_simp_client'))
 
-            is_expected.to create_file('/var/www/ks/bootstrap_simp_client').with({
-                                                                                   ensure: 'file',
+            is_expected.to create_file('/var/www/ks/bootstrap_simp_client').with(
+              ensure: 'file',
               owner: 'root',
               group: 'apache',
               mode: '0640',
               content: expected_content,
-                                                                                 })
+            )
           end
 
           it do

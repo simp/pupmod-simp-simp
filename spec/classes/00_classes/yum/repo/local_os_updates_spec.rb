@@ -53,7 +53,7 @@ describe 'simp::yum::repo::local_os_updates' do
         }
 
         context 'with relative_repo_path = x/y/z and relative_gpgkey_path set to my/gpgkeys' do
-          let(:params) { super().merge({ relative_repo_path: 'x/y/z', relative_gpgkey_path: 'my/gpgkeys' }) }
+          let(:params) { super().merge(relative_repo_path: 'x/y/z', relative_gpgkey_path: 'my/gpgkeys') }
 
           it { is_expected.to compile.with_all_deps }
           it {

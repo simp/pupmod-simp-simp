@@ -11,19 +11,19 @@ describe 'simp::rc_local' do
         context 'with default parameters' do
           it { is_expected.to compile.with_all_deps }
           it do
-            is_expected.to contain_file('/etc/rc.d').with({
-                                                            ensure: 'directory',
+            is_expected.to contain_file('/etc/rc.d').with(
+              ensure: 'directory',
               owner: 'root',
               group: 'root',
               mode: '0644',
-                                                          })
+            )
           end
 
           it do
-            is_expected.to contain_file('/etc/rc.local').with({
-                                                                ensure: 'link',
+            is_expected.to contain_file('/etc/rc.local').with(
+              ensure: 'link',
               target: '/etc/rc.d/rc.local',
-                                                              })
+            )
           end
 
           it do
@@ -33,13 +33,13 @@ describe 'simp::rc_local' do
               # This file managed by Puppet, manual changes will be erased!
               # This file Disabled via Puppet
             EOM
-            is_expected.to contain_file('/etc/rc.d/rc.local').with({
-                                                                     ensure: 'file',
+            is_expected.to contain_file('/etc/rc.d/rc.local').with(
+              ensure: 'file',
               owner: 'root',
               group: 'root',
               mode: '0755',
               content: expected.strip,
-                                                                   })
+            )
           end
         end
 

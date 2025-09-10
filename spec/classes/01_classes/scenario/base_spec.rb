@@ -23,14 +23,14 @@ describe 'simp' do
         facts[:openssh_version] = '5.8'
         facts[:augeas] = { 'version' => '1.2.3' }
         facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-        facts[:puppet_settings] = os_facts[:puppet_settings].merge({
-                                                                     'main' => {
-                                                                       'ssldir' => '/opt/puppetlabs/puppet/vardir',
-                                                                     },
+        facts[:puppet_settings] = os_facts[:puppet_settings].merge(
+          'main' => {
+            'ssldir' => '/opt/puppetlabs/puppet/vardir',
+          },
           'agent' => {
             'server' => 'puppet.bar.baz',
           },
-                                                                   })
+        )
 
         facts
       end
@@ -133,12 +133,12 @@ describe 'simp' do
 
       context 'ipa fact set ' do
         let(:facts) do
-          super().merge({
-                          ipa: {
-                            domain: 'ipa.example.com',
-                            server: 'ipaserver.example.com',
-                          },
-                        })
+          super().merge(
+            ipa: {
+              domain: 'ipa.example.com',
+              server: 'ipaserver.example.com',
+            },
+          )
         end
 
         it { is_expected.to compile.with_all_deps }

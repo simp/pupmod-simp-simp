@@ -23,7 +23,7 @@ describe 'simp::sysctl' do
           context 'with ipv6 enabled' do
             let(:params) { { ipv6: true } }
             let(:facts) do
-              os_facts.merge({ ipv6_enabled: true })
+              os_facts.merge(ipv6_enabled: true)
             end
 
             it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 0) }
