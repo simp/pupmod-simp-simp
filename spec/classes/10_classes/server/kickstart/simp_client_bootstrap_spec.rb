@@ -5,7 +5,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
     {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
-      'serverip'      => '1.2.3.4'
+      'serverip'      => '1.2.3.4',
     }
   end
 
@@ -28,7 +28,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
               owner: 'root',
               group: 'apache',
               mode: '0640',
-              content: expected_content
+              content: expected_content,
                                                                                  })
           end
 
@@ -48,7 +48,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         context 'with reboot_on_failure=false' do
           let(:params) do
             {
-              reboot_on_failure: false
+              reboot_on_failure: false,
             }
           end
 
@@ -69,7 +69,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         context 'with fips=true' do
           let(:params) do
             {
-              fips: true
+              fips: true,
             }
           end
 
@@ -81,7 +81,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         context 'ntp_servers array' do
           let(:params) do
             {
-              ntp_servers: ['1.2.3.4', '5.6.7.8']
+              ntp_servers: ['1.2.3.4', '5.6.7.8'],
             }
           end
 
@@ -104,8 +104,8 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
             {
               ntp_servers: {
                 '1.2.3.4' => ['foo, bar'],
-                '5.6.7.8' => ['baz']
-              }
+                '5.6.7.8' => ['baz'],
+              },
             }
           end
 
@@ -126,7 +126,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         context 'print_stats=false' do
           let(:params) do
             {
-              puppet_print_stats: false
+              puppet_print_stats: false,
             }
           end
 
@@ -147,7 +147,7 @@ describe 'simp::server::kickstart::simp_client_bootstrap' do
         context 'wait_for_cert=false' do
           let(:params) do
             {
-              puppet_wait_for_cert: false
+              puppet_wait_for_cert: false,
             }
           end
 

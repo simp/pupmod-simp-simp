@@ -10,10 +10,10 @@ describe 'simp::mountpoints::tmp' do
         else
           let(:facts) do
             if os_facts.fetch(:init_systems, []).include?('systemd')
-              os_facts.merge({
-                               # This replicates a normal EL7 default installation
-                               tmp_mount_fstype_tmp: 'tmpfs'
-                             })
+              os_facts.merge(
+                # This replicates a normal EL7 default installation
+                tmp_mount_fstype_tmp: 'tmpfs',
+              )
             else
               os_facts
             end
@@ -22,15 +22,15 @@ describe 'simp::mountpoints::tmp' do
           shared_examples_for 'a legacy system' do
             context 'with default parameters' do
               it {
-                is_expected.to contain_mount('/tmp').with({
-                                                            options: 'bind,nodev,noexec,nosuid',
-                device: '/tmp'
-                                                          })
+                is_expected.to contain_mount('/tmp').with(
+                  options: 'bind,nodev,noexec,nosuid',
+                  device: '/tmp',
+                )
               }
               it {
                 is_expected.to contain_mount('/var/tmp').with({
                                                                 options: 'bind,nodev,noexec,nosuid',
-                device: '/tmp'
+                device: '/tmp',
                                                               })
               }
               it { is_expected.to create_file('/tmp').with_mode('u+rwx,g+rwx,o+rwxt') }
@@ -50,7 +50,7 @@ describe 'simp::mountpoints::tmp' do
               it {
                 is_expected.to contain_mount('/tmp').with({
                                                             options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-                device: '/dev/sda3'
+                device: '/dev/sda3',
                                                           })
               }
             end
@@ -67,7 +67,7 @@ describe 'simp::mountpoints::tmp' do
               it {
                 is_expected.to contain_mount('/tmp').with({
                                                             options: 'bind,nodev,noexec,nosuid',
-                device: '/tmp'
+                device: '/tmp',
                                                           })
               }
             end
@@ -108,7 +108,7 @@ Options=mode=1777,nodev,noexec,nosuid
               it {
                 is_expected.to contain_mount('/tmp').with({
                                                             options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-                device: '/dev/sda3'
+                device: '/dev/sda3',
                                                           })
               }
 
@@ -118,7 +118,7 @@ Options=mode=1777,nodev,noexec,nosuid
             context 'tmp_service == false' do
               let(:params) do
                 {
-                  tmp_service: false
+                  tmp_service: false,
                 }
               end
 
@@ -140,7 +140,7 @@ Options=mode=1777,nodev,noexec,nosuid
             it {
               is_expected.to contain_mount('/var/tmp').with({
                                                               options: 'data=ordered,nodev,noexec,nosuid,relatime,rw,seclabel',
-              device: '/dev/sda3'
+              device: '/dev/sda3',
                                                             })
             }
           end
@@ -157,7 +157,7 @@ Options=mode=1777,nodev,noexec,nosuid
             it {
               is_expected.to contain_mount('/var/tmp').with({
                                                               options: 'bind,nodev,noexec,nosuid',
-              device: '/var/tmp'
+              device: '/var/tmp',
                                                             })
             }
           end
@@ -174,7 +174,7 @@ Options=mode=1777,nodev,noexec,nosuid
             it {
               is_expected.to contain_mount('/dev/shm').with({
                                                               options: 'nodev,noexec,nosuid,rw,seclabel',
-              device: 'tmpfs'
+              device: 'tmpfs',
                                                             })
             }
           end

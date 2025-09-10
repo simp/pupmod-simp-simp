@@ -22,7 +22,7 @@ describe 'simp::puppetdb' do
             {
               serversettings: Puppet.version,
               serverversion: Puppet.version,
-              puppet_settings: { 'main' => { 'hostprivkey' => 'blah' } }
+              puppet_settings: { 'main' => { 'hostprivkey' => 'blah' } },
             }.merge(os_facts)
           end
 
@@ -135,7 +135,7 @@ describe 'simp::puppetdb' do
               is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with({
                                                                                       owner: 'root',
                 group: 'root',
-                mode: '0644'
+                mode: '0644',
                                                                                     })
             }
           end
@@ -160,7 +160,7 @@ describe 'simp::puppetdb' do
             let(:hieradata) { 'simp__puppetdb' }
             let(:params) do
               {
-                use_puppet_ssl_certs: false
+                use_puppet_ssl_certs: false,
               }
             end
 
@@ -173,7 +173,7 @@ describe 'simp::puppetdb' do
               is_expected.to contain_file("#{Puppet[:confdir]}/puppetdb.conf").with({
                                                                                       owner: 'root',
                 group: 'root',
-                mode: '0644'
+                mode: '0644',
                                                                                     })
             }
             it { is_expected.to contain_class('puppetdb::master::puppetdb_conf').that_notifies('Class[pupmod::master::base]') }
@@ -184,7 +184,7 @@ describe 'simp::puppetdb' do
             let(:params) do
               {
                 use_puppet_ssl_certs: false,
-                manage_puppetserver: false
+                manage_puppetserver: false,
               }
             end
 
@@ -198,7 +198,7 @@ describe 'simp::puppetdb' do
             let(:hieradata) { 'simp_puppetdb_manage_config_false' }
             let(:params) do
               {
-                use_puppet_ssl_certs: false
+                use_puppet_ssl_certs: false,
               }
             end
 

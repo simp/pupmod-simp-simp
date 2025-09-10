@@ -39,10 +39,10 @@ describe 'SIMP Rsync Environments' do
                                                                                'shares' => [
                                                                                  'mcafee',
                                                                                  'clamav',
-                                                                               ]
-                                                                             }
-                                                                           }
-                                                                         }
+                                                                               ],
+                                                                             },
+                                                                           },
+                                                                         },
                                                                        })
     end
   end

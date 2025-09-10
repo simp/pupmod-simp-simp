@@ -14,7 +14,7 @@ class ProfileJSON < RSpec::Core::Formatters::JsonFormatter
         description: ex[:full_description],
         staus: ex[:status],
         run_time: ex[:run_time],
-        exception: ex[:exception]
+        exception: ex[:exception],
       }
     end
 

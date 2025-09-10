@@ -9,7 +9,7 @@ describe 'simp' do
     {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
-      'serverip'      => '1.2.3.4'
+      'serverip'      => '1.2.3.4',
     }
   end
 
@@ -28,8 +28,8 @@ describe 'simp' do
                                                                        'ssldir' => '/opt/puppetlabs/puppet/vardir',
                                                                      },
           'agent' => {
-            'server' => 'puppet.bar.baz'
-          }
+            'server' => 'puppet.bar.baz',
+          },
                                                                    })
 
         facts
@@ -137,7 +137,7 @@ describe 'simp' do
                           ipa: {
                             domain: 'ipa.example.com',
                             server: 'ipaserver.example.com',
-                          }
+                          },
                         })
         end
 

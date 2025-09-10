@@ -22,7 +22,7 @@ describe 'simp::mountpoints::proc' do
           context 'with manage_proc_group = false' do
             let(:params) do
               {
-                manage_proc_group: false
+                manage_proc_group: false,
               }
             end
 
@@ -33,7 +33,7 @@ describe 'simp::mountpoints::proc' do
           context 'with proc_gid = 0' do
             let(:params) do
               {
-                proc_gid: 0
+                proc_gid: 0,
               }
             end
 

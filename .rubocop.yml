@@ -480,7 +480,7 @@ Style/TrailingBodyOnMethodDefinition:
 Style/TrailingBodyOnModule:
   Enabled: false
 Style/TrailingCommaInHashLiteral:
-  Enabled: false
+  EnforcedStyleForMultiline: comma
 Style/TrailingMethodEndStatement:
   Enabled: false
 Style/UnpackFirst:

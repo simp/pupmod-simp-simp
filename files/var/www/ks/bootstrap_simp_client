@@ -75,7 +75,7 @@ class BootstrapSimpClient
       log_file: DEFAULT_LOG_FILE,
       quiet: DEFAULT_QUIET,
       debug: DEFAULT_DEBUG,
-      help_requested: false
+      help_requested: false,
     }
     @retry_interval = nil
     @hostnamectl = '/usr/bin/hostnamectl'

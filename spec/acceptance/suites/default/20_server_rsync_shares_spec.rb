@@ -14,7 +14,7 @@ describe 'simp::server::rsync_shares class' do
       let(:hieradata) do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
           {
-            'simp_options::stunnel' => true
+            'simp_options::stunnel' => true,
           },
         )
       end

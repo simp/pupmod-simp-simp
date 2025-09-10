@@ -6,7 +6,7 @@ describe 'simp::server::kickstart' do
     {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
-      'serverip'      => '1.2.3.4'
+      'serverip'      => '1.2.3.4',
     }
   end
 
@@ -21,8 +21,8 @@ describe 'simp::server::kickstart' do
             os_facts[:puppet_settings] = os_facts[:puppet_settings].merge({
                                                                             agent: {
                                                                               server: server_facts_hash['servername'],
-                                                                              ca_server: server_facts_hash['servername']
-                                                                            }
+                                                                              ca_server: server_facts_hash['servername'],
+                                                                            },
                                                                           })
 
             os_facts

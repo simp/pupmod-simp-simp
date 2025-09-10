@@ -6,7 +6,7 @@ describe 'simp' do
     {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
-      'serverip'      => '1.2.3.4'
+      'serverip'      => '1.2.3.4',
     }
   end
 
@@ -31,8 +31,8 @@ describe 'simp' do
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
             },
             'agent' => {
-              'server' => 'puppet.bar.baz'
-            }
+              'server' => 'puppet.bar.baz',
+            },
           }
 
           os_facts
@@ -127,7 +127,7 @@ describe 'simp' do
             let(:params) do
               {
                 enable_filebucketing: true,
-              filebucket_server: 'my.puppet.server'
+              filebucket_server: 'my.puppet.server',
               }
             end
 
@@ -188,7 +188,7 @@ describe 'simp' do
                   poss,
                 ],
                 'does_not_contain' => [
-                ]
+                ],
               },
               'simp_lite' => {
                 'contains' => [
@@ -197,7 +197,7 @@ describe 'simp' do
                 ],
                 'does_not_contain' => [
                   simp,
-                ]
+                ],
               },
               'poss' => {
                 'contains' => [
@@ -206,15 +206,15 @@ describe 'simp' do
                 'does_not_contain' => [
                   simp_lite,
                   simp,
-                ]
-              }
+                ],
+              },
             }
 
             scenarios.each do |scenario, data|
               context "'#{scenario}'" do
                 let(:params) do
                   {
-                    scenario: scenario
+                    scenario: scenario,
                   }
                 end
 
@@ -244,7 +244,7 @@ describe 'simp' do
               let(:params) do
                 {
                   enable_filebucketing: true,
-                filebucket_server: 'my.puppet.server'
+                filebucket_server: 'my.puppet.server',
                 }
               end
 
@@ -260,11 +260,11 @@ describe 'simp' do
             {
               'when classes are just added' => {
                 params: {
-                  'classes' => [ 'simp::yum::schedule' ]
+                  'classes' => [ 'simp::yum::schedule' ],
                 },
                 contains: [ 'simp::yum::schedule'],
                 not_contains: [ ],
-              }
+              },
             }.each do |ctxt, hash|
               context ctxt do
                 let(:params) do
@@ -294,7 +294,7 @@ describe 'simp' do
               it {
                 is_expected.to create_stunnel__connection('rsync').with({
                                                                           connect: ['1.2.3.4:8730'],
-                accept: '127.0.0.1:873'
+                accept: '127.0.0.1:873',
                                                                         })
               }
             end
@@ -305,7 +305,7 @@ describe 'simp' do
               it {
                 is_expected.to create_stunnel__connection('rsync').with({
                                                                           connect: ['other.test.host:8730'],
-                accept: '127.0.0.1:873'
+                accept: '127.0.0.1:873',
                                                                         })
               }
             end
@@ -321,7 +321,7 @@ describe 'simp' do
               let(:params) do
                 {
                   rsync_stunnel: true,
-                stock_sssd: false
+                stock_sssd: false,
                 }
               end
 
@@ -329,7 +329,7 @@ describe 'simp' do
               it {
                 is_expected.to create_stunnel__connection('rsync').with({
                                                                           connect: ["#{facts[:puppet_settings]['agent']['server']}:8730"],
-                accept: '127.0.0.1:873'
+                accept: '127.0.0.1:873',
                                                                         })
               }
             end
@@ -340,7 +340,7 @@ describe 'simp' do
               super().merge!(
                 ipa: {
                   domain: 'test.local',
-                  server: 'ipaserver.test.local'
+                  server: 'ipaserver.test.local',
                 },
               )
             end

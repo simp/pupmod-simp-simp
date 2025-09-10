@@ -22,7 +22,7 @@ describe 'simp yum configuration' do
         {
           'simp::yum::repo::simp::servers'             => nil,
           'simp::yum::repo::local_os_updates::servers' => ['%{facts.networking.hostname}'],
-          'simp::yum::repo::local_simp::servers'       => ['%{facts.networking.hostname}']
+          'simp::yum::repo::local_simp::servers'       => ['%{facts.networking.hostname}'],
         },
       )
     end
@@ -72,7 +72,7 @@ describe 'simp yum configuration' do
           {
             'simp::yum::repo::local_simp::enable_repo'   => false,
             'simp::yum::repo::local_simp::servers'       => [],
-            'simp::yum::repo::local_os_updates::servers' => [yum_updates_url]
+            'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
           },
         )
 

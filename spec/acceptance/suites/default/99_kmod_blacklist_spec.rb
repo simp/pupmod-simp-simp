@@ -49,7 +49,7 @@ describe 'simp::kmod_blacklist class' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
           {
-            'simp::kmod_blacklist::allow_overrides' => false
+            'simp::kmod_blacklist::allow_overrides' => false,
           },
         )
       end
@@ -87,7 +87,7 @@ describe 'simp::kmod_blacklist class' do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
           {
             'simp::kmod_blacklist::allow_overrides' => nil,
-            'simp::kmod_blacklist::lock_modules'    => true
+            'simp::kmod_blacklist::lock_modules'    => true,
           },
         )
       end

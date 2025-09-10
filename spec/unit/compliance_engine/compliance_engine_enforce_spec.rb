@@ -73,8 +73,8 @@ describe 'compliance_markup', type: :class do
       exceptions: {
         'documented_missing_parameters' => [ not_expected_classes_regex ],
         'documented_missing_resources'  => [ not_expected_classes_regex ],
-        'non_compliant'                 => {}
-      }
+        'non_compliant'                 => {},
+      },
     },
     'nist_800_53:rev4' => {
       percent_compliant: 100,
@@ -88,10 +88,10 @@ describe 'compliance_markup', type: :class do
           # in facts.blocklist element of pupmod::facter_options. We don't
           # actually care what else is in that configuration Hash.  So, the
           # 'non_compliant' report is a false alarm for pupmod::facter_options.
-          'Class[Pupmod]' => [ 'facter_options' ]
-        }
-      }
-    }
+          'Class[Pupmod]' => [ 'facter_options' ],
+        },
+      },
+    },
   }
 
   on_supported_os.each do |os, os_facts|
@@ -102,7 +102,7 @@ describe 'compliance_markup', type: :class do
         context "with compliance profile '#{target_profile}'" do
           let(:facts) do
             os_facts.merge({
-                             target_compliance_profile: target_profile
+                             target_compliance_profile: target_profile,
                            })
           end
           let(:compliance_report) do

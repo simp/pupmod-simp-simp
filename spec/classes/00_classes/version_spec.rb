@@ -18,7 +18,7 @@ describe 'simp::version' do
               ensure: 'directory',
               owner: root_dir_user,
               group: root_dir_user,
-              mode: root_dir_mode
+              mode: root_dir_mode,
             },
           )
         }
@@ -29,7 +29,7 @@ describe 'simp::version' do
               ensure: 'file',
               owner: root_dir_user,
               group: root_dir_user,
-              mode: root_dir_mode
+              mode: root_dir_mode,
             },
           )
         }

@@ -38,7 +38,7 @@ describe 'simp::ctrl_alt_del' do
             context 'when not logging users' do
               let(:params) do
                 {
-                  log_users: false
+                  log_users: false,
                 }
               end
 
@@ -55,7 +55,7 @@ describe 'simp::ctrl_alt_del' do
             context 'when not logging' do
               let(:params) do
                 {
-                  log: false
+                  log: false,
                 }
               end
 
@@ -68,7 +68,7 @@ describe 'simp::ctrl_alt_del' do
             context 'when allowing ctrl-alt-del' do
               let(:params) do
                 {
-                  enable: true
+                  enable: true,
                 }
               end
 

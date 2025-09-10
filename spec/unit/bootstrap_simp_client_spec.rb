@@ -262,7 +262,7 @@ describe 'BootstrapSimpClient' do
         help_requested: false,
         puppet_server: 'puppet.test.local',
         puppet_ca: 'puppetca.test.local',
-        puppet_cmd: cmd
+        puppet_cmd: cmd,
       }
       expect(bootstrap.options).to eq expected
     end

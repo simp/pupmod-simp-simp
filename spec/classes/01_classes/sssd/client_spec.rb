@@ -66,7 +66,7 @@ describe 'simp::sssd::client' do
              ldap_server_type: '389ds',
              enumerate_users: true,
              cache_credentials: false,
-             min_id: 501
+             min_id: 501,
               }
             end
 

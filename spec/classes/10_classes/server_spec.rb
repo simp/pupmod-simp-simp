@@ -22,8 +22,8 @@ describe 'simp::server' do
                                                                               'ssldir' => '/opt/puppetlabs/puppet/vardir',
                                                                             },
               'agent' => {
-                'server' => 'puppet.bar.baz'
-              }
+                'server' => 'puppet.bar.baz',
+              },
                                                                           })
             my_facts[:augeas] = { 'version' => '1.2.3' }
             my_facts[:openssh_version] = '5.7'
@@ -41,7 +41,7 @@ describe 'simp::server' do
             let(:params) do
               {
                 pam: true,
-             allow_simp_user: true
+             allow_simp_user: true,
               }
             end
 
@@ -101,7 +101,7 @@ describe 'simp::server' do
                   poss,
                 ],
                 'does_not_contain' => [
-                ]
+                ],
               },
               'simp_lite' => {
                 'contains' => [
@@ -111,7 +111,7 @@ describe 'simp::server' do
                   simp,
                 ],
                 'does_not_contain' => [
-                ]
+                ],
               },
               'poss' => {
                 'contains' => [
@@ -121,15 +121,15 @@ describe 'simp::server' do
                   simp,
                 ],
                 'does_not_contain' => [
-                ]
-              }
+                ],
+              },
             }
 
             scenarios.each do |scenario, data|
               context "'#{scenario}'" do
                 let(:params) do
                   {
-                    scenario: scenario
+                    scenario: scenario,
                   }
                 end
 
@@ -147,7 +147,7 @@ describe 'simp::server' do
               context "'#{scenario}' with authselect" do
                 let(:params) do
                   {
-                    scenario: scenario
+                    scenario: scenario,
                   }
                 end
 

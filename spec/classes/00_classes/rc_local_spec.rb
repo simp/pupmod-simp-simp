@@ -15,14 +15,14 @@ describe 'simp::rc_local' do
                                                             ensure: 'directory',
               owner: 'root',
               group: 'root',
-              mode: '0644'
+              mode: '0644',
                                                           })
           end
 
           it do
             is_expected.to contain_file('/etc/rc.local').with({
                                                                 ensure: 'link',
-              target: '/etc/rc.d/rc.local'
+              target: '/etc/rc.d/rc.local',
                                                               })
           end
 
@@ -38,7 +38,7 @@ EOM
               owner: 'root',
               group: 'root',
               mode: '0755',
-              content: expected.strip
+              content: expected.strip,
                                                                    })
           end
         end

@@ -13,16 +13,16 @@ describe 'simp::netconsole' do
           os_facts[:networking] = {
             interfaces: {
               eth0: {
-                ip: '192.168.2.56'
-              }
-            }
+                ip: '192.168.2.56',
+              },
+            },
           }
           os_facts
         end
         let(:params) do
           {
             ensure:    'present',
-         target_ip: '10.0.4.84'
+         target_ip: '10.0.4.84',
           }
         end
 
@@ -70,7 +70,7 @@ describe 'simp::netconsole' do
         context 'disable' do
           let(:params) do
             {
-              ensure: 'absent'
+              ensure: 'absent',
             }
           end
 

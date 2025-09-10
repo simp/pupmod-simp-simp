@@ -59,7 +59,7 @@ describe 'simp yum configuration' do
       packages = {
         'haveged'      => 'simp-community-epel',
         'postgresql96' => 'simp-community-postgresql',
-        'puppet-agent' => 'simp-community-puppet'
+        'puppet-agent' => 'simp-community-puppet',
       }
       block_on(hosts, parallel) do |host|
         on(host, 'yum clean all')

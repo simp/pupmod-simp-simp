@@ -19,22 +19,22 @@ describe 'simp::server::rsync_shares' do
                     'id'     => 'CentOS',
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
                     '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
-                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
+                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] },
                   },
                   'redhat' => {
                     'id'     => 'RedHat',
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
                     '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
-                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
+                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] },
                   },
                   'oraclelinux' => {
                     'id'     => 'OracleLinux',
                     '7'      => { 'id' => '7',      'shares' => ['bind_dns'] },
                     '8'      => { 'id' => '8',      'shares' => ['bind_dns'] },
-                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] }
-                  }
-                }
-              }
+                    'global' => { 'id' => 'Global', 'shares' => ['apache', 'dhcpd', 'freeradius', 'snmp', 'tftpboot'] },
+                  },
+                },
+              },
             }
 
             os_facts
@@ -62,7 +62,7 @@ describe 'simp::server::rsync_shares' do
                     'id' => 'rsync',
                     'global' => {
                       'id' => 'Global',
-                      'shares' => [ 'clamav' ]
+                      'shares' => [ 'clamav' ],
                     },
                     'redhat' => {
                       'id' => 'RedHat',
@@ -70,18 +70,18 @@ describe 'simp::server::rsync_shares' do
                         'id' => '7',
                         'shares' => [
                           'bind_dns',
-                        ]
+                        ],
                       },
                       'global' => {
                         'id' => 'Global',
                         'shares' => [
                           'apache',
                           'tftpboot',
-                        ]
-                      }
-                    }
-                  }
-                }
+                        ],
+                      },
+                    },
+                  },
+                },
               }
 
               os_facts

@@ -14,7 +14,7 @@ describe 'simp::admin' do
             updated_facts[:puppet_settings] = {
               main: {
                 ssldir: '/opt/puppet/somewhere/ssl',
-              }
+              },
             }
 
             updated_facts
@@ -150,10 +150,10 @@ describe 'simp::admin' do
                   admin_group: 'admins',
                   auditor_group: 'auditors',
                   admin_sudo_options: {
-                    'role' => 'unconfined_r'
+                    'role' => 'unconfined_r',
                   },
                   auditor_sudo_options: {
-                    'role' => 'staff_r'
+                    'role' => 'staff_r',
                   },
                   passwordless_auditor_sudo: false,
                   force_logged_shell: false,
@@ -165,7 +165,7 @@ describe 'simp::admin' do
                   user_list: ['%admins'],
                   cmnd: ['/bin/su - root'],
                   options: {
-                    'role' => 'unconfined_r'
+                    'role' => 'unconfined_r',
                   },
                   passwd: false,
                 )
@@ -175,7 +175,7 @@ describe 'simp::admin' do
                   user_list: ['%auditors'],
                   cmnd: ['AUDIT'],
                   options: {
-                    'role' => 'staff_r'
+                    'role' => 'staff_r',
                   },
                   passwd: true,
                 )

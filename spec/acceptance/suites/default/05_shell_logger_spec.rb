@@ -33,7 +33,7 @@ describe 'simp_admin' do
             let(:hieradata)  do
               YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
                 {
-                  'simp::admin::logged_shell' => 'sudosh'
+                  'simp::admin::logged_shell' => 'sudosh',
                 },
               )
             end
@@ -63,7 +63,7 @@ describe 'simp_admin' do
             let(:hieradata)  do
               YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
                 {
-                  'simp::admin::logged_shell' => 'tlog'
+                  'simp::admin::logged_shell' => 'tlog',
                 },
               )
             end

@@ -14,7 +14,7 @@ describe 'windows node' do
     {
       'simp_options::puppet::server' => host_fqdn,
    'simp_options::puppet::ca'     => host_fqdn,
-   'simp::classes'                => ['simp_options']
+   'simp::classes'                => ['simp_options'],
     }
   end
 

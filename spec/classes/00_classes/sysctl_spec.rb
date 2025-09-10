@@ -51,7 +51,7 @@ describe 'simp::sysctl' do
           context 'kernel__core_pattern with absolute path' do
             let(:params) do
               {
-                kernel__core_pattern: '/foo/bar/baz'
+                kernel__core_pattern: '/foo/bar/baz',
               }
             end
 
@@ -61,7 +61,7 @@ describe 'simp::sysctl' do
           context 'kernel__core_pattern with non-aboslute path' do
             let(:params) do
               {
-                kernel__core_pattern: 'foo'
+                kernel__core_pattern: 'foo',
               }
             end
 
@@ -71,7 +71,7 @@ describe 'simp::sysctl' do
           context 'kernel__core_pattern with pipe and absolute path' do
             let(:params) do
               {
-                kernel__core_pattern: '| /bin/foo'
+                kernel__core_pattern: '| /bin/foo',
               }
             end
 
@@ -81,7 +81,7 @@ describe 'simp::sysctl' do
           context 'kernel__core_pattern with pipe and non-absolute path' do
             let(:params) do
               {
-                kernel__core_pattern: '| bin/foo'
+                kernel__core_pattern: '| bin/foo',
               }
             end
 
@@ -95,7 +95,7 @@ describe 'simp::sysctl' do
           context 'kernel__core_pattern with over 128 characters' do
             let(:params) do
               {
-                kernel__core_pattern: ('a' * 129)
+                kernel__core_pattern: ('a' * 129),
               }
             end
 
@@ -117,7 +117,7 @@ describe 'simp::sysctl' do
             let(:params) do
               {
                 pam: true,
-             core_dumps: false
+             core_dumps: false,
               }
             end
 

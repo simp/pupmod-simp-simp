@@ -24,7 +24,7 @@ describe 'simp::sysctl class' do
       let(:hieradata) do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
           {
-            'simp::sysctl::ipv6' => true
+            'simp::sysctl::ipv6' => true,
           },
         )
       end
@@ -50,7 +50,7 @@ describe 'simp::sysctl class' do
       let(:hieradata) do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
           {
-            'simp::sysctl::ipv6' => false
+            'simp::sysctl::ipv6' => false,
           },
         )
       end
