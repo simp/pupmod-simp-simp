@@ -41,7 +41,7 @@ describe 'simp::server' do
             let(:params) do
               {
                 pam: true,
-             allow_simp_user: true,
+                allow_simp_user: true,
               }
             end
 

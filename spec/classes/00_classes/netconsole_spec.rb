@@ -22,7 +22,7 @@ describe 'simp::netconsole' do
         let(:params) do
           {
             ensure:    'present',
-         target_ip: '10.0.4.84',
+            target_ip: '10.0.4.84',
           }
         end
 
@@ -34,20 +34,20 @@ describe 'simp::netconsole' do
           }
           it {
             is_expected.to create_service('netconsole').with(
-            ensure: 'running',
-            enable: true,
-          )
+              ensure: 'running',
+              enable: true,
+            )
           }
         end
 
         context 'with everything set' do
           let(:params) do
             super().merge(
-            target_macaddr: '00:11:22:33:44:55',
-            source_device:  'enp3s0',
-            source_port:    514,
-            target_port:    514,
-          )
+              target_macaddr: '00:11:22:33:44:55',
+              source_device:  'enp3s0',
+              source_port:    514,
+              target_port:    514,
+            )
           end
 
           it { is_expected.to compile.with_all_deps }
@@ -81,9 +81,9 @@ describe 'simp::netconsole' do
           }
           it {
             is_expected.to create_service('netconsole').with(
-            ensure: 'stopped',
-            enable: false,
-          )
+              ensure: 'stopped',
+              enable: false,
+            )
           }
         end
 

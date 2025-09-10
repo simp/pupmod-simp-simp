@@ -37,7 +37,7 @@ describe 'simp::sssd::client' do
             let(:params) do
               {
                 ldap_domain: true,
-             ldap_server_type: 'plain',
+                ldap_server_type: 'plain',
               }
             end
 
@@ -61,12 +61,12 @@ describe 'simp::sssd::client' do
             let(:params) do
               {
                 ldap_domain: true,
-             ldap_domain_options: { 'max_id' => 23_456 },
-             ldap_provider_options: { 'ldap_user_name' => 'bob' },
-             ldap_server_type: '389ds',
-             enumerate_users: true,
-             cache_credentials: false,
-             min_id: 501,
+                ldap_domain_options: { 'max_id' => 23_456 },
+                ldap_provider_options: { 'ldap_user_name' => 'bob' },
+                ldap_server_type: '389ds',
+                enumerate_users: true,
+                cache_credentials: false,
+                min_id: 501,
               }
             end
 

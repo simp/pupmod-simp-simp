@@ -352,8 +352,7 @@ describe 'BootstrapSimpClient' do
       expect(bootstrap.run([ '--help' ])).to eq 0
       expect { bootstrap.run([ '-h' ]) }.to output(
         %r{Usage: bootstrap_simp_client.rb -s PUPPETSRV -c PUPPETCA \[options\]},
-      )
-        .to_stdout
+      ).to_stdout
     end
 
     it 'returns 0 when processing succeeds' do

@@ -22,8 +22,8 @@ describe 'simp::root_user' do
             let(:params) do
               {
                 manage_perms: false,
-             manage_user: false,
-             manage_group: false,
+                manage_user: false,
+                manage_group: false,
               }
             end
 
@@ -60,7 +60,7 @@ describe 'simp::root_user' do
             let(:params) do
               {
                 password: 'mysecretpassword',
-             hashed_password: '$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0',
+                hashed_password: '$6$fdkjfdk$yj8HAo/RyW/WhYkXvTp7nQbjIZz4TMRuj/0W1bJGuQjGxea36JhUkB36BMyf8O/g0/rpRB1lPC/6KuAmgqnIn0',
               }
             end
 

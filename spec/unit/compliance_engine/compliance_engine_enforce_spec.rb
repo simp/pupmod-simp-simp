@@ -116,8 +116,8 @@ describe 'compliance_markup', type: :class do
 
           let(:pre_condition) do
             %(
-            #{expected_classes.map { |c| %(include #{c}) }.join("\n")}
-          )
+              #{expected_classes.map { |c| %(include #{c}) }.join("\n")}
+            )
           end
 
           let(:hieradata) { 'compliance-engine' }

@@ -20,30 +20,32 @@ describe 'SIMP Rsync Environments' do
 
       allow(Facter::Core::Execution).to receive(:exec).with("find -L simp -name '.shares'").at_least(:once).and_return('simp/rsync/.shares')
 
-      allow(Dir).to receive(:glob).with('simp/rsync/*').at_least(:once).and_return([
-                                                                                     'simp/rsync/Global/mcafee',
-                                                                                     'simp/rsync/Global/clamav',
-                                                                                   ])
+      allow(Dir).to receive(:glob).with('simp/rsync/*').at_least(:once).and_return(
+        [
+          'simp/rsync/Global/mcafee',
+          'simp/rsync/Global/clamav',
+        ],
+      )
 
       LegacyFacter.collection.load(:simp_rsync_environments)
     end
 
     it 'returns a Hash of environments' do
-      expect(LegacyFacter.fact(:simp_rsync_environments).value).to eql({
-                                                                         'simp' => {
-                                                                           'id' => 'simp',
-                                                                           'rsync' => {
-                                                                             'id' => 'rsync',
-                                                                             'global' => {
-                                                                               'id' => 'Global',
-                                                                               'shares' => [
-                                                                                 'mcafee',
-                                                                                 'clamav',
-                                                                               ],
-                                                                             },
-                                                                           },
-                                                                         },
-                                                                       })
+      expect(LegacyFacter.fact(:simp_rsync_environments).value).to eql(
+        'simp' => {
+          'id' => 'simp',
+          'rsync' => {
+            'id' => 'rsync',
+            'global' => {
+              'id' => 'Global',
+              'shares' => [
+                'mcafee',
+                'clamav',
+              ],
+            },
+          },
+        },
+      )
     end
   end
 

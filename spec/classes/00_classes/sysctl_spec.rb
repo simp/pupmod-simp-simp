@@ -36,9 +36,9 @@ describe 'simp::sysctl' do
             let(:params) do
               {
                 ipv6: false,
-             net__ipv6__conf__all__accept_redirects: 1,
-             net__ipv6__conf__all__accept_source_route: 1,
-             net__ipv6__conf__default__accept_source_route: 1,
+                net__ipv6__conf__all__accept_redirects: 1,
+                net__ipv6__conf__all__accept_source_route: 1,
+                net__ipv6__conf__default__accept_source_route: 1,
               }
             end
 
@@ -117,7 +117,7 @@ describe 'simp::sysctl' do
             let(:params) do
               {
                 pam: true,
-             core_dumps: false,
+                core_dumps: false,
               }
             end
 

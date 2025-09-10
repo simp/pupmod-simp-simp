@@ -127,7 +127,7 @@ describe 'simp' do
             let(:params) do
               {
                 enable_filebucketing: true,
-              filebucket_server: 'my.puppet.server',
+                filebucket_server: 'my.puppet.server',
               }
             end
 
@@ -244,7 +244,7 @@ describe 'simp' do
               let(:params) do
                 {
                   enable_filebucketing: true,
-                filebucket_server: 'my.puppet.server',
+                  filebucket_server: 'my.puppet.server',
                 }
               end
 
@@ -321,7 +321,7 @@ describe 'simp' do
               let(:params) do
                 {
                   rsync_stunnel: true,
-                stock_sssd: false,
+                  stock_sssd: false,
                 }
               end
 

@@ -59,8 +59,10 @@ describe 'simp::yum::repo::local_simp' do
 
         context 'with relative_repo_path = x/y/z and relative_gpgkey_path x/y/z/GPGKEYS' do
           let(:params) do
-            super().merge(relative_repo_path: 'x/y/z',
-                                      relative_gpgkey_path: 'x/y/z/GPGKEYS')
+            super().merge(
+              relative_repo_path: 'x/y/z',
+              relative_gpgkey_path: 'x/y/z/GPGKEYS',
+            )
           end
 
           it { is_expected.to compile.with_all_deps }
