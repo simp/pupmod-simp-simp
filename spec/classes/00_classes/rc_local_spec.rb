@@ -27,12 +27,12 @@ describe 'simp::rc_local' do
           end
 
           it do
-            expected = <<EOM
-#!/bin/bash
-#
-# This file managed by Puppet, manual changes will be erased!
-# This file Disabled via Puppet
-EOM
+            expected = <<~EOM
+              #!/bin/bash
+              #
+              # This file managed by Puppet, manual changes will be erased!
+              # This file Disabled via Puppet
+            EOM
             is_expected.to contain_file('/etc/rc.d/rc.local').with({
                                                                      ensure: 'file',
               owner: 'root',
@@ -48,12 +48,12 @@ EOM
 
           it { is_expected.to compile.with_all_deps }
           it do
-            expected = <<EOM
-#!/bin/bash
-#
-# This file managed by Puppet, manual changes will be erased!
-# My comment
-EOM
+            expected = <<~EOM
+              #!/bin/bash
+              #
+              # This file managed by Puppet, manual changes will be erased!
+              # My comment
+            EOM
             is_expected.to contain_file('/etc/rc.d/rc.local').with_content(
               expected.strip,
             )
@@ -65,10 +65,10 @@ EOM
 
           it { is_expected.to compile.with_all_deps }
           it do
-            expected = <<EOM
-#!/bin/bash
-# This file Disabled via Puppet
-EOM
+            expected = <<~EOM
+              #!/bin/bash
+              # This file Disabled via Puppet
+            EOM
             is_expected.to contain_file('/etc/rc.d/rc.local').with_content(
               expected.strip,
             )

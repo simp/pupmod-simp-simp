@@ -85,12 +85,12 @@ describe 'simp::mountpoints::tmp' do
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
                   .with_content(
-                  <<-EOM,
-[Mount]
-What=tmpfs
-Where=/tmp
-Type=tmpfs
-Options=mode=1777,nodev,noexec,nosuid
+                  <<~EOM,
+                    [Mount]
+                    What=tmpfs
+                    Where=/tmp
+                    Type=tmpfs
+                    Options=mode=1777,nodev,noexec,nosuid
                   EOM
                 )
               }

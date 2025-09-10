@@ -150,7 +150,7 @@ Layout/FirstArgumentIndentation:
 Layout/HashAlignment:
   Enabled: false
 Layout/HeredocIndentation:
-  Enabled: false
+  Enabled: true
 Layout/LeadingEmptyLines:
   Enabled: false
 Layout/SpaceAroundMethodCallOperator:

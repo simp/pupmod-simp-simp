@@ -11,21 +11,21 @@ describe 'simp::server::yum' do
         context 'default parameters' do
           it { is_expected.to compile.with_all_deps }
           it {
-            is_expected.to contain_simp_apache__site('yum').with_content(<<-EOM,
-Alias /yum /var/www/yum
+            is_expected.to contain_simp_apache__site('yum').with_content(<<~EOM,
+              Alias /yum /var/www/yum
 
-<Location /yum>
-    Options +Indexes
+              <Location /yum>
+                  Options +Indexes
 
-    Order allow,deny
-    Allow from 127.0.0.1
-    Allow from ::1
-    Allow from 1.2.3.0/24
-    Allow from 5.6.0.0/16
-    Allow from example.com
-</Location>
+                  Order allow,deny
+                  Allow from 127.0.0.1
+                  Allow from ::1
+                  Allow from 1.2.3.0/24
+                  Allow from 5.6.0.0/16
+                  Allow from example.com
+              </Location>
 
-          EOM
+            EOM
                                                                         )
           }
           it { is_expected.to contain_package('createrepo') }

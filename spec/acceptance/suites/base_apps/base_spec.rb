@@ -4,18 +4,18 @@ test_name 'simp::base_apps and simp::base_services class'
 
 describe 'simp::base_apps class' do
   let(:hieradata) do
-    <<-EOS
----
-simp_options::firewall: true
-simp_options::trusted_nets:
-  - 'ALL'
+    <<~EOS
+      ---
+      simp_options::firewall: true
+      simp_options::trusted_nets:
+        - 'ALL'
     EOS
   end
 
   let(:manifest) do
-    <<-EOS
-include 'simp::base_apps'
-include 'simp::base_services'
+    <<~EOS
+      include 'simp::base_apps'
+      include 'simp::base_services'
     EOS
   end
 

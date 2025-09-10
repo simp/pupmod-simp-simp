@@ -91,11 +91,11 @@ class BootstrapSimpClient
   # indicated by the LOCKED environment variable
   def bootstrap_locked?
     return false unless ENV['LOCKED'] == 'true'
-    lock_msg = <<EOM
-NOTICE: The server has already been successfully bootstrapped for
-Puppet.  To re-run bootstrap, unlock the service per the instructions
-in #{@options[:service_env_file]}
-EOM
+    lock_msg = <<~EOM
+      NOTICE: The server has already been successfully bootstrapped for
+      Puppet.  To re-run bootstrap, unlock the service per the instructions
+      in #{@options[:service_env_file]}
+    EOM
     # don't have the logger yet, so write to stdout
     puts lock_msg unless @options[:quiet]
     true
@@ -103,23 +103,23 @@ EOM
 
   def configure_puppet
     info(title('Setting puppet configuration', 2))
-    puppet_config = <<EOM
-[main]
-vardir            = /opt/puppetlabs/puppet/cache
-classfile         = $vardir/classes.txt
-localconfig       = $vardir/localconfig
-logdir            = /var/log/puppetlabs/puppet
-report            = false
-rundir            = /var/run/puppetlabs
-server            = #{@options[:puppet_server]}
-ssldir            = /etc/puppetlabs/puppet/ssl
-trusted_node_data = true
-stringify_facts   = false
-digest_algorithm  = #{@options[:digest_algorithm]}
-keylength         = #{@options[:puppet_keylength]}
-ca_server         = #{@options[:puppet_ca]}
-ca_port           = #{@options[:puppet_ca_port]}
-EOM
+    puppet_config = <<~EOM
+      [main]
+      vardir            = /opt/puppetlabs/puppet/cache
+      classfile         = $vardir/classes.txt
+      localconfig       = $vardir/localconfig
+      logdir            = /var/log/puppetlabs/puppet
+      report            = false
+      rundir            = /var/run/puppetlabs
+      server            = #{@options[:puppet_server]}
+      ssldir            = /etc/puppetlabs/puppet/ssl
+      trusted_node_data = true
+      stringify_facts   = false
+      digest_algorithm  = #{@options[:digest_algorithm]}
+      keylength         = #{@options[:puppet_keylength]}
+      ca_server         = #{@options[:puppet_ca]}
+      ca_port           = #{@options[:puppet_ca_port]}
+    EOM
     debug("Configuration:\n#{puppet_config}")
     File.open(@options[:puppet_conf_file], 'w') do |file|
       file.puts(puppet_config)
@@ -188,15 +188,15 @@ EOM
   def lock_bootstrap
     info(title('Locking bootstrap service to prevent inadvertent re-bootstrap', 2))
     File.open(@options[:service_env_file], 'w') do |file|
-      file.puts <<EOM
-#
-# LOCKED is used to prevent a successfully bootstrapped system
-# from being inadvertently re-bootstrapped.  Set LOCKED to
-# to anything besides 'true' to be able to re-run the
-# #{@options[:bootstrap_service]} service.
-#
-LOCKED='true'
-EOM
+      file.puts <<~EOM
+        #
+        # LOCKED is used to prevent a successfully bootstrapped system
+        # from being inadvertently re-bootstrapped.  Set LOCKED to
+        # to anything besides 'true' to be able to re-run the
+        # #{@options[:bootstrap_service]} service.
+        #
+        LOCKED='true'
+      EOM
     end
   end
 

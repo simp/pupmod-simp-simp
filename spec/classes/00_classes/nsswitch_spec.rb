@@ -39,24 +39,24 @@ describe 'simp::nsswitch' do
 
             let(:content) do
               <<~EOM
-              # This file is controlled by Puppet
+                # This file is controlled by Puppet
 
-              passwd:     files [!NOTFOUND=return] sss mymachines systemd
-              shadow:     files [!NOTFOUND=return] sss
-              group:      files [!NOTFOUND=return] sss mymachines systemd
-              sudoers:    files sss
-              hosts:      files mymachines dns myhostname
-              bootparams: files
-              ethers:     files
-              netmasks:   files
-              networks:   files
-              protocols:  files
-              rpc:        files
-              services:   files
-              netgroup:   files [!NOTFOUND=return] sss
-              publickey:  files
-              automount:  files
-              aliases:    files
+                passwd:     files [!NOTFOUND=return] sss mymachines systemd
+                shadow:     files [!NOTFOUND=return] sss
+                group:      files [!NOTFOUND=return] sss mymachines systemd
+                sudoers:    files sss
+                hosts:      files mymachines dns myhostname
+                bootparams: files
+                ethers:     files
+                netmasks:   files
+                networks:   files
+                protocols:  files
+                rpc:        files
+                services:   files
+                netgroup:   files [!NOTFOUND=return] sss
+                publickey:  files
+                automount:  files
+                aliases:    files
               EOM
             end
 

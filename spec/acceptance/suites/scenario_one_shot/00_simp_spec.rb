@@ -37,59 +37,59 @@ describe 'simp "one_shot" scenario' do
   end
 
   let(:hieradata) do
-    <<-EOF
-# Mandatory Settings
-simp_options::dns::servers: ['8.8.8.8']
-simp_options::puppet::server: #{host_fqdn}
-simp_options::puppet::ca: #{host_fqdn}
+    <<~EOF
+      # Mandatory Settings
+      simp_options::dns::servers: ['8.8.8.8']
+      simp_options::puppet::server: #{host_fqdn}
+      simp_options::puppet::ca: #{host_fqdn}
 
-# Settings required for acceptance test, some may be required
-simp::scenario: one_shot
-simp::one_shot::user_ssh_authorized_key: #{ssh_authorized_key}
+      # Settings required for acceptance test, some may be required
+      simp::scenario: one_shot
+      simp::one_shot::user_ssh_authorized_key: #{ssh_authorized_key}
 
-# 'simp_one_shot'
-simp::one_shot::user_password: '$6$jQ3VdTtWGDnCyqI8$triqoAkFqI8nDR9jNJeawj9.kqVh0KPQLjjw35vfB3.33Gb76Di/C4dBmDSUbtsFnZnPwIVB4iKGYTyigDqlj/'
-simp::one_shot::finalize_debug: true
+      # 'simp_one_shot'
+      simp::one_shot::user_password: '$6$jQ3VdTtWGDnCyqI8$triqoAkFqI8nDR9jNJeawj9.kqVh0KPQLjjw35vfB3.33Gb76Di/C4dBmDSUbtsFnZnPwIVB4iKGYTyigDqlj/'
+      simp::one_shot::finalize_debug: true
 
-# Disable network stuff
-simp_options::rsync: false
-simp_options::clamav: false
-simp_options::ldap: false
+      # Disable network stuff
+      simp_options::rsync: false
+      simp_options::clamav: false
+      simp_options::ldap: false
 
-# Enable everything else
-simp_options::auditd: true
-simp_options::firewall: true
-simp_options::haveged: true
-simp_options::logrotate: true
-simp_options::pam: true
-simp_options::sssd: true
-simp_options::syslog: true
-simp_options::tcpwrappers: true
-simp_options::pki: true
-simp_options::sssd: true
+      # Enable everything else
+      simp_options::auditd: true
+      simp_options::firewall: true
+      simp_options::haveged: true
+      simp_options::logrotate: true
+      simp_options::pam: true
+      simp_options::sssd: true
+      simp_options::syslog: true
+      simp_options::tcpwrappers: true
+      simp_options::pki: true
+      simp_options::sssd: true
 
-simp_options::pki::source: '/etc/pki/simp-testing/pki'
-simp_options::trusted_nets: ['ALL']
+      simp_options::pki::source: '/etc/pki/simp-testing/pki'
+      simp_options::trusted_nets: ['ALL']
 
-# Settings to make beaker happy
-ssh::server::conf::permitrootlogin: true
-ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
+      # Settings to make beaker happy
+      ssh::server::conf::permitrootlogin: true
+      ssh::server::conf::authorizedkeysfile: .ssh/authorized_keys
 
-sssd::enable_files_domain: true
+      sssd::enable_files_domain: true
 
-pam::access::users:
-  vagrant:
-    origins:
-      - ALL
-    permission: '+'
+      pam::access::users:
+        vagrant:
+          origins:
+            - ALL
+          permission: '+'
 
-sudo::user_specifications:
-  vagrant_sudo:
-    user_list: ['vagrant']
-    cmnd: ['/bin/su']
+      sudo::user_specifications:
+        vagrant_sudo:
+          user_list: ['vagrant']
+          cmnd: ['/bin/su']
 
-useradd::securetty:
-  - ANY_SHELL
+      useradd::securetty:
+        - ANY_SHELL
     EOF
   end
 

@@ -12,13 +12,13 @@ describe 'simp "poss" scenario' do
   end
 
   let(:hieradata) do
-    <<-EOF
-# Mandatory settings
-simp_options::puppet::server: #{host_fqdn}
-simp_options::puppet::ca: #{host_fqdn}
+    <<~EOF
+      # Mandatory settings
+      simp_options::puppet::server: #{host_fqdn}
+      simp_options::puppet::ca: #{host_fqdn}
 
-# Settings required for acceptance test
-simp::scenario: poss
+      # Settings required for acceptance test
+      simp::scenario: poss
     EOF
   end
 
