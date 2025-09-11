@@ -3,14 +3,14 @@ require 'spec_helper_acceptance'
 test_name 'simp::netconsole class'
 
 describe 'simp::netconsole class' do
-
   shipper = only_host_with_role(hosts, 'shipper')
   receiver = only_host_with_role(hosts, 'receiver')
-  receiver_ip  = fact_on(receiver,'ipaddress_eth1')
-  receiver_mac = fact_on(receiver,'macaddress_eth1')
+  receiver_ip  = fact_on(receiver, 'ipaddress_eth1')
+  receiver_mac = fact_on(receiver, 'macaddress_eth1')
 
   context 'should send logs' do
-    let(:manifest) { <<~EOS
+    let(:manifest) do
+      <<~EOS
         class { 'simp::netconsole':
           ensure         => present,
           source_device  => 'eth1',
@@ -24,17 +24,17 @@ describe 'simp::netconsole class' do
         kernel_parameter { 'debug':    ensure => present }
         kernel_parameter { 'loglevel': ensure => present, value => '7' }
       EOS
-    }
+    end
 
-    let(:remove_manifest) {  "class { 'simp::netconsole': ensure => absent }" }
+    let(:remove_manifest) { "class { 'simp::netconsole': ensure => absent }" }
 
-    it 'should disable the firewall' do
+    it 'disables the firewall' do
       # This test is not managing rsyslog, so the incoming rsyslog port may not be
       # allowed when the firewall is enabled (e.g., on generic/oracle* boxes).
       on(hosts, 'puppet resource service firewalld ensure=stopped')
     end
 
-    it 'should configure hosts to listen for udp logs' do
+    it 'configures hosts to listen for udp logs' do
       create_remote_file(hosts, '/etc/rsyslog.d/udp.conf', <<-EOF
           $ModLoad imudp
           $UDPServerRun 514
@@ -43,14 +43,13 @@ describe 'simp::netconsole class' do
       on(hosts, 'systemctl restart rsyslog')
     end
 
-
-    it "should configure the shipper (#{shipper.name})" do
+    it "configures the shipper (#{shipper.name})" do
       apply_manifest_on(shipper, manifest, catch_failures: true)
       apply_manifest_on(shipper, manifest, catch_changes: true)
     end
 
-    it 'should have a properly configured netconsole' do
-      result = on(shipper,'cat /etc/sysconfig/netconsole')
+    it 'has a properly configured netconsole' do
+      result = on(shipper, 'cat /etc/sysconfig/netconsole')
       expect(result.stdout).to include "SYSLOGADDR=#{receiver_ip}"
       expect(result.stdout).to include 'LOCALPORT=6665'
       expect(result.stdout).to include 'DEV=eth1'
@@ -58,7 +57,7 @@ describe 'simp::netconsole class' do
       expect(result.stdout).to include "SYSLOGMACADDR=#{receiver_mac}"
     end
 
-    it "should reboot the shipper (#{shipper.name}) and send logs to the receiver" do
+    it "reboots the shipper (#{shipper.name}) and send logs to the receiver" do
       sleep 20
       shipper.reboot
       retry_on(shipper, 'ls')
@@ -68,7 +67,7 @@ describe 'simp::netconsole class' do
       expect(result.stdout).to include('netconsole: network logging started')
     end
 
-    it "should unconfigure the shipper (#{shipper.name})" do
+    it "unconfigures the shipper (#{shipper.name})" do
       apply_manifest_on(shipper, remove_manifest, catch_failures: true)
     end
   end

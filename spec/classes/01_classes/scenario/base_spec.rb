@@ -6,10 +6,10 @@ require 'spec_helper'
 # instantiated, i.e., simp.
 describe 'simp' do
   def server_facts_hash
-    return {
+    {
       'serverversion' => Puppet.version,
       'servername'    => 'puppet.bar.baz',
-      'serverip'      => '1.2.3.4'
+      'serverip'      => '1.2.3.4',
     }
   end
 
@@ -23,14 +23,14 @@ describe 'simp' do
         facts[:openssh_version] = '5.8'
         facts[:augeas] = { 'version' => '1.2.3' }
         facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-        facts[:puppet_settings] = os_facts[:puppet_settings].merge({
+        facts[:puppet_settings] = os_facts[:puppet_settings].merge(
           'main' => {
             'ssldir' => '/opt/puppetlabs/puppet/vardir',
           },
           'agent' => {
-            'server' => 'puppet.bar.baz'
-          }
-        })
+            'server' => 'puppet.bar.baz',
+          },
+        )
 
         facts
       end
@@ -44,100 +44,112 @@ describe 'simp' do
         it { is_expected.to create_class('simp::ctrl_alt_del') }
         it { is_expected.to create_class('simp::root_user') }
         # simp_options::pam is not set in spec/fixtures/hieradata/default.yaml
-        it { is_expected.to_not create_class('simp::pam_limits::max_logins') }
+        it { is_expected.not_to create_class('simp::pam_limits::max_logins') }
         it { is_expected.to create_class('postfix') }
-        it { is_expected.to_not create_class('postfix::server') }
+        it { is_expected.not_to create_class('postfix::server') }
         # simp_options::ldap is not set in spec/fixtures/hieradata/default.yaml
-        it { is_expected.to_not create_class('simp_openldap::client') }
+        it { is_expected.not_to create_class('simp_openldap::client') }
         it { is_expected.to create_class('simp::rc_local') }
       end
 
       context "runlevel = 'graphical'" do
-        let(:params) {{ :runlevel =>  'graphical'  }}
+        let(:params) { { runlevel: 'graphical' } }
+
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_runlevel('graphical') }
       end
 
       context 'sssd = false' do
-        let(:params) {{ :sssd => false }}
+        let(:params) { { sssd: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::sssd::client') }
+        it { is_expected.not_to create_class('simp::sssd::client') }
       end
 
       context 'stock_sssd = false' do
-        let(:params) {{ :stock_sssd => false }}
+        let(:params) { { stock_sssd: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::sssd::client') }
+        it { is_expected.not_to create_class('simp::sssd::client') }
       end
 
       context 'use_sudoers_aliases = false' do
-        let(:params) {{ :use_sudoers_aliases => false }}
+        let(:params) { { use_sudoers_aliases: false } }
+
         it { is_expected.to compile.with_all_deps }
         # SIMP-6133
-        pending { is_expected.to_not create_class('simp::sudoers') }
+        pending { is_expected.not_to create_class('simp::sudoers') }
       end
 
       context 'manage_ctrl_alt_del = false' do
-        let(:params) {{ :manage_ctrl_alt_del => false }}
+        let(:params) { { manage_ctrl_alt_del: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::ctrl_alt_del') }
+        it { is_expected.not_to create_class('simp::ctrl_alt_del') }
       end
 
       context 'manage_root_metadata = false' do
-        let(:params) {{ :manage_root_metadata => false }}
+        let(:params) { { manage_root_metadata: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::root_user') }
+        it { is_expected.not_to create_class('simp::root_user') }
       end
 
       context 'restrict_max_logins = false' do
-        let(:params) {{ :restrict_max_logins => false, :pam => true }}
+        let(:params) { { restrict_max_logins: false, pam: true } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::pam_limits::max_logins') }
+        it { is_expected.not_to create_class('simp::pam_limits::max_logins') }
       end
 
       context 'pam = true' do
-        let(:params) {{ :pam => true }}
+        let(:params) { { pam: true } }
+
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('simp::pam_limits::max_logins') }
       end
 
       context 'mail_server = false' do
-        let(:params) {{ :mail_server => false }}
+        let(:params) { { mail_server: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('postfix') }
-        it { is_expected.to_not create_class('postfix::server') }
+        it { is_expected.not_to create_class('postfix') }
+        it { is_expected.not_to create_class('postfix::server') }
       end
 
       context "mail_server = 'remote'" do
-        let(:params) {{ :mail_server => 'remote' }}
+        let(:params) { { mail_server: 'remote' } }
+
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('postfix::server') }
       end
 
       context 'ldap = true' do
-        let(:params) {{ :ldap => true }}
+        let(:params) { { ldap: true } }
+
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('simp_openldap::client') }
       end
 
       context 'ipa fact set ' do
         let(:facts) do
-          super().merge({
-            :ipa => {
-              :domain => 'ipa.example.com',
-              :server => 'ipaserver.example.com',
-            }
-          })
+          super().merge(
+            ipa: {
+              domain: 'ipa.example.com',
+              server: 'ipaserver.example.com',
+            },
+          )
         end
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp_openldap::client') }
+        it { is_expected.not_to create_class('simp_openldap::client') }
       end
 
       context 'manage_rc_local = false' do
-        let(:params) {{ :manage_rc_local => false }}
+        let(:params) { { manage_rc_local: false } }
+
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to_not create_class('simp::rc_local') }
+        it { is_expected.not_to create_class('simp::rc_local') }
       end
     end
   end

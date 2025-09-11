@@ -4,7 +4,7 @@
 class WIN32OLE
   def self.connect(_name)
     Class.new do
-      def self.ExecQuery(_name)
+      def self.ExecQuery(_name) # rubocop:disable Naming/MethodName
         []
       end
     end

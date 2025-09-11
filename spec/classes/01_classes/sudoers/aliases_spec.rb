@@ -4,24 +4,26 @@ describe 'simp::sudoers::aliases' do
   context 'supported operating systems' do
     on_supported_os.each do |os, os_facts|
       context "on #{os}" do
-        let(:facts){ os_facts }
+        let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
-          let(:cmnd_list) {[
-            'audit',
-            'delegating',
-            'drivers',
-            'locate',
-            'networking',
-            'processes',
-            'services',
-            'selinux',
-            'software',
-            'storage',
-            'su'
-          ]}
+          let(:cmnd_list) do
+            [
+              'audit',
+              'delegating',
+              'drivers',
+              'locate',
+              'networking',
+              'processes',
+              'services',
+              'selinux',
+              'software',
+              'storage',
+              'su',
+            ]
+          end
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::sudoers::aliases') }

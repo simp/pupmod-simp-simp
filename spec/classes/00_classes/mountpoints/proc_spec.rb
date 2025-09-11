@@ -7,7 +7,7 @@ describe 'simp::mountpoints::proc' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
           it {
             is_expected.to create_group('simp_proc_read')
@@ -22,7 +22,7 @@ describe 'simp::mountpoints::proc' do
           context 'with manage_proc_group = false' do
             let(:params) do
               {
-                :manage_proc_group => false
+                manage_proc_group: false,
               }
             end
 
@@ -33,7 +33,7 @@ describe 'simp::mountpoints::proc' do
           context 'with proc_gid = 0' do
             let(:params) do
               {
-                :proc_gid => 0
+                proc_gid: 0,
               }
             end
 

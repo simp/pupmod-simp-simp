@@ -1,3 +1,6 @@
+* Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 4.23.1
+- Cleanup for rubocop
+
 * Wed Sep 11 2024 Steven Pritchard <steve@sicura.us> - 4.23.0
 - [puppetsync] Update module dependencies to support simp-iptables 7.x
 

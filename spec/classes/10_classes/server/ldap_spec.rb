@@ -7,10 +7,10 @@ describe 'simp::server::ldap' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         elsif os_facts[:os][:release][:major] > '7'
           it {
-            expect { is_expected.to compile.with_all_deps }.to raise_error(/is not supported as an LDAP server/)
+            expect { is_expected.to compile.with_all_deps }.to raise_error(%r{is not supported as an LDAP server})
           }
         else
           context 'default parameters' do
@@ -19,20 +19,20 @@ describe 'simp::server::ldap' do
             it { is_expected.to create_class('simp_openldap::server') }
             it { is_expected.to create_class('simp_openldap::slapo::ppolicy') }
             it { is_expected.to create_class('simp_openldap::slapo::syncprov') }
-            it { is_expected.to_not create_simp_openldap__server__syncrepl('111') }
+            it { is_expected.not_to create_simp_openldap__server__syncrepl('111') }
             it { is_expected.to create_simp_openldap__server__limits('Host_Bind_DN_Unlimited_Query') }
             it { is_expected.to create_simp_openldap__server__limits('LDAP_Sync_DN_Unlimited_Query') }
           end
 
           context 'is_consumer' do
-            let(:params){{ :is_consumer => true }}
+            let(:params) { { is_consumer: true } }
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_simp_openldap__server__syncrepl('111') }
           end
 
           context 'use_lastbind' do
-            let(:params){{ :enable_lastbind => true }}
+            let(:params) { { enable_lastbind: true } }
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp_openldap::slapo::lastbind') }
