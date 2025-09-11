@@ -15,14 +15,14 @@ describe 'simp::yum::repo::local_simp' do
       end
       let(:other_gpgkeys) do
         {
-          'RedHat-7' => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-redhat-release'],
-           'OracleLinux-7' => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-oracle'],
-           'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-CentOS-7'],
-           'RedHat-8'      => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-redhat-release'],
-           'OracleLinux-8' => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-oracle'],
-           'CentOS-8'      => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-CentOS-8'],
-           'Rocky-8'       => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-rockyofficial'],
-           'AlmaLinux-8'   => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-AlmaLinux'],
+          'RedHat-7'      => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-redhat-release'],
+          'OracleLinux-7' => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-oracle'],
+          'CentOS-7'      => ['RPM-GPG-KEY-EPEL-7', 'RPM-GPG-KEY-CentOS-7'],
+          'RedHat-8'      => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-redhat-release'],
+          'OracleLinux-8' => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-oracle'],
+          'CentOS-8'      => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-CentOS-8'],
+          'Rocky-8'       => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-rockyofficial'],
+          'AlmaLinux-8'   => ['RPM-GPG-KEY-EPEL-8', 'RPM-GPG-KEY-AlmaLinux'],
         }
       end
 

@@ -31,9 +31,7 @@ describe 'simp::prelink class' do
       context 'with prelink enabled' do
         let(:hieradata) do
           YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-            {
-              'simp::prelink::enable' => true,
-            },
+            'simp::prelink::enable' => true,
           )
         end
 
@@ -85,9 +83,7 @@ describe 'simp::prelink class' do
       context 'with prelink disabled after being enabled' do
         let(:hieradata) do
           YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-            {
-              'simp::prelink::enable' => false,
-            },
+            'simp::prelink::enable' => false,
           )
         end
 

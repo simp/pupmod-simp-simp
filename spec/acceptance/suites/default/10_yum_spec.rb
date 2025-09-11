@@ -19,11 +19,9 @@ describe 'simp yum configuration' do
   context 'with reliable test host' do
     let(:hieradata) do
       YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-        {
-          'simp::yum::repo::simp::servers'             => nil,
-          'simp::yum::repo::local_os_updates::servers' => ['%{facts.networking.hostname}'],
-          'simp::yum::repo::local_simp::servers'       => ['%{facts.networking.hostname}'],
-        },
+        'simp::yum::repo::simp::servers'             => nil,
+        'simp::yum::repo::local_os_updates::servers' => ['%{facts.networking.hostname}'],
+        'simp::yum::repo::local_simp::servers'       => ['%{facts.networking.hostname}'],
       )
     end
 
@@ -69,11 +67,9 @@ describe 'simp yum configuration' do
         yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
         hieradata = YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-          {
-            'simp::yum::repo::local_simp::enable_repo'   => false,
-            'simp::yum::repo::local_simp::servers'       => [],
-            'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
-          },
+          'simp::yum::repo::local_simp::enable_repo'   => false,
+          'simp::yum::repo::local_simp::servers'       => [],
+          'simp::yum::repo::local_os_updates::servers' => [yum_updates_url],
         )
 
         set_hieradata_on(host, hieradata)

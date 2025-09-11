@@ -14,23 +14,19 @@ describe 'simp::version' do
 
         it {
           is_expected.to create_file(root_dir).with(
-            {
-              ensure: 'directory',
-              owner: root_dir_user,
-              group: root_dir_user,
-              mode: root_dir_mode,
-            },
+            ensure: 'directory',
+            owner: root_dir_user,
+            group: root_dir_user,
+            mode: root_dir_mode,
           )
         }
 
         it {
           is_expected.to create_file("#{root_dir}/simp.version").with(
-            {
-              ensure: 'file',
-              owner: root_dir_user,
-              group: root_dir_user,
-              mode: root_dir_mode,
-            },
+            ensure: 'file',
+            owner: root_dir_user,
+            group: root_dir_user,
+            mode: root_dir_mode,
           )
         }
 
