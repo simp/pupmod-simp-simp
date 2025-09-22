@@ -61,7 +61,7 @@ describe 'simp::ctrl_alt_del' do
 
               it { is_expected.to compile.with_all_deps }
 
-              it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del.target').with_target('/dev/null') }
+              it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del.target').with_target(File::NULL) }
               it { is_expected.to create_file('/etc/systemd/system/ctrl-alt-del-capture.service').with_ensure('absent') }
             end
 

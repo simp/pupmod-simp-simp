@@ -136,7 +136,7 @@ describe 'BootstrapSimpClient' do
       bootstrap.parse_command_line(test_args)
       command = "ls #{__FILE__}"
       expect(bootstrap.execute(command)[:exitstatus]).to eq 0
-      expect(bootstrap.execute(command)[:stdout]).to match __FILE__.to_s
+      expect(bootstrap.execute(command)[:stdout]).to match __FILE__
       expect(bootstrap.execute(command)[:stderr]).to eq ''
     end
 

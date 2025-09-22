@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 test_name 'simp "one_shot" scenario'
 
 describe 'simp "one_shot" scenario' do
-  def has_puppet(host)
+  def has_puppet?(host)
     on(host, 'test -f /opt/puppetlabs/bin/puppet', accept_all_exit_codes: true).exit_code == 0
   end
 
@@ -110,7 +110,7 @@ describe 'simp "one_shot" scenario' do
     end
 
     it 'bootstraps in a few runs' do
-      if has_puppet(host)
+      if has_puppet?(host)
         apply_manifest_on(host, manifest, accept_all_exit_codes: true)
         wait_for_finalize(host)
       end
@@ -118,7 +118,7 @@ describe 'simp "one_shot" scenario' do
       # Handle items that require a reboot
       host.reboot
 
-      if has_puppet(host)
+      if has_puppet?(host)
         apply_manifest_on(host, manifest, accept_all_exit_codes: true)
         wait_for_finalize(host)
       end
