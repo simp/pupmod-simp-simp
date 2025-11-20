@@ -253,24 +253,22 @@ class simp::sysctl (
     $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
   }
 
-  if $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') {
-    sysctl {
-      'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects;
-      'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route;
-      'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf;
-      'net.ipv6.conf.all.disable_ipv6'             : value => $_disable_ipv6;
-      'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding;
-      'net.ipv6.conf.all.accept_ra'                : value => $net__ipv6__conf__all__accept_ra;
-      'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra;
-      'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr;
-      'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo;
-      'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref;
-      'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects;
-      'net.ipv6.conf.default.accept_source_route'  : value => $net__ipv6__conf__default__accept_source_route;
-      'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf;
-      'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits;
-      'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses;
-      'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations;
-    }
+  sysctl {
+    'net.ipv6.conf.all.accept_redirects'         : value => $net__ipv6__conf__all__accept_redirects, silent => true;
+    'net.ipv6.conf.all.accept_source_route'      : value => $net__ipv6__conf__all__accept_source_route, silent => true;
+    'net.ipv6.conf.all.autoconf'                 : value => $net__ipv6__conf__all__autoconf, silent => true;
+    'net.ipv6.conf.all.disable_ipv6'             : value => $_disable_ipv6, silent => true;
+    'net.ipv6.conf.all.forwarding'               : value => $net__ipv6__conf__all__forwarding, silent => true;
+    'net.ipv6.conf.all.accept_ra'                : value => $net__ipv6__conf__all__accept_ra, silent => true;
+    'net.ipv6.conf.default.accept_ra'            : value => $net__ipv6__conf__default__accept_ra, silent => true;
+    'net.ipv6.conf.default.accept_ra_defrtr'     : value => $net__ipv6__conf__default__accept_ra_defrtr, silent => true;
+    'net.ipv6.conf.default.accept_ra_pinfo'      : value => $net__ipv6__conf__default__accept_ra_pinfo, silent => true;
+    'net.ipv6.conf.default.accept_ra_rtr_pref'   : value => $net__ipv6__conf__default__accept_ra_rtr_pref, silent => true;
+    'net.ipv6.conf.default.accept_redirects'     : value => $net__ipv6__conf__default__accept_redirects, silent => true;
+    'net.ipv6.conf.default.accept_source_route'  : value => $net__ipv6__conf__default__accept_source_route, silent => true;
+    'net.ipv6.conf.default.autoconf'             : value => $net__ipv6__conf__default__autoconf, silent => true;
+    'net.ipv6.conf.default.dad_transmits'        : value => $net__ipv6__conf__default__dad_transmits, silent => true;
+    'net.ipv6.conf.default.max_addresses'        : value => $net__ipv6__conf__default__max_addresses, silent => true;
+    'net.ipv6.conf.default.router_solicitations' : value => $net__ipv6__conf__default__router_solicitations, silent => true;
   }
 }
