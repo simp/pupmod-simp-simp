@@ -287,30 +287,31 @@ class simp::sysctl (
     $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
   }
 
-  if $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') {
-    $_ipv6_settings = {
-      'net.ipv6.conf.all.accept_redirects'         => $net__ipv6__conf__all__accept_redirects,
-      'net.ipv6.conf.all.accept_source_route'      => $net__ipv6__conf__all__accept_source_route,
-      'net.ipv6.conf.all.autoconf'                 => $net__ipv6__conf__all__autoconf,
-      'net.ipv6.conf.all.disable_ipv6'             => $_disable_ipv6,
-      'net.ipv6.conf.all.forwarding'               => $net__ipv6__conf__all__forwarding,
-      'net.ipv6.conf.all.accept_ra'                => $net__ipv6__conf__all__accept_ra,
-      'net.ipv6.conf.default.accept_ra'            => $net__ipv6__conf__default__accept_ra,
-      'net.ipv6.conf.default.accept_ra_defrtr'     => $net__ipv6__conf__default__accept_ra_defrtr,
-      'net.ipv6.conf.default.accept_ra_pinfo'      => $net__ipv6__conf__default__accept_ra_pinfo,
-      'net.ipv6.conf.default.accept_ra_rtr_pref'   => $net__ipv6__conf__default__accept_ra_rtr_pref,
-      'net.ipv6.conf.default.accept_redirects'     => $net__ipv6__conf__default__accept_redirects,
-      'net.ipv6.conf.default.accept_source_route'  => $net__ipv6__conf__default__accept_source_route,
-      'net.ipv6.conf.default.autoconf'             => $net__ipv6__conf__default__autoconf,
-      'net.ipv6.conf.default.dad_transmits'        => $net__ipv6__conf__default__dad_transmits,
-      'net.ipv6.conf.default.max_addresses'        => $net__ipv6__conf__default__max_addresses,
-      'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
-    }
+  $_ipv6_settings = {
+    'net.ipv6.conf.all.accept_redirects'         => $net__ipv6__conf__all__accept_redirects,
+    'net.ipv6.conf.all.accept_source_route'      => $net__ipv6__conf__all__accept_source_route,
+    'net.ipv6.conf.all.autoconf'                 => $net__ipv6__conf__all__autoconf,
+    'net.ipv6.conf.all.disable_ipv6'             => $_disable_ipv6,
+    'net.ipv6.conf.all.forwarding'               => $net__ipv6__conf__all__forwarding,
+    'net.ipv6.conf.all.accept_ra'                => $net__ipv6__conf__all__accept_ra,
+    'net.ipv6.conf.default.accept_ra'            => $net__ipv6__conf__default__accept_ra,
+    'net.ipv6.conf.default.accept_ra_defrtr'     => $net__ipv6__conf__default__accept_ra_defrtr,
+    'net.ipv6.conf.default.accept_ra_pinfo'      => $net__ipv6__conf__default__accept_ra_pinfo,
+    'net.ipv6.conf.default.accept_ra_rtr_pref'   => $net__ipv6__conf__default__accept_ra_rtr_pref,
+    'net.ipv6.conf.default.accept_redirects'     => $net__ipv6__conf__default__accept_redirects,
+    'net.ipv6.conf.default.accept_source_route'  => $net__ipv6__conf__default__accept_source_route,
+    'net.ipv6.conf.default.autoconf'             => $net__ipv6__conf__default__autoconf,
+    'net.ipv6.conf.default.dad_transmits'        => $net__ipv6__conf__default__dad_transmits,
+    'net.ipv6.conf.default.max_addresses'        => $net__ipv6__conf__default__max_addresses,
+    'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
+  }
 
-    $_ipv6_settings.each |$_key, $_value| {
-      unless $_key in $unmanaged_sysctls {
-        sysctl { $_key: value => $_value }
-      }
+  # IPv6 sysctls are managed unconditionally (silent => true) so that
+  # `simp::sysctl::ipv6: false` still disables IPv6 even when the
+  # net.ipv6.conf.all.disable_ipv6 key is absent from the simplib_sysctl fact
+  $_ipv6_settings.each |$_key, $_value| {
+    unless $_key in $unmanaged_sysctls {
+      sysctl { $_key: value => $_value, silent => true }
     }
   }
 }
