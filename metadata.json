@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.23.1",
+  "version": "4.23.2",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
   "dependencies": [
     {
       "name": "puppet/kmod",
-      "version_requirement": ">= 2.1.0 < 5.0.0"
+      "version_requirement": ">= 2.1.0 < 6.0.0"
     },
     {
       "name": "puppet/augeasproviders_sysctl",
@@ -45,7 +45,7 @@
     },
     {
       "name": "simp/aide",
-      "version_requirement": ">= 6.0.0 < 7.0.0"
+      "version_requirement": ">= 6.0.0 < 8.0.0"
     },
     {
       "name": "simp/at",
@@ -53,7 +53,7 @@
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 8.5.0 < 9.0.0"
+      "version_requirement": ">= 8.5.0 < 10.0.0"
     },
     {
       "name": "simp/chkrootkit",
@@ -109,7 +109,7 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     },
     {
       "name": "simp/resolv",
