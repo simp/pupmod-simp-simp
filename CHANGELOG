@@ -1,3 +1,6 @@
+* Mon Nov 24 2025 Steven Pritchard <steve@sicura.us> - 4.23.2
+- Update module dependencies
+
 * Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 4.23.1
 - Cleanup for rubocop
 
