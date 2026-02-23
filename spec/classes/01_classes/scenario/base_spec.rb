@@ -124,13 +124,6 @@ describe 'simp' do
         it { is_expected.to create_class('postfix::server') }
       end
 
-      context 'ldap = true' do
-        let(:params) { { ldap: true } }
-
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_class('simp_openldap::client') }
-      end
-
       context 'ipa fact set ' do
         let(:facts) do
           super().merge(
@@ -142,7 +135,6 @@ describe 'simp' do
         end
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.not_to create_class('simp_openldap::client') }
       end
 
       context 'manage_rc_local = false' do

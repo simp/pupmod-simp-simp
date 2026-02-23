@@ -31,7 +31,6 @@
 * [`simp::server`](#simp--server): Set up a SIMP server in such a way that it will be ready to serve
 * [`simp::server::kickstart`](#simp--server--kickstart): This class provides a working framework for providing a kickstart
 * [`simp::server::kickstart::simp_client_bootstrap`](#simp--server--kickstart--simp_client_bootstrap): This class manages simp_client_bootstrap scripts, which are scripts
-* [`simp::server::ldap`](#simp--server--ldap): Sets up either a primary LDAP server or a consumer LDAP server.
 * [`simp::server::rsync_shares`](#simp--server--rsync_shares): Set up various rsync services that are needed by the SIMP clients
 * [`simp::server::yum`](#simp--server--yum): This class sets up a YUM site at `${data_dir}/yum` and is used by
 * [`simp::sssd::client`](#simp--sssd--client): Set up an SSSD client based on the normal SIMP parameters
@@ -328,7 +327,7 @@ Data type: `Boolean`
 
 Enable management of PAM resources via SIMP modules
 
-Default value: `simplib::lookup('simp_options::pam',  { 'default_value' => false })`
+Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
 
 ##### <a name="-simp--sssd"></a>`sssd`
 
@@ -755,7 +754,7 @@ Default value:
     'squashfs',
     'tipc',
     'udf',
-    'usb-storage'
+    'usb-storage',
   ]
 ```
 
@@ -830,7 +829,7 @@ The following parameters are available in the `simp::kmod_blacklist::lock_module
 
 ##### <a name="-simp--kmod_blacklist--lock_modules--enable"></a>`enable`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Lock all module loading abilities
 
@@ -838,7 +837,7 @@ Default value: `true`
 
 ##### <a name="-simp--kmod_blacklist--lock_modules--notify_if_reboot_required"></a>`notify_if_reboot_required`
 
-Data type: `Any`
+Data type: `Boolean`
 
 If the change requires the system to be rebooted to take effect, a
 notification will be printed during puppet runs until the system has been
@@ -848,7 +847,7 @@ Default value: `true`
 
 ##### <a name="-simp--kmod_blacklist--lock_modules--persist"></a>`persist`
 
-Data type: `Any`
+Data type: `Boolean`
 
 Lock all modules at boot time.
 
@@ -1132,20 +1131,32 @@ A SIMP profile for using the nsswitch module to manage /etc/nsswitch
 
 The following parameters are available in the `simp::nsswitch` class:
 
-* [`ldap`](#-simp--nsswitch--ldap)
-* [`sssd`](#-simp--nsswitch--sssd)
 * [`defaults`](#-simp--nsswitch--defaults)
 * [`sssd_options`](#-simp--nsswitch--sssd_options)
-* [`ldap_options`](#-simp--nsswitch--ldap_options)
 * [`overrides`](#-simp--nsswitch--overrides)
+* [`sssd`](#-simp--nsswitch--sssd)
 
-##### <a name="-simp--nsswitch--ldap"></a>`ldap`
+##### <a name="-simp--nsswitch--defaults"></a>`defaults`
 
-Data type: `Boolean`
+Data type: `Hash`
 
-SIMP global catalyst to enable LDAP
+A hash of the default nsswitch options to use for all services.
+These will be overridden by any options specified in sssd_options or overrides.
 
-Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
+##### <a name="-simp--nsswitch--sssd_options"></a>`sssd_options`
+
+Data type: `Hash`
+
+A hash of nsswitch options to use for all services when sssd is enabled.
+These will be overridden by any options specified in overrides.
+
+##### <a name="-simp--nsswitch--overrides"></a>`overrides`
+
+Data type: `Hash`
+
+A hash of nsswitch options to use for all services that will override any options specified in defaults or sssd_options.
+
+Default value: `{}`
 
 ##### <a name="-simp--nsswitch--sssd"></a>`sssd`
 
@@ -1154,32 +1165,6 @@ Data type: `Boolean`
 SIMP global catalyst to enable sssd
 
 Default value: `simplib::lookup('simp_options::sssd', { 'default_value' => false })`
-
-##### <a name="-simp--nsswitch--defaults"></a>`defaults`
-
-Data type: `Hash`
-
-
-
-##### <a name="-simp--nsswitch--sssd_options"></a>`sssd_options`
-
-Data type: `Hash`
-
-
-
-##### <a name="-simp--nsswitch--ldap_options"></a>`ldap_options`
-
-Data type: `Hash`
-
-
-
-##### <a name="-simp--nsswitch--overrides"></a>`overrides`
-
-Data type: `Hash`
-
-
-
-Default value: `{}`
 
 ### <a name="simp--one_shot"></a>`simp::one_shot`
 
@@ -1658,7 +1643,7 @@ This is used to allow specific hosts access to PuppetDB
   Once PuppetDB is up, then you can switch this to exported resources mode
   using the **use_exported_resources** variable.
 
-Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value'            => ['127.0.0.1'] })`
+Default value: `simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] })`
 
 ##### <a name="-simp--puppetdb--listen_address"></a>`listen_address`
 
@@ -2074,7 +2059,7 @@ Install a local mail service on the system
     * If you use a remote server, you'll need to set the appropriate
       parameters for the ``postfix`` class
 
-Default value: `$::simp::mail_server`
+Default value: `$simp::mail_server`
 
 ##### <a name="-simp--scenario--base--rsync_stunnel"></a>`rsync_stunnel`
 
@@ -2085,7 +2070,7 @@ The rsync server from which files should be retrieved
 * May be set to ``false`` to disable the rsync stunnel connection
 * If unset, will default to the Puppet server itself
 
-Default value: `$::simp::rsync_stunnel`
+Default value: `$simp::rsync_stunnel`
 
 ##### <a name="-simp--scenario--base--use_ssh_global_known_hosts"></a>`use_ssh_global_known_hosts`
 
@@ -2094,7 +2079,7 @@ Data type: `Boolean`
 If true, use the ssh_global_known_hosts function to gather the various host
 SSH public keys and populate the /etc/ssh/known_hosts file.
 
-Default value: `$::simp::use_ssh_global_known_hosts`
+Default value: `$simp::use_ssh_global_known_hosts`
 
 ##### <a name="-simp--scenario--base--puppet_server_hosts_entry"></a>`puppet_server_hosts_entry`
 
@@ -2104,7 +2089,7 @@ Add a ``host`` entry for the Puppet server to the catalog
 
 * This has no effect if the ``$server_facts`` Hash is not populated
 
-Default value: `$::simp::puppet_server_hosts_entry`
+Default value: `$simp::puppet_server_hosts_entry`
 
 ##### <a name="-simp--scenario--base--use_sudoers_aliases"></a>`use_sudoers_aliases`
 
@@ -2112,7 +2097,7 @@ Data type: `Boolean`
 
 If true, enable simp site sudoers aliases
 
-Default value: `$::simp::use_sudoers_aliases`
+Default value: `$simp::use_sudoers_aliases`
 
 ##### <a name="-simp--scenario--base--runlevel"></a>`runlevel`
 
@@ -2120,7 +2105,7 @@ Data type: `Simp::Runlevel`
 
 The default runlevel to which the system should be set
 
-Default value: `$::simp::runlevel`
+Default value: `$simp::runlevel`
 
 ##### <a name="-simp--scenario--base--restrict_max_logins"></a>`restrict_max_logins`
 
@@ -2130,7 +2115,7 @@ Enable restrictions of the number of simultaneous logins a user may have
 
 * Has no effect if ``$pam`` is ``false``
 
-Default value: `$::simp::restrict_max_logins`
+Default value: `$simp::restrict_max_logins`
 
 ##### <a name="-simp--scenario--base--manage_ctrl_alt_del"></a>`manage_ctrl_alt_del`
 
@@ -2139,7 +2124,7 @@ Data type: `Boolean`
 Include the ``simp::ctrl_alt_del`` class, which, by default, disables the
 use of ctrl_alt_del and logs all instances of the event.
 
-Default value: `$::simp::manage_ctrl_alt_del`
+Default value: `$simp::manage_ctrl_alt_del`
 
 ##### <a name="-simp--scenario--base--manage_root_metadata"></a>`manage_root_metadata`
 
@@ -2148,7 +2133,7 @@ Data type: `Boolean`
 Include the ``simp::root_user`` class, which manages resources related to
 the ``root`` user
 
-Default value: `$::simp::manage_root_metadata`
+Default value: `$simp::manage_root_metadata`
 
 ##### <a name="-simp--scenario--base--manage_root_perms"></a>`manage_root_perms`
 
@@ -2157,7 +2142,7 @@ Data type: `Boolean`
 Ensure that ``/root`` has restricted permissions and proper SELinux
 contexts
 
-Default value: `$::simp::manage_root_perms`
+Default value: `$simp::manage_root_perms`
 
 ##### <a name="-simp--scenario--base--manage_rc_local"></a>`manage_rc_local`
 
@@ -2168,7 +2153,7 @@ Include the ``simp::rc_local`` class
 * This **disables** rc.local by default but you may also use it to set
   custom content
 
-Default value: `$::simp::manage_rc_local`
+Default value: `$simp::manage_rc_local`
 
 ##### <a name="-simp--scenario--base--pam"></a>`pam`
 
@@ -2176,7 +2161,7 @@ Data type: `Boolean`
 
 Enable management of PAM resources via SIMP modules
 
-Default value: `$::simp::pam`
+Default value: `$simp::pam`
 
 ##### <a name="-simp--scenario--base--sssd"></a>`sssd`
 
@@ -2184,7 +2169,7 @@ Data type: `Boolean`
 
 Enable management of SSSD resources via SIMP modules
 
-Default value: `$::simp::sssd`
+Default value: `$simp::sssd`
 
 ##### <a name="-simp--scenario--base--ldap"></a>`ldap`
 
@@ -2192,7 +2177,7 @@ Data type: `Boolean`
 
 Enable management of LDAP resources via SIMP modules
 
-Default value: `$::simp::ldap`
+Default value: `$simp::ldap`
 
 ##### <a name="-simp--scenario--base--stock_sssd"></a>`stock_sssd`
 
@@ -2204,7 +2189,7 @@ system
 
 * Has no effect if ``$sssd`` is ``false``
 
-Default value: `$::simp::stock_sssd`
+Default value: `$simp::stock_sssd`
 
 ### <a name="simp--scenario--poss"></a>`simp::scenario::poss`
 
@@ -2231,7 +2216,7 @@ Add a ``host`` entry for the Puppet server to the catalog
 
 * This has no effect if the ``$server_facts`` Hash is not populated
 
-Default value: `$::simp::puppet_server_hosts_entry`
+Default value: `$simp::puppet_server_hosts_entry`
 
 ### <a name="simp--server"></a>`simp::server`
 
@@ -2446,7 +2431,7 @@ Data type: `Stdlib::Absolutepath`
 The location of the web root in which the kickstart directory
 will reside.  Only used to compute the default for `directory`.
 
-Default value: `simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'})`
+Default value: `simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www' })`
 
 ##### <a name="-simp--server--kickstart--simp_client_bootstrap--directory"></a>`directory`
 
@@ -2621,82 +2606,6 @@ will be fixed, when Puppet fully supports FIPS mode.
 
 Default value: `simplib::lookup('simp_options::fips', { 'default_value' => false })`
 
-### <a name="simp--server--ldap"></a>`simp::server::ldap`
-
-If you are setting up a consumer LDAP server, remember that the three
-digit RID must be unique or each consumer server that you attach to the
-same master.
-
-#### Parameters
-
-The following parameters are available in the `simp::server::ldap` class:
-
-* [`is_slave`](#-simp--server--ldap--is_slave)
-* [`is_consumer`](#-simp--server--ldap--is_consumer)
-* [`rid`](#-simp--server--ldap--rid)
-* [`bind_dn`](#-simp--server--ldap--bind_dn)
-* [`sync_dn`](#-simp--server--ldap--sync_dn)
-* [`enable_lastbind`](#-simp--server--ldap--enable_lastbind)
-
-##### <a name="-simp--server--ldap--is_slave"></a>`is_slave`
-
-Data type: `Boolean`
-
-Deprecated in favor of vendor-aligned update: ``is_consumer``
-
-Default value: `false`
-
-##### <a name="-simp--server--ldap--is_consumer"></a>`is_consumer`
-
-Data type: `Boolean`
-
-If true, set this node up as an LDAP consumer. The Hiera parameter
-ldap::master will be used as the master server.
-
-If you want to use values other than the defaults as provided with
-simp_openldap::server::syncrepl. Leave this as 'false', include this
-class and call simp_openldap::server::syncrepl with your values as
-appropriate.
-
-Default value: `$is_slave`
-
-##### <a name="-simp--server--ldap--rid"></a>`rid`
-
-Data type: `Integer[0]`
-
-The RID of the system. See simp_openldap::server::syncrepl for
-additional information.
-
-Default value: `111`
-
-##### <a name="-simp--server--ldap--bind_dn"></a>`bind_dn`
-
-Data type: `String`
-
-Used for setting up sync limits for the bind user.
-
-Default value: `simplib::lookup('simp_options::ldap::bind_dn', { 'default_value' => '' })`
-
-##### <a name="-simp--server--ldap--sync_dn"></a>`sync_dn`
-
-Data type: `String`
-
-Used for setting up sync limits for consumer nodes.
-
-Default value: `simplib::lookup('simp_options::ldap::sync_dn', { 'default_value' => '' })`
-
-##### <a name="-simp--server--ldap--enable_lastbind"></a>`enable_lastbind`
-
-Data type: `Boolean`
-
-If true, enable the 'lastbind' plugin for OpenLDAP. This records
-the last time a user logs into a system within LDAP itself. Note,
-if you have auditing enabled, this will cause an LDAP audit record
-every time someone logs into any system connected to the LDAP
-server.
-
-Default value: `false`
-
 ### <a name="simp--server--rsync_shares"></a>`simp::server::rsync_shares`
 
 If you don't have these provided somewhere, many of the modules will not
@@ -2809,8 +2718,6 @@ as an example of what you can do to make it work for your environment.
 
 The following parameters are available in the `simp::sssd::client` class:
 
-* [`local_domain`](#-simp--sssd--client--local_domain)
-* [`local_domain_options`](#-simp--sssd--client--local_domain_options)
 * [`ldap_domain`](#-simp--sssd--client--ldap_domain)
 * [`ldap_domain_options`](#-simp--sssd--client--ldap_domain_options)
 * [`ldap_server_type`](#-simp--sssd--client--ldap_server_type)
@@ -2818,26 +2725,7 @@ The following parameters are available in the `simp::sssd::client` class:
 * [`enumerate_users`](#-simp--sssd--client--enumerate_users)
 * [`cache_credentials`](#-simp--sssd--client--cache_credentials)
 * [`min_id`](#-simp--sssd--client--min_id)
-* [`autofs`](#-simp--sssd--client--autofs)
-* [`sudo`](#-simp--sssd--client--sudo)
-* [`ssh`](#-simp--sssd--client--ssh)
 * [`enable_domain_warn`](#-simp--sssd--client--enable_domain_warn)
-
-##### <a name="-simp--sssd--client--local_domain"></a>`local_domain`
-
-Data type: `Boolean`
-
-DEPRECATED:  This param does nothing.  It will be removed in the next version
-
-Default value: `false`
-
-##### <a name="-simp--sssd--client--local_domain_options"></a>`local_domain_options`
-
-Data type: `Hash`
-
-DEPRECATED:  This param does nothing.  It will be removed in the next version
-
-Default value: `{}`
 
 ##### <a name="-simp--sssd--client--ldap_domain"></a>`ldap_domain`
 
@@ -2859,7 +2747,7 @@ Default value: `{}`
 
 ##### <a name="-simp--sssd--client--ldap_server_type"></a>`ldap_server_type`
 
-Data type: `Variant[Boolean[false], Enum['plain','389ds']]`
+Data type: `Variant[Boolean[false], Enum['389ds']]`
 
 The type of LDAP server that the system is communicating with
 
@@ -2905,30 +2793,6 @@ Data type: `Integer`
 The lowest user ID that SSSD should recognize from the remote server
 
 Default value: `500`
-
-##### <a name="-simp--sssd--client--autofs"></a>`autofs`
-
-Data type: `Boolean`
-
-Deprecated
-
-Default value: `true`
-
-##### <a name="-simp--sssd--client--sudo"></a>`sudo`
-
-Data type: `Boolean`
-
-Deprecated
-
-Default value: `true`
-
-##### <a name="-simp--sssd--client--ssh"></a>`ssh`
-
-Data type: `Boolean`
-
-Deprecated
-
-Default value: `true`
 
 ##### <a name="-simp--sssd--client--enable_domain_warn"></a>`enable_domain_warn`
 
@@ -2989,7 +2853,7 @@ Default value:
       LANG LC_ADDRESS LC_CTYPE LC_COLLATE LC_IDENTIFICATION \
       LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC \
       LC_PAPER LC_TELEPHONE LC_TIME LC_ALL LANGUAGE LINGUAS \
-      _XKB_CHARSET XAUTHORITY"'
+      _XKB_CHARSET XAUTHORITY"',
   ]
 ```
 
@@ -3038,7 +2902,7 @@ Default value:
     '/sbin/route ""',
     '/sbin/route -[venC]',
     '/usr/bin/getent',
-    '/usr/bin/tail'
+    '/usr/bin/tail',
   ]
 ```
 
@@ -3055,7 +2919,7 @@ Default value:
     '/usr/sbin/visudo',
     '/bin/chown',
     '/bin/chmod',
-    '/bin/chgrp'
+    '/bin/chgrp',
   ]
 ```
 
@@ -3069,7 +2933,7 @@ Default value:
 
 ```puppet
 [
-    '/sbin/modprobe'
+    '/sbin/modprobe',
   ]
 ```
 
@@ -3083,7 +2947,7 @@ Default value:
 
 ```puppet
 [
-    '/usr/sbin/updatedb'
+    '/usr/sbin/updatedb',
   ]
 ```
 
@@ -3106,7 +2970,7 @@ Default value:
     '/usr/bin/rfcomm',
     '/usr/bin/wvdial',
     '/sbin/iwconfig',
-    '/sbin/mii-tool'
+    '/sbin/mii-tool',
   ]
 ```
 
@@ -3123,7 +2987,7 @@ Default value:
     '/bin/nice',
     '/bin/kill',
     '/usr/bin/kill',
-    '/usr/bin/killall'
+    '/usr/bin/killall',
   ]
 ```
 
@@ -3138,7 +3002,7 @@ Default value:
 ```puppet
 [
     '/sbin/service',
-    '/sbin/chkconfig'
+    '/sbin/chkconfig',
   ]
 ```
 
@@ -3157,7 +3021,7 @@ Default value:
     '/usr/bin/audit2allow',
     '/usr/sbin/getenforce',
     '/usr/sbin/setenforce',
-    '/usr/sbin/setsebool'
+    '/usr/sbin/setsebool',
   ]
 ```
 
@@ -3173,7 +3037,7 @@ Default value:
 [
     '/bin/rpm',
     '/usr/bin/up2date',
-    '/usr/bin/yum'
+    '/usr/bin/yum',
   ]
 ```
 
@@ -3192,7 +3056,7 @@ Default value:
     '/sbin/parted',
     '/sbin/partprobe',
     '/bin/mount',
-    '/bin/umount'
+    '/bin/umount',
   ]
 ```
 
@@ -3202,7 +3066,7 @@ Data type: `Array[Stdlib::AbsolutePath]`
 
 Allow unfettered access to ``su``
 
-Default value: `[ '/bin/su' ]`
+Default value: `['/bin/su']`
 
 ### <a name="simp--sysctl"></a>`simp::sysctl`
 
@@ -4060,10 +3924,10 @@ Default value:
 
 ```puppet
 simp::yum::repo::gpgkey_string(
-      $servers,
-      simp::yum::repo::gpgkeys::os_updates(),
-      $relative_gpgkey_path,
-      $extra_gpgkey_urls
+    $servers,
+    simp::yum::repo::gpgkeys::os_updates(),
+    $relative_gpgkey_path,
+    $extra_gpgkey_urls
   )
 ```
 

@@ -58,7 +58,7 @@
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::puppetdb (
-  Simplib::Netlist                    $trusted_nets                      = simplib::lookup('simp_options::trusted_nets', { 'default_value'            => ['127.0.0.1'] }),
+  Simplib::Netlist                    $trusted_nets                      = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
   Simplib::IP                         $listen_address                    = '127.0.0.1',
   Simplib::Port                       $listen_port                       = 8138,
   Boolean                             $open_listen_port                  = false,
@@ -89,7 +89,6 @@ class simp::puppetdb (
   Boolean                             $disable_update_checking           = true,
   Boolean                             $firewall                          = simplib::lookup('simp_options::firewall', { 'default_value' => false })
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $read_database_ssl !~ Undef {
@@ -111,7 +110,7 @@ class simp::puppetdb (
 
   $_java_max_memory = inline_template('<% if @java_max_memory[-1].chr == "%" %><%= (@memorysize_mb.to_f * (@java_max_memory[0..-2].to_f/100.0)).round.to_s + "m" %><% else %><%= @java_max_memory %><% end %>')
 
-  if !defined('puppetdb::java_args') or empty($::puppetdb::java_args) {
+  if !defined('puppetdb::java_args') or empty($puppetdb::java_args) {
     $_java_heapdump_on_oom = $java_heapdump_on_oom ? {
       true    => '-XX:+HeapDumpOnOutOfMemoryError',
       default => '-XX:-HeapDumpOnOutOfMemoryError'
@@ -135,12 +134,12 @@ class simp::puppetdb (
       $_java_heapdump_on_oom         => '',
       $_java_use_code_cache_flushing => '',
       '-Djava.io.tmpdir='            => $java_tmpdir,
-      '-Djava.net.preferIPv4Stack='  => bool2str($java_prefer_ipv4)
+      '-Djava.net.preferIPv4Stack='  => bool2str($java_prefer_ipv4),
     }
   }
 
   else {
-    $_java_args = $::puppetdb::java_args
+    $_java_args = $puppetdb::java_args
   }
 
   $_my_defaults = {
@@ -163,7 +162,7 @@ class simp::puppetdb (
     'java_args'                         => $_java_args,
     'automatic_dlo_cleanup'             => $automatic_dlo_cleanup,
     'dlo_max_age'                       => 90,
-    'disable_update_checking'           => $disable_update_checking
+    'disable_update_checking'           => $disable_update_checking,
   }
 
   class { 'puppetdb': * => $_my_defaults }
@@ -182,11 +181,11 @@ class simp::puppetdb (
     # https://tickets.puppetlabs.com/browse/MODULES-5391
     # If puppetlabs/puppetdb gets updated, watch out for duplicate
     # declaration errors for this file resource.
-    file { "${::puppetdb::master::puppetdb_conf::puppet_confdir}/puppetdb.conf":
+    file { "${puppetdb::master::puppetdb_conf::puppet_confdir}/puppetdb.conf":
       ensure => present,
       owner  => 'root',
       group  => 'root',
-      mode   => '0644'
+      mode   => '0644',
     }
   }
 
@@ -195,7 +194,7 @@ class simp::puppetdb (
     owner  => 'puppetdb',
     group  => 'puppetdb',
     mode   => '0640',
-    before => Service[$::puppetdb::puppetdb_service]
+    before => Service[$puppetdb::puppetdb_service],
   }
 
   if $manage_puppetserver and defined(Class['puppetdb::master::puppetdb_conf']) {
@@ -207,17 +206,17 @@ class simp::puppetdb (
 
   # We need to do this to make PuppetDB use the system puppet certificates
   if $use_puppet_ssl_certs {
-    File<| title == $::puppetdb::ssl_key_path |> {
+    File<| title == $puppetdb::ssl_key_path |> {
       content   => undef,
       show_diff => false,
       source    => "file://${facts['puppet_settings']['main']['hostprivkey']}"
     }
-    File<| title == $::puppetdb::ssl_cert_path |> {
+    File<| title == $puppetdb::ssl_cert_path |> {
       content   => undef,
       show_diff => false,
       source    => "file://${facts['puppet_settings']['main']['hostcert']}"
     }
-    File<| title == $::puppetdb::ssl_ca_cert_path |> {
+    File<| title == $puppetdb::ssl_ca_cert_path |> {
       content   => undef,
       show_diff => false,
       source    => "file://${facts['puppet_settings']['main']['localcacert']}"
@@ -229,10 +228,10 @@ class simp::puppetdb (
     include 'iptables'
 
     iptables::listen::tcp_stateful { 'puppetdb':
-      dports       => [$::puppetdb::ssl_listen_port],
+      dports       => [$puppetdb::ssl_listen_port],
       trusted_nets => $trusted_nets,
       # Need this for the auto-connect test script
-      before       => Service[$::puppetdb::puppetdb_service]
+      before       => Service[$puppetdb::puppetdb_service],
     }
   }
 }

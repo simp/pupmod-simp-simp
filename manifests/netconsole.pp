@@ -32,7 +32,6 @@ class simp::netconsole (
   Optional[String]              $source_device  = undef,
   String[1]                     $package_ensure = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' })
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if (versioncmp($facts.dig('os','release','major'), '8') >= 0) {
@@ -42,7 +41,7 @@ class simp::netconsole (
         notify => [
           Service['netconsole'],
           File['/etc/sysconfig/netconsole']
-        ]
+        ],
       }
     }
     else {
@@ -60,13 +59,13 @@ class simp::netconsole (
         'localport'     => $source_port,
         'dev'           => $source_device,
       }
-    )
+    ),
   }
 
-  $_netconsole_ensure = $ensure ? { 'present' => running, 'absent' => stopped }
+  $_netconsole_ensure = $ensure ? { 'present' => 'running', 'absent' => 'stopped' }
   $_netconsole_enable = $ensure ? { 'present' => true,    'absent' => false }
   service { 'netconsole':
     ensure => $_netconsole_ensure,
-    enable => $_netconsole_enable
+    enable => $_netconsole_enable,
   }
 }

@@ -74,17 +74,16 @@ class simp::yum::repo::local_os_updates (
   String[1]              $relative_gpgkey_path = 'SIMP/GPGKEYS',
   Optional[String[1]]    $baseurl            = undef,
   Optional[String[1]]    $gpgkey             = simp::yum::repo::gpgkey_string(
-      $servers,
-      simp::yum::repo::gpgkeys::os_updates(),
-      $relative_gpgkey_path,
-      $extra_gpgkey_urls
+    $servers,
+    simp::yum::repo::gpgkeys::os_updates(),
+    $relative_gpgkey_path,
+    $extra_gpgkey_urls
   )
-){
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
   if $facts['os']['release']['major'] > '7' {
-
     if $baseurl {
       $_os_updates_url = "${baseurl}/BaseOS"
     } else {
@@ -101,7 +100,7 @@ class simp::yum::repo::local_os_updates (
       keepalive           => 0,
       metadata_expire     => 3600,
       tag                 => 'firstrun',
-      skip_if_unavailable => 1
+      skip_if_unavailable => 1,
     }
 
     if $baseurl {
@@ -120,11 +119,9 @@ class simp::yum::repo::local_os_updates (
       keepalive           => 0,
       metadata_expire     => 3600,
       tag                 => 'firstrun',
-      skip_if_unavailable => 1
+      skip_if_unavailable => 1,
     }
-
   } else {
-
     if $baseurl {
       $_baseurl = $baseurl
     } else {
@@ -142,7 +139,7 @@ class simp::yum::repo::local_os_updates (
       keepalive           => 0,
       metadata_expire     => 3600,
       tag                 => 'firstrun',
-      skip_if_unavailable => 1
+      skip_if_unavailable => 1,
     }
   }
 }

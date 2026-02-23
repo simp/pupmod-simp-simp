@@ -24,13 +24,12 @@ class simp::base_apps (
   Optional[Array[String,1]] $extra_apps           = undef,
   Optional[Boolean]         $manage_elinks_config = undef
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $core_apps = [
     'irqbalance',
     'netlabel_tools',
-    'bind-utils'
+    'bind-utils',
   ]
   $apps = $extra_apps ? {
     Array   => $core_apps + $extra_apps,
@@ -42,14 +41,14 @@ class simp::base_apps (
     enable     => true,
     hasrestart => true,
     hasstatus  => false,
-    require    => Package['irqbalance']
+    require    => Package['irqbalance'],
   }
   service { 'netlabel':
     ensure     => 'running',
     enable     => true,
     hasrestart => true,
     hasstatus  => true,
-    require    => Package['netlabel_tools']
+    require    => Package['netlabel_tools'],
   }
 
   # Puppet cannot enable these services because there is no

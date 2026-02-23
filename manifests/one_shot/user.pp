@@ -71,26 +71,26 @@ class simp::one_shot::user (
       owner   => $username,
       group   => $username,
       mode    => '0640',
-      seltype => 'user_home_dir_t'
+      seltype => 'user_home_dir_t',
     }
 
     pam::access::rule { "allow_${username}":
       users   => [$username],
       origins => ['LOCAL'] + $allowed_from,
-      comment => 'Default Temp Local User'
+      comment => 'Default Temp Local User',
     }
 
     sudo::user_specification { $username:
       user_list => [$username],
       runas     => $sudo_users,
       cmnd      => $sudo_commands,
-      passwd    => $passwordless_sudo
+      passwd    => $passwordless_sudo,
     }
   }
 
   group { $username:
     ensure => $_ensure,
-    gid    => $gid
+    gid    => $gid,
   }
 
   if $password {
@@ -108,14 +108,14 @@ class simp::one_shot::user (
     uid        => $uid,
     gid        => $gid,
     home       => $home,
-    managehome => true
+    managehome => true,
   }
 
   ssh_authorized_key { $username:
     ensure => $_ensure,
     key    => $ssh_authorized_key,
     type   => $ssh_authorized_key_type,
-    user   => $username
+    user   => $username,
   }
 
   if !$enable {

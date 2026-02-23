@@ -28,16 +28,16 @@ class simp::prelink (
 
   if ( $enable and ! $facts['fips_enabled'] ) {
     package { 'prelink':
-      ensure => $ensure
+      ensure => $ensure,
     }
 
     augeas { 'enable prelink':
       lens      => 'Shellvars.lns',
       incl      => '/etc/sysconfig/prelink',
       changes   => [
-        'set PRELINKING "yes"'
+        'set PRELINKING "yes"',
       ],
-      subscribe => Package['prelink']
+      subscribe => Package['prelink'],
     }
   }
   else {
@@ -51,20 +51,20 @@ class simp::prelink (
           lens    => 'Shellvars.lns',
           incl    => '/etc/sysconfig/prelink',
           changes => [
-            'set PRELINKING "no"'
+            'set PRELINKING "no"',
           ],
-          before  => Exec['remove prelinking']
+          before  => Exec['remove prelinking'],
         }
       }
 
       exec { 'remove prelinking':
         command => '/etc/cron.daily/prelink',
         # before is the resource that *removes* the prelink package
-        before  => Package['prelink']
+        before  => Package['prelink'],
       }
 
       package { 'prelink':
-        ensure => 'absent'
+        ensure => 'absent',
       }
     }
   }

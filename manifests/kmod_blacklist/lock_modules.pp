@@ -20,18 +20,17 @@
 #    before enabling.
 #
 class simp::kmod_blacklist::lock_modules (
-  $enable                    = true,
-  $notify_if_reboot_required = true,
-  $persist                   = false
+  Boolean $enable                    = true,
+  Boolean $notify_if_reboot_required = true,
+  Boolean $persist                   = false
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $enable {
     sysctl { 'kernel.modules_disabled':
       apply   => true,
       value   => 1,
-      persist => $persist
+      persist => $persist,
     }
   }
   else {
@@ -39,17 +38,17 @@ class simp::kmod_blacklist::lock_modules (
       sysctl { 'kernel.modules_disabled':
         apply   => true,
         value   => 0,
-        persist => $persist
+        persist => $persist,
       }
 
       if $notify_if_reboot_required {
         reboot_notify { 'kernel.modules_disabled unlock':
-          reason => 'Module loading cannot be fully unlocked until a reboot is performed'
+          reason => 'Module loading cannot be fully unlocked until a reboot is performed',
         }
       }
       else {
         reboot_notify { 'kernel.modules_disabled unlock':
-          ensure => 'absent'
+          ensure => 'absent',
         }
       }
     }

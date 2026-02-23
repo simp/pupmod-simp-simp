@@ -157,7 +157,6 @@ class simp::sysctl (
   Boolean              $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false }),
   Optional[Boolean]    $ipv6                                           = undef
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   simplib::validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
@@ -183,13 +182,13 @@ class simp::sysctl (
     'net.core.netdev_max_backlog'       : value => $net__core__netdev_max_backlog;
     'net.core.somaxconn'                : value => $net__core__somaxconn;
     'net.ipv4.tcp_tw_reuse'             : value => $net__ipv4__tcp_tw_reuse;
-    'fs.inotify.max_user_watches'       : value => $fs__inotify__max_user_watches
+    'fs.inotify.max_user_watches'       : value => $fs__inotify__max_user_watches,
   }
 
   # This may not exist until additional packages are present
   sysctl { 'net.netfilter.nf_conntrack_max':
     value  => $net__netfilter__nf_conntrack_max,
-    silent => true
+    silent => true,
   }
 
   # Security Related Settings
@@ -229,9 +228,9 @@ class simp::sysctl (
       group  => 'root',
       mode   => '0640',
       before => [
-      Sysctl['kernel.core_pattern'],
-      Sysctl['kernel.core_uses_pid'],
-      ]
+        Sysctl['kernel.core_pattern'],
+        Sysctl['kernel.core_uses_pid'],
+      ],
     }
   }
   if ($pam and !$core_dumps) {
@@ -242,7 +241,7 @@ class simp::sysctl (
       type    => 'hard',
       item    => 'core',
       value   => 0,
-      order   => 100
+      order   => 100,
     }
   }
 

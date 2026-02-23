@@ -127,4 +127,3 @@ simp::nsswitch::ldap_options:
   sudoers:
     - 'files [!NOTFOUND=return]'
     - 'ldap'
-

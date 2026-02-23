@@ -26,12 +26,14 @@ simp::scenario_map:
     - aide
     - at
     - auditd
+    - chrony
     - cron
     - deferred_resources
     - incron
     - issue
     - pam::access
     - resolv
+    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -56,12 +58,14 @@ simp::scenario_map:
     - aide
     - at
     - auditd
+    - chrony
     - cron
     - deferred_resources
     - incron
     - issue
     - pam::access
     - resolv
+    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -89,6 +93,7 @@ simp::scenario_map:
     - aide
     - at
     - auditd
+    - chrony
     - cron
     - deferred_resources
     - incron
@@ -96,6 +101,7 @@ simp::scenario_map:
     - pam::access
     - pupmod
     - resolv
+    - rkhunter
     - simp::admin
     - simp::base_apps
     - simp::base_services
@@ -122,12 +128,14 @@ simp::server::data:
   # Shared with 'simp_lite'
   - aide
   - at
+  - chrony
   - cron
   - deferred_resources
   - incron
   - issue
   - pam::access
   - resolv
+  - rkhunter
   - simp::admin
   - simp::base_apps
   - simp::base_services
@@ -148,3 +156,27 @@ simp::server::data:
   - pam::wheel
   - selinux
   - svckill
+
+simp::sssd::client::ldap_server_type: '389ds'
+
+simp::puppetdb::cipher_suites:
+  - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+  - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+  - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+  - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+  - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+  - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+  - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+  - TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
+  - TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
+  - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+  - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
+  - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA
+  - TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+  - TLS_DHE_RSA_WITH_AES_256_CBC_SHA256
+  - TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+  - TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+  - TLS_DHE_RSA_WITH_AES_128_CBC_SHA256
+  - TLS_DHE_RSA_WITH_AES_128_CBC_SHA
+  - TLS_EMPTY_RENEGOTIATION_INFO_SCSV
+

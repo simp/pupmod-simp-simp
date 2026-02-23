@@ -43,14 +43,13 @@
 #     This is extremely dangerous and not recommended for production
 #     environments.
 #
-class simp::yum::repo::internet_simp(
+class simp::yum::repo::internet_simp (
   String[1]               $simp_repos_package     = 'simp-release-community',
   String[1]               $simp_repos_package_url = "https://download.simp-project.com/${simp_repos_package}.rpm",
   Simp::PackageEnsure     $package_ensure         = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
   String                  $simp_release_type      = 'releases',
   Optional[Simp::Version] $simp_release_version   = undef
-){
-
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   package { $simp_repos_package:
@@ -61,7 +60,7 @@ class simp::yum::repo::internet_simp(
   if $package_ensure == 'absent' {
     file { ['/etc/yum/vars/simprelease', '/etc/yum/vars/simpreleasetype']:
       ensure => absent,
-      before => Package[$simp_repos_package]
+      before => Package[$simp_repos_package],
     }
   }
   else {

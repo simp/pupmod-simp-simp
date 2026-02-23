@@ -1,0 +1,21 @@
+---
+HOSTS:
+  server-centos10.simp.beaker:
+    roles:
+    - server
+    - default
+    - master
+    - simp_server
+    - el8
+    platform: el-10-x86_64
+    box: generic/centos10
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    vagrant_memsize: 2048
+    vagrant_cpus: 2
+    # There are not currently any el10 images available on google cloud
+    # family: centos-cloud/centos-stream-10
+    # gce_machine_type: n1-standard-2
+CONFIG:
+  log_level: verbose
+  type: aio
+  puppet_collection: <%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'openvox8') %>

@@ -76,23 +76,22 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::scenario::base (
-  Variant[Boolean,Enum['remote']] $mail_server                = $::simp::mail_server,
-  Variant[Boolean,Simplib::Host]  $rsync_stunnel              = $::simp::rsync_stunnel,
-  Boolean                         $use_ssh_global_known_hosts = $::simp::use_ssh_global_known_hosts,
-  Boolean                         $puppet_server_hosts_entry  = $::simp::puppet_server_hosts_entry,
-  Boolean                         $use_sudoers_aliases        = $::simp::use_sudoers_aliases,
-  Simp::Runlevel                  $runlevel                   = $::simp::runlevel,
-  Boolean                         $restrict_max_logins        = $::simp::restrict_max_logins,
-  Boolean                         $manage_ctrl_alt_del        = $::simp::manage_ctrl_alt_del,
-  Boolean                         $manage_root_metadata       = $::simp::manage_root_metadata,
-  Boolean                         $manage_root_perms          = $::simp::manage_root_perms,
-  Boolean                         $manage_rc_local            = $::simp::manage_rc_local,
-  Boolean                         $pam                        = $::simp::pam,
-  Boolean                         $ldap                       = $::simp::ldap,
-  Boolean                         $sssd                       = $::simp::sssd,
-  Boolean                         $stock_sssd                 = $::simp::stock_sssd
+  Variant[Boolean,Enum['remote']] $mail_server                = $simp::mail_server,
+  Variant[Boolean,Simplib::Host]  $rsync_stunnel              = $simp::rsync_stunnel,
+  Boolean                         $use_ssh_global_known_hosts = $simp::use_ssh_global_known_hosts,
+  Boolean                         $puppet_server_hosts_entry  = $simp::puppet_server_hosts_entry,
+  Boolean                         $use_sudoers_aliases        = $simp::use_sudoers_aliases,
+  Simp::Runlevel                  $runlevel                   = $simp::runlevel,
+  Boolean                         $restrict_max_logins        = $simp::restrict_max_logins,
+  Boolean                         $manage_ctrl_alt_del        = $simp::manage_ctrl_alt_del,
+  Boolean                         $manage_root_metadata       = $simp::manage_root_metadata,
+  Boolean                         $manage_root_perms          = $simp::manage_root_perms,
+  Boolean                         $manage_rc_local            = $simp::manage_rc_local,
+  Boolean                         $pam                        = $simp::pam,
+  Boolean                         $ldap                       = $simp::ldap,
+  Boolean                         $sssd                       = $simp::sssd,
+  Boolean                         $stock_sssd                 = $simp::stock_sssd
 ) inherits simp {
-
   assert_private()
 
   runlevel { String($runlevel): }
@@ -114,13 +113,6 @@ class simp::scenario::base (
     include 'postfix'
   }
 
-  # Even if $ldap is true, if the host is on an IPA domain, do not include
-  # simp_openldap::client
-  # @see simp/simplib lib/facter/ipa.rb
-  if $ldap and !$facts['ipa'] {
-    include 'simp_openldap::client'
-  }
-
   if $manage_rc_local { include 'simp::rc_local' }
 
   if $puppet_server_hosts_entry {
@@ -130,7 +122,7 @@ class simp::scenario::base (
       host { $server_facts['servername']:
         ensure       => 'present',
         host_aliases => $_pserver_alias,
-        ip           => $server_facts['serverip']
+        ip           => $server_facts['serverip'],
       }
     }
   }
@@ -142,7 +134,7 @@ class simp::scenario::base (
   }
 
   if $rsync_stunnel {
-    if $rsync_stunnel == true  {
+    if $rsync_stunnel == true {
       $_rsync_stunnel_svr = (($server_facts =~ Hash) and $server_facts['serverip']) ? {
         true    => $server_facts['serverip'],
         default => $facts['puppet_settings']['agent']['server']
@@ -155,7 +147,7 @@ class simp::scenario::base (
     unless simplib::host_is_me($_rsync_stunnel_svr) {
       stunnel::connection { 'rsync':
         connect => ["${_rsync_stunnel_svr}:8730"],
-        accept  => '127.0.0.1:873'
+        accept  => '127.0.0.1:873',
       }
     }
   }

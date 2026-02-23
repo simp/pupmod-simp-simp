@@ -22,6 +22,7 @@ fixtures:
     augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet.git
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh.git
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
+    authselect: https://github.com/voxpupuli/puppet-authselect.git
     autofs: https://github.com/simp/pupmod-simp-autofs.git
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit.git
     chrony: https://github.com/simp/pupmod-voxpupuli-chrony.git

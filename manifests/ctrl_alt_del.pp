@@ -25,7 +25,6 @@ class simp::ctrl_alt_del (
   Simplib::Syslog::Facility $facility  = 'local6',
   Simplib::Syslog::Severity $severity  = 'warning'
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $log {
@@ -47,7 +46,7 @@ class simp::ctrl_alt_del (
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => file("${module_name}/etc/systemd/system/ctrl-alt-del.target")
+        content => file("${module_name}/etc/systemd/system/ctrl-alt-del.target"),
       }
 
       file { '/etc/systemd/system/ctrl-alt-del-capture.service':
@@ -55,14 +54,14 @@ class simp::ctrl_alt_del (
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => template("${module_name}/etc/systemd/system/ctrl-alt-del-capture.service.erb")
+        content => template("${module_name}/etc/systemd/system/ctrl-alt-del-capture.service.erb"),
       }
     }
     else {
       file { '/etc/systemd/system/ctrl-alt-del.target':
         ensure => 'symlink',
         target => '/dev/null',
-        force  => true
+        force  => true,
       }
 
       file { '/etc/systemd/system/ctrl-alt-del-capture.service': ensure => 'absent' }
@@ -74,6 +73,6 @@ class simp::ctrl_alt_del (
 
   exec { 'ctrl_alt_del_systemd_reexec':
     refreshonly => true,
-    command     => '/bin/systemctl daemon-reexec'
+    command     => '/bin/systemctl daemon-reexec',
   }
 }

@@ -33,7 +33,7 @@ describe 'simplib::secure_mountpoints class' do
         proc_mount = on(host, 'mount | grep " /proc "').output.strip
 
         expect(proc_mount).to match(%r{gid=231})
-        expect(proc_mount).to match(%r{hidepid=2})
+        expect(proc_mount).to match(%r{hidepid=(2|invisible)})
       end
 
       it 'prevents running applications in the noexec mounts' do

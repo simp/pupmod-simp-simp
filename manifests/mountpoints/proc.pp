@@ -33,7 +33,6 @@ class simp::mountpoints::proc (
   String[1]         $proc_group        = pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', '_gid__group'), 'simp_proc_read'),
   Integer[0]        $proc_gid          = pick($facts.dig('simplib__mountpoints', '/proc', 'options_hash', 'gid'), 231)
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $proc_gid == 0 {
@@ -49,7 +48,7 @@ class simp::mountpoints::proc (
       allowdupe  => false,
       forcelocal => true,
       gid        => $proc_gid,
-      notify     => Mount['/proc']
+      notify     => Mount['/proc'],
     }
   }
 
@@ -59,6 +58,6 @@ class simp::mountpoints::proc (
     device   => 'proc',
     fstype   => 'proc',
     remounts => true,
-    options  => $_proc_options
+    options  => $_proc_options,
   }
 }

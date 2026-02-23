@@ -62,31 +62,6 @@ describe 'simp::nsswitch' do
 
             it { is_expected.to create_file('nsswitch.conf').with_content(content) }
           end
-
-          context 'with ldap => true' do
-            let(:params) { { ldap: true } }
-
-            it { is_expected.to create_file('nsswitch.conf').with_content(<<~EOM) }
-              # This file is controlled by Puppet
-
-              passwd:     files [!NOTFOUND=return] ldap mymachines systemd
-              shadow:     files [!NOTFOUND=return] ldap
-              group:      files [!NOTFOUND=return] ldap mymachines systemd
-              sudoers:    files [!NOTFOUND=return] ldap
-              hosts:      files mymachines dns myhostname
-              bootparams: files
-              ethers:     files
-              netmasks:   files
-              networks:   files
-              protocols:  files
-              rpc:        files
-              services:   files
-              netgroup:   files [!NOTFOUND=return] ldap
-              publickey:  files
-              automount:  files
-              aliases:    files
-              EOM
-          end
         end
       end
     end

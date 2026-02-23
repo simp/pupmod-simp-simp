@@ -175,7 +175,7 @@ class simp (
   Boolean                         $manage_root_metadata       = true,
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
-  Boolean                         $pam                        = simplib::lookup('simp_options::pam',  { 'default_value' => false }),
+  Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value' => false }),
   Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true,
