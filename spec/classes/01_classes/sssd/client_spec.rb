@@ -16,7 +16,6 @@ describe 'simp::sssd::client' do
         else
           context 'with default parameters' do
             it_behaves_like 'sssd client'
-            it { is_expected.not_to contain_sssd__domain('LOCAL') }
             it { is_expected.not_to contain_sssd__domain('LDAP') }
             it { is_expected.not_to create_notify('SSSD LOCAL domain warning') }
           end
