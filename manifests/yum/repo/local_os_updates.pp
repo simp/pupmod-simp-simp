@@ -83,63 +83,41 @@ class simp::yum::repo::local_os_updates (
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
 
-  if $facts['os']['release']['major'] > '7' {
-    if $baseurl {
-      $_os_updates_url = "${baseurl}/BaseOS"
-    } else {
-      $_os_updates_url = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/BaseOS")
-    }
-    yumrepo { 'local_baseos':
-      baseurl             => $_os_updates_url,
-      descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']} base packages and updates",
-      enabled             => $_enable_repo,
-      enablegroups        => 1,
-      gpgcheck            => 1,
-      gpgkey              => $gpgkey,
-      sslverify           => 0,
-      keepalive           => 0,
-      metadata_expire     => 3600,
-      tag                 => 'firstrun',
-      skip_if_unavailable => 1,
-    }
-
-    if $baseurl {
-      $_os_appstream_repo = "${baseurl}/AppStream"
-    } else {
-      $_os_appstream_repo = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/AppStream")
-    }
-    yumrepo { 'local_appstream':
-      baseurl             => $_os_appstream_repo,
-      descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']} app stream packages",
-      enabled             => $_enable_repo,
-      enablegroups        => 1,
-      gpgcheck            => 1,
-      gpgkey              => $gpgkey,
-      sslverify           => 0,
-      keepalive           => 0,
-      metadata_expire     => 3600,
-      tag                 => 'firstrun',
-      skip_if_unavailable => 1,
-    }
+  if $baseurl {
+    $_os_updates_url = "${baseurl}/BaseOS"
   } else {
-    if $baseurl {
-      $_baseurl = $baseurl
-    } else {
-      $_baseurl = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/Updates")
-    }
+    $_os_updates_url = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/BaseOS")
+  }
+  yumrepo { 'local_baseos':
+    baseurl             => $_os_updates_url,
+    descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']} base packages and updates",
+    enabled             => $_enable_repo,
+    enablegroups        => 1,
+    gpgcheck            => 1,
+    gpgkey              => $gpgkey,
+    sslverify           => 0,
+    keepalive           => 0,
+    metadata_expire     => 3600,
+    tag                 => 'firstrun',
+    skip_if_unavailable => 1,
+  }
 
-    yumrepo { 'os_updates':
-      baseurl             => $_baseurl,
-      descr               => "All ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']} base packages and updates",
-      enabled             => $_enable_repo,
-      enablegroups        => 0,
-      gpgcheck            => 1,
-      gpgkey              => $gpgkey,
-      sslverify           => 0,
-      keepalive           => 0,
-      metadata_expire     => 3600,
-      tag                 => 'firstrun',
-      skip_if_unavailable => 1,
-    }
+  if $baseurl {
+    $_os_appstream_repo = "${baseurl}/AppStream"
+  } else {
+    $_os_appstream_repo = simp::yum::repo::baseurl_string($servers, "${relative_repo_path}/AppStream")
+  }
+  yumrepo { 'local_appstream':
+    baseurl             => $_os_appstream_repo,
+    descr               => "${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']} app stream packages",
+    enabled             => $_enable_repo,
+    enablegroups        => 1,
+    gpgcheck            => 1,
+    gpgkey              => $gpgkey,
+    sslverify           => 0,
+    keepalive           => 0,
+    metadata_expire     => 3600,
+    tag                 => 'firstrun',
+    skip_if_unavailable => 1,
   }
 }

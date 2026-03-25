@@ -6,7 +6,7 @@ HOSTS:
     - default
     - master
     - simp_server
-    - el8
+    - el10
     platform: el-10-x86_64
     box: centos/stream10
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
