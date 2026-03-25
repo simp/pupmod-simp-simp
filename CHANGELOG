@@ -1,3 +1,7 @@
+* Wed Mar 25 2026 Mike Riddle <mike@sicura.us> - 5.0.0
+- Removed el7 support
+- Added el10 support
+
 * Mon Nov 24 2025 Steven Pritchard <steve@sicura.us> - 4.23.2
 - Update module dependencies
 
