@@ -94,17 +94,5 @@ class simp::sssd::client (
     class { 'sssd':
       domains => $_domains,
     }
-
-    unless member($_sssd_domains_from_hiera, 'LOCAL') {
-      # sssd won't start without at least one domain, so we create a dummy one that doesn't do anything
-      sssd::domain { 'LOCAL':
-        id_provider       => 'proxy',
-        proxy_lib_name    => 'files',
-        auth_provider     => 'none',
-        access_provider   => 'permit',
-        cache_credentials => false,
-        enumerate         => false,
-      }
-    }
   }
 }
