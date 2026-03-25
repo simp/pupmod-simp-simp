@@ -6,7 +6,7 @@ HOSTS:
     - default
     - master
     - simp_server
-    - el10
+    - el9
     platform: el-9-x86_64
     box: rockylinux/9
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
