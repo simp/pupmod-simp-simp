@@ -2,7 +2,11 @@
 HOSTS:
   el9:
     roles:
-    - el9
+    - server
+    - default
+    - master
+    - simp_server
+    - el10
     platform: el-9-x86_64
     box: rockylinux/9
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"

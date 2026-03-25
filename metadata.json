@@ -77,11 +77,7 @@
     },
     {
       "name": "simp/fips",
-      "version_requirement": ">= 0.2.0 < 1.0.0"
-    },
-    {
-      "name": "simp/incron",
-      "version_requirement": ">= 0.4.0 < 1.0.0"
+      "version_requirement": ">= 1.0.0 < 2.0.0"
     },
     {
       "name": "simp/iptables",
@@ -109,15 +105,11 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 8.0.0 < 10.0.0"
+      "version_requirement": ">= 10.0.0 < 11.0.0"
     },
     {
       "name": "simp/resolv",
       "version_requirement": ">= 0.1.1 < 1.0.0"
-    },
-    {
-      "name": "simp/rkhunter",
-      "version_requirement": ">= 0.0.1 < 1.0.0"
     },
     {
       "name": "simp/rsync",
@@ -153,6 +145,10 @@
     },
     {
       "name": "simp/sssd",
+      "version_requirement": ">= 7.0.0 < 8.0.0"
+    },
+    {
+      "name": "simp/stunnel",
       "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {

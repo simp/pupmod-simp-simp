@@ -35,9 +35,6 @@
 # @param min_id
 #   The lowest user ID that SSSD should recognize from the remote server
 #
-# @param enable_domain_warn
-#   Set to true to enable local domain warning
-#
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sssd::client (
@@ -47,37 +44,20 @@ class simp::sssd::client (
   Hash                                           $ldap_provider_options = {},
   Boolean                                        $enumerate_users       = false,
   Boolean                                        $cache_credentials     = true,
-  Integer                                        $min_id                = 500,
-  Boolean                                        $enable_domain_warn    = true
+  Integer                                        $min_id                = 500
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  include 'sssd'
-
-  if  $enable_domain_warn {
-    $_sssd_domains_from_hiera = lookup('sssd::domains',undef,undef, [])
-    $_warning_msg = @(END)
-      SSSD no longer requires a local domain and simp::sssd::client no longer configures
-      it.  It appears that LOCAL is still in the list of domains for this machine.
-
-      Please review hiera data and remove LOCAL from the list of sssd domains or follow
-      the instructions in the sssd module to create a provider if you feel it is needed.
-
-      The hiera value to be updated will look like:
-
-      sssd::domains:
-        - 'LOCAL'
-
-      To disable this warning set simp::sssd::client::enable_domain_warn to false in hiera.
-      | END
-    if member($_sssd_domains_from_hiera, 'LOCAL') {
-      notify { 'SSSD LOCAL domain warning':
-        message => $_warning_msg,
-      }
-    }
-  }
+  $_sssd_domains_from_hiera = lookup('sssd::domains',undef,undef, [])
 
   if $ldap_server_type and $ldap_domain {
+    # Ensure LDAP domain exists in [sssd] domains
+    $_domains = unique($_sssd_domains_from_hiera + ['LDAP'])
+
+    class { 'sssd':
+      domains => $_domains,
+    }
+
     $_ldap_domain_defaults = {
       'description' => 'LOCAL Users Domain',
       'min_id'      => $min_id,
@@ -105,6 +85,26 @@ class simp::sssd::client (
 
     sssd::provider::ldap { 'LDAP':
       * => $_ldap_provider_defaults + $_ldap_server_type_defaults + $ldap_provider_options,
+    }
+  }
+  else {
+    # Ensure LOCAL domain exists in [sssd] domains
+    $_domains = unique($_sssd_domains_from_hiera + ['LOCAL'])
+
+    class { 'sssd':
+      domains => $_domains,
+    }
+
+    unless member($_sssd_domains_from_hiera, 'LOCAL') {
+      # sssd won't start without at least one domain, so we create a dummy one that doesn't do anything
+      sssd::domain { 'LOCAL':
+        id_provider       => 'proxy',
+        proxy_lib_name    => 'files',
+        auth_provider     => 'none',
+        access_provider   => 'permit',
+        cache_credentials => false,
+        enumerate         => false,
+      }
     }
   }
 }

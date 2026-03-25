@@ -33,6 +33,7 @@ describe 'simp class' do
         host.reboot
         sleep(20)
         apply_manifest_on(host, manifest, catch_failures: true)
+        apply_manifest_on(host, manifest, catch_failures: true)
       end
 
       it 'is idempotent' do

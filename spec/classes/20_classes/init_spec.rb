@@ -156,7 +156,6 @@ describe 'simp' do
               'auditd',
               'at',
               'cron',
-              'incron',
               'useradd',
               'resolv',
               'nsswitch',
@@ -173,7 +172,6 @@ describe 'simp' do
               'simp::sysctl',
               'ssh',
             ]
-            simp_lite << 'rkhunter'
             simp_lite << 'chrony'
             simp = [
               'pam::wheel',

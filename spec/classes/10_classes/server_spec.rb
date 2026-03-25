@@ -59,7 +59,6 @@ describe 'simp::server' do
               'auditd',
               'at',
               'cron',
-              'incron',
               'useradd',
               'resolv',
               'nsswitch',
@@ -79,12 +78,10 @@ describe 'simp::server' do
             simp_lite_os_spec = case os_facts[:os][:release][:major]
                                 when '7'
                                   [
-                                    'rkhunter',
                                     'ntpd',
                                   ]
                                 else
                                   [
-                                    'rkhunter',
                                     'chrony',
                                   ]
                                 end

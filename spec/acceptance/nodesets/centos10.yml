@@ -8,13 +8,23 @@ HOSTS:
     - simp_server
     - el8
     platform: el-10-x86_64
-    box: generic/centos10
+    box: centos/stream10
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     vagrant_memsize: 2048
     vagrant_cpus: 2
-    # There are not currently any el10 images available on google cloud
-    # family: centos-cloud/centos-stream-10
-    # gce_machine_type: n1-standard-2
+    family: centos-cloud/centos-stream-10
+    gce_machine_type: n1-standard-2
+    vagrant_provisioners:
+    - type: shell
+      inline: |
+        set -e
+        # Make eth0 win forever
+        nmcli con mod "System eth0" ipv4.route-metric 50 || true
+        nmcli con mod "System eth1" ipv4.route-metric 200 || true
+        nmcli con up "System eth0" || true
+        nmcli con up "System eth1" || true
+        dnf -y install dnf-plugins-core
+        dnf -y config-manager --set-enabled crb
 CONFIG:
   log_level: verbose
   type: aio

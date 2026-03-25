@@ -26,9 +26,6 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-env:
-  PUPPET_VERSION: '~> 7'
-
 jobs:
   puppet-syntax:
     name: 'Puppet Syntax'
@@ -108,10 +105,6 @@ jobs:
     strategy:
       matrix:
         puppet:
-          - label: 'Puppet 7.x [SIMP 6.6/PE 2021.7]'
-            puppet_version: '~> 7.0'
-            ruby_version: '2.7'
-            experimental: false
           - label: 'Puppet 8.x'
             puppet_version: '~> 8.0'
             ruby_version: '3.2'
@@ -148,12 +141,37 @@ jobs:
       - run: ${{matrix.test_suite.run}}
         continue-on-error: ${{matrix.puppet.experimental}}
 
-#  dump_contexts:
-#    name: 'Examine Context contents'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Dump contexts
-#        env:
-#          GITHUB_CONTEXT: ${{ toJson(github) }}
-#        run: echo "$GITHUB_CONTEXT"
-#
+  acceptance:
+    runs-on:
+      - ubuntu-latest
+    strategy:
+      matrix:
+        node:
+          - almalinux8
+          - almalinux10
+        suite:
+          - default
+          - base_apps
+      fail-fast: false
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v6
+      - name: setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+      - name: bundle install
+        run: |
+          bundle install
+      - name: Setup libvirt for Vagrant
+        run: |
+          sudo add-apt-repository ppa:evgeni/vagrant
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends vagrant vagrant-libvirt libvirt-daemon-system libvirt-daemon qemu-system-x86 qemu-utils dnsmasq
+          sudo chmod 666 /var/run/libvirt/libvirt-sock
+      - name: beaker
+        env:
+          BEAKER_HYPERVISOR: 'vagrant_libvirt'
+          VAGRANT_DEFAULT_PROVIDER: 'libvirt'
+        run: |
+          bundle exec rake beaker:suites[${{ matrix.suite}},${{ matrix.node }}]
