@@ -19,7 +19,6 @@
 #
 #   * Use `389ds` for servers that are 'Netscape compatible'. This includes
 #     FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
-#   * Use `plain` for servers that are 'regular LDAP' like OpenLDAP
 #
 # @param ldap_provider_options
 #   A Hash of options to pass directly into the `sssd::provider::ldap` defined type
@@ -40,7 +39,7 @@
 class simp::sssd::client (
   Boolean                                        $ldap_domain           = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Hash                                           $ldap_domain_options   = {},
-  Variant[Boolean[false], Enum['389ds']]         $ldap_server_type      = $ldap_domain ? { false => false, default => undef },
+  Variant[Boolean[false], Enum['389ds']]         $ldap_server_type      = $ldap_domain ? { false => false, default => '389ds' },
   Hash                                           $ldap_provider_options = {},
   Boolean                                        $enumerate_users       = false,
   Boolean                                        $cache_credentials     = true,
