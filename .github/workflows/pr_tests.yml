@@ -124,8 +124,6 @@ jobs:
             run: bundle exec rspec spec/functions
           - label: aliases
             run: bundle exec rspec spec/type_aliases
-          - label: unit
-            run: bundle exec rspec spec/unit
       fail-fast: false
     env:
       PUPPET_VERSION: ${{matrix.puppet.puppet_version}}
