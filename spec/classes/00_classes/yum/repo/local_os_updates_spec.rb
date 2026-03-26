@@ -145,28 +145,19 @@ describe 'simp::yum::repo::local_os_updates' do
         end
 
         it { is_expected.to compile.with_all_deps }
-        if os_facts[:os][:release][:major] <= '7'
-          it {
-            is_expected.to contain_yumrepo('os_updates').with(
-              baseurl: 'https://yum.test1.simp/yum/foobar',
-              gpgkey: 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
-            )
-          }
-        else
-          it {
-            is_expected.to contain_yumrepo('local_baseos').with(
-              baseurl: 'https://yum.test1.simp/yum/foobar/BaseOS',
-              gpgkey: 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
-            )
-          }
+        it {
+          is_expected.to contain_yumrepo('local_baseos').with(
+            baseurl: 'https://yum.test1.simp/yum/foobar/BaseOS',
+            gpgkey: 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
+          )
+        }
 
-          it {
-            is_expected.to contain_yumrepo('local_appstream').with(
-              baseurl: 'https://yum.test1.simp/yum/foobar/AppStream',
-              gpgkey: 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
-            )
-          }
-        end
+        it {
+          is_expected.to contain_yumrepo('local_appstream').with(
+            baseurl: 'https://yum.test1.simp/yum/foobar/AppStream',
+            gpgkey: 'https://yum.test2.simp/yum/foobar/GPGKEYS/RPM-GPG-KEY-CentOS-7',
+          )
+        }
       end
     end
   end
