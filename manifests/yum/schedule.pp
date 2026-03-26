@@ -40,7 +40,6 @@ class simp::yum::schedule (
   Integer                       $randomize    = 5,
   Boolean                       $quiet        = true
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_ensure = $enable ? {
@@ -56,6 +55,6 @@ class simp::yum::schedule (
     hour     => $hour,
     monthday => $monthday,
     month    => $month,
-    weekday  => $weekday
+    weekday  => $weekday,
   }
 }

@@ -92,7 +92,7 @@ class simp::yum::repo::local_simp (
     $relative_gpgkey_path,
     $extra_gpgkey_urls
   )
-){
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   $_enable_repo    = $enable_repo ? { true => 1, default => 0 }
@@ -106,7 +106,7 @@ class simp::yum::repo::local_simp (
     keepalive           => 0,
     metadata_expire     => 3600,
     tag                 => 'firstrun',
-    skip_if_unavailable => 1
+    skip_if_unavailable => 1,
   }
 
   $_descr_base = "SIMP ${facts['os']['name']} ${facts['os']['release']['major']} ${facts['os']['architecture']}"
@@ -115,44 +115,44 @@ class simp::yum::repo::local_simp (
     yumrepo { 'simp':
       baseurl => "${baseurl}/SIMP",
       descr   => "${_descr_base} product packages",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
 
     yumrepo { 'simp-puppet':
       baseurl => "${baseurl}/puppet",
       descr   => "${_descr_base} Puppet packages",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
 
     yumrepo { 'simp-vendor-extras':
       baseurl => "${baseurl}/extras",
       descr   => "${_descr_base} Vendor extras required for correct application",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
 
     yumrepo { 'simp-vendor-powertools':
       baseurl => "${baseurl}/PowerTools",
       descr   => "${_descr_base} Vendor power tools required for correct application",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
 
     yumrepo { 'simp-epel':
       baseurl => "${baseurl}/epel",
       descr   => "${_descr_base} required packages from EPEL",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
 
     yumrepo { 'simp-postgresql':
       baseurl => "${baseurl}/postgresql",
       descr   => "${_descr_base} postgresql packages",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
   }
   else {
     yumrepo { 'simp':
       baseurl => $baseurl,
       descr   => "${_descr_base} product packages",
-      *       => $_common_attrs
+      *       => $_common_attrs,
     }
   }
 }

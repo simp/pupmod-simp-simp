@@ -24,14 +24,14 @@ class simp::version () {
       ensure => 'directory',
       owner  => 'root',
       group  => 'root',
-      mode   => '0640'
+      mode   => '0640',
     }
   }
   ensure_resource('file', $simp_root_dir, {
-    ensure => 'directory',
-    owner  => $simp_root_dir_user,
-    group  => $simp_root_dir_group,
-    mode   => $simp_root_dir_mode
+      ensure => 'directory',
+      owner  => $simp_root_dir_user,
+      group  => $simp_root_dir_group,
+      mode   => $simp_root_dir_mode
   })
 
   file { "${simp_root_dir}/simp.version":
@@ -39,6 +39,6 @@ class simp::version () {
     owner   => $simp_root_dir_user,
     group   => $simp_root_dir_group,
     mode    => $simp_root_dir_mode,
-    content => simplib::simp_version()
+    content => simplib::simp_version(),
   }
 }

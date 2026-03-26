@@ -16,9 +16,7 @@ describe 'simp::sssd::client' do
         else
           context 'with default parameters' do
             it_behaves_like 'sssd client'
-            it { is_expected.not_to contain_sssd__domain('LOCAL') }
             it { is_expected.not_to contain_sssd__domain('LDAP') }
-            it { is_expected.not_to create_notify('SSSD LOCAL domain warning') }
           end
 
           context 'with ldap_domain=true' do
@@ -26,27 +24,23 @@ describe 'simp::sssd::client' do
               { ldap_domain: true }
             end
 
-            if os_facts[:os][:release][:major] == '7'
-              it_behaves_like 'sssd client'
-            else
-              it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{ldap_server_type.+expects a value}) }
-            end
+            it_behaves_like 'sssd client'
           end
 
-          context 'with ldap_domain and ldap_server_type=plain' do
+          context 'with ldap_domain and ldap_server_type=389ds' do
             let(:params) do
               {
                 ldap_domain: true,
-                ldap_server_type: 'plain',
+                ldap_server_type: '389ds',
               }
             end
 
             it_behaves_like 'sssd client'
             it {
               is_expected.to contain_sssd__provider__ldap('LDAP')
-                .with_ldap_account_expire_policy('shadow')
-                .with_ldap_user_ssh_public_key('sshPublicKey')
-                .with_ldap_schema('rfc2307')
+                .with_ldap_account_expire_policy('ipa')
+                .with_ldap_user_ssh_public_key('nsSshPublicKey')
+                .with_ldap_schema('rfc2307bis')
             }
             it {
               is_expected.to contain_sssd__domain('LDAP')
@@ -87,17 +81,6 @@ describe 'simp::sssd::client' do
                 .with_ldap_user_ssh_public_key('nsSshPublicKey')
                 .with_ldap_schema('rfc2307bis')
             }
-          end
-
-          context 'with LOCAL domain set in hiera' do
-            let(:hieradata) { 'sssd_domains' }
-
-            it { is_expected.to create_notify('SSSD LOCAL domain warning') }
-          end
-          context 'with LOCAL not set in hiera' do
-            let(:hieradata) { 'sssd_domains_nolocal' }
-
-            it { is_expected.not_to create_notify('SSSD LOCAL domain warning') }
           end
         end
       end

@@ -52,19 +52,19 @@ class simp::sudoers::aliases (
     '/sbin/route ""',
     '/sbin/route -[venC]',
     '/usr/bin/getent',
-    '/usr/bin/tail'
+    '/usr/bin/tail',
   ],
   Array[Stdlib::AbsolutePath] $delegating_alias = [
     '/usr/sbin/visudo',
     '/bin/chown',
     '/bin/chmod',
-    '/bin/chgrp'
+    '/bin/chgrp',
   ],
   Array[Stdlib::AbsolutePath] $drivers_alias = [
-    '/sbin/modprobe'
+    '/sbin/modprobe',
   ],
   Array[Stdlib::AbsolutePath] $locate_alias = [
-    '/usr/sbin/updatedb'
+    '/usr/sbin/updatedb',
   ],
   Array[Stdlib::AbsolutePath] $networking_alias = [
     '/sbin/route',
@@ -76,17 +76,17 @@ class simp::sudoers::aliases (
     '/usr/bin/rfcomm',
     '/usr/bin/wvdial',
     '/sbin/iwconfig',
-    '/sbin/mii-tool'
+    '/sbin/mii-tool',
   ],
   Array[Stdlib::AbsolutePath] $processes_alias = [
     '/bin/nice',
     '/bin/kill',
     '/usr/bin/kill',
-    '/usr/bin/killall'
+    '/usr/bin/killall',
   ],
   Array[Stdlib::AbsolutePath] $services_alias = [
     '/sbin/service',
-    '/sbin/chkconfig'
+    '/sbin/chkconfig',
   ],
   Array[Stdlib::AbsolutePath] $selinux_alias = [
     '/sbin/restorecon',
@@ -94,12 +94,12 @@ class simp::sudoers::aliases (
     '/usr/bin/audit2allow',
     '/usr/sbin/getenforce',
     '/usr/sbin/setenforce',
-    '/usr/sbin/setsebool'
+    '/usr/sbin/setsebool',
   ],
   Array[Stdlib::AbsolutePath] $software_alias = [
     '/bin/rpm',
     '/usr/bin/up2date',
-    '/usr/bin/yum'
+    '/usr/bin/yum',
   ],
   Array[Stdlib::AbsolutePath] $storage_alias = [
     '/sbin/fdisk',
@@ -107,11 +107,10 @@ class simp::sudoers::aliases (
     '/sbin/parted',
     '/sbin/partprobe',
     '/bin/mount',
-    '/bin/umount'
+    '/bin/umount',
   ],
-  Array[Stdlib::AbsolutePath] $su_alias = [ '/bin/su' ]
+  Array[Stdlib::AbsolutePath] $su_alias = ['/bin/su']
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   sudo::alias::cmnd {
@@ -146,7 +145,6 @@ class simp::sudoers::aliases (
       comment => 'Storage Related Commands',
       content => $storage_alias;
     'su':
-      content => $su_alias
+      content => $su_alias,
   }
-
 }

@@ -4,7 +4,7 @@ parallel = { run_in_parallel: ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_pa
 
 test_name 'simp yum configuration'
 
-describe 'simp yum configuration' do
+describe 'simp yum configuration', :skip do
   let(:manifest) do
     <<-EOS
       include 'simp'

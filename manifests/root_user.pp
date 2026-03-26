@@ -44,8 +44,7 @@ class simp::root_user (
   Integer[0]                    $gid             = 0,
   Stdlib::Absolutepath          $shell           = '/bin/bash',
   Stdlib::Absolutepath          $home            = "/${username}"
-){
-
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $manage_perms {
@@ -53,12 +52,11 @@ class simp::root_user (
       ensure => 'directory',
       owner  => $username,
       group  => $username,
-      mode   => '0550'
+      mode   => '0550',
     }
   }
 
   if $manage_user {
-
     if $password and $hashed_password {
       fail('Error: You cannot specify both "$password" and "$hashed_password"')
     }
@@ -82,7 +80,7 @@ class simp::root_user (
       shell      => $shell,
       membership => 'minimum',
       forcelocal => true,
-      password   => $_password
+      password   => $_password,
     }
   }
 
@@ -93,7 +91,7 @@ class simp::root_user (
       allowdupe       => false,
       auth_membership => true,
       forcelocal      => true,
-      members         => [$username]
+      members         => [$username],
     }
   }
 }

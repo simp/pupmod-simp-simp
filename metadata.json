@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "4.23.2",
+  "version": "5.0.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -77,11 +77,7 @@
     },
     {
       "name": "simp/fips",
-      "version_requirement": ">= 0.2.0 < 1.0.0"
-    },
-    {
-      "name": "simp/incron",
-      "version_requirement": ">= 0.4.0 < 1.0.0"
+      "version_requirement": ">= 1.0.0 < 2.0.0"
     },
     {
       "name": "simp/iptables",
@@ -109,15 +105,11 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 8.0.0 < 10.0.0"
+      "version_requirement": ">= 10.0.0 < 11.0.0"
     },
     {
       "name": "simp/resolv",
       "version_requirement": ">= 0.1.1 < 1.0.0"
-    },
-    {
-      "name": "simp/rkhunter",
-      "version_requirement": ">= 0.0.1 < 1.0.0"
     },
     {
       "name": "simp/rsync",
@@ -153,6 +145,10 @@
     },
     {
       "name": "simp/sssd",
+      "version_requirement": ">= 7.0.0 < 8.0.0"
+    },
+    {
+      "name": "simp/stunnel",
       "version_requirement": ">= 7.0.0 < 8.0.0"
     },
     {
@@ -195,29 +191,31 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
@@ -237,13 +235,17 @@
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9",
+        "10"
       ]
     }
   ]

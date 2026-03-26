@@ -46,7 +46,6 @@ class simp::mountpoints::tmp (
   Array[String] $dev_shm_opts = ['noexec','nodev','nosuid'],
   Boolean       $tmp_service  = (fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false }
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   unless $tmp_service {
@@ -58,7 +57,7 @@ class simp::mountpoints::tmp (
       group   => 'root',
       mode    => 'u+rwx,g+rwx,o+rwxt',
       seltype => 'tmp_t',
-      force   => true
+      force   => true,
     }
   }
 
@@ -68,7 +67,7 @@ class simp::mountpoints::tmp (
     group   => 'root',
     mode    => 'u+rwx,g+rwx,o+rwxt',
     seltype => 'tmp_t',
-    force   => true
+    force   => true,
   }
 
   file { '/usr/tmp':
@@ -76,7 +75,7 @@ class simp::mountpoints::tmp (
     target  => '/var/tmp',
     force   => true,
     seltype => 'tmp_t',
-    require => File['/var/tmp']
+    require => File['/var/tmp'],
   }
 
   # If we decide to secure the tmp mounts....
@@ -98,7 +97,7 @@ class simp::mountpoints::tmp (
       systemd::unit_file { 'tmp.mount':
         enable  => true,
         active  => true,
-        content => $_unit_file_content
+        content => $_unit_file_content,
       }
     }
     else {
@@ -116,7 +115,7 @@ class simp::mountpoints::tmp (
             options  => simplib::join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
             device   => $facts['tmp_mount_path_tmp'],
             pass     => '1',
-            remounts => true
+            remounts => true,
           }
         }
         else {
@@ -126,7 +125,7 @@ class simp::mountpoints::tmp (
             fstype   => 'none',
             options  => simplib::join_mount_opts(['bind'],$tmp_opts),
             device   => $facts['tmp_mount_path_tmp'],
-            remounts => true
+            remounts => true,
           }
 
           if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
@@ -134,7 +133,7 @@ class simp::mountpoints::tmp (
 
             exec { 'remount /tmp':
               command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-              require => Mount['/tmp']
+              require => Mount['/tmp'],
             }
           }
         }
@@ -147,13 +146,13 @@ class simp::mountpoints::tmp (
           options  => simplib::join_mount_opts(['bind'],$tmp_opts),
           device   => '/tmp',
           remounts => true,
-          notify   => Exec['remount /tmp']
+          notify   => Exec['remount /tmp'],
         }
 
         $_remount_tmp_opts = join($tmp_opts,',')
         exec { 'remount /tmp':
           command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-          refreshonly => true
+          refreshonly => true,
         }
       }
 
@@ -173,7 +172,7 @@ class simp::mountpoints::tmp (
           options  => simplib::join_mount_opts($_tmp_mount_var_tmp_opts,$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
           pass     => '1',
-          remounts => true
+          remounts => true,
         }
       }
       else {
@@ -183,7 +182,7 @@ class simp::mountpoints::tmp (
           fstype   => 'none',
           options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
-          remounts => true
+          remounts => true,
         }
 
         if !empty(difference($var_tmp_opts,$_tmp_mount_var_tmp_opts)) {
@@ -191,7 +190,7 @@ class simp::mountpoints::tmp (
 
           exec { 'remount /var/tmp':
             command => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
-            require => Mount['/var/tmp']
+            require => Mount['/var/tmp'],
           }
         }
       }
@@ -205,13 +204,13 @@ class simp::mountpoints::tmp (
         options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
         target   => '/etc/fstab',
         remounts => true,
-        notify   => Exec['remount /var/tmp']
+        notify   => Exec['remount /var/tmp'],
       }
 
       $_remount_var_tmp_opts = join($var_tmp_opts,',')
       exec { 'remount /var/tmp':
         command     => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
-        refreshonly => true
+        refreshonly => true,
       }
     }
 
@@ -229,7 +228,7 @@ class simp::mountpoints::tmp (
         device   => $facts['tmp_mount_path_dev_shm'],
         fstype   => 'tmpfs',
         target   => '/etc/fstab',
-        remounts => true
+        remounts => true,
       }
     }
   }
@@ -242,7 +241,7 @@ class simp::mountpoints::tmp (
   # attempt to manage the tmp.mount service.
   if $tmp_service {
     unless defined(Systemd::Unit_file['tmp.mount']) {
-      ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true }})
+      ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true } })
     }
   }
 }

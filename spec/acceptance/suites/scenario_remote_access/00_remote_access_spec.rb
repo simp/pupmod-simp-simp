@@ -14,11 +14,6 @@ test_name 'remote_access scenario'
 #   4. Attempt to ssh as 'testuser' to the client nodes.
 
 describe 'remote_access scenario' do
-  let(:plain_server_manifest) do
-    <<-EOS
-      include 'simp_openldap::server'
-    EOS
-  end
   let(:ds389_server_manifest) do
     <<-EOS
       include 'simp_ds389::instances::accounts'
@@ -42,11 +37,7 @@ describe 'remote_access scenario' do
       let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map { |d| "dc=#{d}" }.join(',') }
       # For now default to openldap server until test includes a 389DS server
       let(:ldap_type) do
-        if fact_on(ldap_server, 'os.release.major') == '7'
-          'plain'
-        else
-          '389ds'
-        end
+        '389ds'
       end
       let(:common_hieradata)      { File.read(File.expand_path('templates/common_hieradata.yaml.erb', File.dirname(__FILE__))) }
       let(:server_hieradata)      { File.read(File.expand_path("templates/#{ldap_type}/server_hieradata.yaml.erb", File.dirname(__FILE__))) }
@@ -61,54 +52,20 @@ describe 'remote_access scenario' do
         set_hieradata_on(ldap_server, ERB.new(hieradata).result(binding))
       end
 
-      if fact_on(ldap_server, 'os.release.major') == '7'
-        context 'on el7 install openldap server and create users' do
-          let(:add_testuser_to_admin) { File.read(File.expand_path("templates/#{ldap_type}/add_testuser_to_admin.erb", File.dirname(__FILE__))) }
-
-          # Needed for ppassword policy
-          it 'sets up needed repositories' do
-            on(ldap_server, 'yum -y install https://download.simp-project.com/simp-release-community.rpm')
-          end
-
-          it 'sets up an openldap ldap server' do
-            apply_manifest_on(ldap_server, plain_server_manifest, catch_failures: true)
-            apply_manifest_on(ldap_server, plain_server_manifest, acceptable_exit_codes: [0, 2])
-          end
-          it 'is able to connect and use ldapsearch' do
-            on(ldap_server, "ldapsearch -Z -LLL -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w #{root_pw}")
-          end
-          it 'is able to add a user' do
-            create_remote_file(ldap_server, '/tmp/add_testuser.ldif', ERB.new(add_testuser).result(binding))
-
-            on(ldap_server, "ldapadd -Z -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w #{root_pw} -x -f /tmp/add_testuser.ldif")
-
-            result = on(ldap_server, "ldapsearch -Z -LLL -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w #{root_pw} -x uid=#{test_user}")
-            expect(result.stdout).to include("dn: uid=#{test_user},ou=People,#{base_dn}")
-          end
-          it 'is able to add user to group' do
-            create_remote_file(ldap_server, '/tmp/add_testuser_to_admin.ldif', ERB.new(add_testuser_to_admin).result(binding))
-
-            on(ldap_server, "ldapmodify -Z -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w #{root_pw} -x -f /tmp/add_testuser_to_admin.ldif")
-
-            result = on(ldap_server, "ldapsearch -Z -LLL -D cn=LDAPAdmin,ou=People,#{base_dn} -H ldap://#{server_fqdn} -w #{root_pw} -x cn=#{test_user}")
-            expect(result.stdout).to include("dn: cn=#{test_user},ou=Group,#{base_dn}")
-          end
+      raise('389ds is not supported on versions lower than el8') unless Integer(fact_on(ldap_server, 'os.release.major')) > 7
+      context 'on versions later than el7 install 389ds and create users' do
+        it 'installs 389ds with simp_ds389' do
+          apply_manifest_on(ldap_server, ds389_server_manifest, catch_failures: true)
+          apply_manifest_on(ldap_server, ds389_server_manifest, acceptable_exit_codes: [0, 2])
         end
-      else
-        context 'on versions later than el7 install 389ds and create users' do
-          it 'installs 389ds with simp_ds389' do
-            apply_manifest_on(ldap_server, ds389_server_manifest, catch_failures: true)
-            apply_manifest_on(ldap_server, ds389_server_manifest, acceptable_exit_codes: [0, 2])
-          end
-          it 'adds the test user' do
-            create_remote_file(ldap_server, '/root/ldap_add_user', ERB.new(add_testuser).result(binding))
-            on(ldap_server, 'chmod +x /root/ldap_add_user')
-            on(ldap_server, '/root/ldap_add_user')
-            result = on(ldap_server, "dsidm #{ds_root_name} -b #{base_dn} user list")
-            expect(result.stdout).to include(test_user.to_s)
-          end
+        it 'adds the test user' do
+          create_remote_file(ldap_server, '/root/ldap_add_user', ERB.new(add_testuser).result(binding))
+          on(ldap_server, 'chmod +x /root/ldap_add_user')
+          on(ldap_server, '/root/ldap_add_user')
+          result = on(ldap_server, "dsidm #{ds_root_name} -b #{base_dn} user list")
+          expect(result.stdout).to include(test_user.to_s)
         end
-      end # If el7
+      end
 
       # Copy in the password-less key
       it 'copies the testuser private key' do
@@ -122,14 +79,6 @@ describe 'remote_access scenario' do
           let(:client_hieradata)      { File.read(File.expand_path('templates/client_hieradata.yaml.erb', File.dirname(__FILE__))) }
           let(:cc_hieradata)          { common_hieradata.to_s + "\n#{client_hieradata}" }
           let(:client_fqdn) { fact_on(client, 'fqdn') }
-
-          # FIXME: SIMP-9136
-          #  Still needed for tlog on el7.
-          if fact_on(ldap_server, 'os.release.major') == '7'
-            it 'sets up needed repositories' do
-              on(client, 'yum -y install https://download.simp-project.com/simp-release-community.rpm')
-            end
-          end
 
           it 'configures hiera' do
             set_hieradata_on(client, ERB.new(cc_hieradata).result(binding))

@@ -40,14 +40,12 @@ class simp::server::rsync_shares (
   Optional[Hash]       $rsync_environments = $facts['simp_rsync_environments'],
   Boolean              $stunnel            = simplib::lookup('simp_options::stunnel', { 'default_value' => false }),
   Simplib::Netlist     $trusted_nets       = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
-){
-
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'rsync::server'
 
   if $rsync_environments and !empty($rsync_environments) {
-
     if $stunnel {
       $_trusted_nets = ['127.0.0.1']
     }
@@ -60,7 +58,6 @@ class simp::server::rsync_shares (
     # lint:ignore:variable_scope
     # Process each environment that was found
     (keys($rsync_environments) - ['id']).each |String $_env| {
-
       # Do the Global items first
       if $rsync_environments[$_env]['rsync']['global'] {
         $_globals_dir   = 'rsync/Global'
@@ -70,7 +67,7 @@ class simp::server::rsync_shares (
           rsync::server::section { "clamav_${_env}":
             comment     => "ClamAV Virus Database Updates for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/clamav",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
 
@@ -78,7 +75,7 @@ class simp::server::rsync_shares (
           rsync::server::section { "mcafee_${_env}":
             comment     => "McAfee DAT files for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/mcafee",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
 
@@ -86,7 +83,7 @@ class simp::server::rsync_shares (
           rsync::server::section { "jenkins_plugins_${_env}":
             comment     => "Jenkins Configuration for Environment ${_env}",
             path        => "${rsync_base}/${_env}/${_globals_dir}/jenkins_plugins",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
       }
@@ -105,7 +102,7 @@ class simp::server::rsync_shares (
               auth_users  => ["bind_dns_default_rsync_${_env}_${_os_id}_${_os_maj_ver_id}"],
               comment     => "Default DNS configurations for named for Environment ${_env} on ${_os_id} ${_os_maj_ver_id}",
               path        => "${rsync_base}/${_env}/rsync/${_os_id}/${_os_maj_ver_id}/bind_dns/default",
-              hosts_allow => $_trusted_nets
+              hosts_allow => $_trusted_nets,
             }
           }
         }
@@ -119,7 +116,7 @@ class simp::server::rsync_shares (
             comment        => "Apache configurations for Environment ${_env} on ${_os}",
             path           => "${rsync_base}/${_env}/rsync/${_os_id}/Global/apache",
             hosts_allow    => $_trusted_nets,
-            outgoing_chmod => 'o-rwx'
+            outgoing_chmod => 'o-rwx',
           }
         }
 
@@ -128,7 +125,7 @@ class simp::server::rsync_shares (
             auth_users  => ["tftpboot_rsync_${_env}_${_os}"],
             comment     => "Tftpboot server configurations for Environment ${_env} on ${_os}",
             path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/tftpboot",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
 
@@ -137,7 +134,7 @@ class simp::server::rsync_shares (
             auth_users  => ["dhcpd_rsync_${_env}_${_os}"],
             comment     => "DHCP Configurations for Environment ${_env} on ${_os}",
             path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/dhcpd",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
 
@@ -145,7 +142,7 @@ class simp::server::rsync_shares (
           rsync::server::section { "snmp_${_env}_${_os_id}":
             comment     => "SNMP MIBs and Modules for Environment ${_env} on ${_os}",
             path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/snmp",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
 
@@ -154,7 +151,7 @@ class simp::server::rsync_shares (
             auth_users  => ["freeradius_systems_${_env}_${_os}"],
             comment     => "Freeradius configuration files for Environment ${_env} on ${_os}",
             path        => "${rsync_base}/${_env}/rsync/${_os_id}/Global/freeradius",
-            hosts_allow => $_trusted_nets
+            hosts_allow => $_trusted_nets,
           }
         }
       }

@@ -22,6 +22,7 @@ fixtures:
     augeasproviders_puppet: https://github.com/simp/augeasproviders_puppet.git
     augeasproviders_ssh: https://github.com/simp/augeasproviders_ssh.git
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
+    authselect: https://github.com/voxpupuli/puppet-authselect.git
     autofs: https://github.com/simp/pupmod-simp-autofs.git
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit.git
     chrony: https://github.com/simp/pupmod-voxpupuli-chrony.git
@@ -40,7 +41,6 @@ fixtures:
     haveged: https://github.com/simp/pupmod-simp-haveged.git
     hocon: https://github.com/simp/pupmod-puppetlabs-hocon.git
     host_core: https://github.com/simp/pupmod-puppetlabs-host_core.git
-    incron: https://github.com/simp/pupmod-simp-incron.git
     inifile: https://github.com/simp/puppetlabs-inifile.git
     iptables: https://github.com/simp/pupmod-simp-iptables.git
     issue: https://github.com/simp/pupmod-simp-issue.git
@@ -64,7 +64,6 @@ fixtures:
     pupmod: https://github.com/simp/pupmod-simp-pupmod.git
     puppet_authorization: https://github.com/simp/puppetlabs-puppet_authorization.git
     resolv: https://github.com/simp/pupmod-simp-resolv.git
-    rkhunter: https://github.com/simp/pupmod-simp-rkhunter.git
     rsync: https://github.com/simp/pupmod-simp-rsync.git
     rsyslog: https://github.com/simp/pupmod-simp-rsyslog.git
     selinux: https://github.com/simp/pupmod-simp-selinux.git

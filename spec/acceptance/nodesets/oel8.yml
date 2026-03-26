@@ -8,13 +8,9 @@ HOSTS:
     - simp_server
     - el8
     platform: el-8-x86_64
-    box: generic/oracle8
+    box: oraclelinux/8
+    box_url: https://oracle.github.io/vagrant-projects/boxes/oraclelinux/8.json
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    yum_repos:
-      updates:
-        baseurl: https://yum$ociregion.oracle.com/repo/OracleLinux/OL8/baseos/latest/$basearch/
-        gpgkeys:
-        - http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol8
     family: sicura-image-build/oracle-linux-8
     gce_machine_type: n1-standard-2
 CONFIG:

@@ -23,7 +23,7 @@ class simp::one_shot::finalize (
   Boolean $remove_puppet = $simp::one_shot::finalize_remove_puppet,
   Boolean $remove_script = $simp::one_shot::finalize_remove_script,
   Boolean $enable_debug  = $simp::one_shot::finalize_debug
-){
+) {
   assert_private()
 
   $_finalize_script_name = 'simp_one_shot_finalize.sh'
@@ -39,6 +39,6 @@ class simp::one_shot::finalize (
     command   => "${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} -D ${enable_debug} > /dev/null 2>&1 &",
     logoutput => true,
     provider  => 'shell',
-    require   => File[$_finalize_script]
+    require   => File[$_finalize_script],
   }
 }

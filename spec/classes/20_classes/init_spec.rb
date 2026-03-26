@@ -12,8 +12,14 @@ describe 'simp' do
 
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
+    # rubocop:disable RSpec/BeforeAfterAll
+    before(:context) do
+      skip('An issue in the pupmod module is causing this test to fail on unsupported OSs. See https://github.com/simp/pupmod-simp-pupmod/issues/224 for details.')
+    end
+    # rubocop:enable RSpec/BeforeAfterAll
+
     facterdb_queries = [
-      { 'os.name' => 'Ubuntu', 'os.release.major' => '20.04' },
+      { 'os.name' => 'Ubuntu', 'os.release.major' => '22.04' },
     ].map { |q| q.merge('os.hardware' => 'x86_64') }
 
     facterdb_queries.each do |facterdb_query|
@@ -152,7 +158,6 @@ describe 'simp' do
               'auditd',
               'at',
               'cron',
-              'incron',
               'useradd',
               'resolv',
               'nsswitch',
@@ -169,12 +174,7 @@ describe 'simp' do
               'simp::sysctl',
               'ssh',
             ]
-            simp_lite << 'rkhunter'
-            simp_lite << if ['RedHat', 'CentOS', 'OracleLinux'].include?(os_facts[:os][:name]) && (os_facts[:os][:release][:major].to_s == '7')
-                           'ntpd'
-                         else
-                           'chrony'
-                         end
+            simp_lite << 'chrony'
             simp = [
               'pam::wheel',
               'selinux',

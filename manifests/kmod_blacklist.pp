@@ -52,7 +52,7 @@ class simp::kmod_blacklist (
     'squashfs',
     'tipc',
     'udf',
-    'usb-storage'
+    'usb-storage',
   ],
   Array[String]   $custom_blacklist          = [],
   Boolean         $produce_error             = false,
@@ -60,7 +60,6 @@ class simp::kmod_blacklist (
   Boolean         $lock_modules              = false,
   Boolean         $notify_if_reboot_required = true
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $enable_defaults {
@@ -97,7 +96,7 @@ class simp::kmod_blacklist (
     ensure  => file,
     owner   => 'root',
     group   => 'root',
-    content => "${_disable_file_content}\n"
+    content => "${_disable_file_content}\n",
   }
 
   file { $_obsolete_disable_file: ensure => absent }
