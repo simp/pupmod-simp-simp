@@ -47,16 +47,7 @@ class simp::sssd::client (
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  $_sssd_domains_from_hiera = lookup('sssd::domains',undef,undef, [])
-
   if $ldap_server_type and $ldap_domain {
-    # Ensure LDAP domain exists in [sssd] domains
-    $_domains = unique($_sssd_domains_from_hiera + ['LDAP'])
-
-    class { 'sssd':
-      domains => $_domains,
-    }
-
     $_ldap_domain_defaults = {
       'description' => 'LOCAL Users Domain',
       'min_id'      => $min_id,
@@ -84,14 +75,6 @@ class simp::sssd::client (
 
     sssd::provider::ldap { 'LDAP':
       * => $_ldap_provider_defaults + $_ldap_server_type_defaults + $ldap_provider_options,
-    }
-  }
-  else {
-    # Ensure LOCAL domain exists in [sssd] domains
-    $_domains = unique($_sssd_domains_from_hiera + ['LOCAL'])
-
-    class { 'sssd':
-      domains => $_domains,
     }
   }
 }

@@ -1,3 +1,6 @@
+* Mon Mar 30 2026 Mike Riddle <mike@sicura.us> - 5.0.1
+- Fixed potential sssd duplicate definition errors
+
 * Wed Mar 25 2026 Mike Riddle <mike@sicura.us> - 5.0.0
 - Removed el7 support
 - Added el10 support
