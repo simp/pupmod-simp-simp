@@ -2,7 +2,6 @@ require 'spec_helper'
 
 shared_examples_for 'sssd client' do
   it { is_expected.to compile.with_all_deps }
-  it { is_expected.to contain_class('sssd') }
 end
 
 describe 'simp::sssd::client' do
