@@ -48,6 +48,8 @@ class simp::sssd::client (
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $ldap_server_type and $ldap_domain {
+    include 'sssd'
+
     $_ldap_domain_defaults = {
       'description' => 'LOCAL Users Domain',
       'min_id'      => $min_id,
