@@ -24,7 +24,6 @@ fixtures:
     augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl.git
     authselect: https://github.com/voxpupuli/puppet-authselect.git
     autofs: https://github.com/simp/pupmod-simp-autofs.git
-    chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit.git
     chrony: https://github.com/simp/pupmod-voxpupuli-chrony.git
     clamav: https://github.com/simp/pupmod-simp-clamav.git
     compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
@@ -73,7 +72,6 @@ fixtures:
     simp_apache: https://github.com/simp/pupmod-simp-apache.git
     simp_banners: https://github.com/simp/pupmod-simp-simp_banners.git
     simp_firewalld: https://github.com/simp/pupmod-simp-simp_firewalld.git
-    simp_openldap: https://github.com/simp/pupmod-simp-simp_openldap.git
     simp_options: https://github.com/simp/pupmod-simp-simp_options.git
     simp_rsyslog: https://github.com/simp/pupmod-simp-simp_rsyslog.git
     simp_ds389: https://github.com/simp/pupmod-simp-simp_ds389.git
@@ -84,10 +82,8 @@ fixtures:
     stunnel: https://github.com/simp/pupmod-simp-stunnel.git
     systemd: https://github.com/simp/puppet-systemd.git
     sudo: https://github.com/simp/pupmod-simp-sudo.git
-    sudosh: https://github.com/simp/pupmod-simp-sudosh.git
     svckill: https://github.com/simp/pupmod-simp-svckill.git
     swap: https://github.com/simp/pupmod-simp-swap.git
-    tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers.git
     tftpboot: https://github.com/simp/pupmod-simp-tftpboot.git
     timezone: https://github.com/simp/pupmod-simp-timezone.git
     tlog: https://github.com/simp/pupmod-simp-tlog.git
@@ -97,7 +93,6 @@ fixtures:
     vox_selinux:
       repo: https://github.com/simp/pupmod-voxpupuli-selinux.git
       branch: simp-master
-    xinetd: https://github.com/simp/pupmod-simp-xinetd.git
     yum: https://github.com/simp/voxpupuli-yum.git
     yumrepo_core: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
     # Kluge for rsync data
