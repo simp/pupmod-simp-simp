@@ -27,7 +27,6 @@ fixtures:
     chkrootkit: https://github.com/simp/pupmod-simp-chkrootkit.git
     chrony: https://github.com/simp/pupmod-voxpupuli-chrony.git
     clamav: https://github.com/simp/pupmod-simp-clamav.git
-    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup.git
     concat: https://github.com/simp/puppetlabs-concat.git
     cron: https://github.com/simp/pupmod-simp-cron.git
     cron_core: https://github.com/simp/pupmod-puppetlabs-cron_core.git
