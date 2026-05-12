@@ -1,3 +1,6 @@
+* Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 6.0.0
+- Remove unmaintained Compliance Engine data
+
 * Mon Mar 30 2026 Mike Riddle <mike@sicura.us> - 5.0.1
 - Fixed potential sssd duplicate definition errors
 
