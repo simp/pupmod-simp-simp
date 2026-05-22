@@ -91,9 +91,8 @@ else
 This is a SIMP-based standalone image
 
 Some items you should be aware of:
-  * To get to 'root', you need to use 'sudo sudosh'
+  * To get to 'root', you need to use 'sudo su - root'
   * IPTables is *on*
-  * TCPWrappers is *on*
   * Host access restriction via PAM is *on* (/etc/security/access.conf)
   * Password quality restrictions are *enabled*
 

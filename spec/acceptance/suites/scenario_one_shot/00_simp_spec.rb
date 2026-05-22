@@ -64,7 +64,6 @@ describe 'simp "one_shot" scenario' do
       simp_options::pam: true
       simp_options::sssd: true
       simp_options::syslog: true
-      simp_options::tcpwrappers: true
       simp_options::pki: true
       simp_options::sssd: true
 
