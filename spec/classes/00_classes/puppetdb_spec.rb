@@ -1,13 +1,10 @@
 require 'spec_helper'
 
 describe 'simp::puppetdb' do
-  fips_mode_save = OpenSSL.fips_mode
-
-  before(:each) do
+  around(:each) do |example|
+    fips_mode_save = OpenSSL.fips_mode if OpenSSL.respond_to?(:fips_mode)
     OpenSSL.fips_mode = false if OpenSSL.respond_to?(:fips_mode)
-  end
-
-  after(:each) do
+    example.run
     OpenSSL.fips_mode = fips_mode_save if OpenSSL.respond_to?(:fips_mode)
   end
 
@@ -26,75 +23,77 @@ describe 'simp::puppetdb' do
             }.merge(os_facts)
           end
 
-          expected_ciphers = if os_facts[:os][:release][:major] == '7'
-                               [
-                                 'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_RSA_WITH_AES_256_CBC_SHA256',
-                                 'TLS_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384',
-                                 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256',
-                                 'TLS_DHE_DSS_WITH_AES_256_CBC_SHA',
-                                 'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256',
-                                 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256',
-                                 'TLS_DHE_DSS_WITH_AES_128_CBC_SHA',
-                                 'TLS_EMPTY_RENEGOTIATION_INFO_SCSV',
-                               ].join(',')
-                             else
-                               [
-                                 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
-                                 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
-                                 'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
-                                 'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
-                                 'TLS_EMPTY_RENEGOTIATION_INFO_SCSV',
-                               ].join(',')
-                             end
+          let(:expected_ciphers) do
+            if os_facts[:os][:release][:major] == '7'
+              [
+                'TLS_ECDH_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDH_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDH_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDH_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
+                'TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA',
+                'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
+                'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_RSA_WITH_AES_256_CBC_SHA256',
+                'TLS_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_DHE_DSS_WITH_AES_256_GCM_SHA384',
+                'TLS_DHE_DSS_WITH_AES_256_CBC_SHA256',
+                'TLS_DHE_DSS_WITH_AES_256_CBC_SHA',
+                'TLS_DHE_DSS_WITH_AES_128_GCM_SHA256',
+                'TLS_DHE_DSS_WITH_AES_128_CBC_SHA256',
+                'TLS_DHE_DSS_WITH_AES_128_CBC_SHA',
+                'TLS_EMPTY_RENEGOTIATION_INFO_SCSV',
+              ].join(',')
+            else
+              [
+                'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384',
+                'TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256',
+                'TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA',
+                'TLS_DHE_RSA_WITH_AES_256_GCM_SHA384',
+                'TLS_DHE_RSA_WITH_AES_256_CBC_SHA256',
+                'TLS_DHE_RSA_WITH_AES_256_CBC_SHA',
+                'TLS_DHE_RSA_WITH_AES_128_GCM_SHA256',
+                'TLS_DHE_RSA_WITH_AES_128_CBC_SHA256',
+                'TLS_DHE_RSA_WITH_AES_128_CBC_SHA',
+                'TLS_EMPTY_RENEGOTIATION_INFO_SCSV',
+              ].join(',')
+            end
+          end
 
           context 'with default parameters' do
             let(:hieradata) { 'simp__puppetdb' }

@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'SIMP Rsync Environments' do
+  let(:rsync_env_dir) { '/var/simp/environments' }
+
   after :each do
     LegacyFacter.clear
   end
 
-  rsync_env_dir = '/var/simp/environments'
-
-  context "if #{rsync_env_dir} present" do
+  context 'if /var/simp/environments present' do
     before :each do
       allow(File).to receive(:directory?).at_least(:once).and_return(true)
 
@@ -49,7 +49,7 @@ describe 'SIMP Rsync Environments' do
     end
   end
 
-  context "if #{rsync_env_dir} absent" do
+  context 'if /var/simp/environments absent' do
     before :each do
       allow(File).to receive(:directory?).and_return(false)
 
@@ -61,7 +61,7 @@ describe 'SIMP Rsync Environments' do
     end
   end
 
-  context "if #{rsync_env_dir} empty" do
+  context 'if /var/simp/environments empty' do
     before :each do
       allow(File).to receive(:directory?).and_return(true)
 

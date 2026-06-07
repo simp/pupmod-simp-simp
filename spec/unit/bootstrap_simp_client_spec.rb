@@ -380,15 +380,15 @@ describe 'BootstrapSimpClient' do
       # check for log messages to indicate the methods that executed
       # the actions were called
       log = File.read(log_file)
-      expect(log).to match(%r{Setting up system for Puppet bootstrap})
-      expect(log).to match(%r{Setting puppet configuration})
-      expect(log).to match(%r{Setting the system time against ntpserver1 ntpserver2})
-      expect(log).to match(%r{Running Puppet bootstrap})
-      expect(log).to match(%r{Initial puppet agent run with pupmod,simp tags})
-      expect(log).to match(%r{Relabeling filesystem for selinux})
-      expect(log).to match(%r{1 of 2 puppet agent runs})
-      expect(log).to match(%r{2 of 2 puppet agent runs})
-      expect(log).to match(%r{Puppet bootstrap successfully completed})
+      expect(log).to include('Setting up system for Puppet bootstrap')
+      expect(log).to include('Setting puppet configuration')
+      expect(log).to include('Setting the system time against ntpserver1 ntpserver2')
+      expect(log).to include('Running Puppet bootstrap')
+      expect(log).to include('Initial puppet agent run with pupmod,simp tags')
+      expect(log).to include('Relabeling filesystem for selinux')
+      expect(log).to include('1 of 2 puppet agent runs')
+      expect(log).to include('2 of 2 puppet agent runs')
+      expect(log).to include('Puppet bootstrap successfully completed')
     end
 
     it 'runs configured number of puppet agent runs' do
@@ -409,10 +409,10 @@ describe 'BootstrapSimpClient' do
       expect(bootstrap.run(test_args + [ '-r', '4' ])).to eq 0
 
       log = File.read(log_file)
-      expect(log).to match(%r{1 of 4 puppet agent runs})
-      expect(log).to match(%r{2 of 4 puppet agent runs})
-      expect(log).to match(%r{3 of 4 puppet agent runs})
-      expect(log).to match(%r{4 of 4 puppet agent runs})
+      expect(log).to include('1 of 4 puppet agent runs')
+      expect(log).to include('2 of 4 puppet agent runs')
+      expect(log).to include('3 of 4 puppet agent runs')
+      expect(log).to include('4 of 4 puppet agent runs')
     end
 
     it 'returns 1 when command line options fail validation' do
@@ -439,10 +439,10 @@ describe 'BootstrapSimpClient' do
 
       expect(bootstrap.run(test_args)).to eq 1
       log = File.read(log_file)
-      expect(log).to match(%r{ERROR: fixfiles failed with -1 exit status})
-      expect(log).not_to match(%r{1 of 2 puppet agent runs})
-      expect(log).not_to match(%r{2 of 2 puppet agent runs})
-      expect(log).not_to match(%r{Puppet bootstrap successfully completed})
+      expect(log).to include('ERROR: fixfiles failed with -1 exit status')
+      expect(log).not_to include('1 of 2 puppet agent runs')
+      expect(log).not_to include('2 of 2 puppet agent runs')
+      expect(log).not_to include('Puppet bootstrap successfully completed')
     end
 
     it 'returns 1 when processing times out' do
@@ -457,11 +457,11 @@ describe 'BootstrapSimpClient' do
 
       expect(bootstrap.run(test_args + [ '-i', '1', '-m', '2' ])).to eq 1
       log = File.read(log_file)
-      expect(log).to match(%r{Initial puppet agent run with pupmod,simp tags})
-      expect(log).to match(%r{Could not request certificate})
+      expect(log).to include('Initial puppet agent run with pupmod,simp tags')
+      expect(log).to include('Could not request certificate')
       expect(log).to match(%r{>>>>>> Command failed.  Retrying in 1 seconds})
       expect(log).to match(%r{>>>>>> Command failed.  Retrying in 2 seconds})
-      expect(log).to match(%r{ERROR: Failed to complete Puppet bootstrap within 2 seconds})
+      expect(log).to include('ERROR: Failed to complete Puppet bootstrap within 2 seconds')
     end
   end
 
@@ -473,7 +473,7 @@ describe 'BootstrapSimpClient' do
       allow(bootstrap).to receive(:execute).with(cmd).and_return(success_result)
       bootstrap.parse_command_line(test_args)
       bootstrap.run_puppet_agent
-      expect(File.read(log_file)).to match(%r{puppet agent run})
+      expect(File.read(log_file)).to include('puppet agent run')
     end
 
     it 'executes the puppet agent command with extra arguments' do
@@ -483,7 +483,7 @@ describe 'BootstrapSimpClient' do
       allow(bootstrap).to receive(:execute).with(cmd).and_return(success_result)
       bootstrap.parse_command_line(test_args)
       bootstrap.run_puppet_agent('--tags pupmod,simp', 'tagged run')
-      expect(File.read(log_file)).to match(%r{tagged run})
+      expect(File.read(log_file)).to include('tagged run')
     end
 
     it 'when puppet agent command fails, retries until it succeeds' do
@@ -501,8 +501,8 @@ describe 'BootstrapSimpClient' do
       bootstrap.parse_command_line(test_args + ['-i', '1'])
       bootstrap.run_puppet_agent
       log = File.read(log_file)
-      expect(log).to match(%r{\(info\): puppet agent run})
-      expect(log).to match(%r{\(err\): some puppet agent error})
+      expect(log).to include('(info): puppet agent run')
+      expect(log).to include('(err): some puppet agent error')
       expect(log).to match(%r{\(debug\): >>>>>> Command failed.  Retrying in 1 seconds})
       expect(log).to match(%r{\(debug\): >>>>>> Command failed.  Retrying in 2 seconds})
     end
@@ -596,7 +596,7 @@ describe 'BootstrapSimpClient' do
       )
       bootstrap.parse_command_line(test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
-      expect(File.read(log_file)).to match(%r{\(warning\): some ntpdate error})
+      expect(File.read(log_file)).to include('(warning): some ntpdate error')
     end
   end
 

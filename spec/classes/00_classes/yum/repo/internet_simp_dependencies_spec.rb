@@ -1,12 +1,15 @@
 require 'spec_helper'
 
-metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', '..', 'metadata.json'))
-metadata_json = File.read(metadata_file, encoding: 'utf-8')
-
 describe 'simp::yum::repo::internet_simp_dependencies' do
+  let(:metadata_json) do
+    metadata_file = File.expand_path(File.join(__dir__, '..', '..', '..', '..', '..', 'metadata.json'))
+    File.read(metadata_file, encoding: 'utf-8')
+  end
+
   on_supported_os.each do |os, os_facts|
     before(:each) do
-      Puppet::Parser::Functions.newfunction(:load_module_metadata, type: :rvalue) { |_args| JSON.parse(metadata_json) }
+      metadata = metadata_json
+      Puppet::Parser::Functions.newfunction(:load_module_metadata, type: :rvalue) { |_args| JSON.parse(metadata) }
     end
 
     context "on #{os}" do
