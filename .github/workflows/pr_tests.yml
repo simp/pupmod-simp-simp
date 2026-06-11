@@ -89,7 +89,7 @@ jobs:
         run: 'bundle exec pdk build --force'
 
   spec-tests:
-    name: 'Puppet Spec'
+    name: 'Spec (${{matrix.test_suite.label}}, ${{matrix.puppet.label}})'
     needs: [puppet-syntax]
     runs-on: ubuntu-latest
     strategy:
@@ -99,6 +99,21 @@ jobs:
             puppet_version: '~> 8.0'
             ruby_version: '3.2'
             experimental: false
+        test_suite:
+          - label: classes 01
+            run: bundle exec rspec spec/classes/01_classes
+          - label: classes 10
+            run: bundle exec rspec spec/classes/10_classes
+          - label: classes 20
+            run: bundle exec rspec spec/classes/20_classes
+          - label: classes 00
+            run: bundle exec rspec spec/classes/00_classes
+          - label: facter
+            run: bundle exec rspec spec/facter
+          - label: functions
+            run: bundle exec rspec spec/functions
+          - label: aliases
+            run: bundle exec rspec spec/type_aliases
       fail-fast: false
     env:
       PUPPET_VERSION: ${{matrix.puppet.puppet_version}}
@@ -110,7 +125,8 @@ jobs:
           ruby-version: ${{matrix.puppet.ruby_version}}
           bundler-cache: true
       - run: 'command -v rpm || if command -v apt-get; then sudo apt-get update; sudo apt-get install -y rpm; fi ||:'
-      - run: 'bundle exec rake parallel_spec'
+      - run: 'bundle exec rake spec_prep'
+      - run: ${{matrix.test_suite.run}}
         continue-on-error: ${{matrix.puppet.experimental}}
 
   acceptance:
@@ -119,8 +135,12 @@ jobs:
     strategy:
       matrix:
         node:
+          - almalinux8
           - almalinux9
           - almalinux10
+        suite:
+          - default
+          - base_apps
       fail-fast: false
     steps:
       - name: checkout repo
@@ -143,4 +163,4 @@ jobs:
           BEAKER_HYPERVISOR: 'vagrant_libvirt'
           VAGRANT_DEFAULT_PROVIDER: 'libvirt'
         run: |
-          bundle exec rake beaker:suites[default,${{ matrix.node }}]
+          bundle exec rake beaker:suites[${{ matrix.suite}},${{ matrix.node }}]
