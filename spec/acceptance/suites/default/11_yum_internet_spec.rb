@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-parallel = { run_in_parallel: ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }
+YUM_INTERNET_PARALLEL = { run_in_parallel: ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }.freeze
 
 test_name 'simp yum configuration'
 
@@ -30,7 +30,7 @@ describe 'simp yum configuration', :skip do
 
       it 'installs simp-release-community package' do
         result = on(host, 'puppet resource package simp-release-community')
-        expect(result.stdout).not_to match(%r{purged})
+        expect(result.stdout).not_to include('purged')
       end
     end
   end
@@ -43,7 +43,7 @@ describe 'simp yum configuration', :skip do
         'pupmod-simp-simp',
         'pupmod-simp-simplib',
       ]
-      block_on(hosts, parallel) do |host|
+      block_on(hosts, YUM_INTERNET_PARALLEL) do |host|
         on(host, 'yum clean all')
         packages.each do |package|
           # FIXME: Workaround until download.simp-project.com repos are populated for EL8
@@ -61,7 +61,7 @@ describe 'simp yum configuration', :skip do
         'postgresql96' => 'simp-community-postgresql',
         'puppet-agent' => 'simp-community-puppet',
       }
-      block_on(hosts, parallel) do |host|
+      block_on(hosts, YUM_INTERNET_PARALLEL) do |host|
         on(host, 'yum clean all')
         packages.each do |package, repo|
           # FIXME: Workaround until download.simp-project.com repos are populated for EL8

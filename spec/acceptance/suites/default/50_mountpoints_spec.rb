@@ -32,7 +32,7 @@ describe 'simplib::secure_mountpoints class' do
       it 'has /proc mounted with hidepid=2 and gid=231' do
         proc_mount = on(host, 'mount | grep " /proc "').output.strip
 
-        expect(proc_mount).to match(%r{gid=231})
+        expect(proc_mount).to include('gid=231')
         expect(proc_mount).to match(%r{hidepid=(2|invisible)})
       end
 

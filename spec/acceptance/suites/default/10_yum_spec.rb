@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-parallel = { run_in_parallel: ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }
+PARALLEL = { run_in_parallel: ['yes', 'true', 'on'].include?(ENV['BEAKER_SIMP_parallel']) }.freeze
 
 test_name 'simp yum configuration'
 
@@ -26,7 +26,7 @@ describe 'simp yum configuration', :skip do
     end
 
     it 'works with no errors' do
-      block_on(hosts, parallel) do |host|
+      block_on(hosts, PARALLEL) do |host|
         retry_on(host, 'yum install -y createrepo',
           max_retries: 3,
           retry_interval: 10)
@@ -63,7 +63,7 @@ describe 'simp yum configuration', :skip do
   end
   context 'reset the yum repo back to normal' do
     it 'sets up hiera' do
-      block_on(hosts, parallel) do |host|
+      block_on(hosts, PARALLEL) do |host|
         yum_updates_url = host.host_hash['yum_repos']['updates']['baseurl']
 
         hieradata = YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(

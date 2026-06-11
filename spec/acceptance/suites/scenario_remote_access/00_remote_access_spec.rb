@@ -27,11 +27,8 @@ describe 'remote_access scenario' do
   end
   let(:root_pw) { 'suP3rP@ssw0r!' }
 
-  ldap_servers = hosts_with_role(hosts, 'ldap_server')
-  clients = hosts_with_role(hosts, 'client')
-
   # Both client and server need these
-  ldap_servers.each do |ldap_server|
+  hosts_with_role(hosts, 'ldap_server').each do |ldap_server|
     context 'Test running on current LDAP server #{ldap_server}' do
       let(:server_fqdn) { fact_on(ldap_server, 'fqdn') }
       let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map { |d| "dc=#{d}" }.join(',') }
@@ -73,7 +70,7 @@ describe 'remote_access scenario' do
         on(ldap_server, 'chmod 600 /tmp/testkey')
       end
 
-      clients.each do |client|
+      hosts_with_role(hosts, 'client').each do |client|
         context "set up remote_access scenario on #{client}" do
           let(:common_hieradata)      { File.read(File.expand_path('templates/common_hieradata.yaml.erb', File.dirname(__FILE__))) }
           let(:client_hieradata)      { File.read(File.expand_path('templates/client_hieradata.yaml.erb', File.dirname(__FILE__))) }

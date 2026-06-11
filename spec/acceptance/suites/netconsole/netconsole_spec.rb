@@ -3,10 +3,10 @@ require 'spec_helper_acceptance'
 test_name 'simp::netconsole class'
 
 describe 'simp::netconsole class' do
-  shipper = only_host_with_role(hosts, 'shipper')
-  receiver = only_host_with_role(hosts, 'receiver')
-  receiver_ip  = fact_on(receiver, 'ipaddress_eth1')
-  receiver_mac = fact_on(receiver, 'macaddress_eth1')
+  let(:shipper) { only_host_with_role(hosts, 'shipper') }
+  let(:receiver) { only_host_with_role(hosts, 'receiver') }
+  let(:receiver_ip) { fact_on(receiver, 'ipaddress_eth1') }
+  let(:receiver_mac) { fact_on(receiver, 'macaddress_eth1') }
 
   context 'should send logs' do
     let(:manifest) do
@@ -43,7 +43,7 @@ describe 'simp::netconsole class' do
       on(hosts, 'systemctl restart rsyslog')
     end
 
-    it "configures the shipper (#{shipper.name})" do
+    it 'configures the shipper' do
       apply_manifest_on(shipper, manifest, catch_failures: true)
       apply_manifest_on(shipper, manifest, catch_changes: true)
     end
@@ -57,7 +57,7 @@ describe 'simp::netconsole class' do
       expect(result.stdout).to include "SYSLOGMACADDR=#{receiver_mac}"
     end
 
-    it "reboots the shipper (#{shipper.name}) and send logs to the receiver" do
+    it 'reboots the shipper and send logs to the receiver' do
       sleep 20
       shipper.reboot
       retry_on(shipper, 'ls')
@@ -67,7 +67,7 @@ describe 'simp::netconsole class' do
       expect(result.stdout).to include('netconsole: network logging started')
     end
 
-    it "unconfigures the shipper (#{shipper.name})" do
+    it 'unconfigures the shipper' do
       apply_manifest_on(shipper, remove_manifest, catch_failures: true)
     end
   end

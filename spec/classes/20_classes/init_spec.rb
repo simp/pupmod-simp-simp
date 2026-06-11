@@ -10,6 +10,19 @@ describe 'simp' do
     }
   end
 
+  def self.unsupported_os_with_facts
+    [
+      { 'os.name' => 'Ubuntu', 'os.release.major' => '22.04' },
+    ].map { |q| q.merge('os.hardware' => 'x86_64') }.map do |q|
+      facts = FacterDB.get_facts(q).first
+      raise "No facts found for #{q}" if facts.nil? || facts.empty?
+      [
+        "#{facts[:os]['name'].downcase}-#{facts[:os]['release']['major']}-#{facts[:os]['hardware']}",
+        facts,
+      ]
+    end
+  end
+
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
     # rubocop:disable RSpec/BeforeAfterAll
@@ -18,21 +31,12 @@ describe 'simp' do
     end
     # rubocop:enable RSpec/BeforeAfterAll
 
-    facterdb_queries = [
-      { 'os.name' => 'Ubuntu', 'os.release.major' => '22.04' },
-    ].map { |q| q.merge('os.hardware' => 'x86_64') }
-
-    facterdb_queries.each do |facterdb_query|
-      os_facts = FacterDB.get_facts(facterdb_query).first
-      raise "No facts found for #{facterdb_query}" if os_facts.nil? || os_facts.empty?
-      os = "#{os_facts[:os]['name'].downcase}-" \
-           "#{os_facts[:os]['release']['major']}-" \
-           "#{os_facts[:os]['hardware']}"
-
+    unsupported_os_with_facts.each do |os, facterdb_os_facts|
       context "on #{os}" do
         let(:facts) do
-          os_facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
-          os_facts[:puppet_settings] = {
+          facts = facterdb_os_facts
+          facts[:puppet_vardir] = '/opt/puppetlabs/puppet/cache'
+          facts[:puppet_settings] = {
             'main' => {
               'ssldir' => '/opt/puppetlabs/puppet/vardir',
             },
@@ -41,7 +45,7 @@ describe 'simp' do
             },
           }
 
-          os_facts
+          facts
         end
 
         context 'with default parameters (scenario defaults to simp)' do
