@@ -50,6 +50,9 @@
 # @param mail_server
 #   Install a local mail service on the system
 #
+#   * Defaults to ``false`` so the MTA is opt-in: installing Postfix on every
+#     node adds attack surface that is unnecessary for sites that use a
+#     dedicated relay or no MTA at all
 #   * If ``true`` will install only a locally usable MTA
 #   * If ``remote`` will install a full mail server capable of processing
 #     remote connections
@@ -159,7 +162,7 @@ class simp (
   String                          $scenario                   = 'simp',
   Boolean                         $enable_data_includes       = true,
   Array                           $classes                    = [],
-  Variant[Boolean,Enum['remote']] $mail_server                = true,
+  Variant[Boolean,Enum['remote']] $mail_server                = false,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::stunnel', { 'default_value' => true }),
   Boolean                         $use_ssh_global_known_hosts = false,
   Boolean                         $version_info               = true,
