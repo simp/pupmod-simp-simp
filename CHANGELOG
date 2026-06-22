@@ -1,3 +1,12 @@
+* Thu Jun 11 2026 Nicholas Markowski <nicholas.markowski@onxypoint.com> - 7.0.0
+- (#325) Default `simp::mail_server` to `false` so Postfix is opt-in rather
+  than installed on every node (BREAKING CHANGE for sites that relied on the
+  implicit local MTA; set `simp::mail_server: true` to restore prior behavior).
+- (#366) Manage `kernel.yama.ptrace_scope` in `simp::sysctl` (defaults to `1`
+  per STIG RHEL-08-040282 / CCE-80953-8).
+- (#310) Add `simp::sysctl::unmanaged_sysctls` to let sites opt individual
+  sysctl keys out of management without re-specifying the other defaults.
+
 * Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 6.0.0
 - Remove unmaintained Compliance Engine data
 
