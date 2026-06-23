@@ -82,6 +82,11 @@ describe 'simp::mountpoints::tmp' do
               it { is_expected.not_to create_service('tmp.mounts').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
+              # Restart must be a live remount so a busy /tmp can't fail the run (issue #372)
+              it {
+                is_expected.to contain_systemd__unit_file('tmp.mount')
+                  .with_restart('/bin/mount -o remount,mode=1777,nodev,noexec,nosuid /tmp')
+              }
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
                   .with_content(
@@ -113,6 +118,21 @@ describe 'simp::mountpoints::tmp' do
               }
 
               it { is_expected.not_to contain_systemd__unit_file('tmp.mount') }
+            end
+
+            context 'with custom tmp_opts' do
+              let(:params) do
+                {
+                  tmp_opts: ['noexec', 'nodev'],
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+              # The remount command reflects the configured options (issue #372)
+              it {
+                is_expected.to contain_systemd__unit_file('tmp.mount')
+                  .with_restart('/bin/mount -o remount,mode=1777,nodev,noexec /tmp')
+              }
             end
 
             context 'tmp_service == false' do
