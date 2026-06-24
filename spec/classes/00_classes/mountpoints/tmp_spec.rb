@@ -82,11 +82,8 @@ describe 'simp::mountpoints::tmp' do
               it { is_expected.not_to create_service('tmp.mounts').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
-              # Restart must be a live remount so a busy /tmp can't fail the run (issue #372)
-              it {
-                is_expected.to contain_systemd__unit_file('tmp.mount')
-                  .with_restart('/bin/mount -o remount,mode=1777,nodev,noexec,nosuid /tmp')
-              }
+              # The unit file must not restart tmp.mount on change, or a busy /tmp fails the run (issue #372)
+              it { is_expected.to contain_systemd__unit_file('tmp.mount').with_service_restart(false) }
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
                   .with_content(
@@ -128,11 +125,12 @@ describe 'simp::mountpoints::tmp' do
               end
 
               it { is_expected.to compile.with_all_deps }
-              # The remount command reflects the configured options (issue #372)
+              # The unit file Options reflect the configured tmp_opts (issue #372)
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
-                  .with_restart('/bin/mount -o remount,mode=1777,nodev,noexec /tmp')
+                  .with_content(%r{^Options=mode=1777,nodev,noexec$})
               }
+              it { is_expected.to contain_systemd__unit_file('tmp.mount').with_service_restart(false) }
             end
 
             context 'tmp_service == false' do

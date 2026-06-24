@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-test_name 'tmp.mount remount while busy'
+test_name 'tmp.mount change while busy'
 
 # Regression test for https://github.com/simp/pupmod-simp-simp/issues/372
 #
@@ -9,10 +9,10 @@ test_name 'tmp.mount remount while busy'
 # `systemctl restart tmp.mount`. For a .mount unit a restart unmounts and
 # remounts /tmp, and the unmount fails with `target is busy` whenever a
 # process (including Puppet itself) holds an open file under /tmp, aborting
-# the run. simp::mountpoints::tmp now overrides the restart command with an
-# in-place `mount -o remount`, which applies the new options without
-# unmounting.
-describe 'simp::mountpoints::tmp tmp.mount remount' do
+# the run. simp::mountpoints::tmp now sets `service_restart => false` so a unit
+# file change is written and daemon-reloaded without restarting (unmounting)
+# /tmp; the new options take effect on the next boot.
+describe 'simp::mountpoints::tmp tmp.mount change' do
   # The lock file lives on the tmpfs /tmp; an open write fd against it makes
   # the mount busy so a real unmount would fail with EBUSY.
   let(:lock_file) { '/tmp/.busy_372.lock' }
@@ -37,8 +37,8 @@ describe 'simp::mountpoints::tmp tmp.mount remount' do
     EOS
   end
 
-  # ...then add noexec, which changes the unit file content and triggers the
-  # refresh (remount) while /tmp is busy.
+  # ...then add noexec, which changes the unit file content. This must not
+  # restart (unmount) /tmp while it is busy.
   let(:changed_manifest) do
     <<~EOS
       class { 'simp::mountpoints::tmp':
@@ -95,8 +95,8 @@ describe 'simp::mountpoints::tmp tmp.mount remount' do
         expect(on(host, "kill -0 #{pid}", accept_all_exit_codes: true).exit_code).to eq(0)
       end
 
-      it 'applied the new options live via remount' do
-        expect(on(host, "mount | grep ' /tmp '").output).to match(%r{\bnoexec\b})
+      it 'records the new options in the unit file (applied on next boot)' do
+        expect(on(host, 'cat /etc/systemd/system/tmp.mount').output).to match(%r{^Options=.*\bnoexec\b})
       end
 
       it 'is idempotent after the change' do

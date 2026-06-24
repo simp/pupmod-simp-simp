@@ -17,6 +17,7 @@ describe 'simp::nsswitch' do
 
               passwd:     files mymachines systemd
               shadow:     files
+              gshadow:    files
               group:      files mymachines systemd
               sudoers:    files
               hosts:      files mymachines dns myhostname
@@ -43,6 +44,7 @@ describe 'simp::nsswitch' do
 
                 passwd:     files [!NOTFOUND=return] sss mymachines systemd
                 shadow:     files [!NOTFOUND=return] sss
+                gshadow:    files
                 group:      files [!NOTFOUND=return] sss mymachines systemd
                 sudoers:    files sss
                 hosts:      files mymachines dns myhostname
