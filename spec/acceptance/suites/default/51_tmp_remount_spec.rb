@@ -99,6 +99,12 @@ describe 'simp::mountpoints::tmp tmp.mount change' do
         expect(on(host, 'cat /etc/systemd/system/tmp.mount').output).to match(%r{^Options=.*\bnoexec\b})
       end
 
+      it 'registers a reboot notification for tmp.mount' do
+        vardir = on(host, 'puppet config print vardir').output.strip
+        notifications = on(host, "cat #{vardir}/reboot_notifications.json").output
+        expect(notifications).to include('tmp.mount')
+      end
+
       it 'is idempotent after the change' do
         apply_manifest_on(host, changed_manifest, catch_changes: true)
       end

@@ -111,6 +111,15 @@ class simp::mountpoints::tmp (
         content         => $_unit_file_content,
         service_restart => false,
       }
+
+      # Because the running tmp.mount service is not restarted (see above), warn
+      # the user that a reboot is required for the new options to take effect.
+      # ``reboot_notify`` only registers on refresh, so it is notified by the
+      # unit file change.
+      reboot_notify { 'tmp.mount':
+        reason    => 'The /tmp mount options changed; reboot to apply them to the running system',
+        subscribe => Systemd::Unit_file['tmp.mount'],
+      }
     }
     else {
       # If /tmp is mounted

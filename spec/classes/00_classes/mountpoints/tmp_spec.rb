@@ -84,6 +84,11 @@ describe 'simp::mountpoints::tmp' do
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
               # The unit file must not restart tmp.mount on change, or a busy /tmp fails the run (issue #372)
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_service_restart(false) }
+              # Warn the user to reboot when the mount options change (issue #372)
+              it {
+                is_expected.to contain_reboot_notify('tmp.mount')
+                  .that_subscribes_to('Systemd::Unit_file[tmp.mount]')
+              }
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
                   .with_content(
