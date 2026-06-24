@@ -4,17 +4,22 @@ test_name 'tmp.mount change while busy'
 
 # Regression test for https://github.com/simp/pupmod-simp-simp/issues/372
 #
-# When /tmp is a tmpfs managed by the tmp.mount systemd unit, changing the
-# unit file content used to notify Service[tmp.mount], which issued a
-# `systemctl restart tmp.mount`. For a .mount unit a restart unmounts and
-# remounts /tmp, and the unmount fails with `target is busy` whenever a
-# process (including Puppet itself) holds an open file under /tmp, aborting
-# the run. simp::mountpoints::tmp now sets `service_restart => false` so a unit
-# file change is written and daemon-reloaded without restarting (unmounting)
-# /tmp; the new options take effect on the next boot.
+# When the tmp.mount systemd unit is managed, changing the unit file content
+# used to notify Service[tmp.mount], which issued a `systemctl restart
+# tmp.mount`. For a .mount unit a restart unmounts and remounts /tmp, and the
+# unmount fails with `target is busy` whenever a process (including Puppet
+# itself) holds an open file under /tmp, aborting the run.
+# simp::mountpoints::tmp now sets `service_restart => false` so a unit file
+# change is written and daemon-reloaded without restarting (unmounting) /tmp;
+# the new options take effect on the next boot.
+#
+# Note: because the running mount is never restarted, the options are NOT
+# applied to the live /tmp during the run (regardless of whether /tmp is
+# already tmpfs or a real partition), so this test does not assert the live
+# mount type/options -- only that the run succeeds and the change is recorded.
 describe 'simp::mountpoints::tmp tmp.mount change' do
-  # The lock file lives on the tmpfs /tmp; an open write fd against it makes
-  # the mount busy so a real unmount would fail with EBUSY.
+  # An open write fd against this file makes /tmp busy so a real unmount would
+  # fail with EBUSY, reproducing the issue #372 precondition.
   let(:lock_file) { '/tmp/.busy_372.lock' }
   let(:pid_file)  { '/tmp/.busy_372.pid' }
 
@@ -27,7 +32,7 @@ describe 'simp::mountpoints::tmp tmp.mount change' do
     SH
   end
 
-  # Establish a tmpfs /tmp without noexec...
+  # Manage the tmp.mount unit without noexec...
   let(:initial_manifest) do
     <<~EOS
       class { 'simp::mountpoints::tmp':
@@ -59,12 +64,13 @@ describe 'simp::mountpoints::tmp tmp.mount change' do
         next
       end
 
-      it 'mounts /tmp as a tmpfs via tmp.mount' do
+      it 'manages the tmp.mount unit without failing' do
         apply_manifest_on(host, initial_manifest, catch_failures: true)
         apply_manifest_on(host, initial_manifest, catch_changes: true)
 
+        # The unit is enabled/active; the live mount options are intentionally
+        # not applied here (they wait for a reboot), so we do not assert them.
         expect(on(host, 'systemctl is-active tmp.mount').output.strip).to eq('active')
-        expect(on(host, "mount | grep ' /tmp '").output).to match(%r{\btmpfs\b})
       end
 
       it 'holds /tmp busy with an open file descriptor' do
