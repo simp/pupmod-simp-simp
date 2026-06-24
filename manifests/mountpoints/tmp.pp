@@ -94,10 +94,31 @@ class simp::mountpoints::tmp (
         Options=${_tmp_opts}
         | END
 
+      # Do not restart the service when the unit file changes.
+      #
+      # ``systemd::unit_file`` notifies ``Service[tmp.mount]`` whenever the unit
+      # file content changes, which issues a ``systemctl restart tmp.mount``.
+      # For a ``.mount`` unit, a restart unmounts and remounts ``/tmp``, but the
+      # unmount fails with ``target is busy`` because Puppet (and other
+      # processes) hold open files under ``/tmp`` during the run, which aborts
+      # the catalog. Disabling the restart lets the new unit file be written
+      # and ``daemon-reload``ed safely; the updated mount options take effect on
+      # the next boot (or a manual ``systemctl restart tmp.mount`` from a clean
+      # ``/tmp``).
       systemd::unit_file { 'tmp.mount':
-        enable  => true,
-        active  => true,
-        content => $_unit_file_content,
+        enable          => true,
+        active          => true,
+        content         => $_unit_file_content,
+        service_restart => false,
+      }
+
+      # Because the running tmp.mount service is not restarted (see above), warn
+      # the user that a reboot is required for the new options to take effect.
+      # ``reboot_notify`` only registers on refresh, so it is notified by the
+      # unit file change.
+      reboot_notify { 'tmp.mount':
+        reason    => 'The /tmp mount options changed; reboot to apply them to the running system',
+        subscribe => Systemd::Unit_file['tmp.mount'],
       }
     }
     else {

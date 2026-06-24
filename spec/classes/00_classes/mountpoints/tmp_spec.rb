@@ -82,6 +82,13 @@ describe 'simp::mountpoints::tmp' do
               it { is_expected.not_to create_service('tmp.mounts').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_enable(true) }
               it { is_expected.to contain_systemd__unit_file('tmp.mount').with_active(true) }
+              # The unit file must not restart tmp.mount on change, or a busy /tmp fails the run (issue #372)
+              it { is_expected.to contain_systemd__unit_file('tmp.mount').with_service_restart(false) }
+              # Warn the user to reboot when the mount options change (issue #372)
+              it {
+                is_expected.to contain_reboot_notify('tmp.mount')
+                  .that_subscribes_to('Systemd::Unit_file[tmp.mount]')
+              }
               it {
                 is_expected.to contain_systemd__unit_file('tmp.mount')
                   .with_content(
@@ -113,6 +120,22 @@ describe 'simp::mountpoints::tmp' do
               }
 
               it { is_expected.not_to contain_systemd__unit_file('tmp.mount') }
+            end
+
+            context 'with custom tmp_opts' do
+              let(:params) do
+                {
+                  tmp_opts: ['noexec', 'nodev'],
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+              # The unit file Options reflect the configured tmp_opts (issue #372)
+              it {
+                is_expected.to contain_systemd__unit_file('tmp.mount')
+                  .with_content(%r{^Options=mode=1777,nodev,noexec$})
+              }
+              it { is_expected.to contain_systemd__unit_file('tmp.mount').with_service_restart(false) }
             end
 
             context 'tmp_service == false' do

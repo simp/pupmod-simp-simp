@@ -1,3 +1,6 @@
+* Tue Jun 23 2026 Mike Riddle <mike@sicura.us> - 6.0.1
+- Made tmp remounts safer on running systems
+
 * Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 6.0.0
 - Remove unmaintained Compliance Engine data
 
