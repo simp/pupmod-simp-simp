@@ -1,3 +1,11 @@
+* Fri Jun 26 2026 Steven Pritchard <steven.pritchard@gmail.com> - 7.0.0
+- Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
+- Drop Windows from the list of supported operating systems
+- Allow newer SIMP module dependencies (see metadata.json diff)
+- Sync Gemfile with current puppetsync baseline (adds OpenVox to test gems)
+- Drop Puppet 7 / Ruby 2.7 from GitHub Actions; use Ruby 3.2.11 with OpenVox 8 and 3.4.9 elsewhere
+- Add canonical beaker nodesets for EL8/9/10 and add AlmaLinux 9 to the acceptance test matrix
+
 * Tue Jun 23 2026 Mike Riddle <mike@sicura.us> - 6.0.1
 - Made tmp remounts safer on running systems
 
