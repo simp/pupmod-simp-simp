@@ -101,5 +101,3 @@ fixtures:
     yumrepo_core: https://github.com/simp/pupmod-puppetlabs-yumrepo_core.git
     # Kluge for rsync data
     "../acceptance/rsync_shares/simp": https://github.com/simp/simp-rsync-skeleton.git
-  symlinks:
-    simp: "#{source_dir}"

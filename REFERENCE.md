@@ -118,6 +118,8 @@ Data type: `Hash`
 
 An **internal use** parameter for configuring pre-defined maps
 
+Default value: `{ 'none' => [], 'remote_access' => [], 'poss' => [], 'simp_lite' => [], 'simp' => [] }`
+
 ##### <a name="-simp--scenario"></a>`scenario`
 
 Data type: `String`
@@ -372,6 +374,8 @@ Data type: `String[1]`
 Owner for ${facts['puppet_vardir']}/simp directory
 Defaults to 'root' if a platform doesn't specify
 
+Default value: `'root'`
+
 ##### <a name="-simp--vardir_group"></a>`vardir_group`
 
 Data type: `String[1]`
@@ -379,12 +383,16 @@ Data type: `String[1]`
 Group for ${facts['puppet_vardir]}/simp diorectory
 Defaults to 'root' if a platform doesn't specify
 
+Default value: `'root'`
+
 ##### <a name="-simp--vardir_mode"></a>`vardir_mode`
 
 Data type: `Stdlib::Filemode`
 
 Mode for ${facts['puppet_vardir])/simp directory
 Defaults to '0750' if a platform doesn't specify
+
+Default value: `'0750'`
 
 ### <a name="simp--admin"></a>`simp::admin`
 
@@ -1143,12 +1151,16 @@ Data type: `Hash`
 A hash of the default nsswitch options to use for all services.
 These will be overridden by any options specified in sssd_options or overrides.
 
+Default value: `{ 'passwd' => ['files', 'mymachines', 'systemd'], 'shadow' => ['files'], 'group' => ['files', 'mymachines', 'systemd'], 'sudoers' => ['files'], 'hosts' => ['files', 'mymachines', 'dns', 'myhostname'], 'bootparams' => ['files'], 'ethers' => ['files'], 'netmasks' => ['files'], 'networks' => ['files'], 'protocols' => ['files'], 'publickey' => ['files'], 'rpc' => ['files'], 'services' => ['files'], 'netgroup' => ['files'], 'automount' => ['files'], 'aliases' => ['files'] }`
+
 ##### <a name="-simp--nsswitch--sssd_options"></a>`sssd_options`
 
 Data type: `Hash`
 
 A hash of nsswitch options to use for all services when sssd is enabled.
 These will be overridden by any options specified in overrides.
+
+Default value: `{ 'passwd' => ['files [!NOTFOUND=return]', 'sss', 'mymachines', 'systemd'], 'shadow' => ['files [!NOTFOUND=return]', 'sss'], 'group' => ['files [!NOTFOUND=return]', 'sss', 'mymachines', 'systemd'], 'netgroup' => ['files [!NOTFOUND=return]', 'sss'], 'sudoers' => ['files', 'sss'] }`
 
 ##### <a name="-simp--nsswitch--overrides"></a>`overrides`
 
@@ -2297,6 +2309,8 @@ Data type: `Hash[String, Array]`
 An **internal** parameter used for determining the correct classes to apply
 for the ``scenario``
 
+Default value: `{ 'none' => [], 'remote_access' => '%{alias('simp::server::data')}', 'poss' => '%{alias('simp::server::data')}', 'simp_lite' => '%{alias('simp::server::data')}', 'simp' => '%{alias('simp::server::data')}' }`
+
 ### <a name="simp--server--kickstart"></a>`simp::server::kickstart`
 
 server for your client hosts.
@@ -2725,7 +2739,6 @@ The following parameters are available in the `simp::sssd::client` class:
 * [`enumerate_users`](#-simp--sssd--client--enumerate_users)
 * [`cache_credentials`](#-simp--sssd--client--cache_credentials)
 * [`min_id`](#-simp--sssd--client--min_id)
-* [`enable_domain_warn`](#-simp--sssd--client--enable_domain_warn)
 
 ##### <a name="-simp--sssd--client--ldap_domain"></a>`ldap_domain`
 
@@ -2756,9 +2769,8 @@ The type of LDAP server that the system is communicating with
 
 * Use `389ds` for servers that are 'Netscape compatible'. This includes
   FreeIPA, Red Hat Directory Server, and other Netscape DS-derived systems
-* Use `plain` for servers that are 'regular LDAP' like OpenLDAP
 
-Default value: `$ldap_domain ? { false => false, default => undef`
+Default value: `$ldap_domain ? { false => false, default => '389ds'`
 
 ##### <a name="-simp--sssd--client--ldap_provider_options"></a>`ldap_provider_options`
 
@@ -2793,14 +2805,6 @@ Data type: `Integer`
 The lowest user ID that SSSD should recognize from the remote server
 
 Default value: `500`
-
-##### <a name="-simp--sssd--client--enable_domain_warn"></a>`enable_domain_warn`
-
-Data type: `Boolean`
-
-Set to true to enable local domain warning
-
-Default value: `true`
 
 ### <a name="simp--sudoers"></a>`simp::sudoers`
 
