@@ -14,9 +14,9 @@ describe 'simp::sysctl' do
             it { is_expected.to create_class('simp::sysctl') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: true) }
             it { is_expected.to create_sysctl('fs.inotify.max_user_watches').with(value: 102_400) }
           end
 
@@ -26,10 +26,10 @@ describe 'simp::sysctl' do
               os_facts.merge(ipv6_enabled: true)
             end
 
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: true) }
           end
 
           context 'with ipv6 disabled' do
@@ -42,10 +42,25 @@ describe 'simp::sysctl' do
               }
             end
 
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 1) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 1, silent: true) }
+          end
+
+          context 'with ipv6 disabled and no simplib_sysctl fact' do
+            let(:params) { { ipv6: false } }
+            let(:facts) do
+              # Remove simplib_sysctl fact to simulate IPv6 module not loaded
+              os_facts_copy = Marshal.load(Marshal.dump(os_facts))
+              os_facts_copy.delete('simplib_sysctl')
+              os_facts_copy
+            end
+
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: true) }
           end
 
           context 'kernel__core_pattern with absolute path' do
