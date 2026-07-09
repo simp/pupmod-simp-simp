@@ -14,7 +14,7 @@ classes drawn from across the whole SIMP module ecosystem.
 The orchestration is driven by a **scenario** abstraction. The `simp` class
 looks up a `scenario` name, resolves it against a `scenario_map` (a Hash from
 module data mapping each scenario to its class list), and `include`s the
-resulting classes (`manifests/init.pp:201-212`). This is why the module depends
+resulting classes (`manifests/init.pp`). This is why the module depends
 on essentially the entire SIMP stack: it is the thing that wires those modules
 together into a working system.
 
@@ -26,18 +26,18 @@ the SIMP server role, one-shot bootstrap, etc.).
 
 ### The scenario model
 
-The `simp` class (`manifests/init.pp:153-225`) is the public entry class —
+The `simp` class (`manifests/init.pp`) is the public entry class —
 consumers `include 'simp'`. Its behaviour is governed by two data-driven
 parameters:
 
-- **`$scenario`** (`String`, default `'simp'`, `init.pp:159`) — the SIMP
+- **`$scenario`** (`String`, default `'simp'`, `init.pp`) — the SIMP
   scenario to apply.
 - **`$scenario_map`** (`Hash`, no default; set from module data,
-  `init.pp:158`) — the internal map from scenario name to class list. Defined in
+  `init.pp`) — the internal map from scenario name to class list. Defined in
   `data/common.yaml` (`simp::scenario_map`) with the keys `none`,
   `remote_access`, `poss`, `simp_lite`, and `simp`.
 
-Control flow (`init.pp:201-212`):
+Control flow (`init.pp`):
 
 - If `$scenario` is a key in `$scenario_map`, the class list is computed as
   `simp::knockout(union($scenario_map[$scenario], $classes))` — the scenario's
@@ -62,7 +62,7 @@ Two scenario classes are the orchestration entry points:
   `postfix`/`postfix::server` (mail), `simp::rc_local`, a `host` entry for the
   Puppet server (from `$server_facts`), optional `ssh::global_known_hosts`, and
   an `rsync` stunnel connection to the Puppet server on port 8730
-  (`scenario/base.pp:97-153`).
+  (`scenario/base.pp`).
 - **`simp::scenario::poss` (`manifests/scenario/poss.pp`)** — the "Puppet Open
   Source Software" scenario. An `assert_private()` class (`inherits simp`) that
   provides a *minimal* client which merely connects to a SIMP Puppet server. It
@@ -77,7 +77,7 @@ exists to bootstrap or tear down a stand-alone system that disconnects from the
 Puppet server after a successful run.
 
 - **`simp::one_shot` (`manifests/one_shot.pp`)** — asserts the module metadata
-  with `Windows` blacklisted (`one_shot.pp:93`), `contain`s
+  with `Windows` blacklisted (`one_shot.pp`), `contain`s
   `simp::one_shot::user`, defines a late run `stage`
   (`simp_one_shot_finalization`, ordered after `simp_finalize`), and runs
   `simp::one_shot::finalize` in that stage so finalization only happens if all
@@ -123,29 +123,29 @@ by role rather than enumerating each one when working here.
 - **This is a meta-module, not a service module.** Almost nothing here manages a
   daemon directly; the module's job is *classification* — pick a scenario, union
   in extra classes, knock out unwanted ones, and `include` the result
-  (`init.pp:201-212`). Changes to what a "SIMP system" includes usually belong
+  (`init.pp`). Changes to what a "SIMP system" includes usually belong
   in the `scenario_map` in `data/common.yaml`, not in new manifest logic.
 - **The scenario is data-driven.** `$scenario_map` and `$classes` both merge
   across the Hiera hierarchy (`data/common.yaml` sets deep/unique merge
   behaviour and defines the `simp::knockout` `--` prefix semantics). An
-  invalid scenario name is a hard compile `fail` (`init.pp:211`).
+  invalid scenario name is a hard compile `fail` (`init.pp`).
 - **`simplib::module_metadata::assert` is intentionally NOT called in
   `simp::init`** — this is deliberate, to permit non-SIMP OSes to use the `poss`
-  scenario (`init.pp:195-199`). Contrast `simp::one_shot`, which *does* assert
-  (with `Windows` blacklisted, `one_shot.pp:93`).
+  scenario (`init.pp`). Contrast `simp::one_shot`, which *does* assert
+  (with `Windows` blacklisted, `one_shot.pp`).
 - **`poss` provides no security.** It is a bare client-to-server connection;
   do not assume any hardening is applied under the `poss` scenario
-  (`scenario/poss.pp:5-8`).
+  (`scenario/poss.pp`).
 - **Bolt-awareness.** The `$facts['puppet_vardir']}/simp` directory and the
   filebucket are skipped under `simplib::in_bolt()` because the vardir would be
-  on the Bolt host, not the target (`init.pp:184,214-215`).
+  on the Bolt host, not the target (`init.pp`).
 - **`simp::base_services` is deprecated** and will be removed in a future
-  version (`manifests/base_services.pp:1`); do not build new logic on it.
-- **`enable_data_includes` is deprecated and has no effect** (`init.pp:22-25`);
+  version (`manifests/base_services.pp`); do not build new logic on it.
+- **`enable_data_includes` is deprecated and has no effect** (`init.pp`);
   it is slated for removal in the next major release.
 - **one_shot finalization is destructive and asynchronous.** It runs a script in
   the background that can remove PKI and the puppet package
-  (`one_shot/finalize.pp:37-43`); it is not part of a normal run and should not
+  (`one_shot/finalize.pp`); it is not part of a normal run and should not
   be enabled on managed clients.
 - **Windows in the OS matrix is vestigial.** `metadata.json` still carries a
   legacy Windows entry, but the module and its acceptance suite are EL-only in
@@ -167,7 +167,7 @@ distinct `simp_options::*` seams consumed across the manifests:
 
 In `simp::init` specifically, `$rsync_stunnel`, `$pam`, `$ldap`, and `$sssd`
 default off the `simp_options::stunnel` / `::pam` / `::ldap` / `::sssd` seams
-(`init.pp:163,178-180`). Keep new toggles flowing through
+(`init.pp`). Keep new toggles flowing through
 `simplib::lookup('simp_options::*', { 'default_value' => ... })` with an
 explicit default rather than assuming `simp_options` is included.
 
@@ -258,7 +258,7 @@ bundle exec rake beaker:suites[default,almalinux8]
 bundle exec rake beaker:suites[base_apps,almalinux10]
 ```
 
-`spec/spec_helper.rb:11` requires `puppetlabs_spec_helper/module_spec_helper`.
+`spec/spec_helper.rb` requires `puppetlabs_spec_helper/module_spec_helper`.
 Relevant gem pins (from `Gemfile`): `puppetlabs_spec_helper ~> 8.0.0`,
 `simp-rake-helpers ~> 5.24.0`, `simp-beaker-helpers ~> 2.0.0`. Rubocop is pinned
 to `~> 1.88.0`. The `Gemfile` installs only the `puppet` gem (no `openvox` gem
@@ -278,7 +278,7 @@ requirement in `metadata.json` is `>= 8 < 9`.
 - **Preserve `assert_private()`** on scenario and one_shot classes — they are
   internal and reached only through `simp` / `simp::one_shot`.
 - **Do not add `simplib::module_metadata::assert` to `simp::init`** — its
-  absence is intentional so non-SIMP OSes can use `poss` (`init.pp:195-199`).
+  absence is intentional so non-SIMP OSes can use `poss` (`init.pp`).
 - Continue routing SIMP feature toggles through
   `simplib::lookup('simp_options::*', { 'default_value' => ... })` with an
   explicit default rather than assuming `simp_options` is included.
