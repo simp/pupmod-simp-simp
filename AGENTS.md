@@ -126,8 +126,7 @@ by role rather than enumerating each one when working here.
   (`init.pp`). Changes to what a "SIMP system" includes usually belong
   in the `scenario_map` in `data/common.yaml`, not in new manifest logic.
 - **The scenario is data-driven.** `$scenario_map` and `$classes` both merge
-  across the Hiera hierarchy (`data/common.yaml` sets deep/unique merge
-  behaviour and defines the `simp::knockout` `--` prefix semantics). An
+  across the Hiera hierarchy (`data/common.yaml` sets deep/unique merge behaviour; the `--` knockout prefix is applied by the `simp::knockout`/`simplib::knockout` functions in the manifests, with Hiera `knockout_prefix` enabled only for `simp::puppetdb::cipher_suites`). An
   invalid scenario name is a hard compile `fail` (`init.pp`).
 - **`simplib::module_metadata::assert` is intentionally NOT called in
   `simp::init`** — this is deliberate, to permit non-SIMP OSes to use the `poss`
