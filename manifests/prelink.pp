@@ -57,11 +57,21 @@ class simp::prelink (
         }
       }
 
+      # lint:ignore:exec_idempotency
+      # No guard is added here: /etc/cron.daily/prelink itself decides
+      # (based on /etc/sysconfig/prelink) whether there is any prelinking
+      # left to undo, so it is already a no-op when nothing needs undoing.
+      # There is no external file/command that reliably indicates "already
+      # un-prelinked" without invoking prelink itself, so adding an
+      # onlyif/unless/creates guard here could not be done without risking a
+      # change in behavior (e.g. skipping a needed unprelink before the
+      # package is removed).
       exec { 'remove prelinking':
         command => '/etc/cron.daily/prelink',
         # before is the resource that *removes* the prelink package
         before  => Package['prelink'],
       }
+      # lint:endignore
 
       package { 'prelink':
         ensure => 'absent',

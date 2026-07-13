@@ -28,10 +28,10 @@ class simp::version () {
     }
   }
   ensure_resource('file', $simp_root_dir, {
-      ensure => 'directory',
-      owner  => $simp_root_dir_user,
-      group  => $simp_root_dir_group,
-      mode   => $simp_root_dir_mode
+    ensure => 'directory',
+    owner  => $simp_root_dir_user,
+    group  => $simp_root_dir_group,
+    mode   => $simp_root_dir_mode
   })
 
   file { "${simp_root_dir}/simp.version":

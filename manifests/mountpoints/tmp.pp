@@ -151,9 +151,16 @@ class simp::mountpoints::tmp (
 
           if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
             $_remount_tmp_opts = join($tmp_opts,',')
+            # Every option that ``mount -o remount`` would set, wrapped so it
+            # can be checked with a simple substring test against the live
+            # mount options below.
+            $_remount_tmp_opts_check = join($tmp_opts.map |$_opt| { "echo \",\$opts,\" | /usr/bin/grep -qF ',${_opt},'" },' && ')
 
             exec { 'remount /tmp':
               command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
+              # Skip the remount if every desired option is already active on
+              # the live mount, so this exec only runs when it needs to.
+              unless  => "/bin/sh -c 'opts=\$(/usr/bin/findmnt -no OPTIONS /tmp); ${_remount_tmp_opts_check}'",
               require => Mount['/tmp'],
             }
           }
@@ -208,9 +215,16 @@ class simp::mountpoints::tmp (
 
         if !empty(difference($var_tmp_opts,$_tmp_mount_var_tmp_opts)) {
           $_remount_var_tmp_opts = join($var_tmp_opts,',')
+          # Every option that ``mount -o remount`` would set, wrapped so it
+          # can be checked with a simple substring test against the live
+          # mount options below.
+          $_remount_var_tmp_opts_check = join($var_tmp_opts.map |$_opt| { "echo \",\$opts,\" | /usr/bin/grep -qF ',${_opt},'" },' && ')
 
           exec { 'remount /var/tmp':
             command => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
+            # Skip the remount if every desired option is already active on
+            # the live mount, so this exec only runs when it needs to.
+            unless  => "/bin/sh -c 'opts=\$(/usr/bin/findmnt -no OPTIONS /var/tmp); ${_remount_var_tmp_opts_check}'",
             require => Mount['/var/tmp'],
           }
         }

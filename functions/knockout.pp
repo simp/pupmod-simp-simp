@@ -7,4 +7,3 @@
 function simp::knockout(Array $array) {
   simplib::knockout($array)
 }
-
