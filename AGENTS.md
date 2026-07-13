@@ -96,13 +96,40 @@ The remaining classes implement individual baseline concerns and are included
 via the scenario map / scenario classes rather than directly. Grouped by
 subdirectory:
 
-- **top-level `manifests/*.pp`** — `simp::admin` (admin/auditor group access
-  and default sudo rules), `simp::base_apps` (common apps such as irqbalance),
-  `simp::base_services` (**deprecated**, slated for removal), `simp::ctrl_alt_del`,
-  `simp::kmod_blacklist`, `simp::mountpoints`, `simp::netconsole`,
-  `simp::nsswitch`, `simp::prelink`, `simp::puppetdb`, `simp::rc_local`,
-  `simp::root_user`, `simp::server` (the SIMP server role), `simp::sudoers`,
-  `simp::sysctl`, and `simp::version`.
+- **top-level `manifests/*.pp`** — each of these directly manages a concrete
+  piece of system state (they are the "what a SIMP baseline touches" classes):
+  - `simp::sysctl` — sets a large set of kernel `sysctl` parameters via the
+    `sysctl` type, covering both performance tuning and security hardening
+    (values validated with `simplib::validate_sysctl_value`); can also disable
+    IPv6.
+  - `simp::sudoers` — manages the global `sudoers` defaults (`default_entry`)
+    and, optionally, a set of common sudoers aliases (via
+    `simp::sudoers::aliases`).
+  - `simp::root_user` — manages the `root` user and group (UID/GID, shell, home
+    directory), the root password hash, and the home directory's permissions
+    and SELinux context.
+  - `simp::rc_local` — manages the content of `/etc/rc.d/rc.local`; disables the
+    file by default.
+  - `simp::puppetdb` — enables and configures a PuppetDB server with
+    SIMP-compatible defaults (wraps `puppetdb` / `puppetdb::master::config`),
+    including TLS settings and `trusted_nets`-based access.
+  - `simp::prelink` — manages prelinking; disabled by default and forcibly
+    removed under FIPS (satisfies the SCAP Security Guide `disable_prelink`
+    check).
+  - `simp::netconsole` — configures `/etc/sysconfig/netconsole` and the
+    netconsole service (kernel console messages over UDP syslog).
+  - `simp::mountpoints` — applies secure mount options and permissions to the
+    `/tmp` family, `/proc`, `/sys`, and `/dev/pts` (delegating to
+    `simp::mountpoints::proc` / `simp::mountpoints::tmp`).
+  - `simp::kmod_blacklist` — blacklists kernel modules per the SCAP Security
+    Guide (a default list plus a custom list), optionally locking further module
+    loading (via `simp::kmod_blacklist::lock_modules`).
+  - `simp::ctrl_alt_del` — controls whether Ctrl-Alt-Del reboots the system and
+    whether the key combination (and the logged-in users) is logged.
+  - `simp::admin` (admin/auditor group access and default sudo rules),
+    `simp::base_apps` (common apps such as irqbalance), `simp::server` (the SIMP
+    server role), `simp::nsswitch`, `simp::version`, and `simp::base_services`
+    (**deprecated**, slated for removal).
 - **`kmod_blacklist/`** — `lock_modules`.
 - **`mountpoints/`** — `proc`, `tmp` (secure mount options).
 - **`pam_limits/`** — `max_logins` (simultaneous-login restriction).
@@ -110,7 +137,8 @@ subdirectory:
   `rsync_shares`, `yum` (server-role provisioning).
 - **`sssd/`** — `client` (stock SSSD stack).
 - **`sudoers/`** — `aliases` (SIMP site sudoers aliases).
-- **`yum/`** — `schedule`, plus a set of `yum/repo/*` repo-definition classes
+- **`yum/`** — `schedule` (sets up a cron-based YUM update schedule via
+  `simp::yum::schedule`), plus a set of `yum/repo/*` repo-definition classes
   (`internet_simp`, `internet_simp_dependencies`, `internet_simp_server`,
   `local_os_updates`, `local_simp`).
 
