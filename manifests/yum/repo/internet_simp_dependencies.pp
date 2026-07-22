@@ -11,8 +11,7 @@
 #
 class simp::yum::repo::internet_simp_dependencies (
   Optional[String] $simp_release_slug = undef
-){
-
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   # TODO remove this class and the function called when the version

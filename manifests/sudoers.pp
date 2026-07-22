@@ -34,16 +34,15 @@ class simp::sudoers (
       LANG LC_ADDRESS LC_CTYPE LC_COLLATE LC_IDENTIFICATION \
       LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC \
       LC_PAPER LC_TELEPHONE LC_TIME LC_ALL LANGUAGE LINGUAS \
-      _XKB_CHARSET XAUTHORITY"'
+      _XKB_CHARSET XAUTHORITY"',
   ]
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'sudo'
 
   sudo::default_entry { '00_main':
-    content => $default_entry
+    content => $default_entry,
   }
 
   if $common_aliases { include 'simp::sudoers::aliases' }

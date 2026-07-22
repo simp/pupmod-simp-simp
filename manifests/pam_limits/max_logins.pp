@@ -10,7 +10,6 @@
 class simp::pam_limits::max_logins (
   Pam::Limits::Value $value = 10
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   pam::limits::rule { 'max_logins':
@@ -18,6 +17,6 @@ class simp::pam_limits::max_logins (
     type    => 'hard',
     item    => 'maxlogins',
     value   => $value,
-    order   => 100
+    order   => 100,
   }
 }

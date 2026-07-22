@@ -25,12 +25,10 @@ class simp::mountpoints (
   Boolean       $manage_dev_pts   = true,
   Boolean       $manage_proc      = true
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $manage_tmp_perms { include 'simp::mountpoints::tmp' }
   if $manage_proc { include 'simp::mountpoints::proc' }
-
 
   if $manage_dev_pts {
     mount { '/dev/pts':
@@ -41,7 +39,7 @@ class simp::mountpoints (
       dump     => 0,
       pass     => 0,
       target   => '/etc/fstab',
-      remounts => true
+      remounts => true,
     }
   }
   if $manage_sys {
@@ -52,7 +50,7 @@ class simp::mountpoints (
       options  => join($sys_options,','),
       pass     => 0,
       target   => '/etc/fstab',
-      remounts => true
+      remounts => true,
     }
   }
 }

@@ -109,7 +109,7 @@
 #   will be fixed, when Puppet fully supports FIPS mode.
 #
 class simp::server::kickstart::simp_client_bootstrap (
-  Stdlib::Absolutepath        $data_dir                = simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www'}),
+  Stdlib::Absolutepath        $data_dir                = simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www' }),
   Stdlib::Absolutepath        $directory               = "${data_dir}/ks",
   String                      $service_root_name       = 'simp_client_bootstrap',
   Variant[Array, Hash]        $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
@@ -128,7 +128,6 @@ class simp::server::kickstart::simp_client_bootstrap (
   Boolean                     $reboot_on_failure       = true,
   Boolean                     $fips                    = simplib::lookup('simp_options::fips', { 'default_value' => false })
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $puppet_server {
@@ -159,7 +158,6 @@ class simp::server::kickstart::simp_client_bootstrap (
     $_puppet_keylength = 4096
   }
 
-
   # This is the bootstrap helper script used by both the systemd and sysv
   # versions of the SIMP client bootstrap service
   file { "${directory}/bootstrap_simp_client":
@@ -167,7 +165,7 @@ class simp::server::kickstart::simp_client_bootstrap (
     owner   => 'root',
     group   => 'apache',
     mode    => '0640',
-    content => file("${module_name}/var/www/ks/bootstrap_simp_client")
+    content => file("${module_name}/var/www/ks/bootstrap_simp_client"),
   }
 
   file { "${directory}/${service_root_name}":
@@ -175,7 +173,7 @@ class simp::server::kickstart::simp_client_bootstrap (
     owner   => 'root',
     group   => 'apache',
     mode    => '0640',
-    content => template("${module_name}/www/ks/simp_client_bootstrap.erb")
+    content => template("${module_name}/www/ks/simp_client_bootstrap.erb"),
   }
 
   file { "${directory}/${service_root_name}.service":
@@ -183,6 +181,6 @@ class simp::server::kickstart::simp_client_bootstrap (
     owner   => 'root',
     group   => 'apache',
     mode    => '0640',
-    content => template("${module_name}/www/ks/simp_client_bootstrap_systemd.erb")
+    content => template("${module_name}/www/ks/simp_client_bootstrap_systemd.erb"),
   }
 }

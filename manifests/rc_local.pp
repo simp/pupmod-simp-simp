@@ -21,9 +21,7 @@ class simp::rc_local (
   Stdlib::Absolutepath $shell              = '/bin/bash',
   Boolean              $management_comment = true
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
-
 
   $_default_header = "#!${shell}\n"
   $_managed_header = "${_default_header}#\n# This file managed by Puppet, manual changes will be erased!\n"
@@ -46,12 +44,12 @@ class simp::rc_local (
     ensure => 'directory',
     owner  => 'root',
     group  => 'root',
-    mode   => '0644'
+    mode   => '0644',
   }
 
   file { '/etc/rc.local':
     ensure => 'link',
-    target => '/etc/rc.d/rc.local'
+    target => '/etc/rc.d/rc.local',
   }
 
   file { '/etc/rc.d/rc.local':
@@ -59,6 +57,6 @@ class simp::rc_local (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    content => $_content
+    content => $_content,
   }
 }

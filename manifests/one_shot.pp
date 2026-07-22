@@ -90,7 +90,6 @@ class simp::one_shot (
   Boolean             $finalize_remove_script       = true,
   Boolean             $finalize_debug               = false
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'simplib::stages'
@@ -113,7 +112,7 @@ class simp::one_shot (
   # The only place where this may have issues is if there are changes that are
   # based on facts that would require an additional run to take effect
   stage { 'simp_one_shot_finalization':
-    require => Stage['simp_finalize']
+    require => Stage['simp_finalize'],
   }
 
   class { 'simp::one_shot::finalize':

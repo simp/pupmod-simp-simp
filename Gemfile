@@ -6,26 +6,33 @@
 # ------------------------------------------------------------------------------
 gem_sources = ENV.fetch('GEM_SERVERS', 'https://rubygems.org').split(%r{[, ]+})
 
-ENV['PDK_DISABLE_ANALYTICS'] ||= 'true'
-
 gem_sources.each { |gem_source| source gem_source }
 
-group :test do
-  puppet_version = ENV.fetch('PUPPET_VERSION', ['>= 7', '< 9'])
-  major_puppet_version = Array(puppet_version).first.scan(%r{(\d+)(?:\.|\Z)}).flatten.first.to_i
-  gem 'hiera-puppet-helper'
+group :syntax do
   gem 'metadata-json-lint'
-  gem 'pathspec', '~> 0.2' if Gem::Requirement.create('< 2.6').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
-  gem('pdk', ENV.fetch('PDK_VERSION', ['>= 2.0', '< 4.0']), require: false) if major_puppet_version > 5
-  gem 'puppet', puppet_version
-  gem 'puppetlabs_spec_helper'
   gem 'puppet-lint-trailing_comma-check', require: false
-  gem 'puppet-strings'
+  # rubocop, rubocop-rake, and rubocop-rspec are pulled in and version-pinned by
+  # voxpupuli-test (via simp-rake-helpers); pinning them here conflicts with its
+  # constraints. rubocop-performance is not a voxpupuli-test dependency, so it
+  # stays explicit.
+  gem 'rubocop-performance', '~> 1.26.0'
+end
+
+group :test do
+  puppet_version = ENV.fetch('PUPPET_VERSION', ['>= 8', '< 9'])
+  openvox_version = ENV.fetch('OPENVOX_VERSION', puppet_version)
+  gem 'hiera-puppet-helper'
+  gem 'openvox', openvox_version
+  gem 'openvox-strings'
   gem 'rake'
   gem 'rspec'
   gem 'rspec-puppet'
-  gem 'simp-rake-helpers', ENV.fetch('SIMP_RAKE_HELPERS_VERSION', ['>= 5.21.0', '< 6'])
-  gem 'simp-rspec-puppet-facts', ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 3.7')
+  # renovate: datasource=rubygems versioning=ruby
+  gem 'simp-rake-helpers', ENV.fetch('SIMP_RAKE_HELPERS_VERSION', '~> 6.0')
+  # renovate: datasource=rubygems versioning=ruby
+  gem 'simp-rspec-puppet-facts', ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 4.0.0')
+  gem 'syslog', require: false
+  gem 'observer', require: false
 end
 
 group :development do
@@ -38,7 +45,8 @@ group :system_tests do
   gem 'bcrypt_pbkdf'
   gem 'beaker'
   gem 'beaker-rspec'
-  gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', ['>= 1.32.1', '< 2'])
+  # renovate: datasource=rubygems versioning=ruby
+  gem 'simp-beaker-helpers', ENV.fetch('SIMP_BEAKER_HELPERS_VERSION', '~> 3.1')
 end
 
 # Evaluate extra gemfiles if they exist

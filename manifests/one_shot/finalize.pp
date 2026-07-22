@@ -23,7 +23,7 @@ class simp::one_shot::finalize (
   Boolean $remove_puppet = $simp::one_shot::finalize_remove_puppet,
   Boolean $remove_script = $simp::one_shot::finalize_remove_script,
   Boolean $enable_debug  = $simp::one_shot::finalize_debug
-){
+) {
   assert_private()
 
   $_finalize_script_name = 'simp_one_shot_finalize.sh'
@@ -35,10 +35,22 @@ class simp::one_shot::finalize (
   }
 
   # Run this in the background so that we don't break the current Puppet run
+  #
+  # lint:ignore:exec_idempotency
+  # This is intentionally unguarded: it is the last-effort, one-shot cleanup
+  # script that disconnects the node from Puppet (optionally removing the
+  # 'puppet' package itself, per $remove_puppet). It backgrounds itself and
+  # relies entirely on the idempotent 'puppet resource ...' calls inside
+  # ${_finalize_script_name} for its actual idempotency; a Puppet-level
+  # onlyif/unless/creates guard here could prevent legitimate re-runs while
+  # the background job is still finishing (e.g. before puppet is removed),
+  # which would change the intended "run every time this class is applied"
+  # behavior.
   exec { 'one_shot finalize':
     command   => "${_finalize_script} -d ${dry_run} -k ${remove_pki} -p ${remove_puppet} -f ${remove_script} -D ${enable_debug} > /dev/null 2>&1 &",
     logoutput => true,
     provider  => 'shell',
-    require   => File[$_finalize_script]
+    require   => File[$_finalize_script],
   }
+  # lint:endignore
 }

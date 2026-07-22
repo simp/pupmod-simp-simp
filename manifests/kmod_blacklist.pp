@@ -8,6 +8,11 @@
 # @param blacklist
 #   List of kernel modules to be blacklisted by default
 #
+# @param produce_error
+#   If set to true, any disabled modules will point to '/bin/false', which will
+#   produce an error when anyone attempts to load the module. Default is false,
+#   which will point to '/bin/true', which will not produce any error.
+#
 # @param custom_blacklist
 #   Additional kernel modules to be blacklisted
 #
@@ -47,14 +52,14 @@ class simp::kmod_blacklist (
     'squashfs',
     'tipc',
     'udf',
-    'usb-storage'
+    'usb-storage',
   ],
   Array[String]   $custom_blacklist          = [],
+  Boolean         $produce_error             = false,
   Boolean         $allow_overrides           = true,
   Boolean         $lock_modules              = false,
   Boolean         $notify_if_reboot_required = true
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   if $enable_defaults {
@@ -80,13 +85,18 @@ class simp::kmod_blacklist (
     $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
   }
 
-  $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} /bin/true" }, "\n")
+  $_produce_error = $produce_error ? {
+    true  => '/bin/false',
+    false => '/bin/true',
+  }
+
+  $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} ${_produce_error}" }, "\n")
 
   file { $_disable_file:
     ensure  => file,
     owner   => 'root',
     group   => 'root',
-    content => "${_disable_file_content}\n"
+    content => "${_disable_file_content}\n",
   }
 
   file { $_obsolete_disable_file: ensure => absent }

@@ -28,16 +28,16 @@ class simp::prelink (
 
   if ( $enable and ! $facts['fips_enabled'] ) {
     package { 'prelink':
-      ensure => $ensure
+      ensure => $ensure,
     }
 
     augeas { 'enable prelink':
       lens      => 'Shellvars.lns',
       incl      => '/etc/sysconfig/prelink',
       changes   => [
-        'set PRELINKING "yes"'
+        'set PRELINKING "yes"',
       ],
-      subscribe => Package['prelink']
+      subscribe => Package['prelink'],
     }
   }
   else {
@@ -51,20 +51,30 @@ class simp::prelink (
           lens    => 'Shellvars.lns',
           incl    => '/etc/sysconfig/prelink',
           changes => [
-            'set PRELINKING "no"'
+            'set PRELINKING "no"',
           ],
-          before  => Exec['remove prelinking']
+          before  => Exec['remove prelinking'],
         }
       }
 
+      # lint:ignore:exec_idempotency
+      # No guard is added here: /etc/cron.daily/prelink itself decides
+      # (based on /etc/sysconfig/prelink) whether there is any prelinking
+      # left to undo, so it is already a no-op when nothing needs undoing.
+      # There is no external file/command that reliably indicates "already
+      # un-prelinked" without invoking prelink itself, so adding an
+      # onlyif/unless/creates guard here could not be done without risking a
+      # change in behavior (e.g. skipping a needed unprelink before the
+      # package is removed).
       exec { 'remove prelinking':
         command => '/etc/cron.daily/prelink',
         # before is the resource that *removes* the prelink package
-        before  => Package['prelink']
+        before  => Package['prelink'],
       }
+      # lint:endignore
 
       package { 'prelink':
-        ensure => 'absent'
+        ensure => 'absent',
       }
     }
   }

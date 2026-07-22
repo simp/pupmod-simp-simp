@@ -112,8 +112,7 @@ class simp::admin (
   Boolean               $set_selinux_login         = false,
   String[1]             $selinux_user_context      = 'staff_u',
   String[1]             $selinux_user_mls_range    = 's0-s0:c0.c1023'
-){
-
+) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   include 'simp::sudoers'
@@ -124,24 +123,24 @@ class simp::admin (
     pam::access::rule { "Allow ${admin_group}":
       comment => "Allow the ${admin_group} to access the system from anywhere",
       users   => ["(${admin_group})"],
-      origins => $admins_allowed_from
+      origins => $admins_allowed_from,
     }
 
     pam::access::rule { "Allow ${auditor_group}":
       comment => "Allow the ${auditor_group} to access the system from anywhere",
       users   => ["(${auditor_group})"],
-      origins => $auditors_allowed_from
+      origins => $auditors_allowed_from,
     }
   }
 
   # Set up some default sudoers entries
 
   sudo::alias::user { 'admins':
-    content => [ $admin_group, 'wheel' ]
+    content => [$admin_group, 'wheel'],
   }
 
   sudo::alias::user { 'auditors':
-    content => [ $auditor_group ]
+    content => [$auditor_group],
   }
 
   if $force_logged_shell {
@@ -166,7 +165,7 @@ class simp::admin (
       tidy { 'Tlog profile.d files':
         path    => '/etc/profile.d',
         matches => ['00-simp-tlog.*'],
-        recurse => 1
+        recurse => 1,
       }
     }
   }
@@ -177,7 +176,7 @@ class simp::admin (
     tidy { 'Shell logging profile.d files':
       path    => '/etc/profile.d',
       matches => ['00-simp-tlog.*', 'sudosh2.*'],
-      recurse => 1
+      recurse => 1,
     }
   }
 
@@ -186,7 +185,7 @@ class simp::admin (
     runas     => $admin_runas,
     cmnd      => $_shell_cmd,
     passwd    => !$passwordless_admin_sudo,
-    options   => $admin_sudo_options
+    options   => $admin_sudo_options,
   }
 
   if $simp::sudoers::common_aliases {
@@ -195,7 +194,7 @@ class simp::admin (
       runas     => $auditor_runas,
       cmnd      => ['AUDIT'],
       passwd    => !$passwordless_auditor_sudo,
-      options   => $auditor_sudo_options
+      options   => $auditor_sudo_options,
     }
   }
 
@@ -206,7 +205,7 @@ class simp::admin (
     runas     => $admin_runas,
     cmnd      => ['/usr/sbin/puppet', '/opt/puppetlabs/bin/puppet'],
     passwd    => !$passwordless_admin_sudo,
-    options   => $admin_sudo_options
+    options   => $admin_sudo_options,
   }
 
   # Bolt sets this to a random directory every time it runs
@@ -223,7 +222,7 @@ class simp::admin (
       runas     => $admin_runas,
       cmnd      => ["/bin/rm -rf ${$_ssldir}"],
       passwd    => !$passwordless_admin_sudo,
-      options   => $admin_sudo_options
+      options   => $admin_sudo_options,
     }
   }
 
@@ -249,7 +248,7 @@ class simp::admin (
     if $facts['os']['selinux']['current_mode'] and ($facts['os']['selinux']['current_mode'] != 'disabled') {
       selinux_login { "%${admin_group}":
         seuser    => $selinux_user_context,
-        mls_range => $selinux_user_mls_range
+        mls_range => $selinux_user_mls_range,
       }
     }
   }

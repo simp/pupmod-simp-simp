@@ -46,7 +46,6 @@ class simp::mountpoints::tmp (
   Array[String] $dev_shm_opts = ['noexec','nodev','nosuid'],
   Boolean       $tmp_service  = (fact('tmp_mount_fstype_tmp') == 'tmpfs') ? { true => true, default => false }
 ) {
-
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
   unless $tmp_service {
@@ -58,7 +57,7 @@ class simp::mountpoints::tmp (
       group   => 'root',
       mode    => 'u+rwx,g+rwx,o+rwxt',
       seltype => 'tmp_t',
-      force   => true
+      force   => true,
     }
   }
 
@@ -68,7 +67,7 @@ class simp::mountpoints::tmp (
     group   => 'root',
     mode    => 'u+rwx,g+rwx,o+rwxt',
     seltype => 'tmp_t',
-    force   => true
+    force   => true,
   }
 
   file { '/usr/tmp':
@@ -76,7 +75,7 @@ class simp::mountpoints::tmp (
     target  => '/var/tmp',
     force   => true,
     seltype => 'tmp_t',
-    require => File['/var/tmp']
+    require => File['/var/tmp'],
   }
 
   # If we decide to secure the tmp mounts....
@@ -95,10 +94,31 @@ class simp::mountpoints::tmp (
         Options=${_tmp_opts}
         | END
 
+      # Do not restart the service when the unit file changes.
+      #
+      # ``systemd::unit_file`` notifies ``Service[tmp.mount]`` whenever the unit
+      # file content changes, which issues a ``systemctl restart tmp.mount``.
+      # For a ``.mount`` unit, a restart unmounts and remounts ``/tmp``, but the
+      # unmount fails with ``target is busy`` because Puppet (and other
+      # processes) hold open files under ``/tmp`` during the run, which aborts
+      # the catalog. Disabling the restart lets the new unit file be written
+      # and ``daemon-reload``ed safely; the updated mount options take effect on
+      # the next boot (or a manual ``systemctl restart tmp.mount`` from a clean
+      # ``/tmp``).
       systemd::unit_file { 'tmp.mount':
-        enable  => true,
-        active  => true,
-        content => $_unit_file_content
+        enable          => true,
+        active          => true,
+        content         => $_unit_file_content,
+        service_restart => false,
+      }
+
+      # Because the running tmp.mount service is not restarted (see above), warn
+      # the user that a reboot is required for the new options to take effect.
+      # ``reboot_notify`` only registers on refresh, so it is notified by the
+      # unit file change.
+      reboot_notify { 'tmp.mount':
+        reason    => 'The /tmp mount options changed; reboot to apply them to the running system',
+        subscribe => Systemd::Unit_file['tmp.mount'],
       }
     }
     else {
@@ -116,7 +136,7 @@ class simp::mountpoints::tmp (
             options  => simplib::join_mount_opts($_tmp_mount_tmp_opts,$tmp_opts),
             device   => $facts['tmp_mount_path_tmp'],
             pass     => '1',
-            remounts => true
+            remounts => true,
           }
         }
         else {
@@ -126,15 +146,22 @@ class simp::mountpoints::tmp (
             fstype   => 'none',
             options  => simplib::join_mount_opts(['bind'],$tmp_opts),
             device   => $facts['tmp_mount_path_tmp'],
-            remounts => true
+            remounts => true,
           }
 
           if !empty(difference($tmp_opts,$_tmp_mount_tmp_opts)) {
             $_remount_tmp_opts = join($tmp_opts,',')
+            # Every option that ``mount -o remount`` would set, wrapped so it
+            # can be checked with a simple substring test against the live
+            # mount options below.
+            $_remount_tmp_opts_check = join($tmp_opts.map |$_opt| { "echo \",\$opts,\" | /usr/bin/grep -qF ',${_opt},'" },' && ')
 
             exec { 'remount /tmp':
               command => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-              require => Mount['/tmp']
+              # Skip the remount if every desired option is already active on
+              # the live mount, so this exec only runs when it needs to.
+              unless  => "/bin/sh -c 'opts=\$(/usr/bin/findmnt -no OPTIONS /tmp); ${_remount_tmp_opts_check}'",
+              require => Mount['/tmp'],
             }
           }
         }
@@ -147,13 +174,13 @@ class simp::mountpoints::tmp (
           options  => simplib::join_mount_opts(['bind'],$tmp_opts),
           device   => '/tmp',
           remounts => true,
-          notify   => Exec['remount /tmp']
+          notify   => Exec['remount /tmp'],
         }
 
         $_remount_tmp_opts = join($tmp_opts,',')
         exec { 'remount /tmp':
           command     => "/bin/mount -o remount,${_remount_tmp_opts} /tmp",
-          refreshonly => true
+          refreshonly => true,
         }
       }
 
@@ -173,7 +200,7 @@ class simp::mountpoints::tmp (
           options  => simplib::join_mount_opts($_tmp_mount_var_tmp_opts,$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
           pass     => '1',
-          remounts => true
+          remounts => true,
         }
       }
       else {
@@ -183,15 +210,22 @@ class simp::mountpoints::tmp (
           fstype   => 'none',
           options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
           device   => $facts['tmp_mount_path_var_tmp'],
-          remounts => true
+          remounts => true,
         }
 
         if !empty(difference($var_tmp_opts,$_tmp_mount_var_tmp_opts)) {
           $_remount_var_tmp_opts = join($var_tmp_opts,',')
+          # Every option that ``mount -o remount`` would set, wrapped so it
+          # can be checked with a simple substring test against the live
+          # mount options below.
+          $_remount_var_tmp_opts_check = join($var_tmp_opts.map |$_opt| { "echo \",\$opts,\" | /usr/bin/grep -qF ',${_opt},'" },' && ')
 
           exec { 'remount /var/tmp':
             command => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
-            require => Mount['/var/tmp']
+            # Skip the remount if every desired option is already active on
+            # the live mount, so this exec only runs when it needs to.
+            unless  => "/bin/sh -c 'opts=\$(/usr/bin/findmnt -no OPTIONS /var/tmp); ${_remount_var_tmp_opts_check}'",
+            require => Mount['/var/tmp'],
           }
         }
       }
@@ -205,13 +239,13 @@ class simp::mountpoints::tmp (
         options  => simplib::join_mount_opts(['bind'],$var_tmp_opts),
         target   => '/etc/fstab',
         remounts => true,
-        notify   => Exec['remount /var/tmp']
+        notify   => Exec['remount /var/tmp'],
       }
 
       $_remount_var_tmp_opts = join($var_tmp_opts,',')
       exec { 'remount /var/tmp':
         command     => "/bin/mount -o remount,${_remount_var_tmp_opts} /var/tmp",
-        refreshonly => true
+        refreshonly => true,
       }
     }
 
@@ -229,7 +263,7 @@ class simp::mountpoints::tmp (
         device   => $facts['tmp_mount_path_dev_shm'],
         fstype   => 'tmpfs',
         target   => '/etc/fstab',
-        remounts => true
+        remounts => true,
       }
     }
   }
@@ -242,7 +276,7 @@ class simp::mountpoints::tmp (
   # attempt to manage the tmp.mount service.
   if $tmp_service {
     unless defined(Systemd::Unit_file['tmp.mount']) {
-      ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true }})
+      ensure_resources('service', { 'tmp.mount' => { 'ensure' => 'running', 'enable' => true } })
     }
   }
 }

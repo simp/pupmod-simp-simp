@@ -1,5 +1,43 @@
 * Wed Feb 07 2024 Mike Riddle <mike@sicura.us> - 4.21.0
 - [puppetsync] Update metadata upper bounds for puppet-nsswitch, puppet-gitlab, puppet-snmp, simp-pam, and simp-useradd
+* Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 7.0.1
+- Added exec idempotency guards and resolved puppet-lint offenses
+
+* Fri Jun 26 2026 Steven Pritchard <steven.pritchard@gmail.com> - 7.0.0
+- Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
+- Drop Windows from the list of supported operating systems
+- Allow newer SIMP module dependencies (see metadata.json diff)
+- Sync Gemfile with current puppetsync baseline (adds OpenVox to test gems)
+- Drop Puppet 7 / Ruby 2.7 from GitHub Actions; use Ruby 3.2.11 with OpenVox 8 and 3.4.9 elsewhere
+- Add canonical beaker nodesets for EL8/9/10 and add AlmaLinux 9 to the acceptance test matrix
+
+* Tue Jun 23 2026 Mike Riddle <mike@sicura.us> - 6.0.1
+- Made tmp remounts safer on running systems
+
+* Mon May 11 2026 Steven Pritchard <steve@sicura.us> - 6.0.0
+- Remove unmaintained Compliance Engine data
+
+* Mon Mar 30 2026 Mike Riddle <mike@sicura.us> - 5.0.1
+- Fixed potential sssd duplicate definition errors
+
+* Wed Mar 25 2026 Mike Riddle <mike@sicura.us> - 5.0.0
+- Removed el7 support
+- Added el10 support
+
+* Mon Nov 24 2025 Steven Pritchard <steve@sicura.us> - 4.23.2
+- Update module dependencies
+
+* Wed Aug 27 2025 Steven Pritchard <steve@sicura.us> - 4.23.1
+- Cleanup for rubocop
+
+* Wed Sep 11 2024 Steven Pritchard <steve@sicura.us> - 4.23.0
+- [puppetsync] Update module dependencies to support simp-iptables 7.x
+
+* Tue Jul 09 2024 Mike Riddle <mike@sicura.us> - 4.22.0
+- Added ability for users to switch between '/bin/true' and '/bin/false' when disabling kernel modules via the kmod_blacklist class
+
+* Tue Jul 02 2024 Steven Pritchard <steve@sicura.us> - 4.21.0
+- Clean up use of legacy facts to better support Puppet 8
 
 * Thu Jan 25 2024 Steven Pritchard <steve@sicura.us> - 4.20.0
 - Switch from `trlinkin-nsswitch` to `puppet-nsswitch`
@@ -559,7 +597,7 @@
   satisfies the SCAP Security Guide's OVAL check
   xccdf_org.ssgproject.content_rule_disable_prelink.
 
-* Mon Nov 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.3.0-0
+* Sat Nov 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.3.0-0
 - In simp::sysctl, add parameters for net.ipv6.conf.all.accept_source_route
   and net.ipv6.conf.default.accept_source_route and set them to 0 by
   default.  This satisfies STIG CCI-0000366.
@@ -619,7 +657,7 @@
 * Wed May 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
 - Added a 'remote_access' scenario
 
-* Mon May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.0-0
+* Tue May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.0-0
 - Use the correct simp_options global catalyst for base_apps::ensure
 
 * Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
@@ -684,10 +722,10 @@
 - Added simp::kmod_blacklist profile to manage the kernel blacklist using puppet-kmod
   - config migrated from simplib
 
-* Thu Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
+* Fri Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
 - Removed pupmod-simp-sysctl in favor of augeas-sysctl
 
-* Thu Nov 29 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+* Tue Nov 29 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
 - Introduced rsyslog rule orders so messages hit 'stop' rules before they
   reach 'catch-alls'.  By doing so, log duplication is prevented.
 - Modified the spooler log local rule to ensure both uucp and news

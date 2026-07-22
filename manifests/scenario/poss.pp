@@ -17,9 +17,8 @@
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::scenario::poss (
-  Boolean $puppet_server_hosts_entry  = $::simp::puppet_server_hosts_entry
+  Boolean $puppet_server_hosts_entry  = $simp::puppet_server_hosts_entry
 ) inherits simp {
-
   assert_private()
 
   if $puppet_server_hosts_entry {
@@ -29,7 +28,7 @@ class simp::scenario::poss (
       host { $server_facts['servername']:
         ensure       => 'present',
         host_aliases => $_pserver_alias,
-        ip           => $server_facts['serverip']
+        ip           => $server_facts['serverip'],
       }
     }
   }

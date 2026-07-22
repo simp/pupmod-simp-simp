@@ -52,8 +52,8 @@ class simp::server::kickstart (
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  if $manage_dhcp      { include 'dhcp::dhcpd' }
-  if $manage_tftpboot  { include 'tftpboot' }
+  if $manage_dhcp { include 'dhcp::dhcpd' }
+  if $manage_tftpboot { include 'tftpboot' }
   if $manage_runpuppet {
     deprecation('simp::server::manage_runpuppet','simp::server::manage_runpuppet has been deprecated.  Use simp::server::manage_simp_client_bootstrap instead')
   }
@@ -66,21 +66,20 @@ class simp::server::kickstart (
 
   include 'simp_apache'
   simp_apache::site { 'ks':
-    content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb")
+    content => template("${module_name}/etc/httpd/conf.d/ks.conf.erb"),
   }
 
   file { "${data_dir}/ks":
     ensure => 'directory',
     owner  => 'root',
     group  => 'apache',
-    mode   => '2640'
+    mode   => '2640',
   }
 
   if $data_dir != '/var/www' {
     file { '/var/www/ks':
       ensure => 'link',
-      target => "${data_dir}/ks"
+      target => "${data_dir}/ks",
     }
   }
-
 }

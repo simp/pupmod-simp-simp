@@ -7,19 +7,21 @@ describe 'simp::base_apps' do
         let(:facts) { os_facts }
 
         if os_facts[:kernel] == 'windows'
-          it { expect{ is_expected.to compile.with_all_deps }.to raise_error(/'windows .+' is not supported/) }
+          it { expect { is_expected.to compile.with_all_deps }.to raise_error(%r{'windows .+' is not supported}) }
         else
-          let(:core_packages) { [
-            'irqbalance',
-            'netlabel_tools',
-            'bind-utils'
-          ] }
+          let(:core_packages) do
+            [
+              'irqbalance',
+              'netlabel_tools',
+              'bind-utils',
+            ]
+          end
 
           context 'with default parameters' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::base_apps').with_ensure('installed') }
             it { is_expected.to contain_package('netlabel_tools').that_comes_before('Service[netlabel]') }
-            it 'should install core packages' do
+            it 'installs core packages' do
               core_packages.each do |package|
                 is_expected.to create_package(package).with_ensure('installed')
               end
@@ -30,9 +32,10 @@ describe 'simp::base_apps' do
           end
 
           context 'with extra_apps' do
-            let(:params) {{ :extra_apps => ['htop','git','ncdu'] }}
-            let(:packages) { core_packages + ['htop','git','ncdu'] }
-            it 'should install core packages with the specified extras' do
+            let(:params) { { extra_apps: ['htop', 'git', 'ncdu'] } }
+            let(:packages) { core_packages + ['htop', 'git', 'ncdu'] }
+
+            it 'installs core packages with the specified extras' do
               packages.each do |package|
                 is_expected.to create_package(package).with_ensure('installed')
               end
