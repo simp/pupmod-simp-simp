@@ -49,9 +49,10 @@
 # @param kernel__sysrq
 # @param kernel__yama__ptrace_scope
 #   Restricts the use of ``ptrace`` to processes with a defined relationship
-#   (parent/child by default).  Set to ``1`` to satisfy STIG/SSG controls that
-#   require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g. RHEL-08-040282).
-#   Valid kernel values are ``0``-``3``.
+#   (parent/child by default).  Unmanaged by default (``undef``) so the OS
+#   default (``0`` on EL) is left in place; set to ``1`` to satisfy STIG/SSG
+#   controls that require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g.
+#   RHEL-08-040282 / CCE-80953-8).  Valid kernel values are ``0``-``3``.
 # @param net__ipv4__conf__all__accept_redirects
 # @param net__ipv4__conf__all__accept_source_route
 # @param net__ipv4__conf__all__log_martians
@@ -133,7 +134,7 @@ class simp::sysctl (
   Integer[0]           $kernel__panic                                  = 10,
   Integer[0,2]         $kernel__randomize_va_space                     = 2,          # CCE-26999-3
   Integer[0]           $kernel__sysrq                                  = 0,
-  Integer[0,3]         $kernel__yama__ptrace_scope                     = 1,          # STIG RHEL-08-040282 / CCE-80953-8
+  Optional[Integer[0,3]] $kernel__yama__ptrace_scope                   = undef,       # Set to 1 for STIG RHEL-08-040282 / CCE-80953-8
   Integer[0,1]         $net__ipv4__conf__all__accept_redirects         = 0,          # CCE-27027-2
   Integer[0,1]         $net__ipv4__conf__all__accept_source_route      = 0,          # CCE-27037-1
   Integer[0,1]         $net__ipv4__conf__all__log_martians             = 1,          # CCE-27066-0
@@ -247,7 +248,9 @@ class simp::sysctl (
   }
 
   $_security_settings.each |$_key, $_value| {
-    unless $_key in $unmanaged_sysctls {
+    # $_value =~ Undef skips optional settings (e.g. kernel.yama.ptrace_scope)
+    # that are left unmanaged by default
+    unless $_key in $unmanaged_sysctls or $_value =~ Undef {
       sysctl { $_key: value => $_value }
     }
   }
