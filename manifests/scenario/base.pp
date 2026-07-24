@@ -7,6 +7,8 @@
 # @param mail_server
 #   Install a local mail service on the system
 #
+#   * Defaults to ``false`` so the MTA is opt-in (inherited from
+#     ``simp::mail_server``)
 #   * If ``true`` will install only a locally usable MTA
 #   * If ``remote`` will install a full mail server capable of processing
 #     remote connections

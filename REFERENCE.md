@@ -178,13 +178,16 @@ Data type: `Variant[Boolean,Enum['remote']]`
 
 Install a local mail service on the system
 
+* Defaults to ``false`` so the MTA is opt-in: installing Postfix on every
+  node adds attack surface that is unnecessary for sites that use a
+  dedicated relay or no MTA at all
 * If ``true`` will install only a locally usable MTA
 * If ``remote`` will install a full mail server capable of processing
   remote connections
     * If you use a remote server, you'll need to set the appropriate
       parameters for the ``postfix`` class
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-simp--rsync_stunnel"></a>`rsync_stunnel`
 
@@ -2065,6 +2068,8 @@ Data type: `Variant[Boolean,Enum['remote']]`
 
 Install a local mail service on the system
 
+* Defaults to ``false`` so the MTA is opt-in (inherited from
+  ``simp::mail_server``)
 * If ``true`` will install only a locally usable MTA
 * If ``remote`` will install a full mail server capable of processing
   remote connections
@@ -3118,6 +3123,7 @@ The following parameters are available in the `simp::sysctl` class:
 * [`kernel__panic`](#-simp--sysctl--kernel__panic)
 * [`kernel__randomize_va_space`](#-simp--sysctl--kernel__randomize_va_space)
 * [`kernel__sysrq`](#-simp--sysctl--kernel__sysrq)
+* [`kernel__yama__ptrace_scope`](#-simp--sysctl--kernel__yama__ptrace_scope)
 * [`net__ipv4__conf__all__accept_redirects`](#-simp--sysctl--net__ipv4__conf__all__accept_redirects)
 * [`net__ipv4__conf__all__accept_source_route`](#-simp--sysctl--net__ipv4__conf__all__accept_source_route)
 * [`net__ipv4__conf__all__log_martians`](#-simp--sysctl--net__ipv4__conf__all__log_martians)
@@ -3154,6 +3160,7 @@ The following parameters are available in the `simp::sysctl` class:
 * [`core_dump_dir`](#-simp--sysctl--core_dump_dir)
 * [`pam`](#-simp--sysctl--pam)
 * [`ipv6`](#-simp--sysctl--ipv6)
+* [`unmanaged_sysctls`](#-simp--sysctl--unmanaged_sysctls)
 
 ##### <a name="-simp--sysctl--net__netfilter__nf_conntrack_max"></a>`net__netfilter__nf_conntrack_max`
 
@@ -3395,6 +3402,18 @@ Data type: `Integer[0]`
 
 
 Default value: `0`
+
+##### <a name="-simp--sysctl--kernel__yama__ptrace_scope"></a>`kernel__yama__ptrace_scope`
+
+Data type: `Optional[Integer[0,3]]`
+
+Restricts the use of ``ptrace`` to processes with a defined relationship
+(parent/child by default).  Unmanaged by default (``undef``) so the OS
+default (``0`` on EL) is left in place; set to ``1`` to satisfy STIG/SSG
+controls that require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g.
+RHEL-08-040282 / CCE-80953-8).  Valid kernel values are ``0``-``3``.
+
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__accept_redirects"></a>`net__ipv4__conf__all__accept_redirects`
 
@@ -3684,6 +3703,18 @@ Data type: `Optional[Boolean]`
 Set to ``false`` to disable IPv6 on your system via ``sysctl``
 
 Default value: `undef`
+
+##### <a name="-simp--sysctl--unmanaged_sysctls"></a>`unmanaged_sysctls`
+
+Data type: `Array[String]`
+
+List of sysctl keys (e.g. ``net.core.somaxconn``) that this class should
+leave alone. Use when another tool (``tuned``, ``NetworkManager``, a
+container runtime, a vendor installer) already manages the value and SIMP
+should not fight over it. Keys must match the actual sysctl name, not the
+class parameter name.
+
+Default value: `[]`
 
 ### <a name="simp--version"></a>`simp::version`
 

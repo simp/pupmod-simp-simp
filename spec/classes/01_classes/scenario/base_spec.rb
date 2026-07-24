@@ -45,7 +45,8 @@ describe 'simp' do
         it { is_expected.to create_class('simp::root_user') }
         # simp_options::pam is not set in spec/fixtures/hieradata/default.yaml
         it { is_expected.not_to create_class('simp::pam_limits::max_logins') }
-        it { is_expected.to create_class('postfix') }
+        # mail_server defaults to false; postfix is opt-in
+        it { is_expected.not_to create_class('postfix') }
         it { is_expected.not_to create_class('postfix::server') }
         # simp_options::ldap is not set in spec/fixtures/hieradata/default.yaml
         it { is_expected.not_to create_class('simp_openldap::client') }
@@ -114,6 +115,14 @@ describe 'simp' do
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.not_to create_class('postfix') }
+        it { is_expected.not_to create_class('postfix::server') }
+      end
+
+      context 'mail_server = true' do
+        let(:params) { { mail_server: true } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_class('postfix') }
         it { is_expected.not_to create_class('postfix::server') }
       end
 
