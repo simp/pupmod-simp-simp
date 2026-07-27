@@ -1,3 +1,9 @@
+* Mon Jul 27 2026 Steven Pritchard <steve@sicura.us> - 8.0.1
+- (#353) Fix `simp::sysctl::ipv6: false` being ignored when
+  `net.ipv6.conf.all.disable_ipv6` is absent from the `simplib_sysctl` fact.
+  The IPv6 sysctls are now managed unconditionally with `silent => true`
+  instead of being gated on the fact.
+
 * Fri Jul 24 2026 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 8.0.0
 - (#325) Default `simp::mail_server` to `false` so Postfix is opt-in rather
   than installed on every node (BREAKING CHANGE for sites that relied on the
