@@ -37,7 +37,27 @@ describe 'simp class' do
       end
 
       it 'is idempotent' do
-        apply_manifest_on(host, manifest, catch_changes: true)
+        # pam sets pam_tty_audit to 'required' only once the simplib__auditd
+        # fact reports auditd is enforcing. This is deliberate: it avoids
+        # switching pam_tty_audit to 'required' before the kernel audit
+        # subsystem is active, which could otherwise lock users out. Because
+        # that fact transitions from false to true as this same catalog
+        # enables auditd, the sudo and *-auth PAM files legitimately change
+        # once more on the first run after the transition. The timing of that
+        # transition varies by platform (it can land later on EL8), so
+        # converge over a few runs before requiring a no-op run rather than
+        # assuming a fixed bootstrap length.
+        converged = false
+        5.times do
+          # catch_failures runs with --detailed-exitcodes and permits changes
+          # (exit 2) but still fails on errors (exit 4/6); exit 0 == no changes
+          result = apply_manifest_on(host, manifest, catch_failures: true)
+          if result.exit_code.zero?
+            converged = true
+            break
+          end
+        end
+        expect(converged).to eq(true)
       end
     end
   end
