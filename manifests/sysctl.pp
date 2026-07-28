@@ -94,6 +94,12 @@
 # @param ipv6
 #   Set to ``false`` to disable IPv6 on your system via ``sysctl``
 #
+#   @note This only affects systems where the IPv6 stack is present. If the
+#     ``ipv6`` kernel module is not loaded, or IPv6 was disabled on the kernel
+#     command line, the ``net.ipv6.*`` keys do not exist and cannot be set by
+#     ``sysctl``. Use a kernel command line argument (``ipv6.disable=1``) if you
+#     need IPv6 disabled before the stack is initialized.
+#
 # @param unmanaged_sysctls
 #   List of sysctl keys (e.g. ``net.core.somaxconn``) that this class should
 #   leave alone. Use when another tool (``tuned``, ``NetworkManager``, a
@@ -306,12 +312,24 @@ class simp::sysctl (
     'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
   }
 
-  # IPv6 sysctls are managed unconditionally (silent => true) so that
-  # `simp::sysctl::ipv6: false` still disables IPv6 even when the
-  # net.ipv6.conf.all.disable_ipv6 key is absent from the simplib_sysctl fact
+  # The IPv6 sysctls are declared unconditionally. They used to be gated on the
+  # simplib_sysctl fact, which meant a missing or stale fact silently dropped
+  # every IPv6 setting (including `simp::sysctl::ipv6: false`) from the catalog.
+  #
+  # `silent` is only enabled when the fact tells us the IPv6 stack is absent, in
+  # which case these keys do not exist and augeasproviders_sysctl would fail on
+  # them. Everywhere else we keep `silent => false` so that drift in the *running*
+  # kernel value is still detected and corrected -- in silent mode the provider
+  # skips the live value check entirely, which would weaken enforcement of the
+  # hardening settings above.
+  $_ipv6_silent = $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') ? {
+    undef   => true,
+    default => false,
+  }
+
   $_ipv6_settings.each |$_key, $_value| {
     unless $_key in $unmanaged_sysctls {
-      sysctl { $_key: value => $_value, silent => true }
+      sysctl { $_key: value => $_value, silent => $_ipv6_silent }
     }
   }
 }

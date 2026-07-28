@@ -1,8 +1,18 @@
-* Mon Jul 27 2026 Steven Pritchard <steve@sicura.us> - 8.0.1
-- (#353) Fix `simp::sysctl::ipv6: false` being ignored when
-  `net.ipv6.conf.all.disable_ipv6` is absent from the `simplib_sysctl` fact.
-  The IPv6 sysctls are now managed unconditionally with `silent => true`
-  instead of being gated on the fact.
+* Tue Jul 28 2026 Steven Pritchard <steve@sicura.us> - 8.1.0
+- (#353) Fix `simp::sysctl::ipv6` (and the other `simp::sysctl` IPv6 settings)
+  being silently dropped from the catalog when `net.ipv6.conf.all.disable_ipv6`
+  is absent from the `simplib_sysctl` fact. The IPv6 sysctls are now declared
+  unconditionally instead of being gated on the fact.
+  `silent => true` is set only when the fact indicates that the IPv6 stack is
+  absent, so drift in the running kernel values is still enforced everywhere
+  else.
+  NOTE: Hosts that previously received no IPv6 sysctl resources will now
+  receive all of them. If you worked around this bug by declaring your own
+  `sysctl` resources for those keys, add them to
+  `simp::sysctl::unmanaged_sysctls` to avoid duplicate resource declarations.
+  This does not disable IPv6 on systems where the `ipv6` kernel module is not
+  loaded -- those sysctls do not exist and cannot be set. Use the
+  `ipv6.disable=1` kernel command line argument for that.
 
 * Fri Jul 24 2026 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 8.0.0
 - (#325) Default `simp::mail_server` to `false` so Postfix is opt-in rather
