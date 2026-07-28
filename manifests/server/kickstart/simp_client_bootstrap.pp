@@ -112,7 +112,6 @@ class simp::server::kickstart::simp_client_bootstrap (
   Stdlib::Absolutepath        $data_dir                = simplib::lookup('simp::server::kickstart::data_dir', { 'default_value' => '/var/www' }),
   Stdlib::Absolutepath        $directory               = "${data_dir}/ks",
   String                      $service_root_name       = 'simp_client_bootstrap',
-  Variant[Array, Hash]        $ntp_servers             = simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] }),
   Boolean                     $set_static_hostname     = true,
   Optional[Simplib::Host]     $puppet_server           = simplib::lookup('simp_options::puppet::server', { 'default_value' => undef }),
   Optional[Simplib::Host]     $puppet_ca               = simplib::lookup('simp_options::puppet::ca', { 'default_value' => undef }),

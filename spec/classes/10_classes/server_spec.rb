@@ -76,11 +76,6 @@ describe 'simp::server' do
               'ssh',
             ]
             simp_lite_os_spec = case os_facts[:os][:release][:major]
-                                when '7'
-                                  [
-                                    'ntpd',
-                                  ]
-                                else
                                   [
                                     'chrony',
                                   ]
