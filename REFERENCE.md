@@ -3702,6 +3702,12 @@ Data type: `Optional[Boolean]`
 
 Set to ``false`` to disable IPv6 on your system via ``sysctl``
 
+@note This only affects systems where the IPv6 stack is present. If the
+  ``ipv6`` kernel module is not loaded, or IPv6 was disabled on the kernel
+  command line, the ``net.ipv6.*`` keys do not exist and cannot be set by
+  ``sysctl``. Use a kernel command line argument (``ipv6.disable=1``) if you
+  need IPv6 disabled before the stack is initialized.
+
 Default value: `undef`
 
 ##### <a name="-simp--sysctl--unmanaged_sysctls"></a>`unmanaged_sysctls`

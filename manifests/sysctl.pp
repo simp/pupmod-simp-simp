@@ -94,6 +94,12 @@
 # @param ipv6
 #   Set to ``false`` to disable IPv6 on your system via ``sysctl``
 #
+#   @note This only affects systems where the IPv6 stack is present. If the
+#     ``ipv6`` kernel module is not loaded, or IPv6 was disabled on the kernel
+#     command line, the ``net.ipv6.*`` keys do not exist and cannot be set by
+#     ``sysctl``. Use a kernel command line argument (``ipv6.disable=1``) if you
+#     need IPv6 disabled before the stack is initialized.
+#
 # @param unmanaged_sysctls
 #   List of sysctl keys (e.g. ``net.core.somaxconn``) that this class should
 #   leave alone. Use when another tool (``tuned``, ``NetworkManager``, a
@@ -287,30 +293,43 @@ class simp::sysctl (
     $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
   }
 
-  if $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') {
-    $_ipv6_settings = {
-      'net.ipv6.conf.all.accept_redirects'         => $net__ipv6__conf__all__accept_redirects,
-      'net.ipv6.conf.all.accept_source_route'      => $net__ipv6__conf__all__accept_source_route,
-      'net.ipv6.conf.all.autoconf'                 => $net__ipv6__conf__all__autoconf,
-      'net.ipv6.conf.all.disable_ipv6'             => $_disable_ipv6,
-      'net.ipv6.conf.all.forwarding'               => $net__ipv6__conf__all__forwarding,
-      'net.ipv6.conf.all.accept_ra'                => $net__ipv6__conf__all__accept_ra,
-      'net.ipv6.conf.default.accept_ra'            => $net__ipv6__conf__default__accept_ra,
-      'net.ipv6.conf.default.accept_ra_defrtr'     => $net__ipv6__conf__default__accept_ra_defrtr,
-      'net.ipv6.conf.default.accept_ra_pinfo'      => $net__ipv6__conf__default__accept_ra_pinfo,
-      'net.ipv6.conf.default.accept_ra_rtr_pref'   => $net__ipv6__conf__default__accept_ra_rtr_pref,
-      'net.ipv6.conf.default.accept_redirects'     => $net__ipv6__conf__default__accept_redirects,
-      'net.ipv6.conf.default.accept_source_route'  => $net__ipv6__conf__default__accept_source_route,
-      'net.ipv6.conf.default.autoconf'             => $net__ipv6__conf__default__autoconf,
-      'net.ipv6.conf.default.dad_transmits'        => $net__ipv6__conf__default__dad_transmits,
-      'net.ipv6.conf.default.max_addresses'        => $net__ipv6__conf__default__max_addresses,
-      'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
-    }
+  $_ipv6_settings = {
+    'net.ipv6.conf.all.accept_redirects'         => $net__ipv6__conf__all__accept_redirects,
+    'net.ipv6.conf.all.accept_source_route'      => $net__ipv6__conf__all__accept_source_route,
+    'net.ipv6.conf.all.autoconf'                 => $net__ipv6__conf__all__autoconf,
+    'net.ipv6.conf.all.disable_ipv6'             => $_disable_ipv6,
+    'net.ipv6.conf.all.forwarding'               => $net__ipv6__conf__all__forwarding,
+    'net.ipv6.conf.all.accept_ra'                => $net__ipv6__conf__all__accept_ra,
+    'net.ipv6.conf.default.accept_ra'            => $net__ipv6__conf__default__accept_ra,
+    'net.ipv6.conf.default.accept_ra_defrtr'     => $net__ipv6__conf__default__accept_ra_defrtr,
+    'net.ipv6.conf.default.accept_ra_pinfo'      => $net__ipv6__conf__default__accept_ra_pinfo,
+    'net.ipv6.conf.default.accept_ra_rtr_pref'   => $net__ipv6__conf__default__accept_ra_rtr_pref,
+    'net.ipv6.conf.default.accept_redirects'     => $net__ipv6__conf__default__accept_redirects,
+    'net.ipv6.conf.default.accept_source_route'  => $net__ipv6__conf__default__accept_source_route,
+    'net.ipv6.conf.default.autoconf'             => $net__ipv6__conf__default__autoconf,
+    'net.ipv6.conf.default.dad_transmits'        => $net__ipv6__conf__default__dad_transmits,
+    'net.ipv6.conf.default.max_addresses'        => $net__ipv6__conf__default__max_addresses,
+    'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
+  }
 
-    $_ipv6_settings.each |$_key, $_value| {
-      unless $_key in $unmanaged_sysctls {
-        sysctl { $_key: value => $_value }
-      }
+  # The IPv6 sysctls are declared unconditionally. They used to be gated on the
+  # simplib_sysctl fact, which meant a missing or stale fact silently dropped
+  # every IPv6 setting (including `simp::sysctl::ipv6: false`) from the catalog.
+  #
+  # `silent` is only enabled when the fact tells us the IPv6 stack is absent, in
+  # which case these keys do not exist and augeasproviders_sysctl would fail on
+  # them. Everywhere else we keep `silent => false` so that drift in the *running*
+  # kernel value is still detected and corrected -- in silent mode the provider
+  # skips the live value check entirely, which would weaken enforcement of the
+  # hardening settings above.
+  $_ipv6_silent = $facts.dig('simplib_sysctl', 'net.ipv6.conf.all.disable_ipv6') ? {
+    undef   => true,
+    default => false,
+  }
+
+  $_ipv6_settings.each |$_key, $_value| {
+    unless $_key in $unmanaged_sysctls {
+      sysctl { $_key: value => $_value, silent => $_ipv6_silent }
     }
   }
 }

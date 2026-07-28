@@ -14,9 +14,11 @@ describe 'simp::sysctl' do
             it { is_expected.to create_class('simp::sysctl') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_pattern]') }
             it { is_expected.not_to create_file('/var/core').that_comes_before('Sysctl[kernel.core_uses_pid]') }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0) }
+            # silent => false so that live (running kernel) drift is still
+            # enforced; see the note in manifests/sysctl.pp
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: false) }
             it { is_expected.to create_sysctl('fs.inotify.max_user_watches').with(value: 102_400) }
             it { is_expected.not_to create_sysctl('kernel.yama.ptrace_scope') }
           end
@@ -34,10 +36,10 @@ describe 'simp::sysctl' do
               os_facts.merge(ipv6_enabled: true)
             end
 
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 0, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: false) }
           end
 
           context 'with ipv6 disabled' do
@@ -50,10 +52,42 @@ describe 'simp::sysctl' do
               }
             end
 
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 1) }
-            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 1) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 1, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 1, silent: false) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 1, silent: false) }
+          end
+
+          # The IPv6 settings used to be gated on this fact, so a missing (or
+          # stale) fact dropped them from the catalog entirely. os_facts is
+          # symbol-keyed today, but normalize with to_sym so this keeps working
+          # if that ever changes -- a key type mismatch here fails open and
+          # leaves the fact in place, silently making the test a no-op.
+          context 'with ipv6 disabled and no simplib_sysctl fact' do
+            let(:params) { { ipv6: false } }
+            let(:facts) { os_facts.reject { |fact, _value| fact.to_sym == :simplib_sysctl } }
+
+            it { is_expected.to compile.with_all_deps }
+
+            # silent => true only here, because a missing fact means the keys
+            # may not exist and the provider would otherwise fail on them
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(value: 1, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_source_route').with(value: 0, silent: true) }
+            it { is_expected.to create_sysctl('net.ipv6.conf.default.accept_source_route').with(value: 0, silent: true) }
+          end
+
+          context 'with ipv6 disabled and the ipv6 keys in unmanaged_sysctls' do
+            let(:params) do
+              {
+                ipv6: false,
+                unmanaged_sysctls: ['net.ipv6.conf.all.disable_ipv6'],
+              }
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.not_to create_sysctl('net.ipv6.conf.all.disable_ipv6') }
+            it { is_expected.to create_sysctl('net.ipv6.conf.all.accept_redirects') }
           end
 
           context 'kernel__core_pattern with absolute path' do
