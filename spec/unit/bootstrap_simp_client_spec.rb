@@ -20,14 +20,6 @@ describe 'BootstrapSimpClient' do
       stderr: '',
     }
   end
-  let(:uname_result) do
-    {
-      exitstatus: 0,
-      stdout: '3.4.5',
-      stderr: '',
-    }
-  end
-
   let(:selinux_off) { { 'selinux' => { 'enabled' => false } } }
 
   let(:selinux_disabled) do
@@ -356,8 +348,7 @@ describe 'BootstrapSimpClient' do
     end
 
     it 'returns 0 when processing succeeds' do
-      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(uname_result)
-      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return(success_result)
+      allow(bootstrap).to receive(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").and_return(success_result)
       puppet_cmd1 = "#{puppet_command} agent --onetime --no-daemonize" \
                     " --no-show_diff --no-splay --verbose --logdest #{log_file}" \
                     ' --waitforcert 10 --evaltrace --summarize --tags pupmod,simp'
@@ -557,46 +548,29 @@ describe 'BootstrapSimpClient' do
       allow(bootstrap).to receive(:execute).and_return(
         exitstatus: -1,
         stdout: '',
-        stderr: 'some ntpdate error',
+        stderr: 'some chronyd error',
       )
       bootstrap.parse_command_line(test_args)
 
-      # if we try to run ntdpdate, this will fail
+      # if we try to run chronyd, this will fail
       bootstrap.set_system_time
     end
 
-    it 'when ntp servers are configured it runs ntpdate for kernel < 4' do
-      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(uname_result)
-      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return(success_result)
-      bootstrap.parse_command_line(test_args + [ '-n', 'ntpserver1,ntpserver2' ])
-      bootstrap.set_system_time
-    end
-
-    it 'when ntp servers are configured it runs chronyd for kernel >= 4 ' do
-      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(
-        exitstatus: 0,
-        stdout: '4.14.5',
-        stderr: '',
-      )
+    it 'when ntp servers are configured it runs chronyd' do
       allow(bootstrap).to receive(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").and_return(success_result)
       bootstrap.parse_command_line(test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
     end
 
-    it 'logs error when ntpdate fails' do
-      allow(bootstrap).to receive(:execute).with('/usr/bin/uname -r').and_return(
-        exitstatus: 0,
-        stdout: '3.14.5',
-        stderr: '',
-      )
-      allow(bootstrap).to receive(:execute).with('/usr/sbin/ntpdate -b ntpserver1 ntpserver2').and_return(
+    it 'logs error when chronyd fails' do
+      allow(bootstrap).to receive(:execute).with("/usr/sbin/chronyd -q 'server ntpserver1 iburst' 'server ntpserver2 iburst'").and_return(
         exitstatus: -1,
         stdout: '',
-        stderr: 'some ntpdate error',
+        stderr: 'some chronyd error',
       )
       bootstrap.parse_command_line(test_args + [ '-n', 'ntpserver1,ntpserver2' ])
       bootstrap.set_system_time
-      expect(File.read(log_file)).to include('(warning): some ntpdate error')
+      expect(File.read(log_file)).to include('(warning): some chronyd error')
     end
   end
 

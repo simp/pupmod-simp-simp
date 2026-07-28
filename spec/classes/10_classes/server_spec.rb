@@ -75,11 +75,9 @@ describe 'simp::server' do
               'simp::sysctl',
               'ssh',
             ]
-            simp_lite_os_spec = case os_facts[:os][:release][:major]
-                                  [
-                                    'chrony',
-                                  ]
-                                end
+            simp_lite_os_spec = [
+              'chrony',
+            ]
             simp = [
               'pam::wheel',
               'svckill',
