@@ -1,3 +1,10 @@
+* Tue Jul 28 2026 Hazel Caballero <hazel@sicura.us> - 8.2.0
+- (#374) Remove all references to the archived pupmod-simp-ntpd module: drop
+  the `simp/ntpd` metadata dependency and fixture, consolidate the kickstart
+  client's time-server lookup onto `simp_options::ntp::servers`, and remove
+  the dead EL7 ntpdate path from `bootstrap_simp_client` (chrony is now used
+  unconditionally)
+
 * Tue Jul 28 2026 Steven Pritchard <steve@sicura.us> - 8.1.0
 - (#353) Fix `simp::sysctl::ipv6` (and the other `simp::sysctl` IPv6 settings)
   being silently dropped from the catalog when `net.ipv6.conf.all.disable_ipv6`

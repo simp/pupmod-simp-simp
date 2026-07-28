@@ -160,16 +160,6 @@ to the ``scenario`` selected above.
 * Any Array item in the lookup hierarchy that you prefix with ``--`` will
   be **removed** from the Array
 
-@example The following list would include the `apache` class and exclude
-  the `ntpd` class:
-
-  ```
-  ---
-  simp::classes:
-      - 'apache'
-      - '--ntpd'
-  ```
-
 Default value: `[]`
 
 ##### <a name="-simp--mail_server"></a>`mail_server`
@@ -2480,7 +2470,7 @@ prior to PKI key distribution.
 **NOTE**: Failure to set the system clock will not cause the
 simp_client_bootstrap scripts to fail to execute.
 
-Default value: `simplib::lookup('simp_options::ntpd::servers', { 'default_value' => [] })`
+Default value: `simplib::lookup('simp_options::ntp::servers', { 'default_value' => [] })`
 
 ##### <a name="-simp--server--kickstart--simp_client_bootstrap--set_static_hostname"></a>`set_static_hostname`
 

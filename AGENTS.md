@@ -43,7 +43,7 @@ Control flow (`init.pp`):
   `simp::knockout(union($scenario_map[$scenario], $classes))` — the scenario's
   classes unioned with the caller-supplied `$classes` array, then filtered
   through the `simp::knockout` function which honours a `--` knockout prefix
-  (an entry `--ntpd` removes `ntpd` from the list).
+  (an entry `--chrony` removes `chrony` from the list).
 - If the resulting list is empty, it emits a `notify` warning that
   auto-classification is disabled (gated on `$classification_warning`) rather
   than failing.
@@ -187,7 +187,7 @@ distinct `simp_options::*` seams consumed across the manifests:
 
 `simp_options::auditd`, `simp_options::authselect`, `simp_options::clamav`,
 `simp_options::fips`, `simp_options::firewall`, `simp_options::ldap`,
-`simp_options::ntpd::servers`, `simp_options::package_ensure`,
+`simp_options::ntp::servers`, `simp_options::package_ensure`,
 `simp_options::pam`, `simp_options::puppet::ca`, `simp_options::puppet::ca_port`,
 `simp_options::puppet::server`, `simp_options::sssd`, `simp_options::stunnel`,
 `simp_options::trusted_nets`.
