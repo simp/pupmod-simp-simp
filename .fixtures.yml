@@ -52,7 +52,6 @@ fixtures:
     named: https://github.com/simp/pupmod-simp-named.git
     nfs: https://github.com/simp/pupmod-simp-nfs.git
     nsswitch: https://github.com/simp/pupmod-puppet-nsswitch.git
-    ntpd: https://github.com/simp/pupmod-simp-ntpd.git
     oddjob: https://github.com/simp/pupmod-simp-oddjob.git
     pam: https://github.com/simp/pupmod-simp-pam.git
     pki: https://github.com/simp/pupmod-simp-pki.git

@@ -3,7 +3,7 @@
 simp_options::puppet::server: "%{facts.networking.fqdn}"
 simp_options::puppet::ca: "%{facts.networking.fqdn}"
 simp_options::dns::servers: ['8.8.8.8']
-simp_options::ntpd::servers: ['time.nist.gov']
+simp_options::ntp::servers: ['time.nist.gov']
 simp_options::ldap::bind_pw: 's00per sekr3t!'
 simp_options::ldap::bind_hash: '{SSHA}foobarbaz!!!!'
 simp_options::ldap::sync_pw: 's00per sekr3t!'

@@ -1,3 +1,17 @@
+* Wed Jul 29 2026 Hazel Caballero <hazel@sicura.us> - 9.0.0
+- (#374) Remove all references to the archived pupmod-simp-ntpd module: drop
+  the `simp/ntpd` metadata dependency and fixture, consolidate the kickstart
+  client's time-server lookup onto `simp_options::ntp::servers`, and remove
+  the dead EL7 ntpdate path from `bootstrap_simp_client` (chrony is now used
+  unconditionally)
+- BREAKING CHANGE: `simp::server::kickstart::simp_client_bootstrap` now looks
+  up its `ntp_servers` default from `simp_options::ntp::servers` instead of
+  the deprecated `simp_options::ntpd::servers`. Sites that set
+  `simp_options::ntpd::servers` in hieradata MUST rename the key to
+  `simp_options::ntp::servers`, or client kickstarts will silently skip the
+  initial time sync (clock skew there can break PKI certificate validation
+  during bootstrap)
+
 * Tue Jul 28 2026 Steven Pritchard <steve@sicura.us> - 8.1.0
 - (#353) Fix `simp::sysctl::ipv6` (and the other `simp::sysctl` IPv6 settings)
   being silently dropped from the catalog when `net.ipv6.conf.all.disable_ipv6`

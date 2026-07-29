@@ -37,16 +37,6 @@
 #   * Any Array item in the lookup hierarchy that you prefix with ``--`` will
 #     be **removed** from the Array
 #
-#   @example The following list would include the `apache` class and exclude
-#     the `ntpd` class:
-#
-#     ```
-#     ---
-#     simp::classes:
-#         - 'apache'
-#         - '--ntpd'
-#     ```
-#
 # @param mail_server
 #   Install a local mail service on the system
 #
