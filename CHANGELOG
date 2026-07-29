@@ -1,3 +1,9 @@
+* Wed Jul 29 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
+- Remove references to archived SIMP modules (sudosh, tcpwrappers, xinetd,
+  chkrootkit, simp_openldap): drop their fixtures and metadata dependencies
+- BREAKING CHANGE: `simp::admin::logged_shell` no longer accepts `sudosh`;
+  `tlog` is the only supported logged shell
+
 * Wed Jul 29 2026 Hazel Caballero <hazel@sicura.us> - 9.0.0
 - (#374) Remove all references to the archived pupmod-simp-ntpd module: drop
   the `simp/ntpd` metadata dependency and fixture, consolidate the kickstart
