@@ -30,8 +30,8 @@ describe 'remote_access scenario' do
   # Both client and server need these
   hosts_with_role(hosts, 'ldap_server').each do |ldap_server|
     context 'Test running on current LDAP server #{ldap_server}' do
-      let(:server_fqdn) { fact_on(ldap_server, 'fqdn') }
-      let(:base_dn) { fact_on(ldap_server, 'domain').split('.').map { |d| "dc=#{d}" }.join(',') }
+      let(:server_fqdn) { fact_on(ldap_server, 'networking.fqdn') }
+      let(:base_dn) { fact_on(ldap_server, 'networking.domain').split('.').map { |d| "dc=#{d}" }.join(',') }
       # For now default to openldap server until test includes a 389DS server
       let(:ldap_type) do
         '389ds'
@@ -75,7 +75,7 @@ describe 'remote_access scenario' do
           let(:common_hieradata)      { File.read(File.expand_path('templates/common_hieradata.yaml.erb', File.dirname(__FILE__))) }
           let(:client_hieradata)      { File.read(File.expand_path('templates/client_hieradata.yaml.erb', File.dirname(__FILE__))) }
           let(:cc_hieradata)          { common_hieradata.to_s + "\n#{client_hieradata}" }
-          let(:client_fqdn) { fact_on(client, 'fqdn') }
+          let(:client_fqdn) { fact_on(client, 'networking.fqdn') }
 
           it 'configures hiera' do
             set_hieradata_on(client, ERB.new(cc_hieradata).result(binding))

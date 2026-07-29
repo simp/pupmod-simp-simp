@@ -5,8 +5,8 @@ test_name 'simp::netconsole class'
 describe 'simp::netconsole class' do
   let(:shipper) { only_host_with_role(hosts, 'shipper') }
   let(:receiver) { only_host_with_role(hosts, 'receiver') }
-  let(:receiver_ip) { fact_on(receiver, 'ipaddress_eth1') }
-  let(:receiver_mac) { fact_on(receiver, 'macaddress_eth1') }
+  let(:receiver_ip) { fact_on(receiver, 'networking.interfaces.eth1.ip') }
+  let(:receiver_mac) { fact_on(receiver, 'networking.interfaces.eth1.mac') }
 
   context 'should send logs' do
     let(:manifest) do

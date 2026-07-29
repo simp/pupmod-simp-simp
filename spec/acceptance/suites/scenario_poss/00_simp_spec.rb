@@ -23,7 +23,7 @@ describe 'simp "poss" scenario' do
   end
 
   hosts.each do |host|
-    let(:host_fqdn) { fact_on(host, 'fqdn') }
+    let(:host_fqdn) { fact_on(host, 'networking.fqdn') }
     let(:ssh_authorized_key) do
       on(host, 'cat ~/.ssh/authorized_keys').stdout.strip.lines.first.split(%r{\s+})[1]
     end

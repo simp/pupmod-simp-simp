@@ -108,7 +108,15 @@ class simp::puppetdb (
 
   $_simp_manage_firewall = ($manage_firewall and $firewall)
 
-  $_java_max_memory = inline_template('<% if @java_max_memory[-1].chr == "%" %><%= (@memorysize_mb.to_f * (@java_max_memory[0..-2].to_f/100.0)).round.to_s + "m" %><% else %><%= @java_max_memory %><% end %>')
+  # A percentage is converted to megabytes of system memory; anything else is
+  # passed to Java verbatim
+  if $java_max_memory =~ /^(\d+(?:\.\d+)?)%$/ {
+    $_system_memory_mb = Float($facts['memory']['system']['total_bytes']) / 1048576
+    $_java_max_memory = "${round($_system_memory_mb * Float($1) / 100.0)}m"
+  }
+  else {
+    $_java_max_memory = $java_max_memory
+  }
 
   if !defined('puppetdb::java_args') or empty($puppetdb::java_args) {
     $_java_heapdump_on_oom = $java_heapdump_on_oom ? {
