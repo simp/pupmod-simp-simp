@@ -25,7 +25,6 @@ describe 'simp_admin' do
             expect(host.check_for_package('tlog')).to be true
           end
         end
-
       end
     end
   end
