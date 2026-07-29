@@ -20,7 +20,7 @@ describe 'windows node' do
 
   # A Linux host has to be in the nodeset for the setup code
   hosts_with_role(hosts, 'windows').each do |host|
-    let(:host_fqdn) { fact_on(host, 'fqdn') }
+    let(:host_fqdn) { fact_on(host, 'networking.fqdn') }
 
     it 'applies the test manifest' do
       set_hieradata_on(host, hieradata)

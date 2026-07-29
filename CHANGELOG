@@ -1,3 +1,12 @@
+* Wed Jul 29 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
+- Replace legacy facts with structured facts (fixes #329)
+  - `simp::puppetdb` computes percentage-based Java heap sizes from
+    `$facts['memory']['system']['total_bytes']` in native Puppet instead
+    of an inline ERB template using the legacy `memorysize_mb` fact
+  - Acceptance tests query `networking.*` structured facts instead of
+    the flat `fqdn`, `domain`, `ipaddress_eth1`, and `macaddress_eth1`
+    facts
+
 * Wed Jul 29 2026 Hazel Caballero <hazel@sicura.us> - 9.0.0
 - (#374) Remove all references to the archived pupmod-simp-ntpd module: drop
   the `simp/ntpd` metadata dependency and fixture, consolidate the kickstart
