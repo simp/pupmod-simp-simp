@@ -139,6 +139,31 @@ describe 'simp::puppetdb' do
             }
           end
 
+          context 'with a percentage java_max_memory' do
+            let(:hieradata) { 'simp__puppetdb' }
+            let(:params) { { java_max_memory: '40%' } }
+            let(:expected_xmx) do
+              "#{(os_facts[:memory][:system][:total_bytes].to_f / 1_048_576 * 0.40).round}m"
+            end
+
+            it { is_expected.to compile.with_all_deps }
+            it 'computes -Xmx from the system memory fact' do
+              java_args = catalogue.resource('Class[puppetdb]')[:java_args]
+              expect(java_args['-Xmx']).to eq(expected_xmx)
+            end
+          end
+
+          context 'with an absolute java_max_memory' do
+            let(:hieradata) { 'simp__puppetdb' }
+            let(:params) { { java_max_memory: '2g' } }
+
+            it { is_expected.to compile.with_all_deps }
+            it 'passes -Xmx through verbatim' do
+              java_args = catalogue.resource('Class[puppetdb]')[:java_args]
+              expect(java_args['-Xmx']).to eq('2g')
+            end
+          end
+
           context 'with read_database_ssl = true' do
             let(:hieradata) { 'simp__puppetdb' }
             let(:params) { { read_database_ssl: true } }
