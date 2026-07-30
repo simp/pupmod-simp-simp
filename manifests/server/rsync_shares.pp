@@ -63,14 +63,6 @@ class simp::server::rsync_shares (
         $_globals_dir   = 'rsync/Global'
         $_global_shares = $rsync_environments[$_env]['rsync']['global']['shares']
 
-        if 'clamav' in $_global_shares {
-          rsync::server::section { "clamav_${_env}":
-            comment     => "ClamAV Virus Database Updates for Environment ${_env}",
-            path        => "${rsync_base}/${_env}/${_globals_dir}/clamav",
-            hosts_allow => $_trusted_nets,
-          }
-        }
-
         if 'mcafee' in $_global_shares {
           rsync::server::section { "mcafee_${_env}":
             comment     => "McAfee DAT files for Environment ${_env}",

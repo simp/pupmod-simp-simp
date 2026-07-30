@@ -7,14 +7,6 @@
 # @param pam
 #   Enable SIMP management of the PAM stack
 #
-# @param clamav
-#   Deprecated. Enable SIMP management of Antivirus
-#
-#   This parameter and the simp_options::clamav catalyst are deprecated and
-#   both will be removed in a future SIMP release. Once removed, if you want
-#   to manage ClamAV, you will have to manually include the `clamav` class
-#   from the `simp-clamav` module in the server's class list.
-#
 # @param auditd
 #   Enable SIMP management of auditing
 #
@@ -37,7 +29,6 @@ class simp::server (
   Hash[String, Array] $scenario_map,
   Boolean             $allow_simp_user = false,
   Boolean             $pam             = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean             $clamav          = simplib::lookup('simp_options::clamav', { 'default_value' => false }),
   Boolean             $auditd          = simplib::lookup('simp_options::auditd', { 'default_value' => false }),
   String              $scenario        = simplib::lookup('simp::scenario', { 'default_value' => 'simp' }),
   Array[String]       $classes         = []
@@ -61,10 +52,6 @@ class simp::server (
   } else {
     fail("ERROR - Invalid scenario '${scenario}' for the given scenario map.")
   }
-
-  # This setting will be removed from future releases of simp.
-  # See the simp-clamav module for information on how manage ClamAV
-  if $clamav { include 'clamav' }
 
   if $auditd { include 'auditd' }
 

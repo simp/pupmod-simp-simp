@@ -12,7 +12,6 @@ simp_options::ldap::root_hash: '{SSHA}foobarbaz!!!!'
 simp::scenario: simp
 simp_options::ldap: false
 simp_options::rsync: false
-simp_options::clamav: false
 simp_options::pki: true
 simp_options::pki::source: '/etc/pki/simp-testing/pki'
 simp_options::trusted_nets: ['0.0.0.0/0']

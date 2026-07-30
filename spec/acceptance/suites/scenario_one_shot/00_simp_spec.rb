@@ -53,7 +53,6 @@ describe 'simp "one_shot" scenario' do
 
       # Disable network stuff
       simp_options::rsync: false
-      simp_options::clamav: false
       simp_options::ldap: false
 
       # Enable everything else
