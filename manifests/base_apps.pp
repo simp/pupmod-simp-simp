@@ -13,16 +13,11 @@
 # @param extra_apps
 #   A list of other applications that you wish to install
 #
-# @param manage_elinks_config
-#   DEPRECATED: This functionality is not required for normal operation of the
-#   system and should be moved to external management.
-#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 #
 class simp::base_apps (
-  Simp::PackageEnsure       $ensure               = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
-  Optional[Array[String,1]] $extra_apps           = undef,
-  Optional[Boolean]         $manage_elinks_config = undef
+  Simp::PackageEnsure       $ensure     = simplib::lookup('simp_options::package_ensure', { 'default_value' => 'installed' }),
+  Optional[Array[String,1]] $extra_apps = undef
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 

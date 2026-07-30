@@ -41,9 +41,6 @@
 # @param kernel__core_uses_pid
 # @param kernel__dmesg_restrict
 #
-# @param kernel__exec_shield
-#   **DEPRECATED BY VENDOR WILL BE REMOVED IN NEXT RELEASE**
-#
 # @param kernel__panic
 # @param kernel__randomize_va_space
 # @param kernel__sysrq
@@ -136,7 +133,6 @@ class simp::sysctl (
   Integer[0]           $kernel__core_pipe_limit                        = 0,
   Integer[0,1]         $kernel__core_uses_pid                          = 1,
   Integer[0,1]         $kernel__dmesg_restrict                         = 1,          # CCE-27366-4
-  Integer[0,1]         $kernel__exec_shield                            = 1,          # CCE-27007-4
   Integer[0]           $kernel__panic                                  = 10,
   Integer[0,2]         $kernel__randomize_va_space                     = 2,          # CCE-26999-3
   Integer[0]           $kernel__sysrq                                  = 0,

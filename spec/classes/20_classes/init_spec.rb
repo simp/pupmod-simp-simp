@@ -171,7 +171,6 @@ describe 'simp' do
               'timezone',
               'simp::admin',
               'simp::base_apps',
-              'simp::base_services',
               'simp::kmod_blacklist',
               'simp::mountpoints',
               'simp::prelink',

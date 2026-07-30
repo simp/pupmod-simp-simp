@@ -19,11 +19,6 @@
 #   * Please see the module data for the exact class list that is included in
 #     each scenario
 #
-# @param enable_data_includes
-#   **Deprecated** - Has no effect
-#
-#   * Will be removed in the next major release
-#
 # @param classes
 #   A list of classes that you wish to include in your SIMP stack in addition
 #   to the ``scenario`` selected above.
@@ -147,7 +142,6 @@ class simp (
   Stdlib::Filemode                $vardir_mode,
   Hash                            $scenario_map,
   String                          $scenario                   = 'simp',
-  Boolean                         $enable_data_includes       = true,
   Array                           $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = false,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::stunnel', { 'default_value' => true }),

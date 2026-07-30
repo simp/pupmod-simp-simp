@@ -34,7 +34,6 @@ simp::scenario_map:
     - resolv
     - simp::admin
     - simp::base_apps
-    - simp::base_services
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -64,7 +63,6 @@ simp::scenario_map:
     - resolv
     - simp::admin
     - simp::base_apps
-    - simp::base_services
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -98,7 +96,6 @@ simp::scenario_map:
     - resolv
     - simp::admin
     - simp::base_apps
-    - simp::base_services
     - simp::kmod_blacklist
     - simp::mountpoints
     - simp::nsswitch
@@ -130,7 +127,6 @@ simp::server::data:
   - resolv
   - simp::admin
   - simp::base_apps
-  - simp::base_services
   - simp::kmod_blacklist
   - simp::mountpoints
   - simp::nsswitch
