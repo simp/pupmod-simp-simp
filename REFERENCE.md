@@ -9,7 +9,6 @@
 * [`simp`](#simp): This class provides an entry point to configuring your systems to
 * [`simp::admin`](#simp--admin): Set up a host of common administrative functions including
 * [`simp::base_apps`](#simp--base_apps): This is a set of applications that you will want on most systems
-* [`simp::base_services`](#simp--base_services): Deprecated - This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simp--ctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
 * [`simp::kmod_blacklist`](#simp--kmod_blacklist): This class provides a default set of blacklist entries per the SCAP
 * [`simp::kmod_blacklist::lock_modules`](#simp--kmod_blacklist--lock_modules): This class toggles the ability to load any further kernel modules
@@ -39,8 +38,6 @@
 * [`simp::sysctl`](#simp--sysctl): Sets sysctl settings that are useful from a general 'modern system'
 * [`simp::version`](#simp--version): Places SIMP version related information on the filesystem
 * [`simp::yum::repo::internet_simp`](#simp--yum--repo--internet_simp): Configure yum to use the internet public repository for SIMP
-* [`simp::yum::repo::internet_simp_dependencies`](#simp--yum--repo--internet_simp_dependencies): DEPRECATED Configure yum to use the internet public repositories for SIMP dependencies
-* [`simp::yum::repo::internet_simp_server`](#simp--yum--repo--internet_simp_server): DEPRECATED Configure yum to use the internet public repository for SIMP servers
 * [`simp::yum::repo::local_os_updates`](#simp--yum--repo--local_os_updates): Configure yum to use a (SIMP-managed) OS Updates repository for
 network-isolated environments.
 * [`simp::yum::repo::local_simp`](#simp--yum--repo--local_simp): Set up the local SIMP repositiories for network-isolated
@@ -85,7 +82,6 @@ The following parameters are available in the `simp` class:
 
 * [`scenario_map`](#-simp--scenario_map)
 * [`scenario`](#-simp--scenario)
-* [`enable_data_includes`](#-simp--enable_data_includes)
 * [`classes`](#-simp--classes)
 * [`mail_server`](#-simp--mail_server)
 * [`rsync_stunnel`](#-simp--rsync_stunnel)
@@ -105,7 +101,6 @@ The following parameters are available in the `simp` class:
 * [`manage_rc_local`](#-simp--manage_rc_local)
 * [`pam`](#-simp--pam)
 * [`sssd`](#-simp--sssd)
-* [`ldap`](#-simp--ldap)
 * [`stock_sssd`](#-simp--stock_sssd)
 * [`classification_warning`](#-simp--classification_warning)
 * [`vardir_owner`](#-simp--vardir_owner)
@@ -133,16 +128,6 @@ The SIMP 'scenario' that you wish to apply to your system
   each scenario
 
 Default value: `'simp'`
-
-##### <a name="-simp--enable_data_includes"></a>`enable_data_includes`
-
-Data type: `Boolean`
-
-**Deprecated** - Has no effect
-
-* Will be removed in the next major release
-
-Default value: `true`
 
 ##### <a name="-simp--classes"></a>`classes`
 
@@ -332,14 +317,6 @@ Enable management of SSSD resources via SIMP modules
 
 Default value: `simplib::lookup('simp_options::sssd', { 'default_value' => true })`
 
-##### <a name="-simp--ldap"></a>`ldap`
-
-Data type: `Boolean`
-
-Enable management of LDAP resources via SIMP modules
-
-Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
-
 ##### <a name="-simp--stock_sssd"></a>`stock_sssd`
 
 Data type: `Boolean`
@@ -502,9 +479,12 @@ Default value: `true`
 
 ##### <a name="-simp--admin--logged_shell"></a>`logged_shell`
 
-Data type: `Enum['sudosh','tlog']`
+Data type: `Enum['tlog']`
 
 The name of the logged shell to use
+
+* ``sudosh`` support was removed when the ``simp/sudosh`` module was
+  archived; ``tlog`` is the only supported logged shell
 
 Default value: `'tlog'`
 
@@ -615,7 +595,6 @@ The following parameters are available in the `simp::base_apps` class:
 
 * [`ensure`](#-simp--base_apps--ensure)
 * [`extra_apps`](#-simp--base_apps--extra_apps)
-* [`manage_elinks_config`](#-simp--base_apps--manage_elinks_config)
 
 ##### <a name="-simp--base_apps--ensure"></a>`ensure`
 
@@ -635,19 +614,6 @@ Data type: `Optional[Array[String,1]]`
 A list of other applications that you wish to install
 
 Default value: `undef`
-
-##### <a name="-simp--base_apps--manage_elinks_config"></a>`manage_elinks_config`
-
-Data type: `Optional[Boolean]`
-
-DEPRECATED: This functionality is not required for normal operation of the
-system and should be moved to external management.
-
-Default value: `undef`
-
-### <a name="simp--base_services"></a>`simp::base_services`
-
-Deprecated - This class will be removed in a future version of SIMP.
 
 ### <a name="simp--ctrl_alt_del"></a>`simp::ctrl_alt_del`
 
@@ -1619,7 +1585,6 @@ The following parameters are available in the `simp::puppetdb` class:
 * [`read_database_username`](#-simp--puppetdb--read_database_username)
 * [`read_database_password`](#-simp--puppetdb--read_database_password)
 * [`read_database_name`](#-simp--puppetdb--read_database_name)
-* [`read_database_ssl`](#-simp--puppetdb--read_database_ssl)
 * [`read_database_jdbc_ssl_properties`](#-simp--puppetdb--read_database_jdbc_ssl_properties)
 * [`manage_firewall`](#-simp--puppetdb--manage_firewall)
 * [`manage_puppetserver`](#-simp--puppetdb--manage_puppetserver)
@@ -1768,17 +1733,6 @@ Data type: `String`
 
 
 Default value: `'simp_puppetdb'`
-
-##### <a name="-simp--puppetdb--read_database_ssl"></a>`read_database_ssl`
-
-Data type: `Optional[Boolean]`
-
-This parameter has been deprecated, because its corresponding
-``puppetdb::server`` parameter has been replaced with
-``puppetdb::server::read_database_jdbc_ssl_properties``.
-Use $read_database_jdbc_ssl_properties = '?ssl=true' instead.
-
-Default value: `undef`
 
 ##### <a name="-simp--puppetdb--read_database_jdbc_ssl_properties"></a>`read_database_jdbc_ssl_properties`
 
@@ -2049,7 +2003,6 @@ The following parameters are available in the `simp::scenario::base` class:
 * [`manage_rc_local`](#-simp--scenario--base--manage_rc_local)
 * [`pam`](#-simp--scenario--base--pam)
 * [`sssd`](#-simp--scenario--base--sssd)
-* [`ldap`](#-simp--scenario--base--ldap)
 * [`stock_sssd`](#-simp--scenario--base--stock_sssd)
 
 ##### <a name="-simp--scenario--base--mail_server"></a>`mail_server`
@@ -2178,14 +2131,6 @@ Enable management of SSSD resources via SIMP modules
 
 Default value: `$simp::sssd`
 
-##### <a name="-simp--scenario--base--ldap"></a>`ldap`
-
-Data type: `Boolean`
-
-Enable management of LDAP resources via SIMP modules
-
-Default value: `$simp::ldap`
-
 ##### <a name="-simp--scenario--base--stock_sssd"></a>`stock_sssd`
 
 Data type: `Boolean`
@@ -2235,7 +2180,6 @@ The following parameters are available in the `simp::server` class:
 
 * [`allow_simp_user`](#-simp--server--allow_simp_user)
 * [`pam`](#-simp--server--pam)
-* [`clamav`](#-simp--server--clamav)
 * [`auditd`](#-simp--server--auditd)
 * [`scenario`](#-simp--server--scenario)
 * [`classes`](#-simp--server--classes)
@@ -2256,19 +2200,6 @@ Data type: `Boolean`
 Enable SIMP management of the PAM stack
 
 Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
-
-##### <a name="-simp--server--clamav"></a>`clamav`
-
-Data type: `Boolean`
-
-Deprecated. Enable SIMP management of Antivirus
-
-This parameter and the simp_options::clamav catalyst are deprecated and
-both will be removed in a future SIMP release. Once removed, if you want
-to manage ClamAV, you will have to manually include the `clamav` class
-from the `simp-clamav` module in the server's class list.
-
-Default value: `simplib::lookup('simp_options::clamav', { 'default_value' => false })`
 
 ##### <a name="-simp--server--auditd"></a>`auditd`
 
@@ -2321,7 +2252,6 @@ The following parameters are available in the `simp::server::kickstart` class:
 * [`trusted_nets`](#-simp--server--kickstart--trusted_nets)
 * [`manage_dhcp`](#-simp--server--kickstart--manage_dhcp)
 * [`manage_tftpboot`](#-simp--server--kickstart--manage_tftpboot)
-* [`manage_runpuppet`](#-simp--server--kickstart--manage_runpuppet)
 * [`manage_simp_client_bootstrap`](#-simp--server--kickstart--manage_simp_client_bootstrap)
 * [`sslverifyclient`](#-simp--server--kickstart--sslverifyclient)
 
@@ -2357,20 +2287,6 @@ Data type: `Boolean`
 If true, have this node act as a TFTP server.
 
 Default value: `true`
-
-##### <a name="-simp--server--kickstart--manage_runpuppet"></a>`manage_runpuppet`
-
-Data type: `Boolean`
-
-Deprecated  The runpuppet script has been replaced by the
-simp_client_bootstrap script.  The runpuppet script did
-not work well on CentOS 7 and will not work on CentOS 8.
-Remember to update your kickstart scripts to call the correct
-script. See the bootstrap scripts in simp-core under build/distributions
-for examples.
-This parameter will be removed in later versions.
-
-Default value: `false`
 
 ##### <a name="-simp--server--kickstart--manage_simp_client_bootstrap"></a>`manage_simp_client_bootstrap`
 
@@ -3109,7 +3025,6 @@ The following parameters are available in the `simp::sysctl` class:
 * [`kernel__core_pipe_limit`](#-simp--sysctl--kernel__core_pipe_limit)
 * [`kernel__core_uses_pid`](#-simp--sysctl--kernel__core_uses_pid)
 * [`kernel__dmesg_restrict`](#-simp--sysctl--kernel__dmesg_restrict)
-* [`kernel__exec_shield`](#-simp--sysctl--kernel__exec_shield)
 * [`kernel__panic`](#-simp--sysctl--kernel__panic)
 * [`kernel__randomize_va_space`](#-simp--sysctl--kernel__randomize_va_space)
 * [`kernel__sysrq`](#-simp--sysctl--kernel__sysrq)
@@ -3358,14 +3273,6 @@ Default value: `1`
 Data type: `Integer[0,1]`
 
 
-
-Default value: `1`
-
-##### <a name="-simp--sysctl--kernel__exec_shield"></a>`kernel__exec_shield`
-
-Data type: `Integer[0,1]`
-
-**DEPRECATED BY VENDOR WILL BE REMOVED IN NEXT RELEASE**
 
 Default value: `1`
 
@@ -3795,50 +3702,6 @@ Type of release you want:
   environments.
 
 Default value: `'releases'`
-
-### <a name="simp--yum--repo--internet_simp_dependencies"></a>`simp::yum::repo::internet_simp_dependencies`
-
-The packagecloud yum repository that used to be configured by this class is
-no longer maintained. As an interim workaround, this class now uses
-``simp::yum::repo::internet_simp`` to configure the correct repositories. You
-should switch to using ``simp::yum::repo::internet_simp directly``, as this
-class will be removed in a future release.
-
-#### Parameters
-
-The following parameters are available in the `simp::yum::repo::internet_simp_dependencies` class:
-
-* [`simp_release_slug`](#-simp--yum--repo--internet_simp_dependencies--simp_release_slug)
-
-##### <a name="-simp--yum--repo--internet_simp_dependencies--simp_release_slug"></a>`simp_release_slug`
-
-Data type: `Optional[String]`
-
-The unique release URL "slug" of SIMP for the target release.
-
-Default value: `undef`
-
-### <a name="simp--yum--repo--internet_simp_server"></a>`simp::yum::repo::internet_simp_server`
-
-The packagecloud yum repository that used to be configured by this class is
-no longer maintained. As an interim workaround, this class now uses
-``simp::yum::repo::internet_simp`` to configure the correct repository. You
-should switch to using ``simp::yum::repo::internet_simp directly``, as this
-class will be removed in a future release.
-
-#### Parameters
-
-The following parameters are available in the `simp::yum::repo::internet_simp_server` class:
-
-* [`simp_release_slug`](#-simp--yum--repo--internet_simp_server--simp_release_slug)
-
-##### <a name="-simp--yum--repo--internet_simp_server--simp_release_slug"></a>`simp_release_slug`
-
-Data type: `Optional[String]`
-
-The unique release URL "slug" of SIMP for the target release.
-
-Default value: `undef`
 
 ### <a name="simp--yum--repo--local_os_updates"></a>`simp::yum::repo::local_os_updates`
 

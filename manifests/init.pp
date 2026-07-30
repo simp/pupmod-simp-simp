@@ -19,11 +19,6 @@
 #   * Please see the module data for the exact class list that is included in
 #     each scenario
 #
-# @param enable_data_includes
-#   **Deprecated** - Has no effect
-#
-#   * Will be removed in the next major release
-#
 # @param classes
 #   A list of classes that you wish to include in your SIMP stack in addition
 #   to the ``scenario`` selected above.
@@ -116,9 +111,6 @@
 # @param sssd
 #   Enable management of SSSD resources via SIMP modules
 #
-# @param ldap
-#   Enable management of LDAP resources via SIMP modules
-#
 # @param stock_sssd
 #   Add a default setup that will successfully connect to the SIMP LDAP server,
 #   if enabled, and will otherwise provide a functional SSSD stack for the
@@ -150,7 +142,6 @@ class simp (
   Stdlib::Filemode                $vardir_mode,
   Hash                            $scenario_map,
   String                          $scenario                   = 'simp',
-  Boolean                         $enable_data_includes       = true,
   Array                           $classes                    = [],
   Variant[Boolean,Enum['remote']] $mail_server                = false,
   Variant[Boolean,Simplib::Host]  $rsync_stunnel              = simplib::lookup('simp_options::stunnel', { 'default_value' => true }),
@@ -169,7 +160,6 @@ class simp (
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
   Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true,
   Boolean                         $classification_warning     = true

@@ -21,15 +21,6 @@
 # @param manage_tftpboot
 #   If true, have this node act as a TFTP server.
 #
-# @param manage_runpuppet
-#   Deprecated  The runpuppet script has been replaced by the
-#   simp_client_bootstrap script.  The runpuppet script did
-#   not work well on CentOS 7 and will not work on CentOS 8.
-#   Remember to update your kickstart scripts to call the correct
-#   script. See the bootstrap scripts in simp-core under build/distributions
-#   for examples.
-#   This parameter will be removed in later versions.
-#
 # @param manage_simp_client_bootstrap
 #   If true, generate the simp_client_bootstrap sysv init
 #   script and simp_client_bootstrap.service systemd
@@ -46,7 +37,6 @@ class simp::server::kickstart (
   Stdlib::Absolutepath   $data_dir                     = '/var/www',
   Boolean                $manage_dhcp                  = true,
   Boolean                $manage_tftpboot              = true,
-  Boolean                $manage_runpuppet             = false,
   Boolean                $manage_simp_client_bootstrap = true,
   Enum['require','none'] $sslverifyclient              = 'none'
 ) {
@@ -54,9 +44,6 @@ class simp::server::kickstart (
 
   if $manage_dhcp { include 'dhcp::dhcpd' }
   if $manage_tftpboot { include 'tftpboot' }
-  if $manage_runpuppet {
-    deprecation('simp::server::manage_runpuppet','simp::server::manage_runpuppet has been deprecated.  Use simp::server::manage_simp_client_bootstrap instead')
-  }
 
   if $manage_simp_client_bootstrap {
     contain 'simp::server::kickstart::simp_client_bootstrap'

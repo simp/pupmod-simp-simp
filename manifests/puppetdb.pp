@@ -35,12 +35,6 @@
 # @param read_database_username
 # @param read_database_password
 # @param read_database_name
-# @param read_database_ssl
-#   This parameter has been deprecated, because its corresponding
-#   ``puppetdb::server`` parameter has been replaced with
-#   ``puppetdb::server::read_database_jdbc_ssl_properties``.
-#   Use $read_database_jdbc_ssl_properties = '?ssl=true' instead.
-#
 # @param read_database_jdbc_ssl_properties
 # @param manage_firewall
 # @param manage_puppetserver
@@ -74,7 +68,6 @@ class simp::puppetdb (
   String                              $read_database_username            = 'simp_puppetdb',
   String                              $read_database_password            = simplib::passgen('simp_read_puppetdb'),
   String                              $read_database_name                = 'simp_puppetdb',
-  Optional[Boolean]                   $read_database_ssl                 = undef,
   String                              $read_database_jdbc_ssl_properties = '?ssl=true',
   Boolean                             $manage_firewall                   = true,
   Boolean                             $manage_puppetserver               = true,
@@ -91,20 +84,7 @@ class simp::puppetdb (
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  if $read_database_ssl !~ Undef {
-    if $read_database_ssl {
-      warning('$read_database_ssl is deprecated and will be removed in the next major release. Please use $read_database_jdbc_ssl_properties = "?ssl=true" instead.')
-      $_read_database_jdbc_ssl_properties = '?ssl=true'
-    }
-    else {
-      warning('$read_database_ssl is deprecated and will be removed in the next major release. Please use $read_database_jdbc_ssl_properties = "" instead.')
-
-      $_read_database_jdbc_ssl_properties = '' # lint:ignore:empty_string_assignment
-    }
-  }
-  else {
-    $_read_database_jdbc_ssl_properties = $read_database_jdbc_ssl_properties
-  }
+  $_read_database_jdbc_ssl_properties = $read_database_jdbc_ssl_properties
 
   $_simp_manage_firewall = ($manage_firewall and $firewall)
 

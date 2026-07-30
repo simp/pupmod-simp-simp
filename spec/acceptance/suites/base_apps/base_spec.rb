@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-test_name 'simp::base_apps and simp::base_services class'
+test_name 'simp::base_apps class'
 
 describe 'simp::base_apps class' do
   let(:hieradata) do
@@ -15,7 +15,6 @@ describe 'simp::base_apps class' do
   let(:manifest) do
     <<~EOS
       include 'simp::base_apps'
-      include 'simp::base_services'
     EOS
   end
 

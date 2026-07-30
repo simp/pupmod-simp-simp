@@ -139,22 +139,6 @@ describe 'simp::puppetdb' do
             }
           end
 
-          context 'with read_database_ssl = true' do
-            let(:hieradata) { 'simp__puppetdb' }
-            let(:params) { { read_database_ssl: true } }
-
-            it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_class('puppetdb').with_read_database_jdbc_ssl_properties('?ssl=true') }
-          end
-
-          context 'with read_database_ssl = false' do
-            let(:hieradata) { 'simp__puppetdb' }
-            let(:params) { { read_database_ssl: false } }
-
-            it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_class('puppetdb').with_read_database_jdbc_ssl_properties('') }
-          end
-
           context 'with use_puppet_ssl_certs => false' do
             let(:hieradata) { 'simp__puppetdb' }
             let(:params) do

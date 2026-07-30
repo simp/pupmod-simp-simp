@@ -42,7 +42,7 @@ describe 'simp::server::rsync_shares' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_class('simp::server::rsync_shares') }
-          it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
+          it { is_expected.not_to create_rsync__server__section("clamav_#{environment}") }
           it { is_expected.to create_rsync__server__section("mcafee_#{environment}") }
           it { is_expected.to create_rsync__server__section("jenkins_plugins_#{environment}") }
           it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }
@@ -89,7 +89,7 @@ describe 'simp::server::rsync_shares' do
 
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to create_class('simp::server::rsync_shares') }
-            it { is_expected.to create_rsync__server__section("clamav_#{environment}") }
+            it { is_expected.not_to create_rsync__server__section("clamav_#{environment}") }
             it { is_expected.not_to create_rsync__server__section("mcafee_#{environment}") }
             it { is_expected.not_to create_rsync__server__section("jenkins_plugins_#{environment}") }
             it { is_expected.to create_rsync__server__section("bind_dns_default_#{environment}_RedHat_7") }

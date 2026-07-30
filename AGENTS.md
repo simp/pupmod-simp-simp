@@ -128,8 +128,7 @@ subdirectory:
     whether the key combination (and the logged-in users) is logged.
   - `simp::admin` (admin/auditor group access and default sudo rules),
     `simp::base_apps` (common apps such as irqbalance), `simp::server` (the SIMP
-    server role), `simp::nsswitch`, `simp::version`, and `simp::base_services`
-    (**deprecated**, slated for removal).
+    server role), `simp::nsswitch`, and `simp::version`.
 - **`kmod_blacklist/`** — `lock_modules`.
 - **`mountpoints/`** — `proc`, `tmp` (secure mount options).
 - **`pam_limits/`** — `max_logins` (simultaneous-login restriction).
@@ -139,11 +138,10 @@ subdirectory:
 - **`sudoers/`** — `aliases` (SIMP site sudoers aliases).
 - **`yum/`** — `schedule` (sets up a cron-based YUM update schedule via
   `simp::yum::schedule`), plus a set of `yum/repo/*` repo-definition classes
-  (`internet_simp`, `internet_simp_dependencies`, `internet_simp_server`,
-  `local_os_updates`, `local_simp`).
+  (`internet_simp`, `local_os_updates`, `local_simp`).
 
-There are roughly **39 classes** in total across `manifests/` (18 top-level
-`manifests/*.pp` plus ~21 subclasses under the subdirectories above). Summarize
+There are roughly **35 classes** in total across `manifests/` (17 top-level
+`manifests/*.pp` plus ~18 subclasses under the subdirectories above). Summarize
 by role rather than enumerating each one when working here.
 
 ### Gotchas / non-obvious details
@@ -166,10 +164,6 @@ by role rather than enumerating each one when working here.
 - **Bolt-awareness.** The `$facts['puppet_vardir']}/simp` directory and the
   filebucket are skipped under `simplib::in_bolt()` because the vardir would be
   on the Bolt host, not the target (`init.pp`).
-- **`simp::base_services` is deprecated** and will be removed in a future
-  version (`manifests/base_services.pp`); do not build new logic on it.
-- **`enable_data_includes` is deprecated and has no effect** (`init.pp`);
-  it is slated for removal in the next major release.
 - **one_shot finalization is destructive and asynchronous.** It runs a script in
   the background that can remove PKI and the puppet package
   (`one_shot/finalize.pp`); it is not part of a normal run and should not
@@ -182,18 +176,17 @@ by role rather than enumerating each one when working here.
 
 Like every SIMP module, `simp` routes cross-cutting feature toggles through the
 `simp_options::*` namespace via `simplib::lookup(..., { 'default_value' => ...
-})`, so a site can flip a capability once and have it propagate. There are **15**
+})`, so a site can flip a capability once and have it propagate. There are **13**
 distinct `simp_options::*` seams consumed across the manifests:
 
-`simp_options::auditd`, `simp_options::authselect`, `simp_options::clamav`,
-`simp_options::fips`, `simp_options::firewall`, `simp_options::ldap`,
-`simp_options::ntp::servers`, `simp_options::package_ensure`,
-`simp_options::pam`, `simp_options::puppet::ca`, `simp_options::puppet::ca_port`,
-`simp_options::puppet::server`, `simp_options::sssd`, `simp_options::stunnel`,
-`simp_options::trusted_nets`.
+`simp_options::auditd`, `simp_options::authselect`, `simp_options::fips`,
+`simp_options::firewall`, `simp_options::ldap`, `simp_options::ntp::servers`,
+`simp_options::package_ensure`, `simp_options::pam`, `simp_options::puppet::ca`,
+`simp_options::puppet::ca_port`, `simp_options::puppet::server`,
+`simp_options::sssd`, `simp_options::stunnel`, `simp_options::trusted_nets`.
 
-In `simp::init` specifically, `$rsync_stunnel`, `$pam`, `$ldap`, and `$sssd`
-default off the `simp_options::stunnel` / `::pam` / `::ldap` / `::sssd` seams
+In `simp::init` specifically, `$rsync_stunnel`, `$pam`, and `$sssd`
+default off the `simp_options::stunnel` / `::pam` / `::sssd` seams
 (`init.pp`). Keep new toggles flowing through
 `simplib::lookup('simp_options::*', { 'default_value' => ... })` with an
 explicit default rather than assuming `simp_options` is included.
@@ -201,7 +194,7 @@ explicit default rather than assuming `simp_options` is included.
 ## Dependencies
 
 This is a **meta-module: it depends on essentially the entire SIMP stack.**
-`metadata.json` declares **43** dependencies — do not transcribe them all when
+`metadata.json` declares **38** dependencies — do not transcribe them all when
 editing; treat the dependency list as "the whole SIMP ecosystem." A
 representative handful:
 
@@ -240,12 +233,12 @@ EL-only in practice.
   (not part of a normal run).
 - `manifests/*.pp` and the `kmod_blacklist/`, `mountpoints/`, `pam_limits/`,
   `server/`, `sssd/`, `sudoers/`, `yum/` subdirectories — the individual
-  baseline classes (~39 classes total).
+  baseline classes (~35 classes total).
 - `data/common.yaml` — the `scenario_map`, class lists, nsswitch defaults, and
   merge behaviours. **This is where "what a SIMP system includes" lives.**
 - `data/os/`, `hiera.yaml` — module data hierarchy (v5): OS name+major → OS name
   → kernel → common.
-- `metadata.json` — the 43 dependencies, OS matrix, and Puppet requirement.
+- `metadata.json` — the 38 dependencies, OS matrix, and Puppet requirement.
 - `spec/classes/`, `spec/defines/` — rspec-puppet unit tests.
 - `spec/acceptance/suites/` — beaker suites (`default`, `base_apps`); nodesets
   under `spec/acceptance/nodesets/` (**30** files: a `vagrant` set —
