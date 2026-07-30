@@ -116,9 +116,6 @@
 # @param sssd
 #   Enable management of SSSD resources via SIMP modules
 #
-# @param ldap
-#   Enable management of LDAP resources via SIMP modules
-#
 # @param stock_sssd
 #   Add a default setup that will successfully connect to the SIMP LDAP server,
 #   if enabled, and will otherwise provide a functional SSSD stack for the
@@ -169,7 +166,6 @@ class simp (
   Boolean                         $manage_root_perms          = true,
   Boolean                         $manage_rc_local            = true,
   Boolean                         $pam                        = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Boolean                         $ldap                       = simplib::lookup('simp_options::ldap', { 'default_value' => false }),
   Boolean                         $sssd                       = simplib::lookup('simp_options::sssd', { 'default_value' => true }),
   Boolean                         $stock_sssd                 = true,
   Boolean                         $classification_warning     = true
