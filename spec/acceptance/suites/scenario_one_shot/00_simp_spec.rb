@@ -52,7 +52,6 @@ describe 'simp "one_shot" scenario' do
       simp::one_shot::finalize_debug: true
 
       # Disable network stuff
-      simp_options::rsync: false
       simp_options::clamav: false
       simp_options::ldap: false
 
