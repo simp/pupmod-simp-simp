@@ -1,3 +1,6 @@
+* Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 9.0.1
+- [puppetsync] Update metadata.json dependency ranges from the Forge
+
 * Wed Jul 29 2026 Steven Pritchard <steve@sicura.us> - 9.0.0
 - Replace legacy facts with structured facts (fixes #329)
   - `simp::puppetdb` computes percentage-based Java heap sizes from

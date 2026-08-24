@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -25,11 +25,11 @@
     },
     {
       "name": "puppet/chrony",
-      "version_requirement": ">= 1.0.0 < 5.0.0"
+      "version_requirement": ">= 1.0.0 < 6.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 6.4.0 < 10.0.0"
+      "version_requirement": ">= 6.4.0 < 11.0.0"
     },
     {
       "name": "puppetlabs/puppetdb",
@@ -37,7 +37,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 8.0.0 < 10.0.0"
+      "version_requirement": ">= 8.0.0 < 11.0.0"
     },
     {
       "name": "saz/timezone",
@@ -49,7 +49,7 @@
     },
     {
       "name": "simp/at",
-      "version_requirement": ">= 0.0.5 < 2.0.0"
+      "version_requirement": ">= 0.0.5 < 3.0.0"
     },
     {
       "name": "simp/auditd",
@@ -65,7 +65,7 @@
     },
     {
       "name": "simp/cron",
-      "version_requirement": ">= 0.1.0 < 2.0.0"
+      "version_requirement": ">= 0.1.0 < 3.0.0"
     },
     {
       "name": "simp/deferred_resources",
@@ -101,7 +101,7 @@
     },
     {
       "name": "simp/pupmod",
-      "version_requirement": ">= 10.0.0 < 12.0.0"
+      "version_requirement": ">= 10.0.0 < 13.0.0"
     },
     {
       "name": "simp/resolv",
@@ -117,7 +117,7 @@
     },
     {
       "name": "simp/simp_apache",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 7.0.0 < 10.0.0"
     },
     {
       "name": "simp/simp_openldap",
@@ -133,7 +133,7 @@
     },
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 4.9.0 < 6.0.0"
+      "version_requirement": ">= 4.9.0 < 8.0.0"
     },
     {
       "name": "simp/ssh",
@@ -141,11 +141,11 @@
     },
     {
       "name": "simp/sssd",
-      "version_requirement": ">= 7.0.0 < 10.0.0"
+      "version_requirement": ">= 7.0.0 < 11.0.0"
     },
     {
       "name": "simp/stunnel",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 7.0.0 < 10.0.0"
     },
     {
       "name": "simp/sudo",
@@ -157,7 +157,7 @@
     },
     {
       "name": "simp/svckill",
-      "version_requirement": ">= 3.6.1 < 5.0.0"
+      "version_requirement": ">= 3.6.1 < 6.0.0"
     },
     {
       "name": "simp/swap",
@@ -177,7 +177,7 @@
     },
     {
       "name": "simp/useradd",
-      "version_requirement": ">= 0.2.2 < 3.0.0"
+      "version_requirement": ">= 0.2.2 < 4.0.0"
     },
     {
       "name": "puppet/nsswitch",
