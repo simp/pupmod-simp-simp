@@ -56,6 +56,10 @@
       "version_requirement": ">= 8.5.0 < 11.0.0"
     },
     {
+      "name": "simp/chkrootkit",
+      "version_requirement": ">= 0.1.0 < 1.0.0"
+    },
+    {
       "name": "simp/cron",
       "version_requirement": ">= 0.1.0 < 2.0.0"
     },
@@ -112,6 +116,10 @@
       "version_requirement": ">= 7.0.0 < 9.0.0"
     },
     {
+      "name": "simp/simp_openldap",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
       "name": "simp/simp_options",
       "version_requirement": ">= 1.6.1 < 3.0.0"
     },
@@ -138,6 +146,10 @@
     {
       "name": "simp/sudo",
       "version_requirement": ">= 5.1.1 < 7.0.0"
+    },
+    {
+      "name": "simp/sudosh",
+      "version_requirement": ">= 6.1.0 < 7.0.0"
     },
     {
       "name": "simp/svckill",

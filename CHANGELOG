@@ -15,12 +15,6 @@
   (deprecated since 2019) along with the `simp::server::clamav` parameter,
   the clamav rsync share, and the `simp/clamav` dependency. To manage ClamAV,
   include the `clamav` class directly in your class list
-- BREAKING CHANGE: Removed sudosh support from `simp::admin`
-  (`pupmod-simp-sudosh` is archived). `simp::admin::logged_shell` now only
-  accepts `tlog`; sites setting `sudosh` will fail catalog compilation and
-  must migrate to `tlog`
-- Dropped dependencies on the archived `simp/chkrootkit` and
-  `simp/simp_openldap` modules (neither was referenced by any manifest)
 - BREAKING CHANGE: Removed the unused `simp::ldap` and
   `simp::scenario::base::ldap` parameters. The `simp_options::ldap` catalyst
   is still honored by `simp::sssd::client`

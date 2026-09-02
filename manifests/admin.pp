@@ -37,9 +37,6 @@
 # @param logged_shell
 #   The name of the logged shell to use
 #
-#   * ``sudosh`` support was removed when the ``simp/sudosh`` module was
-#     archived; ``tlog`` is the only supported logged shell
-#
 # @param default_admin_sudo_cmnds
 #   The set of commands that ``$admin_group`` should be able to run by default
 #
@@ -104,7 +101,7 @@ class simp::admin (
   Simplib::Netlist      $admins_allowed_from       = ['ALL'],
   Simplib::Netlist      $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
   Boolean               $force_logged_shell        = true,
-  Enum['tlog']          $logged_shell              = 'tlog',
+  Enum['sudosh','tlog'] $logged_shell              = 'tlog',
   Array[String[2]]      $default_admin_sudo_cmnds  = ['/bin/su - root'],
   Hash                  $admin_sudo_options        = { 'role' => 'unconfined_r' },
   Hash                  $auditor_sudo_options      = {},
@@ -147,12 +144,30 @@ class simp::admin (
   }
 
   if $force_logged_shell {
-    include 'tlog::rec_session'
+    # We restrict this so we don't need a fallback
+    if $logged_shell == 'sudosh' {
+      include 'sudosh'
 
-    $_shell_cmd = $default_admin_sudo_cmnds
+      $_shell_cmd = ['/usr/bin/sudosh']
+    }
+    else {
+      # TODO: This should be removed when SIMP-5169 is resolved
+      file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
+    }
 
-    # TODO: This should be removed when SIMP-5169 is resolved
-    file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
+    if $logged_shell == 'tlog' {
+      include 'tlog::rec_session'
+
+      $_shell_cmd = $default_admin_sudo_cmnds
+    }
+    else {
+      # TODO: This should be removed when SIMP-5169 is resolved
+      tidy { 'Tlog profile.d files':
+        path    => '/etc/profile.d',
+        matches => ['00-simp-tlog.*'],
+        recurse => 1,
+      }
+    }
   }
   else {
     $_shell_cmd = $default_admin_sudo_cmnds
@@ -183,8 +198,8 @@ class simp::admin (
     }
   }
 
-  # The following allows you to recover from destroying the certs in your
-  # environment.
+  # The following two are especially important if you're using sudosh.
+  # They allow you to recover from destroying the certs in your environment.
   sudo::user_specification { 'admin run puppet':
     user_list => ["%${admin_group}"],
     runas     => $admin_runas,

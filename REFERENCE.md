@@ -479,12 +479,9 @@ Default value: `true`
 
 ##### <a name="-simp--admin--logged_shell"></a>`logged_shell`
 
-Data type: `Enum['tlog']`
+Data type: `Enum['sudosh','tlog']`
 
 The name of the logged shell to use
-
-* ``sudosh`` support was removed when the ``simp/sudosh`` module was
-  archived; ``tlog`` is the only supported logged shell
 
 Default value: `'tlog'`
 
