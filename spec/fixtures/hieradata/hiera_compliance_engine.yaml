@@ -1,0 +1,17 @@
+---
+# Mirrors the generated spec/fixtures/hieradata/hiera.yaml (see spec_helper.rb)
+# with the Sicura Compliance Engine `lookup_key` backend appended at the lowest
+# priority, so profile values sit below explicit test hieradata.
+version: 5
+defaults:
+  data_hash: yaml_data
+  datadir: '.'
+hierarchy:
+  - name: "Custom Test Hiera"
+    path: "%{custom_hiera}.yaml"
+  - name: "%{module_name}"
+    path: "%{module_name}.yaml"
+  - name: "Common"
+    path: default.yaml
+  - name: "Compliance Engine"
+    lookup_key: "compliance_engine::enforcement"

@@ -1,0 +1,14 @@
+# The `simp:defaults` Sicura Compliance Engine profile.
+#
+# Enforcing it (Hiera `compliance_engine::enforcement: [simp:defaults]`) restores
+# the behavior `simp::kmod_blacklist` had by default before the 10.0.0
+# blast-radius refactor, without re-introducing any auto-opt-in into the
+# module's own defaults. The profile lists its checks directly (no controls/CE
+# indirection); the checks are defined in checks.yaml.
+---
+version: 2.0.0
+profiles:
+  simp:defaults:
+    checks:
+      simp:defaults.simp.kmod_blacklist.enable_defaults: true
+      simp:defaults.simp.kmod_blacklist.lock_modules: true

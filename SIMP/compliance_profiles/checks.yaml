@@ -1,0 +1,23 @@
+# Sicura Compliance Engine checks that restore the behavior `simp::kmod_blacklist`
+# had by default *before* the 10.0.0 blast-radius refactor (where a bare
+# `include simp::kmod_blacklist` manages nothing). One `puppet-class-parameter`
+# check per restored parameter; the `simp:defaults` profile lists them directly
+# (see profile-simp_defaults.yaml).
+#
+# Scope is intentionally limited to this module's own parameters.
+---
+version: 2.0.0
+checks:
+  # Pre-10.0.0: the SCAP Security Guide blacklist was enforced on every include
+  simp:defaults.simp.kmod_blacklist.enable_defaults:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::kmod_blacklist::enable_defaults
+      value: true
+  # Pre-10.0.0: `kernel.modules_disabled` was managed (unlocked) on every
+  # include where the sysctl is available
+  simp:defaults.simp.kmod_blacklist.lock_modules:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::kmod_blacklist::lock_modules
+      value: false

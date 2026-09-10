@@ -7,6 +7,7 @@
 #### Table of Contents
 
 1. [Overview](#overview)
+    * [Breaking changes in 10.0.0](#breaking-changes-in-1000)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with simp](#setup)
     * [What simp affects](#what-simp-affects)
@@ -21,6 +22,57 @@
 
 This module is the overarching profile of SIMP managed systems. It should be
 the entry point for all supported SIMP configurations.
+
+## Breaking changes in 10.0.0
+
+In 10.0.0 the blast radius of `simp::kmod_blacklist` was reduced: a bare
+`include simp::kmod_blacklist` now manages **nothing**. It no longer writes the
+SCAP Security Guide blacklist to `/etc/modprobe.d` and no longer manages the
+`kernel.modules_disabled` sysctl (which, on a locked system, *unlocked* module
+loading and requested a reboot). Everything is opt-in:
+
+* `enable_defaults` (now `false`) enforces the default `blacklist`
+* `custom_blacklist` blacklists additional modules
+* `purge_blacklist` (new) removes specific entries a previous configuration
+  added -- `enable_defaults => false` no longer removes the defaults on its own
+* `lock_modules` (now `Optional[Boolean]`, default `undef`) manages module
+  locking: `true` locks, `false` ensures unlocked, `undef` leaves it alone
+
+The `simp`, `simp_lite`, and `poss` scenarios still include the class; sites
+using a scenario must opt in with one of the paths below to keep enforcing the
+default blacklist.
+
+If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
+
+* **Path 1 -- set the parameters yourself.** In Hiera:
+
+  ```yaml
+  simp::kmod_blacklist::enable_defaults: true
+  simp::kmod_blacklist::lock_modules: false
+  ```
+
+  Best when you want explicit, granular control of exactly what the class
+  manages.
+
+* **Path 2 -- enforce the `simp:defaults` compliance profile.** Set a single
+  Hiera key:
+
+  ```yaml
+  compliance_engine::enforcement:
+    - simp:defaults
+  ```
+
+  This requires the [Sicura Compliance Engine][compliance_engine] Hiera backend
+  (it is **not** a hard dependency of this module -- `metadata.json` is
+  unchanged). The profile, shipped in `SIMP/compliance_profiles/`, is a drop-in
+  restoration of the *old* behavior: it sets `enable_defaults: true` and
+  `lock_modules: false`, so the default blacklist is enforced and module
+  locking is managed (unlocked) exactly as before. It is opinionated for SIMP
+  sites. Sites that want "old behavior but safer" can enable the profile and
+  override the individual `simp::kmod_blacklist::*` parameters they care
+  about in their own Hiera, which always wins over the profile.
+
+[compliance_engine]: https://github.com/simp/rubygem-simp-compliance_engine
 
 ## This is a SIMP module
 This module is a component of the [System Integrity Management Platform](https://simp-project.com)

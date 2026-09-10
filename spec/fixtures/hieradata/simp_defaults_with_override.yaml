@@ -1,0 +1,7 @@
+---
+compliance_engine::enforcement:
+  - simp:defaults
+# Explicit site Hiera must beat the profile (which restores `true`)
+simp::kmod_blacklist::enable_defaults: false
+simp::kmod_blacklist::custom_blacklist:
+  - nfs

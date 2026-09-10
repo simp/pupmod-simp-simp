@@ -1,3 +1,33 @@
+* Thu Sep 10 2026 Steven Pritchard <steve@sicura.us> - 10.0.0
+- BREAKING CHANGE: Reduce the blast radius of `simp::kmod_blacklist`. A bare
+  `include simp::kmod_blacklist` now manages nothing. Previously it:
+  - wrote the SCAP Security Guide blacklist (17 modules) to
+    `/etc/modprobe.d/zz_simp_disable.conf` and `/etc/modprobe.d/blacklist.conf`
+    on every include (`enable_defaults` now defaults to `false`)
+  - declared `simp::kmod_blacklist::lock_modules` with `enable => false` on
+    every include where `kernel.modules_disabled` is available, which
+    *unlocked* module loading (and requested a reboot) on a locked system
+    (`lock_modules` is now `Optional[Boolean]` defaulting to `undef`, meaning
+    "do not manage module locking")
+  - `/etc/modprobe.d` is only touched once at least one module is listed in
+    `blacklist` (with `enable_defaults => true`), `custom_blacklist`, or the new
+    `purge_blacklist` parameter
+  - Setting `enable_defaults => false` no longer removes the default modules
+    from the blacklist automatically. Use the new `purge_blacklist` array to
+    remove specific entries a previous configuration added
+  - Duplicate entries between `blacklist` and `custom_blacklist` are now
+    de-duplicated instead of failing compilation
+  - The `simp`/`simp_lite`/`poss` scenarios still include the class, so sites
+    using a scenario must also opt in (via parameters or the profile below) to
+    keep enforcing the default blacklist
+- Ship a `simp:defaults` Sicura Compliance Engine profile
+  (`SIMP/compliance_profiles/`) that restores the pre-10.0.0
+  `simp::kmod_blacklist` behavior (`enable_defaults: true`,
+  `lock_modules: false`) with one Hiera key:
+  `compliance_engine::enforcement: [simp:defaults]`. Explicit site Hiera values
+  still win over the profile. `simp/compliance_engine` is NOT a module
+  dependency; the `compliance_engine` fixture is only used by the spec tests
+
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 9.0.1
 - [puppetsync] Update metadata.json dependency ranges from the Forge
 

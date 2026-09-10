@@ -10,7 +10,41 @@ describe 'simp::kmod_blacklist class' do
   end
 
   hosts.each do |host|
-    context 'default parameters' do
+    # 10.0.0 safe default: a bare include manages nothing
+    context 'default parameters (bare include)' do
+      let(:hieradata) do
+        YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__))
+      end
+
+      it 'resets hieradata' do
+        set_hieradata_on(host, hieradata)
+      end
+
+      it 'applies with no errors and no changes' do
+        apply_manifest_on(host, manifest, catch_changes: true)
+      end
+
+      it 'does not write the SIMP disable file' do
+        on(host, 'test ! -e /etc/modprobe.d/zz_simp_disable.conf')
+        on(host, 'test ! -e /etc/modprobe.d/00_simp_disable.conf')
+      end
+
+      it 'does not blacklist bluetooth' do
+        on(host, 'modprobe -c | grep -qx "blacklist bluetooth"', acceptable_exit_codes: [1])
+      end
+    end
+
+    context 'with the default blacklist enabled' do
+      let(:hieradata) do
+        YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::enable_defaults' => true,
+        )
+      end
+
+      it 'enables the default blacklist via hiera' do
+        set_hieradata_on(host, hieradata)
+      end
+
       it 'applies with no errors' do
         apply_manifest_on(host, manifest, catch_failures: true)
       end
@@ -48,6 +82,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to override modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::enable_defaults' => true,
           'simp::kmod_blacklist::allow_overrides' => false,
         )
       end
@@ -83,6 +118,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to load modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::enable_defaults' => true,
           'simp::kmod_blacklist::allow_overrides' => nil,
           'simp::kmod_blacklist::lock_modules'    => true,
         )
