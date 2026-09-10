@@ -47,6 +47,15 @@ describe 'simp::kmod_blacklist class' do
 
       it 'applies with no errors' do
         apply_manifest_on(host, manifest, catch_failures: true)
+
+        # This is the first run that creates /etc/modprobe.d/blacklist.conf
+        # (owned by puppet-kmod). On SELinux systems the kmod File resource
+        # creates it as system_u, then the kmod::setting augeas resources
+        # rewrite it (temp file + rename) as the puppet process's
+        # unconfined_u, so the File resource relabels it on the following
+        # run. Before 10.0.0 this happened during the multi-run bootstrap in
+        # 00_simp_spec; absorb it here the same way.
+        apply_manifest_on(host, manifest, catch_failures: true)
       end
 
       it 'is idempotent' do
