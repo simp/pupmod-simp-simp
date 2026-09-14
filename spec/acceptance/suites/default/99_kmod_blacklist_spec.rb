@@ -16,6 +16,21 @@ describe 'simp::kmod_blacklist class' do
     EOS
   end
 
+  # Apply until the catalog settles, then the caller checks idempotency.
+  #
+  # Every modprobe.d file this class manages is created by puppet-kmod:
+  # kmod::setting's File resource creates the file as system_u, then its
+  # augeas resource rewrites it (temp file + rename) under the puppet
+  # process's SELinux context -- unconfined_u when `puppet apply` runs from an
+  # ssh session, as beaker does -- so the run after a file is (re)created
+  # relabels it. A system_u agent daemon does not hit this. Before 10.0.0 the
+  # files were created during the multi-run bootstrap in 00_simp_spec, which
+  # absorbed the relabel; do the same here with a second apply.
+  def apply_and_settle(host, manifest)
+    apply_manifest_on(host, manifest, catch_failures: true)
+    apply_manifest_on(host, manifest, catch_failures: true)
+  end
+
   hosts.each do |host|
     # 10.0.0 safe default: a bare include manages nothing
     context 'default parameters (bare include)' do
@@ -53,18 +68,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
-
-        # This is the first run that creates /etc/modprobe.d/blacklist.conf
-        # and the SIMP drop-in (both via puppet-kmod). On SELinux systems the
-        # kmod::setting File resource creates each file as system_u, then the
-        # augeas resources rewrite it (temp file + rename) under the puppet
-        # process's context -- unconfined_u when `puppet apply` runs from an
-        # ssh session, as beaker does -- so the File resource relabels it on
-        # the following run. A system_u agent daemon does not hit this.
-        # Before 10.0.0 this happened during the multi-run bootstrap in
-        # 00_simp_spec; absorb it here the same way.
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do
@@ -110,12 +114,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
-
-        # First creation of /etc/modprobe.d/00_simp_disable.conf: same
-        # one-time SELinux relabel as above (kmod::setting's File resource
-        # creates it, augeas rewrites it under the puppet process's context)
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do
@@ -156,7 +155,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do
