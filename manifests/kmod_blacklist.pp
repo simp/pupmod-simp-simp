@@ -1,39 +1,39 @@
-# @summary Blacklist and disable kernel modules, optionally using the default
-# set of entries from the SCAP Security Guide
+# @summary Blacklist and disable kernel modules
 #
-# A bare `include simp::kmod_blacklist` manages **nothing**: the default
-# blacklist is opt-in via `enable_defaults`, module locking is opt-in via
-# `lock_modules`, and the module only touches `/etc/modprobe.d` once at least
-# one module is listed in `blacklist` (with `enable_defaults => true`),
-# `custom_blacklist`, or `purge_blacklist`.
+# A bare `include simp::kmod_blacklist` manages **nothing**: `blacklist` is
+# empty by default, module locking is opt-in via `lock_modules`, and the class
+# only touches `/etc/modprobe.d` once at least one module is listed in
+# `blacklist`, `custom_blacklist`, or `purge_blacklist`.
 #
-# The pre-10.0.0 behavior (default blacklist enforced, module locking managed)
-# is restored by enforcing the `simp:defaults` compliance profile shipped in
-# `SIMP/compliance_profiles/`.
-#
-# @param enable_defaults
-#   Enable to use the default `blacklist`, otherwise just the
-#   `custom_blacklist` will be used
+# The pre-10.0.0 behavior (the SCAP Security Guide blacklist enforced, module
+# locking managed) is restored by enforcing the `simp:defaults` compliance
+# profile shipped in `SIMP/compliance_profiles/`, which carries the default
+# module list.
 #
 # @param blacklist
-#   List of kernel modules to be blacklisted when `enable_defaults` is `true`
+#   List of kernel modules to be blacklisted
 #
-# @param produce_error
-#   If set to true, any disabled modules will point to '/bin/false', which will
-#   produce an error when anyone attempts to load the module. Default is false,
-#   which will point to '/bin/true', which will not produce any error.
+#   * Empty by default. The `simp:defaults` compliance profile sets this to the
+#     SCAP Security Guide list that the class enforced before 10.0.0.
 #
 # @param custom_blacklist
 #   Additional kernel modules to be blacklisted
+#
+#   * Kept separate from `blacklist` so that a site can add modules on top of a
+#     `blacklist` supplied by a compliance profile without overriding it
 #
 # @param purge_blacklist
 #   Kernel modules to remove from the kmod blacklist (`kmod::blacklist { ...:
 #   ensure => 'absent' }`)
 #
 #   * Use this to clean up entries that a previous configuration of this class
-#     added (for example, the default `blacklist` after switching
-#     `enable_defaults` off). Modules that are also present in the effective
-#     blacklist are ignored.
+#     added. Modules that are also present in the effective blacklist are
+#     ignored.
+#
+# @param produce_error
+#   If set to true, any disabled modules will point to '/bin/false', which will
+#   produce an error when anyone attempts to load the module. Default is false,
+#   which will point to '/bin/true', which will not produce any error.
 #
 # @param allow_overrides
 #   Allow the addition of kernel module rules that come before the disabling of
@@ -59,39 +59,17 @@
 #   * Only used when `lock_modules` is set
 #
 class simp::kmod_blacklist (
-  Boolean            $enable_defaults           = false,
-  Array[String[1],1] $blacklist                 = [
-    'bluetooth',
-    'cramfs',
-    'dccp',
-    'dccp_ipv4',
-    'dccp_ipv6',
-    'freevxfs',
-    'hfs',
-    'hfsplus',
-    'ieee1394',
-    'jffs2',
-    'net-pf-31',
-    'rds',
-    'sctp',
-    'squashfs',
-    'tipc',
-    'udf',
-    'usb-storage',
-  ],
-  Array[String[1]]   $custom_blacklist          = [],
-  Array[String[1]]   $purge_blacklist           = [],
-  Boolean            $produce_error             = false,
-  Boolean            $allow_overrides           = true,
-  Optional[Boolean]  $lock_modules              = undef,
-  Boolean            $notify_if_reboot_required = true
+  Array[String[1]]  $blacklist                 = [],
+  Array[String[1]]  $custom_blacklist          = [],
+  Array[String[1]]  $purge_blacklist           = [],
+  Boolean           $produce_error             = false,
+  Boolean           $allow_overrides           = true,
+  Optional[Boolean] $lock_modules              = undef,
+  Boolean           $notify_if_reboot_required = true
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  $_blacklist = $enable_defaults ? {
-    true    => unique($custom_blacklist + $blacklist),
-    default => unique($custom_blacklist),
-  }
+  $_blacklist = unique($custom_blacklist + $blacklist)
 
   $_unblacklist = $purge_blacklist - $_blacklist
 

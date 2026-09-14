@@ -40,6 +40,10 @@ describe 'simp::kmod_blacklist' do
     it 'uses the simp:defaults check ID namespace' do
       expect(checks.keys).to all(start_with('simp:defaults.simp.kmod_blacklist.'))
     end
+
+    it 'carries the pre-10.0.0 SCAP Security Guide blacklist' do
+      expect(checks['simp:defaults.simp.kmod_blacklist.blacklist']['settings']['value']).to eq(stock_blacklist)
+    end
   end
 
   context 'supported operating systems' do
@@ -59,7 +63,7 @@ describe 'simp::kmod_blacklist' do
 
           it { is_expected.to compile.with_all_deps }
 
-          it 'blacklists all the default kmods' do
+          it 'blacklists all the SCAP kmods' do
             is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
             is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_ensure('absent')
 

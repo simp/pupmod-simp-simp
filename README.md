@@ -31,10 +31,16 @@ SCAP Security Guide blacklist to `/etc/modprobe.d` and no longer manages the
 `kernel.modules_disabled` sysctl (which, on a locked system, *unlocked* module
 loading and requested a reboot). Everything is opt-in:
 
-* `enable_defaults` (now `false`) enforces the default `blacklist`
-* `custom_blacklist` blacklists additional modules
+* `blacklist` is now empty by default. The 17-module SCAP Security Guide list
+  it used to ship with has moved to the `simp:defaults` compliance profile
+* `enable_defaults` has been removed; the contents of `blacklist` are the
+  opt-in. Sites that set `enable_defaults: false` should remove that key (and
+  override `simp::kmod_blacklist::blacklist: []` if they also enforce the
+  profile)
+* `custom_blacklist` still blacklists additional modules on top of `blacklist`,
+  so a site can add modules without overriding a profile-supplied list
 * `purge_blacklist` (new) removes specific entries a previous configuration
-  added -- `enable_defaults => false` no longer removes the defaults on its own
+  added; nothing is un-blacklisted automatically any more
 * `lock_modules` (now `Optional[Boolean]`, default `undef`) manages module
   locking: `true` locks, `false` ensures unlocked, `undef` leaves it alone
 
@@ -47,7 +53,24 @@ If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
 * **Path 1 -- set the parameters yourself.** In Hiera:
 
   ```yaml
-  simp::kmod_blacklist::enable_defaults: true
+  simp::kmod_blacklist::blacklist:
+    - bluetooth
+    - cramfs
+    - dccp
+    - dccp_ipv4
+    - dccp_ipv6
+    - freevxfs
+    - hfs
+    - hfsplus
+    - ieee1394
+    - jffs2
+    - net-pf-31
+    - rds
+    - sctp
+    - squashfs
+    - tipc
+    - udf
+    - usb-storage
   simp::kmod_blacklist::lock_modules: false
   ```
 
@@ -65,12 +88,13 @@ If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
   This requires the [Sicura Compliance Engine][compliance_engine] Hiera backend
   (it is **not** a hard dependency of this module -- `metadata.json` is
   unchanged). The profile, shipped in `SIMP/compliance_profiles/`, is a drop-in
-  restoration of the *old* behavior: it sets `enable_defaults: true` and
-  `lock_modules: false`, so the default blacklist is enforced and module
-  locking is managed (unlocked) exactly as before. It is opinionated for SIMP
-  sites. Sites that want "old behavior but safer" can enable the profile and
-  override the individual `simp::kmod_blacklist::*` parameters they care
-  about in their own Hiera, which always wins over the profile.
+  restoration of the *old* behavior: it sets `blacklist` to the SCAP Security
+  Guide list above and `lock_modules: false`, so the default blacklist is
+  enforced and module locking is managed (unlocked) exactly as before. It is
+  opinionated for SIMP sites. Sites that want "old behavior but safer" can
+  enable the profile and override the individual `simp::kmod_blacklist::*`
+  parameters they care about in their own Hiera, which always wins over the
+  profile.
 
 [compliance_engine]: https://github.com/simp/rubygem-simp-compliance_engine
 

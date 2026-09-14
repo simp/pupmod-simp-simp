@@ -66,10 +66,11 @@ describe 'simp::kmod_blacklist' do
           end
 
           # ------------------------------------------------------------------
-          # Opt-in: the default blacklist
+          # Opt-in: an explicit blacklist (the simp:defaults profile supplies
+          # this list; see kmod_blacklist_simp_defaults_profile_spec.rb)
           # ------------------------------------------------------------------
-          context 'with enable_defaults => true' do
-            let(:params) { { enable_defaults: true } }
+          context 'with the SCAP blacklist' do
+            let(:params) { { blacklist: stock_blacklist } }
 
             it { is_expected.to compile.with_all_deps }
 
@@ -90,7 +91,7 @@ describe 'simp::kmod_blacklist' do
             context 'when disabling overrides' do
               let(:params) do
                 {
-                  enable_defaults: true,
+                  blacklist: stock_blacklist,
                   allow_overrides: false,
                 }
               end
@@ -109,7 +110,7 @@ describe 'simp::kmod_blacklist' do
               let(:custom_list) { ['nfs', 'fuse'] }
               let(:params) do
                 {
-                  enable_defaults: true,
+                  blacklist: stock_blacklist,
                   custom_blacklist: custom_list,
                 }
               end
@@ -123,10 +124,10 @@ describe 'simp::kmod_blacklist' do
               end
             end
 
-            context 'with a custom kmod that duplicates a default' do
+            context 'with a custom kmod that duplicates a blacklist entry' do
               let(:params) do
                 {
-                  enable_defaults: true,
+                  blacklist: stock_blacklist,
                   custom_blacklist: ['bluetooth'],
                 }
               end
@@ -141,7 +142,7 @@ describe 'simp::kmod_blacklist' do
             context 'when producing an error on module load' do
               let(:params) do
                 {
-                  enable_defaults: true,
+                  blacklist: stock_blacklist,
                   produce_error: true,
                 }
               end
@@ -170,7 +171,7 @@ describe 'simp::kmod_blacklist' do
               end
             end
 
-            it 'leaves the default kmods alone' do
+            it 'leaves the other kmods alone' do
               stock_blacklist.each do |mod|
                 is_expected.not_to create_kmod__blacklist(mod)
               end
@@ -197,10 +198,10 @@ describe 'simp::kmod_blacklist' do
               end
             end
 
-            context 'and the default blacklist enabled' do
+            context 'and a blacklist' do
               let(:params) do
                 {
-                  enable_defaults: true,
+                  blacklist: stock_blacklist,
                   purge_blacklist: ['usb-storage', 'nfs'],
                 }
               end

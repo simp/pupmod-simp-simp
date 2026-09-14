@@ -8,12 +8,31 @@
 ---
 version: 2.0.0
 checks:
-  # Pre-10.0.0: the SCAP Security Guide blacklist was enforced on every include
-  simp:defaults.simp.kmod_blacklist.enable_defaults:
+  # Pre-10.0.0: this SCAP Security Guide blacklist was the hardcoded default
+  # for `simp::kmod_blacklist::blacklist` and was enforced on every include.
+  # The class default is now empty; the list lives here.
+  simp:defaults.simp.kmod_blacklist.blacklist:
     type: puppet-class-parameter
     settings:
-      parameter: simp::kmod_blacklist::enable_defaults
-      value: true
+      parameter: simp::kmod_blacklist::blacklist
+      value:
+        - bluetooth
+        - cramfs
+        - dccp
+        - dccp_ipv4
+        - dccp_ipv6
+        - freevxfs
+        - hfs
+        - hfsplus
+        - ieee1394
+        - jffs2
+        - net-pf-31
+        - rds
+        - sctp
+        - squashfs
+        - tipc
+        - udf
+        - usb-storage
   # Pre-10.0.0: `kernel.modules_disabled` was managed (unlocked) on every
   # include where the sysctl is available
   simp:defaults.simp.kmod_blacklist.lock_modules:

@@ -1,7 +1,7 @@
 ---
 compliance_engine::enforcement:
   - simp:defaults
-# Explicit site Hiera must beat the profile (which restores `true`)
-simp::kmod_blacklist::enable_defaults: false
+# Explicit site Hiera must beat the profile (which restores the SCAP list)
+simp::kmod_blacklist::blacklist: []
 simp::kmod_blacklist::custom_blacklist:
   - nfs
