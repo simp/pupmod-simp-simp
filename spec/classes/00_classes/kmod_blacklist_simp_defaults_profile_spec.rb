@@ -42,7 +42,7 @@ describe 'simp::kmod_blacklist' do
     end
 
     it 'carries the pre-10.0.0 SCAP Security Guide blacklist' do
-      expect(checks['simp:defaults.simp.kmod_blacklist.blacklist']['settings']['value']).to eq(stock_blacklist)
+      expect(checks['simp:defaults.simp.kmod_blacklist.modules']['settings']['value']).to eq(stock_blacklist.to_h { |mod| [mod, {}] })
     end
   end
 
@@ -63,12 +63,16 @@ describe 'simp::kmod_blacklist' do
 
           it { is_expected.to compile.with_all_deps }
 
-          it 'blacklists all the SCAP kmods' do
-            is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
+          it 'blacklists and disables all the SCAP kmods' do
             is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_ensure('absent')
 
             stock_blacklist.each do |mod|
               is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+              is_expected.to create_kmod__install(mod).with(
+                ensure: 'present',
+                command: '/bin/true',
+                file: '/etc/modprobe.d/zz_simp_disable.conf',
+              )
             end
           end
 
@@ -117,6 +121,7 @@ describe 'simp::kmod_blacklist' do
 
             stock_blacklist.each do |mod|
               is_expected.not_to create_kmod__blacklist(mod)
+              is_expected.not_to create_kmod__install(mod)
             end
           end
         end
@@ -132,12 +137,17 @@ describe 'simp::kmod_blacklist' do
 
           it { is_expected.to compile.with_all_deps }
 
-          it 'uses the overridden blacklist instead of the profile default' do
-            is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content("install nfs /bin/true\n")
+          it 'deep-merges the site entries over the profile list' do
+            # Site-supplied: usb-storage removed, nfs added
+            is_expected.to create_kmod__blacklist('usb-storage').with_ensure('absent')
+            is_expected.to create_kmod__install('usb-storage').with_ensure('absent')
             is_expected.to create_kmod__blacklist('nfs').with_ensure('present')
+            is_expected.to create_kmod__install('nfs').with_ensure('present')
 
-            stock_blacklist.each do |mod|
-              is_expected.not_to create_kmod__blacklist(mod)
+            # Everything else still comes from the profile
+            (stock_blacklist - ['usb-storage']).each do |mod|
+              is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+              is_expected.to create_kmod__install(mod).with_ensure('present')
             end
           end
 

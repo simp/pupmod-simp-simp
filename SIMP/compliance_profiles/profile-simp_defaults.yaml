@@ -10,5 +10,5 @@ version: 2.0.0
 profiles:
   simp:defaults:
     checks:
-      simp:defaults.simp.kmod_blacklist.blacklist: true
+      simp:defaults.simp.kmod_blacklist.modules: true
       simp:defaults.simp.kmod_blacklist.lock_modules: true

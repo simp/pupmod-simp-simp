@@ -15,6 +15,7 @@ describe 'simp::kmod_blacklist' do
              'ieee1394', 'jffs2', 'net-pf-31', 'rds', 'sctp',
              'squashfs', 'tipc', 'udf', 'usb-storage']
           end
+          let(:stock_modules) { stock_blacklist.to_h { |mod| [mod, {}] } }
 
           # ------------------------------------------------------------------
           # Safe default: a bare include manages nothing. These are the
@@ -31,6 +32,7 @@ describe 'simp::kmod_blacklist' do
 
               stock_blacklist.each do |mod|
                 is_expected.not_to create_kmod__blacklist(mod)
+                is_expected.not_to create_kmod__install(mod)
               end
             end
 
@@ -66,21 +68,29 @@ describe 'simp::kmod_blacklist' do
           end
 
           # ------------------------------------------------------------------
-          # Opt-in: an explicit blacklist (the simp:defaults profile supplies
-          # this list; see kmod_blacklist_simp_defaults_profile_spec.rb)
+          # Opt-in: the `modules` Hash (the simp:defaults profile supplies the
+          # SCAP list; see kmod_blacklist_simp_defaults_profile_spec.rb)
           # ------------------------------------------------------------------
-          context 'with the SCAP blacklist' do
-            let(:params) { { blacklist: stock_blacklist } }
+          context 'with the SCAP modules' do
+            let(:params) { { modules: stock_modules } }
 
             it { is_expected.to compile.with_all_deps }
 
-            it 'blacklists all the default kmods' do
-              is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
+            it 'blacklists and disables all the kmods' do
               is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_ensure('absent')
 
               stock_blacklist.each do |mod|
                 is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+                is_expected.to create_kmod__install(mod).with(
+                  ensure: 'present',
+                  command: '/bin/true',
+                  file: '/etc/modprobe.d/zz_simp_disable.conf',
+                )
               end
+            end
+
+            it 'lets kmod create the disable file' do
+              is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_ensure('file')
             end
 
             it 'does not manage module locking' do
@@ -91,102 +101,165 @@ describe 'simp::kmod_blacklist' do
             context 'when disabling overrides' do
               let(:params) do
                 {
-                  blacklist: stock_blacklist,
+                  modules: stock_modules,
                   allow_overrides: false,
                 }
               end
 
-              it 'blacklists all the default kmods authoritatively' do
-                is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
+              it 'disables all the kmods authoritatively' do
                 is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_ensure('absent')
 
                 stock_blacklist.each do |mod|
                   is_expected.to create_kmod__blacklist(mod)
+                  is_expected.to create_kmod__install(mod).with_file('/etc/modprobe.d/00_simp_disable.conf')
                 end
-              end
-            end
-
-            context 'with custom kmods' do
-              let(:custom_list) { ['nfs', 'fuse'] }
-              let(:params) do
-                {
-                  blacklist: stock_blacklist,
-                  custom_blacklist: custom_list,
-                }
-              end
-
-              it 'includes all the kmods in the blacklist' do
-                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content((custom_list + stock_blacklist).map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
-
-                (stock_blacklist + custom_list).each do |mod|
-                  is_expected.to create_kmod__blacklist(mod)
-                end
-              end
-            end
-
-            context 'with a custom kmod that duplicates a blacklist entry' do
-              let(:params) do
-                {
-                  blacklist: stock_blacklist,
-                  custom_blacklist: ['bluetooth'],
-                }
-              end
-
-              it { is_expected.to compile.with_all_deps }
-
-              it 'lists the module once' do
-                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
               end
             end
 
             context 'when producing an error on module load' do
               let(:params) do
                 {
-                  blacklist: stock_blacklist,
+                  modules: stock_modules,
                   produce_error: true,
                 }
               end
 
-              it 'blacklists all the default kmods and point to /bin/false' do
-                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(stock_blacklist.map { |x| "install #{x} /bin/false" }.join("\n") + "\n")
+              it 'points the disabled kmods at /bin/false' do
+                stock_blacklist.each do |mod|
+                  is_expected.to create_kmod__install(mod).with_command('/bin/false')
+                end
+              end
+            end
+
+            context 'with a module set to absent' do
+              let(:params) do
+                {
+                  modules: stock_modules.merge('usb-storage' => { 'ensure' => 'absent' }),
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'removes the blacklist and install entries for that module' do
+                is_expected.to create_kmod__blacklist('usb-storage').with_ensure('absent')
+                is_expected.to create_kmod__install('usb-storage').with_ensure('absent')
+              end
+
+              it 'still manages the other modules' do
+                (stock_blacklist - ['usb-storage']).each do |mod|
+                  is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+                  is_expected.to create_kmod__install(mod).with_ensure('present')
+                end
+              end
+            end
+
+            context 'with extra kmod::blacklist parameters' do
+              let(:params) do
+                {
+                  modules: { 'nfs' => { 'file' => '/etc/modprobe.d/nfs.conf' } },
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'passes them through to kmod::blacklist' do
+                is_expected.to create_kmod__blacklist('nfs').with_file('/etc/modprobe.d/nfs.conf')
+                is_expected.to create_kmod__install('nfs').with_file('/etc/modprobe.d/zz_simp_disable.conf')
               end
             end
           end
 
-          # ------------------------------------------------------------------
-          # Opt-in: custom modules only
-          # ------------------------------------------------------------------
-          context 'with only custom kmods' do
-            let(:custom_list) { ['nfs', 'fuse'] }
-            let(:params) { { custom_blacklist: custom_list } }
+          context 'with only a module set to absent' do
+            let(:params) { { modules: { 'usb-storage' => { 'ensure' => 'absent' } } } }
 
             it { is_expected.to compile.with_all_deps }
 
-            it 'includes only the custom kmods in the blacklist' do
-              is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content(custom_list.map { |x| "install #{x} /bin/true" }.join("\n") + "\n")
+            it 'removes the entries without adding any' do
+              is_expected.to create_kmod__blacklist('usb-storage').with_ensure('absent')
+              is_expected.to create_kmod__install('usb-storage').with_ensure('absent')
               is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_ensure('absent')
-
-              custom_list.each do |mod|
-                is_expected.to create_kmod__blacklist(mod).with_ensure('present')
-              end
-            end
-
-            it 'leaves the other kmods alone' do
-              stock_blacklist.each do |mod|
-                is_expected.not_to create_kmod__blacklist(mod)
-              end
             end
           end
 
           # ------------------------------------------------------------------
-          # Deprecated: enable_defaults
+          # Deprecated Array parameters
           # ------------------------------------------------------------------
-          context 'with the deprecated enable_defaults parameter' do
+          context 'with the deprecated Array parameters' do
             before(:each) do
               allow(Puppet).to receive(:deprecation_warning)
             end
 
-            context 'set to false' do
+            context 'blacklist' do
+              let(:params) { { blacklist: stock_blacklist } }
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'blacklists and disables all the kmods' do
+                stock_blacklist.each do |mod|
+                  is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+                  is_expected.to create_kmod__install(mod).with_ensure('present')
+                end
+              end
+
+              # rspec-puppet caches catalogs per parameter set, so use a
+              # distinct one here to force a fresh compile for the mock
+              context 'compiling a fresh catalog' do
+                let(:params) { { blacklist: ['fuse'] } }
+
+                it 'logs a deprecation warning' do
+                  expect(Puppet).to receive(:deprecation_warning).with(%r{blacklist is deprecated}, 'simp::kmod_blacklist::blacklist')
+                  catalogue
+                end
+              end
+            end
+
+            context 'custom_blacklist' do
+              let(:params) { { custom_blacklist: ['nfs', 'fuse'] } }
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'blacklists and disables only the listed kmods' do
+                ['nfs', 'fuse'].each do |mod|
+                  is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+                  is_expected.to create_kmod__install(mod).with_ensure('present')
+                end
+
+                stock_blacklist.each do |mod|
+                  is_expected.not_to create_kmod__blacklist(mod)
+                end
+              end
+
+              context 'compiling a fresh catalog' do
+                let(:params) { { custom_blacklist: ['fuse'] } }
+
+                it 'logs a deprecation warning' do
+                  expect(Puppet).to receive(:deprecation_warning).with(%r{custom_blacklist is deprecated}, 'simp::kmod_blacklist::custom_blacklist')
+                  catalogue
+                end
+              end
+            end
+
+            context 'blacklist and custom_blacklist combined with modules' do
+              let(:params) do
+                {
+                  blacklist: ['bluetooth', 'cramfs'],
+                  custom_blacklist: ['bluetooth', 'nfs'],
+                  modules: { 'cramfs' => { 'ensure' => 'absent' }, 'fuse' => {} },
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'de-duplicates and lets modules win' do
+                is_expected.to create_kmod__blacklist('bluetooth').with_ensure('present')
+                is_expected.to create_kmod__blacklist('nfs').with_ensure('present')
+                is_expected.to create_kmod__blacklist('fuse').with_ensure('present')
+                is_expected.to create_kmod__blacklist('cramfs').with_ensure('absent')
+                is_expected.to create_kmod__install('cramfs').with_ensure('absent')
+              end
+            end
+
+            context 'enable_defaults set to false' do
               let(:params) do
                 {
                   enable_defaults: false,
@@ -197,8 +270,6 @@ describe 'simp::kmod_blacklist' do
 
               it { is_expected.to compile.with_all_deps }
 
-              # rspec-puppet caches catalogs per parameter set, so use a
-              # distinct one here to force a fresh compile for the mock
               context 'compiling a fresh catalog' do
                 let(:params) { super().merge(custom_blacklist: ['fuse']) }
 
@@ -209,8 +280,8 @@ describe 'simp::kmod_blacklist' do
               end
 
               it 'ignores blacklist and only uses custom_blacklist, as before 10.0.0' do
-                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content("install nfs /bin/true\n")
                 is_expected.to create_kmod__blacklist('nfs').with_ensure('present')
+                is_expected.to create_kmod__install('nfs').with_ensure('present')
 
                 stock_blacklist.each do |mod|
                   is_expected.not_to create_kmod__blacklist(mod)
@@ -218,7 +289,7 @@ describe 'simp::kmod_blacklist' do
               end
             end
 
-            context 'set to true' do
+            context 'enable_defaults set to true' do
               let(:params) do
                 {
                   enable_defaults: true,
@@ -232,43 +303,6 @@ describe 'simp::kmod_blacklist' do
                 stock_blacklist.each do |mod|
                   is_expected.to create_kmod__blacklist(mod).with_ensure('present')
                 end
-              end
-            end
-          end
-
-          # ------------------------------------------------------------------
-          # Opt-in: removing previously-managed entries
-          # ------------------------------------------------------------------
-          context 'with purge_blacklist' do
-            context 'and nothing blacklisted' do
-              let(:params) { { purge_blacklist: ['usb-storage', 'bluetooth'] } }
-
-              it { is_expected.to compile.with_all_deps }
-
-              it 'removes the modules from the blacklist' do
-                is_expected.to create_kmod__blacklist('usb-storage').with_ensure('absent')
-                is_expected.to create_kmod__blacklist('bluetooth').with_ensure('absent')
-              end
-
-              it 'manages an empty disable file' do
-                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content("\n")
-                is_expected.to create_file('/etc/modprobe.d/00_simp_disable.conf').with_ensure('absent')
-              end
-            end
-
-            context 'and a blacklist' do
-              let(:params) do
-                {
-                  blacklist: stock_blacklist,
-                  purge_blacklist: ['usb-storage', 'nfs'],
-                }
-              end
-
-              it { is_expected.to compile.with_all_deps }
-
-              it 'ignores purge entries that are still blacklisted' do
-                is_expected.to create_kmod__blacklist('usb-storage').with_ensure('present')
-                is_expected.to create_kmod__blacklist('nfs').with_ensure('absent')
               end
             end
           end

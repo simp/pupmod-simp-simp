@@ -1,43 +1,52 @@
 # @summary Blacklist and disable kernel modules
 #
-# A bare `include simp::kmod_blacklist` manages **nothing**: `blacklist` is
+# A bare `include simp::kmod_blacklist` manages **nothing**: `modules` is
 # empty by default, module locking is opt-in via `lock_modules`, and the class
 # only touches `/etc/modprobe.d` once at least one module is listed in
-# `blacklist`, `custom_blacklist`, or `purge_blacklist`.
+# `modules`.
+#
+# Each module in `modules` gets a `kmod::blacklist` entry (in
+# `/etc/modprobe.d/blacklist.conf` by default) and a `kmod::install` entry
+# pointing the module at `/bin/true` (or `/bin/false`, see `produce_error`) in
+# a SIMP-owned drop-in file so that it cannot be auto-loaded.
 #
 # The pre-10.0.0 behavior (the SCAP Security Guide blacklist enforced, module
 # locking managed) is restored by enforcing the `simp:defaults` compliance
 # profile shipped in `SIMP/compliance_profiles/`, which carries the default
 # module list.
 #
-# @param enable_defaults
-#   **Deprecated** and no longer needed: `blacklist` is empty by default, so
-#   its contents are the opt-in. Setting this parameter logs a deprecation
-#   warning.
+# @param modules
+#   Kernel modules to blacklist and disable, as a Hash of module name =>
+#   `kmod::blacklist` parameters
 #
-#   * `false` is still honored for backwards compatibility and ignores
-#     `blacklist` (only `custom_blacklist` is used), as it did before 10.0.0
-#   * `true` has no effect
-#
-# @param blacklist
-#   List of kernel modules to be blacklisted
-#
+#   * An empty Hash of parameters (`bluetooth: {}`) blacklists the module with
+#     the `kmod::blacklist` defaults
+#   * `ensure: absent` removes the module's blacklist and install entries; use
+#     it to drop a module from a list supplied by a compliance profile
+#   * Any other `kmod::blacklist` parameter (e.g. `file`) is passed through
+#   * Deep-merged across the Hiera hierarchy (see `lookup_options` in
+#     `data/common.yaml`), so a site can add to or override entries supplied
+#     by a compliance profile without restating the whole list
 #   * Empty by default. The `simp:defaults` compliance profile sets this to the
 #     SCAP Security Guide list that the class enforced before 10.0.0.
 #
+# @param blacklist
+#   **Deprecated**, use `modules` instead. List of kernel modules to be
+#   blacklisted. Each entry is added to `modules` with default options; an
+#   entry that is also present in `modules` takes its options from `modules`.
+#
 # @param custom_blacklist
-#   Additional kernel modules to be blacklisted
+#   **Deprecated**, use `modules` instead. Additional kernel modules to be
+#   blacklisted. Handled like `blacklist`.
 #
-#   * Kept separate from `blacklist` so that a site can add modules on top of a
-#     `blacklist` supplied by a compliance profile without overriding it
+# @param enable_defaults
+#   **Deprecated** and no longer needed: `modules` is empty by default, so
+#   its contents are the opt-in.
 #
-# @param purge_blacklist
-#   Kernel modules to remove from the kmod blacklist (`kmod::blacklist { ...:
-#   ensure => 'absent' }`)
-#
-#   * Use this to clean up entries that a previous configuration of this class
-#     added. Modules that are also present in the effective blacklist are
-#     ignored.
+#   * `false` is still honored for backwards compatibility and ignores the
+#     deprecated `blacklist` (only `custom_blacklist` and `modules` are used),
+#     as it did before 10.0.0
+#   * `true` has no effect
 #
 # @param produce_error
 #   If set to true, any disabled modules will point to '/bin/false', which will
@@ -68,35 +77,53 @@
 #   * Only used when `lock_modules` is set
 #
 class simp::kmod_blacklist (
-  Array[String[1]]  $blacklist                 = [],
-  Optional[Boolean] $enable_defaults           = undef,
-  Array[String[1]]  $custom_blacklist          = [],
-  Array[String[1]]  $purge_blacklist           = [],
-  Boolean           $produce_error             = false,
-  Boolean           $allow_overrides           = true,
-  Optional[Boolean] $lock_modules              = undef,
-  Boolean           $notify_if_reboot_required = true
+  Hash[String[1], Hash[String[1], Any]] $modules                   = {},
+  Optional[Array[String[1]]]            $blacklist                 = undef,
+  Optional[Array[String[1]]]            $custom_blacklist          = undef,
+  Optional[Boolean]                     $enable_defaults           = undef,
+  Boolean                               $produce_error             = false,
+  Boolean                               $allow_overrides           = true,
+  Optional[Boolean]                     $lock_modules              = undef,
+  Boolean                               $notify_if_reboot_required = true
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  if $enable_defaults =~ NotUndef {
+  if $blacklist =~ NotUndef {
     deprecation(
-      'simp::kmod_blacklist::enable_defaults',
-      'simp::kmod_blacklist::enable_defaults is deprecated and no longer needed: `blacklist` is empty by default, so its contents are the opt-in. Remove this parameter.',
+      'simp::kmod_blacklist::blacklist',
+      'simp::kmod_blacklist::blacklist is deprecated. List the modules in simp::kmod_blacklist::modules instead.',
       false,
     )
   }
 
-  $_blacklist = $enable_defaults ? {
-    false   => unique($custom_blacklist),
-    default => unique($custom_blacklist + $blacklist),
+  if $custom_blacklist =~ NotUndef {
+    deprecation(
+      'simp::kmod_blacklist::custom_blacklist',
+      'simp::kmod_blacklist::custom_blacklist is deprecated. List the modules in simp::kmod_blacklist::modules instead.',
+      false,
+    )
   }
 
-  $_unblacklist = $purge_blacklist - $_blacklist
+  if $enable_defaults =~ NotUndef {
+    deprecation(
+      'simp::kmod_blacklist::enable_defaults',
+      'simp::kmod_blacklist::enable_defaults is deprecated and no longer needed: `modules` is empty by default, so its contents are the opt-in. Remove this parameter.',
+      false,
+    )
+  }
+
+  # Fold the deprecated Array parameters into the `modules` Hash with default
+  # options. Explicit `modules` entries win.
+  $_legacy_blacklist = $enable_defaults ? {
+    false   => $custom_blacklist.lest || { [] },
+    default => ($custom_blacklist.lest || { [] }) + ($blacklist.lest || { [] }),
+  }
+
+  $_modules = Hash($_legacy_blacklist.unique.map |$mod| { [$mod, {}] }) + $modules
 
   # Only touch /etc/modprobe.d once the user has asked us to manage at least
   # one module. A bare include declares nothing.
-  unless empty($_blacklist) and empty($_unblacklist) {
+  unless empty($_modules) {
     # Overrides in modprobe are processed in shell glob alphabetical order
     if $allow_overrides {
       $_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
@@ -107,28 +134,21 @@ class simp::kmod_blacklist (
       $_obsolete_disable_file = '/etc/modprobe.d/zz_simp_disable.conf'
     }
 
-    $_produce_error = $produce_error ? {
+    $_command = $produce_error ? {
       true  => '/bin/false',
       false => '/bin/true',
     }
 
-    $_disable_file_content = join($_blacklist.map |$mod| { "install ${mod} ${_produce_error}" }, "\n")
-
-    file { $_disable_file:
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      content => "${_disable_file_content}\n",
-    }
-
     file { $_obsolete_disable_file: ensure => absent }
 
-    $_blacklist.each |String $mod| {
-      kmod::blacklist { $mod: }
-    }
+    $_modules.each |String $mod, Hash $options| {
+      kmod::blacklist { $mod: * => $options }
 
-    $_unblacklist.each |String $mod| {
-      kmod::blacklist { $mod: ensure => 'absent' }
+      kmod::install { $mod:
+        ensure  => $options['ensure'].lest || { 'present' },
+        command => $_command,
+        file    => $_disable_file,
+      }
     }
   }
 

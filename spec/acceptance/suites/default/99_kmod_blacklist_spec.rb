@@ -4,10 +4,10 @@ test_name 'simp::kmod_blacklist class'
 
 describe 'simp::kmod_blacklist class' do
   # The pre-10.0.0 default list, now carried by the simp:defaults profile
-  let(:scap_blacklist) do
+  let(:scap_modules) do
     ['bluetooth', 'cramfs', 'dccp', 'dccp_ipv4', 'dccp_ipv6', 'freevxfs',
      'hfs', 'hfsplus', 'ieee1394', 'jffs2', 'net-pf-31', 'rds', 'sctp',
-     'squashfs', 'tipc', 'udf', 'usb-storage']
+     'squashfs', 'tipc', 'udf', 'usb-storage'].to_h { |mod| [mod, {}] }
   end
 
   let(:manifest) do
@@ -41,14 +41,14 @@ describe 'simp::kmod_blacklist class' do
       end
     end
 
-    context 'with the SCAP blacklist' do
+    context 'with the SCAP modules' do
       let(:hieradata) do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-          'simp::kmod_blacklist::blacklist' => scap_blacklist,
+          'simp::kmod_blacklist::modules' => scap_modules,
         )
       end
 
-      it 'sets the blacklist via hiera' do
+      it 'sets the modules via hiera' do
         set_hieradata_on(host, hieradata)
       end
 
@@ -98,7 +98,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to override modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-          'simp::kmod_blacklist::blacklist' => scap_blacklist,
+          'simp::kmod_blacklist::modules' => scap_modules,
           'simp::kmod_blacklist::allow_overrides' => false,
         )
       end
@@ -134,7 +134,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to load modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
-          'simp::kmod_blacklist::blacklist' => scap_blacklist,
+          'simp::kmod_blacklist::modules' => scap_modules,
           'simp::kmod_blacklist::allow_overrides' => nil,
           'simp::kmod_blacklist::lock_modules'    => true,
         )

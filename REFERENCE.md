@@ -706,10 +706,15 @@ Default value: `'warning'`
 
 ### <a name="simp--kmod_blacklist"></a>`simp::kmod_blacklist`
 
-A bare `include simp::kmod_blacklist` manages **nothing**: `blacklist` is
+A bare `include simp::kmod_blacklist` manages **nothing**: `modules` is
 empty by default, module locking is opt-in via `lock_modules`, and the class
 only touches `/etc/modprobe.d` once at least one module is listed in
-`blacklist`, `custom_blacklist`, or `purge_blacklist`.
+`modules`.
+
+Each module in `modules` gets a `kmod::blacklist` entry (in
+`/etc/modprobe.d/blacklist.conf` by default) and a `kmod::install` entry
+pointing the module at `/bin/true` (or `/bin/false`, see `produce_error`) in
+a SIMP-owned drop-in file so that it cannot be auto-loaded.
 
 The pre-10.0.0 behavior (the SCAP Security Guide blacklist enforced, module
 locking managed) is restored by enforcing the `simp:defaults` compliance
@@ -720,63 +725,67 @@ module list.
 
 The following parameters are available in the `simp::kmod_blacklist` class:
 
-* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
+* [`modules`](#-simp--kmod_blacklist--modules)
 * [`blacklist`](#-simp--kmod_blacklist--blacklist)
 * [`custom_blacklist`](#-simp--kmod_blacklist--custom_blacklist)
-* [`purge_blacklist`](#-simp--kmod_blacklist--purge_blacklist)
+* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
 * [`produce_error`](#-simp--kmod_blacklist--produce_error)
 * [`allow_overrides`](#-simp--kmod_blacklist--allow_overrides)
 * [`lock_modules`](#-simp--kmod_blacklist--lock_modules)
 * [`notify_if_reboot_required`](#-simp--kmod_blacklist--notify_if_reboot_required)
 
+##### <a name="-simp--kmod_blacklist--modules"></a>`modules`
+
+Data type: `Hash[String[1], Hash[String[1], Any]]`
+
+Kernel modules to blacklist and disable, as a Hash of module name =>
+`kmod::blacklist` parameters
+
+* An empty Hash of parameters (`bluetooth: {}`) blacklists the module with
+  the `kmod::blacklist` defaults
+* `ensure: absent` removes the module's blacklist and install entries; use
+  it to drop a module from a list supplied by a compliance profile
+* Any other `kmod::blacklist` parameter (e.g. `file`) is passed through
+* Deep-merged across the Hiera hierarchy (see `lookup_options` in
+  `data/common.yaml`), so a site can add to or override entries supplied
+  by a compliance profile without restating the whole list
+* Empty by default. The `simp:defaults` compliance profile sets this to the
+  SCAP Security Guide list that the class enforced before 10.0.0.
+
+Default value: `{}`
+
+##### <a name="-simp--kmod_blacklist--blacklist"></a>`blacklist`
+
+Data type: `Optional[Array[String[1]]]`
+
+**Deprecated**, use `modules` instead. List of kernel modules to be
+blacklisted. Each entry is added to `modules` with default options; an
+entry that is also present in `modules` takes its options from `modules`.
+
+Default value: `undef`
+
+##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
+
+Data type: `Optional[Array[String[1]]]`
+
+**Deprecated**, use `modules` instead. Additional kernel modules to be
+blacklisted. Handled like `blacklist`.
+
+Default value: `undef`
+
 ##### <a name="-simp--kmod_blacklist--enable_defaults"></a>`enable_defaults`
 
 Data type: `Optional[Boolean]`
 
-**Deprecated** and no longer needed: `blacklist` is empty by default, so
-its contents are the opt-in. Setting this parameter logs a deprecation
-warning.
+**Deprecated** and no longer needed: `modules` is empty by default, so
+its contents are the opt-in.
 
-* `false` is still honored for backwards compatibility and ignores
-  `blacklist` (only `custom_blacklist` is used), as it did before 10.0.0
+* `false` is still honored for backwards compatibility and ignores the
+  deprecated `blacklist` (only `custom_blacklist` and `modules` are used),
+  as it did before 10.0.0
 * `true` has no effect
 
 Default value: `undef`
-
-##### <a name="-simp--kmod_blacklist--blacklist"></a>`blacklist`
-
-Data type: `Array[String[1]]`
-
-List of kernel modules to be blacklisted
-
-* Empty by default. The `simp:defaults` compliance profile sets this to the
-  SCAP Security Guide list that the class enforced before 10.0.0.
-
-Default value: `[]`
-
-##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
-
-Data type: `Array[String[1]]`
-
-Additional kernel modules to be blacklisted
-
-* Kept separate from `blacklist` so that a site can add modules on top of a
-  `blacklist` supplied by a compliance profile without overriding it
-
-Default value: `[]`
-
-##### <a name="-simp--kmod_blacklist--purge_blacklist"></a>`purge_blacklist`
-
-Data type: `Array[String[1]]`
-
-Kernel modules to remove from the kmod blacklist (`kmod::blacklist { ...:
-ensure => 'absent' }`)
-
-* Use this to clean up entries that a previous configuration of this class
-  added. Modules that are also present in the effective blacklist are
-  ignored.
-
-Default value: `[]`
 
 ##### <a name="-simp--kmod_blacklist--produce_error"></a>`produce_error`
 
