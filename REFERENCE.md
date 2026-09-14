@@ -720,6 +720,7 @@ module list.
 
 The following parameters are available in the `simp::kmod_blacklist` class:
 
+* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
 * [`blacklist`](#-simp--kmod_blacklist--blacklist)
 * [`custom_blacklist`](#-simp--kmod_blacklist--custom_blacklist)
 * [`purge_blacklist`](#-simp--kmod_blacklist--purge_blacklist)
@@ -727,6 +728,20 @@ The following parameters are available in the `simp::kmod_blacklist` class:
 * [`allow_overrides`](#-simp--kmod_blacklist--allow_overrides)
 * [`lock_modules`](#-simp--kmod_blacklist--lock_modules)
 * [`notify_if_reboot_required`](#-simp--kmod_blacklist--notify_if_reboot_required)
+
+##### <a name="-simp--kmod_blacklist--enable_defaults"></a>`enable_defaults`
+
+Data type: `Optional[Boolean]`
+
+**Deprecated** and no longer needed: `blacklist` is empty by default, so
+its contents are the opt-in. Setting this parameter logs a deprecation
+warning.
+
+* `false` is still honored for backwards compatibility and ignores
+  `blacklist` (only `custom_blacklist` is used), as it did before 10.0.0
+* `true` has no effect
+
+Default value: `undef`
 
 ##### <a name="-simp--kmod_blacklist--blacklist"></a>`blacklist`
 

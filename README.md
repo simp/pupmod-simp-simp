@@ -33,10 +33,12 @@ loading and requested a reboot). Everything is opt-in:
 
 * `blacklist` is now empty by default. The 17-module SCAP Security Guide list
   it used to ship with has moved to the `simp:defaults` compliance profile
-* `enable_defaults` has been removed; the contents of `blacklist` are the
-  opt-in. Sites that set `enable_defaults: false` should remove that key (and
-  override `simp::kmod_blacklist::blacklist: []` if they also enforce the
-  profile)
+* `enable_defaults` is deprecated and no longer needed; the contents of
+  `blacklist` are the opt-in. Setting it logs a deprecation warning (it does
+  not fail the catalog). `false` is still honored and ignores `blacklist`, so
+  a site that enforces the profile but sets `enable_defaults: false` gets only
+  its `custom_blacklist`, as before. Remove the key, or replace it with
+  `simp::kmod_blacklist::blacklist: []`
 * `custom_blacklist` still blacklists additional modules on top of `blacklist`,
   so a site can add modules without overriding a profile-supplied list
 * `purge_blacklist` (new) removes specific entries a previous configuration

@@ -5,9 +5,12 @@
     `/etc/modprobe.d/zz_simp_disable.conf` and `/etc/modprobe.d/blacklist.conf`
     on every include. `blacklist` is now empty by default and the SCAP list has
     moved to the `simp:defaults` compliance profile (below)
-  - `enable_defaults` has been removed; the contents of `blacklist` are the
-    opt-in. Sites that set `enable_defaults: false` should drop that key and,
-    if they enforce the profile, override `simp::kmod_blacklist::blacklist: []`
+  - `enable_defaults` is deprecated and no longer needed; the contents of
+    `blacklist` are the opt-in. Setting it logs a stdlib `deprecation()`
+    warning without failing the catalog. `false` is still honored and ignores
+    `blacklist` (only `custom_blacklist` is used), as before
+  - The `puppetlabs/stdlib` lower bound is raised to 9.2.0 for the
+    three-argument `deprecation()` function
   - declared `simp::kmod_blacklist::lock_modules` with `enable => false` on
     every include where `kernel.modules_disabled` is available, which
     *unlocked* module loading (and requested a reboot) on a locked system

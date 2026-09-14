@@ -10,6 +10,15 @@
 # profile shipped in `SIMP/compliance_profiles/`, which carries the default
 # module list.
 #
+# @param enable_defaults
+#   **Deprecated** and no longer needed: `blacklist` is empty by default, so
+#   its contents are the opt-in. Setting this parameter logs a deprecation
+#   warning.
+#
+#   * `false` is still honored for backwards compatibility and ignores
+#     `blacklist` (only `custom_blacklist` is used), as it did before 10.0.0
+#   * `true` has no effect
+#
 # @param blacklist
 #   List of kernel modules to be blacklisted
 #
@@ -60,6 +69,7 @@
 #
 class simp::kmod_blacklist (
   Array[String[1]]  $blacklist                 = [],
+  Optional[Boolean] $enable_defaults           = undef,
   Array[String[1]]  $custom_blacklist          = [],
   Array[String[1]]  $purge_blacklist           = [],
   Boolean           $produce_error             = false,
@@ -69,7 +79,18 @@ class simp::kmod_blacklist (
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  $_blacklist = unique($custom_blacklist + $blacklist)
+  if $enable_defaults =~ NotUndef {
+    deprecation(
+      'simp::kmod_blacklist::enable_defaults',
+      'simp::kmod_blacklist::enable_defaults is deprecated and no longer needed: `blacklist` is empty by default, so its contents are the opt-in. Remove this parameter.',
+      false,
+    )
+  }
+
+  $_blacklist = $enable_defaults ? {
+    false   => unique($custom_blacklist),
+    default => unique($custom_blacklist + $blacklist),
+  }
 
   $_unblacklist = $purge_blacklist - $_blacklist
 

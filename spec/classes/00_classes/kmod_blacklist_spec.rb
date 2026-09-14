@@ -179,6 +179,64 @@ describe 'simp::kmod_blacklist' do
           end
 
           # ------------------------------------------------------------------
+          # Deprecated: enable_defaults
+          # ------------------------------------------------------------------
+          context 'with the deprecated enable_defaults parameter' do
+            before(:each) do
+              allow(Puppet).to receive(:deprecation_warning)
+            end
+
+            context 'set to false' do
+              let(:params) do
+                {
+                  enable_defaults: false,
+                  blacklist: stock_blacklist,
+                  custom_blacklist: ['nfs'],
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+
+              # rspec-puppet caches catalogs per parameter set, so use a
+              # distinct one here to force a fresh compile for the mock
+              context 'compiling a fresh catalog' do
+                let(:params) { super().merge(custom_blacklist: ['fuse']) }
+
+                it 'logs a deprecation warning' do
+                  expect(Puppet).to receive(:deprecation_warning).with(%r{enable_defaults is deprecated}, 'simp::kmod_blacklist::enable_defaults')
+                  catalogue
+                end
+              end
+
+              it 'ignores blacklist and only uses custom_blacklist, as before 10.0.0' do
+                is_expected.to create_file('/etc/modprobe.d/zz_simp_disable.conf').with_content("install nfs /bin/true\n")
+                is_expected.to create_kmod__blacklist('nfs').with_ensure('present')
+
+                stock_blacklist.each do |mod|
+                  is_expected.not_to create_kmod__blacklist(mod)
+                end
+              end
+            end
+
+            context 'set to true' do
+              let(:params) do
+                {
+                  enable_defaults: true,
+                  blacklist: stock_blacklist,
+                }
+              end
+
+              it { is_expected.to compile.with_all_deps }
+
+              it 'has no effect on the blacklist' do
+                stock_blacklist.each do |mod|
+                  is_expected.to create_kmod__blacklist(mod).with_ensure('present')
+                end
+              end
+            end
+          end
+
+          # ------------------------------------------------------------------
           # Opt-in: removing previously-managed entries
           # ------------------------------------------------------------------
           context 'with purge_blacklist' do
