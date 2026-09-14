@@ -56,11 +56,13 @@ describe 'simp::kmod_blacklist class' do
         apply_manifest_on(host, manifest, catch_failures: true)
 
         # This is the first run that creates /etc/modprobe.d/blacklist.conf
-        # (owned by puppet-kmod). On SELinux systems the kmod File resource
-        # creates it as system_u, then the kmod::setting augeas resources
-        # rewrite it (temp file + rename) as the puppet process's
-        # unconfined_u, so the File resource relabels it on the following
-        # run. Before 10.0.0 this happened during the multi-run bootstrap in
+        # and the SIMP drop-in (both via puppet-kmod). On SELinux systems the
+        # kmod::setting File resource creates each file as system_u, then the
+        # augeas resources rewrite it (temp file + rename) under the puppet
+        # process's context -- unconfined_u when `puppet apply` runs from an
+        # ssh session, as beaker does -- so the File resource relabels it on
+        # the following run. A system_u agent daemon does not hit this.
+        # Before 10.0.0 this happened during the multi-run bootstrap in
         # 00_simp_spec; absorb it here the same way.
         apply_manifest_on(host, manifest, catch_failures: true)
       end
@@ -108,6 +110,11 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
+        apply_manifest_on(host, manifest, catch_failures: true)
+
+        # First creation of /etc/modprobe.d/00_simp_disable.conf: same
+        # one-time SELinux relabel as above (kmod::setting's File resource
+        # creates it, augeas rewrites it under the puppet process's context)
         apply_manifest_on(host, manifest, catch_failures: true)
       end
 
