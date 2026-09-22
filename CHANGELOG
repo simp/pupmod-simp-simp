@@ -19,12 +19,16 @@
 - Deprecate `simp::kmod_blacklist::blacklist`, `custom_blacklist`, and
   `enable_defaults`. They still work (the Array entries are folded into
   `modules`; `enable_defaults: false` still ignores `blacklist`) but log a
-  stdlib `deprecation()` warning without failing the catalog
+  stdlib `deprecation()` warning without failing the catalog. Note that with
+  the `simp:defaults` profile enforced the deprecated parameters only *add*
+  to the profile's `modules` list: `enable_defaults: false` no longer removes
+  the SCAP list and an explicit `blacklist` no longer replaces it. Use
+  `modules` entries with `ensure: absent` instead
 - The `puppetlabs/stdlib` lower bound is raised to 9.2.0 for the
   three-argument `deprecation()` function
-- The `simp`/`simp_lite`/`poss` scenarios still include the class, so sites
-  using a scenario must also opt in (via parameters or the profile below) to
-  keep enforcing the default blacklist
+- The `simp`/`simp_lite`/`one_shot` scenarios and the `simp::server` class
+  list still include the class, so sites using them must also opt in (via
+  parameters or the profile below) to keep enforcing the default blacklist
 - Ship a `simp:defaults` Sicura Compliance Engine profile
   (`SIMP/compliance_profiles/`) that restores the pre-10.0.0
   `simp::kmod_blacklist` behavior (the SCAP Security Guide `modules`,

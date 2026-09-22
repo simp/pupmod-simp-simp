@@ -42,17 +42,18 @@ loading and requested a reboot). Everything is opt-in:
   managed individually and removed with `ensure: absent`
 * `blacklist` and `custom_blacklist` are deprecated in favor of `modules`.
   They still work (their entries are folded into `modules` with default
-  options) but log a deprecation warning
+  options, on top of whatever `modules` already holds) but log a deprecation
+  warning
 * `enable_defaults` is deprecated and no longer needed; the contents of
   `modules` are the opt-in. Setting it logs a deprecation warning (it does not
-  fail the catalog). `false` is still honored and ignores the deprecated
-  `blacklist`, as before
+  fail the catalog). `false` still means "do not add the deprecated
+  `blacklist`"; it has no effect on `modules`
 * `lock_modules` (now `Optional[Boolean]`, default `undef`) manages module
   locking: `true` locks, `false` ensures unlocked, `undef` leaves it alone
 
-The `simp`, `simp_lite`, and `poss` scenarios still include the class; sites
-using a scenario must opt in with one of the paths below to keep enforcing the
-default blacklist.
+The `simp`, `simp_lite`, and `one_shot` scenarios and the `simp::server` class
+list still include the class; sites using them must opt in with one of the
+paths below to keep enforcing the default blacklist.
 
 If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
 
@@ -107,6 +108,19 @@ If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
     usb-storage:
       ensure: absent
   ```
+
+  Two pre-10.0.0 configurations do **not** carry over to Path 2 unchanged,
+  because the profile supplies the SCAP list through `modules` and the
+  deprecated parameters only add to it:
+
+  * `enable_defaults: false` used to mean "no default list at all". With the
+    profile enforced it no longer removes the SCAP list.
+  * An explicit `blacklist: [a, b]` used to *replace* the default list. Folded
+    into `modules` it is now *additive* to the profile list.
+
+  Sites that relied on either should use Path 1 (and drop the deprecated
+  parameters), or keep Path 2 and layer `ensure: absent` entries over the
+  profile list as shown above.
 
 [compliance_engine]: https://github.com/simp/rubygem-simp-compliance_engine
 
