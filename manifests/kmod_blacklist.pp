@@ -23,7 +23,11 @@
 #     the `kmod::blacklist` defaults
 #   * `ensure: absent` removes the module's blacklist and install entries; use
 #     it to drop a module from a list supplied by a compliance profile
-#   * Any other `kmod::blacklist` parameter (e.g. `file`) is passed through
+#   * Any other `kmod::blacklist` parameter (e.g. `file`) is passed through.
+#     `file` may not point at one of the SIMP disable files
+#     (`/etc/modprobe.d/zz_simp_disable.conf`,
+#     `/etc/modprobe.d/00_simp_disable.conf`), which this class manages;
+#     compilation fails if it does
 #   * Deep-merged across the Hiera hierarchy (see `lookup_options` in
 #     `data/common.yaml`), so a site can add to or override entries supplied
 #     by a compliance profile without restating the whole list
@@ -137,6 +141,16 @@ class simp::kmod_blacklist (
     $_command = $produce_error ? {
       true  => '/bin/false',
       false => '/bin/true',
+    }
+
+    # The SIMP disable files are managed by this class; a module's `file`
+    # override may not point at either of them (the obsolete one is removed
+    # below, the current one holds the `install` entries).
+    $_reserved_files = [$_disable_file, $_obsolete_disable_file]
+    $_modules.each |String $mod, Hash $options| {
+      if $options['file'] in $_reserved_files {
+        fail("simp::kmod_blacklist: modules['${mod}']['file'] may not be a SIMP disable file (${$_reserved_files.join(', ')}); these are managed by this class")
+      }
     }
 
     file { $_obsolete_disable_file: ensure => absent }

@@ -745,7 +745,11 @@ Kernel modules to blacklist and disable, as a Hash of module name =>
   the `kmod::blacklist` defaults
 * `ensure: absent` removes the module's blacklist and install entries; use
   it to drop a module from a list supplied by a compliance profile
-* Any other `kmod::blacklist` parameter (e.g. `file`) is passed through
+* Any other `kmod::blacklist` parameter (e.g. `file`) is passed through.
+  `file` may not point at one of the SIMP disable files
+  (`/etc/modprobe.d/zz_simp_disable.conf`,
+  `/etc/modprobe.d/00_simp_disable.conf`), which this class manages;
+  compilation fails if it does
 * Deep-merged across the Hiera hierarchy (see `lookup_options` in
   `data/common.yaml`), so a site can add to or override entries supplied
   by a compliance profile without restating the whole list

@@ -169,6 +169,18 @@ describe 'simp::kmod_blacklist' do
             end
           end
 
+          context 'with a module whose file is a SIMP disable file' do
+            let(:params) do
+              {
+                modules: { 'nfs' => { 'file' => '/etc/modprobe.d/00_simp_disable.conf' } },
+              }
+            end
+
+            it 'fails to compile with a clear message' do
+              expect { is_expected.to compile.with_all_deps }.to raise_error(%r{modules\['nfs'\]\['file'\] may not be a SIMP disable file})
+            end
+          end
+
           context 'with only a module set to absent' do
             let(:params) { { modules: { 'usb-storage' => { 'ensure' => 'absent' } } } }
 
