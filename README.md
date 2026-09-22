@@ -7,6 +7,7 @@
 #### Table of Contents
 
 1. [Overview](#overview)
+    * [Breaking changes in 10.0.0](#breaking-changes-in-1000)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with simp](#setup)
     * [What simp affects](#what-simp-affects)
@@ -21,6 +22,110 @@
 
 This module is the overarching profile of SIMP managed systems. It should be
 the entry point for all supported SIMP configurations.
+
+## Breaking changes in 10.0.0
+
+In 10.0.0 the blast radius of `simp::kmod_blacklist` was reduced: a bare
+`include simp::kmod_blacklist` now manages **nothing**. It no longer writes the
+SCAP Security Guide blacklist to `/etc/modprobe.d` and no longer manages the
+`kernel.modules_disabled` sysctl (which, on a locked system, *unlocked* module
+loading and requested a reboot). Everything is opt-in:
+
+* `modules` (new) is a Hash of module name => `kmod::blacklist` parameters and
+  is the way to blacklist modules. It is empty by default; the 17-module SCAP
+  Security Guide list the class used to ship with has moved to the
+  `simp:defaults` compliance profile. `modules` is deep-merged across Hiera, so
+  a site can add entries, or set `ensure: absent` on one, on top of a
+  profile-supplied list without restating it
+* Disabled modules are now written to the SIMP drop-in file with
+  `kmod::install` entries instead of a whole-file template, so entries are
+  managed individually and removed with `ensure: absent`
+* `blacklist` and `custom_blacklist` are deprecated in favor of `modules`.
+  They still work (their entries are folded into `modules` with default
+  options, on top of whatever `modules` already holds) but log a deprecation
+  warning
+* `enable_defaults` is deprecated and no longer needed; the contents of
+  `modules` are the opt-in. Setting it logs a deprecation warning (it does not
+  fail the catalog). `false` still means "do not add the deprecated
+  `blacklist`"; it has no effect on `modules`
+* `lock_modules` (now `Optional[Boolean]`, default `undef`) manages module
+  locking: `true` locks, `false` ensures unlocked, `undef` leaves it alone
+
+The `simp`, `simp_lite`, and `one_shot` scenarios and the `simp::server` class
+list still include the class; sites using them must opt in with one of the
+paths below to keep enforcing the default blacklist.
+
+If you relied on the pre-10.0.0 behavior, there are two ways to restore it.
+The `simp:defaults` profile is the recommended path; it is the same profile
+name and pattern used across all of the SIMP module rewrites.
+
+* **Path 1 -- enforce the `simp:defaults` compliance profile.** Set a single
+  Hiera key:
+
+  ```yaml
+  compliance_engine::enforcement:
+    - simp:defaults
+  ```
+
+  This requires the [Sicura Compliance Engine][compliance_engine] Hiera backend
+  (it is **not** a hard dependency of this module -- `metadata.json` is
+  unchanged). The profile, shipped in `SIMP/compliance_profiles/`, is a drop-in
+  restoration of the *old* behavior: it sets `modules` to the SCAP Security
+  Guide list (shown in full under Path 2) and `lock_modules: false`, so the
+  default blacklist is enforced and module locking is managed (unlocked)
+  exactly as before. It is opinionated for SIMP sites. Sites that want "old
+  behavior but safer" can enable the profile and override the individual
+  `simp::kmod_blacklist::*` parameters they care about in their own Hiera,
+  which always wins over the profile. For example, to keep the SCAP list but
+  allow `usb-storage`:
+
+  ```yaml
+  simp::kmod_blacklist::modules:
+    usb-storage:
+      ensure: absent
+  ```
+
+  Two pre-10.0.0 configurations do **not** carry over to Path 1 unchanged,
+  because the profile supplies the SCAP list through `modules` and the
+  deprecated parameters only add to it:
+
+  * `enable_defaults: false` used to mean "no default list at all". With the
+    profile enforced it no longer removes the SCAP list.
+  * An explicit `blacklist: [a, b]` used to *replace* the default list. Folded
+    into `modules` it is now *additive* to the profile list.
+
+  Sites that relied on either should layer `ensure: absent` entries over the
+  profile list as shown above, or use Path 2 (and drop the deprecated
+  parameters).
+
+* **Path 2 -- set the parameters yourself.** In Hiera:
+
+  ```yaml
+  simp::kmod_blacklist::modules:
+    bluetooth: {}
+    cramfs: {}
+    dccp: {}
+    dccp_ipv4: {}
+    dccp_ipv6: {}
+    freevxfs: {}
+    hfs: {}
+    hfsplus: {}
+    ieee1394: {}
+    jffs2: {}
+    net-pf-31: {}
+    rds: {}
+    sctp: {}
+    squashfs: {}
+    tipc: {}
+    udf: {}
+    usb-storage: {}
+  simp::kmod_blacklist::lock_modules: false
+  ```
+
+  Best when you want explicit, granular control of exactly what the class
+  manages.
+
+[compliance_engine]: https://github.com/simp/rubygem-simp-compliance_engine
 
 ## This is a SIMP module
 This module is a component of the [System Integrity Management Platform](https://simp-project.com)

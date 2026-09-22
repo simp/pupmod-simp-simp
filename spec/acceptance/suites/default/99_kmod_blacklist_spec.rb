@@ -3,16 +3,72 @@ require 'spec_helper_acceptance'
 test_name 'simp::kmod_blacklist class'
 
 describe 'simp::kmod_blacklist class' do
+  # The pre-10.0.0 default list, now carried by the simp:defaults profile
+  let(:scap_modules) do
+    ['bluetooth', 'cramfs', 'dccp', 'dccp_ipv4', 'dccp_ipv6', 'freevxfs',
+     'hfs', 'hfsplus', 'ieee1394', 'jffs2', 'net-pf-31', 'rds', 'sctp',
+     'squashfs', 'tipc', 'udf', 'usb-storage'].to_h { |mod| [mod, {}] }
+  end
+
   let(:manifest) do
     <<-EOS
       include 'simp::kmod_blacklist'
     EOS
   end
 
+  # Apply until the catalog settles, then the caller checks idempotency.
+  #
+  # Every modprobe.d file this class manages is created by puppet-kmod:
+  # kmod::setting's File resource creates the file as system_u, then its
+  # augeas resource rewrites it (temp file + rename) under the puppet
+  # process's SELinux context -- unconfined_u when `puppet apply` runs from an
+  # ssh session, as beaker does -- so the run after a file is (re)created
+  # relabels it. A system_u agent daemon does not hit this. Before 10.0.0 the
+  # files were created during the multi-run bootstrap in 00_simp_spec, which
+  # absorbed the relabel; do the same here with a second apply.
+  def apply_and_settle(host, manifest)
+    apply_manifest_on(host, manifest, catch_failures: true)
+    apply_manifest_on(host, manifest, catch_failures: true)
+  end
+
   hosts.each do |host|
-    context 'default parameters' do
+    # 10.0.0 safe default: a bare include manages nothing
+    context 'default parameters (bare include)' do
+      let(:hieradata) do
+        YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__))
+      end
+
+      it 'resets hieradata' do
+        set_hieradata_on(host, hieradata)
+      end
+
+      it 'applies with no errors and no changes' do
+        apply_manifest_on(host, manifest, catch_changes: true)
+      end
+
+      it 'does not write the SIMP disable file' do
+        on(host, 'test ! -e /etc/modprobe.d/zz_simp_disable.conf')
+        on(host, 'test ! -e /etc/modprobe.d/00_simp_disable.conf')
+      end
+
+      it 'does not blacklist bluetooth' do
+        on(host, 'modprobe -c | grep -qx "blacklist bluetooth"', acceptable_exit_codes: [1])
+      end
+    end
+
+    context 'with the SCAP modules' do
+      let(:hieradata) do
+        YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::modules' => scap_modules,
+        )
+      end
+
+      it 'sets the modules via hiera' do
+        set_hieradata_on(host, hieradata)
+      end
+
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do
@@ -48,6 +104,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to override modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::modules' => scap_modules,
           'simp::kmod_blacklist::allow_overrides' => false,
         )
       end
@@ -57,7 +114,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do
@@ -83,6 +140,7 @@ describe 'simp::kmod_blacklist class' do
     context 'disabling the ability to load modules' do
       let(:hieradata)  do
         YAML.load_file(File.expand_path('files/default_hiera.yaml', __dir__)).merge(
+          'simp::kmod_blacklist::modules' => scap_modules,
           'simp::kmod_blacklist::allow_overrides' => nil,
           'simp::kmod_blacklist::lock_modules'    => true,
         )
@@ -97,7 +155,7 @@ describe 'simp::kmod_blacklist class' do
       end
 
       it 'applies with no errors' do
-        apply_manifest_on(host, manifest, catch_failures: true)
+        apply_and_settle(host, manifest)
       end
 
       it 'is idempotent' do

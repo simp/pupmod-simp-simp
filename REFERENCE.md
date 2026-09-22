@@ -11,7 +11,7 @@
 * [`simp::base_apps`](#simp--base_apps): This is a set of applications that you will want on most systems
 * [`simp::base_services`](#simp--base_services): Deprecated - This class will be removed in a future version of SIMP.
 * [`simp::ctrl_alt_del`](#simp--ctrl_alt_del): Manage the state of pressing ``ctrl-alt-del``
-* [`simp::kmod_blacklist`](#simp--kmod_blacklist): This class provides a default set of blacklist entries per the SCAP
+* [`simp::kmod_blacklist`](#simp--kmod_blacklist): Blacklist and disable kernel modules
 * [`simp::kmod_blacklist::lock_modules`](#simp--kmod_blacklist--lock_modules): This class toggles the ability to load any further kernel modules
 * [`simp::mountpoints`](#simp--mountpoints): Add security settings to several mounts on the system.
 * [`simp::mountpoints::proc`](#simp--mountpoints--proc): Mount ``/proc``
@@ -706,58 +706,90 @@ Default value: `'warning'`
 
 ### <a name="simp--kmod_blacklist"></a>`simp::kmod_blacklist`
 
-Security Guide
+A bare `include simp::kmod_blacklist` manages **nothing**: `modules` is
+empty by default, module locking is opt-in via `lock_modules`, and the class
+only touches `/etc/modprobe.d` once at least one module is listed in
+`modules`.
+
+Each module in `modules` gets a `kmod::blacklist` entry (in
+`/etc/modprobe.d/blacklist.conf` by default) and a `kmod::install` entry
+pointing the module at `/bin/true` (or `/bin/false`, see `produce_error`) in
+a SIMP-owned drop-in file so that it cannot be auto-loaded.
+
+The pre-10.0.0 behavior (the SCAP Security Guide blacklist enforced, module
+locking managed) is restored by enforcing the `simp:defaults` compliance
+profile shipped in `SIMP/compliance_profiles/`, which carries the default
+module list.
 
 #### Parameters
 
 The following parameters are available in the `simp::kmod_blacklist` class:
 
-* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
+* [`modules`](#-simp--kmod_blacklist--modules)
 * [`blacklist`](#-simp--kmod_blacklist--blacklist)
-* [`produce_error`](#-simp--kmod_blacklist--produce_error)
 * [`custom_blacklist`](#-simp--kmod_blacklist--custom_blacklist)
+* [`enable_defaults`](#-simp--kmod_blacklist--enable_defaults)
+* [`produce_error`](#-simp--kmod_blacklist--produce_error)
 * [`allow_overrides`](#-simp--kmod_blacklist--allow_overrides)
 * [`lock_modules`](#-simp--kmod_blacklist--lock_modules)
 * [`notify_if_reboot_required`](#-simp--kmod_blacklist--notify_if_reboot_required)
 
-##### <a name="-simp--kmod_blacklist--enable_defaults"></a>`enable_defaults`
+##### <a name="-simp--kmod_blacklist--modules"></a>`modules`
 
-Data type: `Boolean`
+Data type: `Hash[String[1], Hash[String[1], Any]]`
 
-Enable to use the default blacklist, otherwise just the
-``$custom_blacklist`` will be used
+Kernel modules to blacklist and disable, as a Hash of module name =>
+`kmod::blacklist` parameters
 
-Default value: `true`
+* An empty Hash of parameters (`bluetooth: {}`) blacklists the module with
+  the `kmod::blacklist` defaults
+* `ensure: absent` removes the module's blacklist and install entries; use
+  it to drop a module from a list supplied by a compliance profile
+* Any other `kmod::blacklist` parameter (e.g. `file`) is passed through.
+  `file` may not point at one of the SIMP disable files
+  (`/etc/modprobe.d/zz_simp_disable.conf`,
+  `/etc/modprobe.d/00_simp_disable.conf`), which this class manages;
+  compilation fails if it does
+* Deep-merged across the Hiera hierarchy (see `lookup_options` in
+  `data/common.yaml`), so a site can add to or override entries supplied
+  by a compliance profile without restating the whole list
+* Empty by default. The `simp:defaults` compliance profile sets this to the
+  SCAP Security Guide list that the class enforced before 10.0.0.
+
+Default value: `{}`
 
 ##### <a name="-simp--kmod_blacklist--blacklist"></a>`blacklist`
 
-Data type: `Array[String,1]`
+Data type: `Optional[Array[String[1]]]`
 
-List of kernel modules to be blacklisted by default
+**Deprecated**, use `modules` instead. List of kernel modules to be
+blacklisted. Each entry is added to `modules` with default options; an
+entry that is also present in `modules` takes its options from `modules`.
 
-Default value:
+Default value: `undef`
 
-```puppet
-[
-    'bluetooth',
-    'cramfs',
-    'dccp',
-    'dccp_ipv4',
-    'dccp_ipv6',
-    'freevxfs',
-    'hfs',
-    'hfsplus',
-    'ieee1394',
-    'jffs2',
-    'net-pf-31',
-    'rds',
-    'sctp',
-    'squashfs',
-    'tipc',
-    'udf',
-    'usb-storage',
-  ]
-```
+##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
+
+Data type: `Optional[Array[String[1]]]`
+
+**Deprecated**, use `modules` instead. Additional kernel modules to be
+blacklisted. Handled like `blacklist`.
+
+Default value: `undef`
+
+##### <a name="-simp--kmod_blacklist--enable_defaults"></a>`enable_defaults`
+
+Data type: `Optional[Boolean]`
+
+**Deprecated** and no longer needed: `modules` is empty by default, so
+its contents are the opt-in.
+
+* `false` is still honored for backwards compatibility and ignores the
+  deprecated `blacklist` (only `custom_blacklist` and `modules` are used),
+  as it did before 10.0.0
+* `true` has no effect
+
+Default value: `undef`
 
 ##### <a name="-simp--kmod_blacklist--produce_error"></a>`produce_error`
 
@@ -768,14 +800,6 @@ produce an error when anyone attempts to load the module. Default is false,
 which will point to '/bin/true', which will not produce any error.
 
 Default value: `false`
-
-##### <a name="-simp--kmod_blacklist--custom_blacklist"></a>`custom_blacklist`
-
-Data type: `Array[String]`
-
-Additional kernel modules to be blacklisted
-
-Default value: `[]`
 
 ##### <a name="-simp--kmod_blacklist--allow_overrides"></a>`allow_overrides`
 
@@ -792,13 +816,17 @@ Default value: `true`
 
 ##### <a name="-simp--kmod_blacklist--lock_modules"></a>`lock_modules`
 
-Data type: `Boolean`
+Data type: `Optional[Boolean]`
 
-Disallow all further modification to modules without a reboot
+Manage the `kernel.modules_disabled` sysctl
 
+* `true`: Disallow all further modification to modules without a reboot
+* `false`: Ensure module loading is unlocked (a reboot is required to fully
+  unlock a locked system)
+* `undef` (default): Do not manage module locking at all
 * Requires that the ``kernel.modules_disabled`` sysctl option is available
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-simp--kmod_blacklist--notify_if_reboot_required"></a>`notify_if_reboot_required`
 
@@ -806,6 +834,8 @@ Data type: `Boolean`
 
 Trigger a 'reboot_notify' resource that will warn at every puppet run that
 a reboot is required if necessary.
+
+* Only used when `lock_modules` is set
 
 Default value: `true`
 

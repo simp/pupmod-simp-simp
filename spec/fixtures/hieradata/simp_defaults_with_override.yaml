@@ -1,0 +1,9 @@
+---
+compliance_engine::enforcement:
+  - simp:defaults
+# Explicit site Hiera must beat the profile. `modules` is deep-merged, so the
+# site only has to state the entries it wants to change.
+simp::kmod_blacklist::modules:
+  usb-storage:
+    ensure: absent
+  nfs: {}

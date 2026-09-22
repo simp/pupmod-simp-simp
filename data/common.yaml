@@ -23,6 +23,9 @@ lookup_options:
   simp::nsswitch::defaults:
     merge:
       strategy: hash
+  simp::kmod_blacklist::modules:
+    merge:
+      strategy: deep
   simp::puppetdb::cipher_suites:
     merge:
       strategy: deep
