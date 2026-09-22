@@ -55,9 +55,50 @@ The `simp`, `simp_lite`, and `one_shot` scenarios and the `simp::server` class
 list still include the class; sites using them must opt in with one of the
 paths below to keep enforcing the default blacklist.
 
-If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
+If you relied on the pre-10.0.0 behavior, there are two ways to restore it.
+The `simp:defaults` profile is the recommended path; it is the same profile
+name and pattern used across all of the SIMP module rewrites.
 
-* **Path 1 -- set the parameters yourself.** In Hiera:
+* **Path 1 -- enforce the `simp:defaults` compliance profile.** Set a single
+  Hiera key:
+
+  ```yaml
+  compliance_engine::enforcement:
+    - simp:defaults
+  ```
+
+  This requires the [Sicura Compliance Engine][compliance_engine] Hiera backend
+  (it is **not** a hard dependency of this module -- `metadata.json` is
+  unchanged). The profile, shipped in `SIMP/compliance_profiles/`, is a drop-in
+  restoration of the *old* behavior: it sets `modules` to the SCAP Security
+  Guide list (shown in full under Path 2) and `lock_modules: false`, so the
+  default blacklist is enforced and module locking is managed (unlocked)
+  exactly as before. It is opinionated for SIMP sites. Sites that want "old
+  behavior but safer" can enable the profile and override the individual
+  `simp::kmod_blacklist::*` parameters they care about in their own Hiera,
+  which always wins over the profile. For example, to keep the SCAP list but
+  allow `usb-storage`:
+
+  ```yaml
+  simp::kmod_blacklist::modules:
+    usb-storage:
+      ensure: absent
+  ```
+
+  Two pre-10.0.0 configurations do **not** carry over to Path 1 unchanged,
+  because the profile supplies the SCAP list through `modules` and the
+  deprecated parameters only add to it:
+
+  * `enable_defaults: false` used to mean "no default list at all". With the
+    profile enforced it no longer removes the SCAP list.
+  * An explicit `blacklist: [a, b]` used to *replace* the default list. Folded
+    into `modules` it is now *additive* to the profile list.
+
+  Sites that relied on either should layer `ensure: absent` entries over the
+  profile list as shown above, or use Path 2 (and drop the deprecated
+  parameters).
+
+* **Path 2 -- set the parameters yourself.** In Hiera:
 
   ```yaml
   simp::kmod_blacklist::modules:
@@ -83,44 +124,6 @@ If you relied on the pre-10.0.0 behavior, there are two ways to restore it:
 
   Best when you want explicit, granular control of exactly what the class
   manages.
-
-* **Path 2 -- enforce the `simp:defaults` compliance profile.** Set a single
-  Hiera key:
-
-  ```yaml
-  compliance_engine::enforcement:
-    - simp:defaults
-  ```
-
-  This requires the [Sicura Compliance Engine][compliance_engine] Hiera backend
-  (it is **not** a hard dependency of this module -- `metadata.json` is
-  unchanged). The profile, shipped in `SIMP/compliance_profiles/`, is a drop-in
-  restoration of the *old* behavior: it sets `modules` to the SCAP Security
-  Guide list above and `lock_modules: false`, so the default blacklist is
-  enforced and module locking is managed (unlocked) exactly as before. It is
-  opinionated for SIMP sites. Sites that want "old behavior but safer" can
-  enable the profile and override the individual `simp::kmod_blacklist::*`
-  parameters they care about in their own Hiera, which always wins over the
-  profile. For example, to keep the SCAP list but allow `usb-storage`:
-
-  ```yaml
-  simp::kmod_blacklist::modules:
-    usb-storage:
-      ensure: absent
-  ```
-
-  Two pre-10.0.0 configurations do **not** carry over to Path 2 unchanged,
-  because the profile supplies the SCAP list through `modules` and the
-  deprecated parameters only add to it:
-
-  * `enable_defaults: false` used to mean "no default list at all". With the
-    profile enforced it no longer removes the SCAP list.
-  * An explicit `blacklist: [a, b]` used to *replace* the default list. Folded
-    into `modules` it is now *additive* to the profile list.
-
-  Sites that relied on either should use Path 1 (and drop the deprecated
-  parameters), or keep Path 2 and layer `ensure: absent` entries over the
-  profile list as shown above.
 
 [compliance_engine]: https://github.com/simp/rubygem-simp-compliance_engine
 

@@ -29,9 +29,7 @@ fixtures:
     clamav: https://github.com/simp/pupmod-simp-clamav.git
     # Only needed so spec tests can resolve `compliance_engine::enforcement`
     # for the `simp:defaults` profile. NOT a module dependency (see metadata.json).
-    compliance_engine:
-      repo: https://github.com/simp/rubygem-simp-compliance_engine.git
-      ref: '1.1.0'
+    compliance_engine: https://github.com/simp/rubygem-simp-compliance_engine.git
     concat: https://github.com/simp/puppetlabs-concat.git
     cron: https://github.com/simp/pupmod-simp-cron.git
     cron_core: https://github.com/simp/pupmod-puppetlabs-cron_core.git
