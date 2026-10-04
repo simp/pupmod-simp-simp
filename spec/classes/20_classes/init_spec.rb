@@ -25,11 +25,10 @@ describe 'simp' do
 
   # Unsupported OSes systems should only be able to use scenario 'none'
   context 'on unsupported operating systems' do
-    # rubocop:disable RSpec/BeforeAfterAll
+    # rubocop:disable-next RSpec/BeforeAfterAll
     before(:context) do
       skip('An issue in the pupmod module is causing this test to fail on unsupported OSs. See https://github.com/simp/pupmod-simp-pupmod/issues/224 for details.')
     end
-    # rubocop:enable RSpec/BeforeAfterAll
 
     unsupported_os_with_facts.each do |os, facterdb_os_facts|
       context "on #{os}" do

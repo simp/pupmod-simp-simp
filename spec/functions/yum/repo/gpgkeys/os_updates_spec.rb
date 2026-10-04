@@ -9,11 +9,11 @@ describe 'simp::yum::repo::gpgkeys::os_updates' do
         let(:return_value) do
           if os_facts[:os][:name] == 'RedHat'
             ['RPM-GPG-KEY-redhat-release']
-          elsif os_facts[:os][:name] ==  'OracleLinux'
+          elsif os_facts[:os][:name] == 'OracleLinux'
             ['RPM-GPG-KEY-oracle']
-          elsif os_facts[:os][:name] ==  'CentOS'
+          elsif os_facts[:os][:name] == 'CentOS'
             ["RPM-GPG-KEY-#{os_facts[:os][:name]}-#{os_facts[:os][:release][:major]}"]
-          elsif os_facts[:os][:name] ==  'Rocky'
+          elsif os_facts[:os][:name] == 'Rocky'
             ['RPM-GPG-KEY-rockyofficial']
           else
             ["RPM-GPG-KEY-#{os_facts[:os][:name]}"]

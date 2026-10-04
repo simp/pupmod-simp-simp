@@ -18,8 +18,8 @@ describe 'simp::yum::repo::local_os_updates' do
         it { is_expected.to compile.with_all_deps }
 
         it {
-          os_yum_path =  "#{os_name}/#{os_maj_rel}/#{facts[:os][:architecture]}"
-          gpgkey_path =  'SIMP/GPGKEYS'
+          os_yum_path = "#{os_name}/#{os_maj_rel}/#{facts[:os][:architecture]}"
+          gpgkey_path = 'SIMP/GPGKEYS'
 
           gpgkey = if os_name == 'RedHat'
                      "https://puppet.example.simp/yum/#{gpgkey_path}/RPM-GPG-KEY-redhat-release"
