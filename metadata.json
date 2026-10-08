@@ -1,6 +1,6 @@
 {
   "name": "simp-simp",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "author": "SIMP Team",
   "summary": "default profiles for core SIMP installations",
   "license": "Apache-2.0",
@@ -33,7 +33,7 @@
     },
     {
       "name": "puppetlabs/puppetdb",
-      "version_requirement": ">= 7.1.0 < 9.0.0"
+      "version_requirement": ">= 7.1.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -53,7 +53,7 @@
     },
     {
       "name": "simp/auditd",
-      "version_requirement": ">= 8.5.0 < 11.0.0"
+      "version_requirement": ">= 8.5.0 < 12.0.0"
     },
     {
       "name": "simp/chkrootkit",
@@ -81,7 +81,7 @@
     },
     {
       "name": "simp/iptables",
-      "version_requirement": ">= 6.5.3 < 9.0.0"
+      "version_requirement": ">= 6.5.3 < 10.0.0"
     },
     {
       "name": "simp/issue",
@@ -125,7 +125,7 @@
     },
     {
       "name": "simp/simp_options",
-      "version_requirement": ">= 1.6.1 < 3.0.0"
+      "version_requirement": ">= 1.6.1 < 4.0.0"
     },
     {
       "name": "simp/simp_rsyslog",
@@ -137,7 +137,7 @@
     },
     {
       "name": "simp/ssh",
-      "version_requirement": ">= 6.11.0 < 9.0.0"
+      "version_requirement": ">= 6.11.0 < 10.0.0"
     },
     {
       "name": "simp/sssd",
@@ -149,7 +149,7 @@
     },
     {
       "name": "simp/sudo",
-      "version_requirement": ">= 5.1.1 < 7.0.0"
+      "version_requirement": ">= 5.1.1 < 8.0.0"
     },
     {
       "name": "simp/sudosh",
@@ -177,7 +177,7 @@
     },
     {
       "name": "simp/useradd",
-      "version_requirement": ">= 0.2.2 < 4.0.0"
+      "version_requirement": ">= 0.2.2 < 5.0.0"
     },
     {
       "name": "puppet/nsswitch",
@@ -187,7 +187,7 @@
   "requirements": [
     {
       "name": "openvox",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ],
   "operatingsystem_support": [
