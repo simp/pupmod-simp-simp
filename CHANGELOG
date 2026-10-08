@@ -1,3 +1,7 @@
+* Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 10.1.0
+- Add support for OpenVox 9
+- Update metadata.json dependency ranges from the Forge
+
 * Thu Sep 10 2026 Steven Pritchard <steve@sicura.us> - 10.0.0
 - BREAKING CHANGE: Reduce the blast radius of `simp::kmod_blacklist`. A bare
   `include simp::kmod_blacklist` now manages nothing. Previously it:
