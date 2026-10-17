@@ -24,7 +24,12 @@ class simp::kmod_blacklist::lock_modules (
   Boolean $notify_if_reboot_required = true,
   Boolean $persist                   = false
 ) {
-  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+  # Generic Linux class: supported on more operating systems than the module
+  # as a whole (see the README), so only the Windows blacklist is asserted
+  simplib::module_metadata::assert($module_name, {
+    'blacklist'     => ['Windows'],
+    'os_validation' => { 'enable' => false },
+  })
 
   if $enable {
     sysctl { 'kernel.modules_disabled':

@@ -25,7 +25,12 @@ class simp::ctrl_alt_del (
   Simplib::Syslog::Facility $facility  = 'local6',
   Simplib::Syslog::Severity $severity  = 'warning'
 ) {
-  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+  # Generic Linux class: supported on more operating systems than the module
+  # as a whole (see the README), so only the Windows blacklist is asserted
+  simplib::module_metadata::assert($module_name, {
+    'blacklist'     => ['Windows'],
+    'os_validation' => { 'enable' => false },
+  })
 
   if $log {
     if $log_users {
