@@ -180,7 +180,12 @@ class simp::sysctl (
   Optional[Boolean]    $ipv6                                           = undef,
   Array[String]        $unmanaged_sysctls                              = []
 ) {
-  simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
+  # Generic Linux class: supported on more operating systems than the module
+  # as a whole (see the README), so only the Windows blacklist is asserted
+  simplib::module_metadata::assert($module_name, {
+    'blacklist'     => ['Windows'],
+    'os_validation' => { 'enable' => false },
+  })
 
   simplib::validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
   simplib::validate_sysctl_value('fs.inotify.max_user_watches', $fs__inotify__max_user_watches)

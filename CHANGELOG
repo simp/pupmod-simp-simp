@@ -1,3 +1,10 @@
+* Sat Oct 17 2026 Steven Pritchard <steve@sicura.us> - 10.2.0
+- Support Ubuntu 22.04 and 24.04 in `simp::sysctl`, `simp::kmod_blacklist`,
+  `simp::kmod_blacklist::lock_modules`, and `simp::ctrl_alt_del`. The rest of
+  the module, and `metadata.json`, remain EL-only
+- These four classes no longer warn that the OS is not supported by the
+  module on non-EL Linux systems (Windows is still rejected)
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 10.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge

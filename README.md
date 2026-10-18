@@ -221,6 +221,39 @@ different configurations easily:
 * ``none``
   * Does nothing at all. All configuration is in your control.
 
+## Limitations
+
+SIMP Puppet modules are generally intended for use on Red Hat Enterprise Linux
+and compatible distributions. The module as a whole supports the operating
+systems listed in [metadata.json](./metadata.json).
+
+### Ubuntu
+
+The following classes also support Ubuntu 22.04 and 24.04:
+
+* `simp::sysctl`
+* `simp::kmod_blacklist` (and `simp::kmod_blacklist::lock_modules`)
+* `simp::ctrl_alt_del`
+
+They can be included directly or enabled through compliance data. Ubuntu is not
+listed in `metadata.json` because the rest of the module (the `simp` class and
+its scenarios, `simp::yum::*`, `simp::server`, `simp::prelink`,
+`simp::netconsole`, and so on) is EL-only.
+
+Notes for Ubuntu:
+
+* `simp::sysctl` writes `/etc/sysctl.conf`, which Ubuntu applies at boot
+  through the `/etc/sysctl.d/99-sysctl.conf` symlink that the `systemd` package
+  ships. That name sorts after the `sysctl.d` files that `procps` and `systemd`
+  ship, so its values take precedence over theirs.
+* When `apport` is enabled, it overwrites `kernel.core_pattern` when it starts,
+  which conflicts with `simp::sysctl::kernel__core_pattern`. Either disable
+  `apport` or add `kernel.core_pattern` to `simp::sysctl::unmanaged_sysctls`.
+* `simp::kmod_blacklist` edits the `blacklist` entries in
+  `/etc/modprobe.d/blacklist.conf`, which the `kmod` package ships, in place.
+* To mask `ctrl-alt-del.target` (rather than replacing it with a logging
+  target), set `simp::ctrl_alt_del::log` to `false`.
+
 ## Development
 
 Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
