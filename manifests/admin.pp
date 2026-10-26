@@ -101,7 +101,7 @@ class simp::admin (
   Simplib::Netlist      $admins_allowed_from       = ['ALL'],
   Simplib::Netlist      $auditors_allowed_from     = simplib::lookup('simp_options::trusted_nets', { 'default_value' => ['127.0.0.1'] }),
   Boolean               $force_logged_shell        = true,
-  Enum['sudosh','tlog'] $logged_shell              = 'tlog',
+  Enum['tlog']          $logged_shell              = 'tlog',
   Array[String[2]]      $default_admin_sudo_cmnds  = ['/bin/su - root'],
   Hash                  $admin_sudo_options        = { 'role' => 'unconfined_r' },
   Hash                  $auditor_sudo_options      = {},
@@ -144,35 +144,15 @@ class simp::admin (
   }
 
   if $force_logged_shell {
-    # We restrict this so we don't need a fallback
-    if $logged_shell == 'sudosh' {
-      include 'sudosh'
+    include 'tlog::rec_session'
 
-      $_shell_cmd = ['/usr/bin/sudosh']
-    }
-    else {
-      # TODO: This should be removed when SIMP-5169 is resolved
-      file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
-    }
+    $_shell_cmd = $default_admin_sudo_cmnds
 
-    if $logged_shell == 'tlog' {
-      include 'tlog::rec_session'
-
-      $_shell_cmd = $default_admin_sudo_cmnds
-    }
-    else {
-      # TODO: This should be removed when SIMP-5169 is resolved
-      tidy { 'Tlog profile.d files':
-        path    => '/etc/profile.d',
-        matches => ['00-simp-tlog.*'],
-        recurse => 1,
-      }
-    }
+    file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
   }
   else {
     $_shell_cmd = $default_admin_sudo_cmnds
 
-    # TODO: These should be removed when SIMP-5169 is resolved
     tidy { 'Shell logging profile.d files':
       path    => '/etc/profile.d',
       matches => ['00-simp-tlog.*', 'sudosh2.*'],
@@ -198,7 +178,7 @@ class simp::admin (
     }
   }
 
-  # The following two are especially important if you're using sudosh.
+  # The following two are especially important for logged shell recovery.
   # They allow you to recover from destroying the certs in your environment.
   sudo::user_specification { 'admin run puppet':
     user_list => ["%${admin_group}"],

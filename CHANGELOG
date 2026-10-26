@@ -1,3 +1,9 @@
+* Tue Oct 20 2026 Steven Pritchard <steve@sicura.us> - 11.0.0
+- Remove references to archived SIMP modules (sudosh, tcpwrappers, xinetd,
+  chkrootkit, simp_openldap): drop their fixtures and metadata dependencies
+- BREAKING CHANGE: `simp::admin::logged_shell` no longer accepts `sudosh`;
+  `tlog` is the only supported logged shell
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 10.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge
