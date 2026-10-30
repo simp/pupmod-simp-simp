@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'support/ubuntu_facts'
 require 'yaml'
 
 # Tests the `simp:defaults` Sicura Compliance Engine profile end to end: with
@@ -47,7 +48,7 @@ describe 'simp::kmod_blacklist' do
   end
 
   context 'supported operating systems' do
-    on_supported_os.each do |os, os_facts|
+    supported_os_and_ubuntu_facts.each do |os, os_facts|
       next if os_facts[:kernel] == 'windows'
 
       context "on #{os}" do
