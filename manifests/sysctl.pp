@@ -112,7 +112,12 @@
 #   * `true`: manage `core_dump_dir` as a directory for core dumps
 #   * `false`: when `pam` is also `true`, add a PAM limits rule that prevents
 #     core dumps (meets CCE-27033-0)
-#   * `undef` (default): manage neither
+#   * `undef` (default): manage neither. On nodes where `/etc/security/limits.conf`
+#     is managed by `pam::limits` (e.g. the `simp`, `simp_lite` and `one_shot`
+#     scenarios, through `simp::pam_limits::max_logins`), that file is built
+#     from the rules in the catalog, so a `prevent_core` rule written by an
+#     earlier run is **removed**. Set `false` (or enforce `simp:defaults`) to
+#     keep it.
 #
 # @param core_dump_dir Directory to place core dumps
 #
@@ -233,7 +238,8 @@ class simp::sysctl (
     )
   }
 
-  if $kernel__core_pattern =~ String and $kernel__core_pattern != 'absent' {
+  # Match `absent` by type: Puppet's `==` and selector String cases ignore case
+  if $kernel__core_pattern =~ String and !($kernel__core_pattern =~ Enum['absent']) {
     simplib::validate_sysctl_value('kernel.core_pattern', $kernel__core_pattern)
   }
   if $fs__inotify__max_user_watches =~ Integer {
@@ -363,8 +369,8 @@ class simp::sysctl (
 
   $_managed.each |$_key, $_setting| {
     $_attrs = $_setting[0] ? {
-      'absent' => { 'ensure' => 'absent' },
-      default  => { 'value' => $_setting[0] },
+      Enum['absent'] => { 'ensure' => 'absent' },
+      default        => { 'value' => $_setting[0] },
     }
 
     sysctl { $_key:

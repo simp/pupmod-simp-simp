@@ -44,7 +44,9 @@ opt-in:
   `false` disables IPv6, `true` enables it, `'absent'` removes the key
 * `core_dumps` defaults to `undef`. `true` manages `core_dump_dir`; `false`
   adds the `prevent_core` PAM limits rule when `pam` (`simp_options::pam`) is
-  `true`
+  `true`. Where `pam::limits` manages `/etc/security/limits.conf` (it builds
+  the whole file from the rules in the catalog), leaving `core_dumps` unset
+  **removes** a `prevent_core` line written by an earlier run
 * `unmanaged_sysctls` is deprecated: leave the parameter unset instead (`~` in
   Hiera leaves a key unmanaged even when a compliance profile sets it). It
   still works but logs a deprecation warning
@@ -55,9 +57,15 @@ applies as `/etc/sysctl.d/99-sysctl.conf`. A value set here therefore overrides
 `/usr/lib/sysctl.d/` and most `/etc/sysctl.d/` drop-ins; a drop-in that sorts
 after `99-sysctl.conf` still wins.
 
-The `simp`, `simp_lite`, and `one_shot` scenarios still include the class;
-sites using them lose all of its settings until they opt in with one of the
-paths below.
+The `simp`, `simp_lite`, and `one_shot` scenarios and the `simp::server` class
+list still include the class. Until a site opts in with one of the paths below,
+on those nodes:
+
+* the class stops enforcing its settings. Values already in `/etc/sysctl.conf`
+  remain and are applied at boot; drift is no longer corrected
+* the `prevent_core` line is **removed** from `/etc/security/limits.conf`,
+  because these scenarios manage that file with `pam::limits`
+  (`simp::pam_limits::max_logins`), so core dumps are no longer blocked
 
 * **Path 1 -- enforce the `simp:defaults` compliance profile** (the same
   single Hiera key described for 10.0.0 below). It restores every pre-11.0.0

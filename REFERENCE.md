@@ -3720,7 +3720,12 @@ Data type: `Optional[Boolean]`
 * `true`: manage `core_dump_dir` as a directory for core dumps
 * `false`: when `pam` is also `true`, add a PAM limits rule that prevents
   core dumps (meets CCE-27033-0)
-* `undef` (default): manage neither
+* `undef` (default): manage neither. On nodes where `/etc/security/limits.conf`
+  is managed by `pam::limits` (e.g. the `simp`, `simp_lite` and `one_shot`
+  scenarios, through `simp::pam_limits::max_logins`), that file is built
+  from the rules in the catalog, so a `prevent_core` rule written by an
+  earlier run is **removed**. Set `false` (or enforce `simp:defaults`) to
+  keep it.
 
 Default value: `undef`
 

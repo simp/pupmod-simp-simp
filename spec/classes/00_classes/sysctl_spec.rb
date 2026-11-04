@@ -176,6 +176,15 @@ describe 'simp::sysctl' do
             it { is_expected.to create_sysctl('kernel.core_pattern').with_ensure('absent') }
           end
 
+          # Puppet's String comparison ignores case; only an exact 'absent'
+          # removes the key
+          context "kernel__core_pattern set to 'Absent'" do
+            let(:params) { { kernel__core_pattern: 'Absent' } }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to create_sysctl('kernel.core_pattern').with_value('Absent').without_ensure }
+          end
+
           context 'with core_dumps => true' do
             let(:params) { { core_dumps: true } }
 
