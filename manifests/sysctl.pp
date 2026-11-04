@@ -1,8 +1,28 @@
-# @summary Sets sysctl settings that are useful from a general 'modern system'
-# point of view.
+# @summary Manage kernel parameters (sysctl) that are useful from a general
+# 'modern system' and system security point of view.
 #
-# There are also items in this list that are particularly useful for
-# general system security.
+# A bare `include simp::sysctl` manages **nothing**. Each sysctl parameter
+# below maps to one kernel key (`net__ipv4__tcp_syncookies` =>
+# `net.ipv4.tcp_syncookies`) and has three states:
+#
+# * `undef` (default): the key is not managed; whatever is in
+#   `/etc/sysctl.conf` and the running kernel stays as it is
+# * a value: the key is written to `/etc/sysctl.conf` and applied to the
+#   running kernel
+# * `'absent'`: the key is removed from `/etc/sysctl.conf`. The running
+#   kernel value is **not** reset; it reverts to the kernel default at the next
+#   reboot (unless another `sysctl.d` file sets it)
+#
+# Settings are written to `/etc/sysctl.conf`. At boot, `systemd-sysctl` applies
+# it as `/etc/sysctl.d/99-sysctl.conf` (a symlink shipped by systemd), after
+# the files in `/usr/lib/sysctl.d/` and most drop-ins in `/etc/sysctl.d/`, so a
+# value set here overrides package and admin drop-ins. A drop-in that sorts
+# after `99-sysctl.conf` still wins. Leaving a parameter unset leaves any
+# drop-in value in force.
+#
+# The pre-11.0.0 behavior (every key below set to a hard-coded value, IPv6
+# disabled, and core dumps restricted) is restored by enforcing the
+# `simp:defaults` compliance profile shipped in `SIMP/compliance_profiles/`.
 #
 # See the kernel documentation for the functionality of each variable.
 #
@@ -42,17 +62,19 @@
 # @param kernel__dmesg_restrict
 #
 # @param kernel__exec_shield
-#   **DEPRECATED BY VENDOR WILL BE REMOVED IN NEXT RELEASE**
+#   **Deprecated** and has no effect: `kernel.exec_shield` does not exist on
+#   any supported kernel. Setting it logs a deprecation warning. It will be
+#   removed in the next major release.
 #
 # @param kernel__panic
 # @param kernel__randomize_va_space
 # @param kernel__sysrq
 # @param kernel__yama__ptrace_scope
 #   Restricts the use of ``ptrace`` to processes with a defined relationship
-#   (parent/child by default).  Unmanaged by default (``undef``) so the OS
-#   default (``0`` on EL) is left in place; set to ``1`` to satisfy STIG/SSG
-#   controls that require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g.
-#   RHEL-08-040282 / CCE-80953-8).  Valid kernel values are ``0``-``3``.
+#   (parent/child by default). Set to ``1`` to satisfy STIG/SSG controls that
+#   require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g. RHEL-08-040282 /
+#   CCE-80953-8). Valid kernel values are ``0``-``3``. Not set by the
+#   ``simp:defaults`` profile.
 # @param net__ipv4__conf__all__accept_redirects
 # @param net__ipv4__conf__all__accept_source_route
 # @param net__ipv4__conf__all__log_martians
@@ -86,13 +108,25 @@
 # @param net__ipv6__conf__default__max_addresses
 # @param net__ipv6__conf__default__router_solicitations
 #
-# @param core_dumps If true, enable core dumps on the system.
+# @param core_dumps
+#   * `true`: manage `core_dump_dir` as a directory for core dumps
+#   * `false`: when `pam` is also `true`, add a PAM limits rule that prevents
+#     core dumps (meets CCE-27033-0)
+#   * `undef` (default): manage neither
+#
 # @param core_dump_dir Directory to place core dumps
-# @param pam SIMP catalyst for enabling PAM management
-#   As set, meets CCE-27033-0
+#
+# @param pam
+#   SIMP catalyst for enabling PAM management. Only used when `core_dumps` is
+#   `false`.
 #
 # @param ipv6
-#   Set to ``false`` to disable IPv6 on your system via ``sysctl``
+#   Manage ``net.ipv6.conf.all.disable_ipv6``
+#
+#   * ``false``: disable IPv6 (``disable_ipv6 = 1``)
+#   * ``true``: enable IPv6 (``disable_ipv6 = 0``)
+#   * ``'absent'``: remove the key from ``/etc/sysctl.conf``
+#   * ``undef`` (default): leave it alone
 #
 #   @note This only affects systems where the IPv6 stack is present. If the
 #     ``ipv6`` kernel module is not loaded, or IPv6 was disabled on the kernel
@@ -101,90 +135,122 @@
 #     need IPv6 disabled before the stack is initialized.
 #
 # @param unmanaged_sysctls
+#   **Deprecated**: leave the corresponding parameter unset (``undef``)
+#   instead; a site can do that over a compliance profile with a Hiera ``~``.
 #   List of sysctl keys (e.g. ``net.core.somaxconn``) that this class should
-#   leave alone. Use when another tool (``tuned``, ``NetworkManager``, a
-#   container runtime, a vendor installer) already manages the value and SIMP
-#   should not fight over it. Keys must match the actual sysctl name, not the
-#   class parameter name.
+#   leave alone even when the matching parameter is set. Keys must match the
+#   actual sysctl name, not the class parameter name. Setting it logs a
+#   deprecation warning. It will be removed in the next major release.
 #
 # @author https://github.com/simp/pupmod-simp-simp/graphs/contributors
 #
 class simp::sysctl (
-  Integer[0]           $net__netfilter__nf_conntrack_max               = 655360,
-  Integer[0]           $net__unix__max_dgram_qlen                      = 50,
-  Integer[0]           $net__ipv4__neigh__default__gc_thresh3          = 2048,
-  Integer[0]           $net__ipv4__neigh__default__gc_thresh2          = 1024,
-  Integer[0]           $net__ipv4__neigh__default__gc_thresh1          = 32,
-  Integer[0]           $net__ipv4__neigh__default__proxy_qlen          = 92,
-  Integer[0]           $net__ipv4__neigh__default__unres_qlen          = 6,
-  Array[Integer,3,3]   $net__ipv4__tcp_rmem                            = [4096,98304,16777216],
-  Array[Integer,3,3]   $net__ipv4__tcp_wmem                            = [4096,65535,16777216],
-  Integer[0]           $net__ipv4__tcp_fin_timeout                     = 30,
-  Integer[0,1]         $net__ipv4__tcp_rfc1337                         = 1,
-  Integer[0]           $net__ipv4__tcp_keepalive_time                  = 3600,
-  Integer[0,2]         $net__ipv4__tcp_mtu_probing                     = 1,
-  Integer[0,1]         $net__ipv4__tcp_no_metrics_save                 = 0,
-  Integer[0]           $net__core__rmem_max                            = 16777216,
-  Integer[0]           $net__core__wmem_max                            = 16777216,
-  Integer[0]           $net__core__optmem_max                          = 20480,
-  Integer[0]           $net__core__netdev_max_backlog                  = 2048,
-  Integer[0]           $net__core__somaxconn                           = 2048,
-  Integer[0,1]         $net__ipv4__tcp_tw_reuse                        = 1,
-  Integer[8912]        $fs__inotify__max_user_watches                  = 102400,
-  Integer[0,1]         $fs__suid_dumpable                              = 0,          # CCE-27044-7
-  String               $kernel__core_pattern                           = '/var/core/%u_%g_%p_%t_%h_%e.core',
-  Integer[0]           $kernel__core_pipe_limit                        = 0,
-  Integer[0,1]         $kernel__core_uses_pid                          = 1,
-  Integer[0,1]         $kernel__dmesg_restrict                         = 1,          # CCE-27366-4
-  Integer[0,1]         $kernel__exec_shield                            = 1,          # CCE-27007-4
-  Integer[0]           $kernel__panic                                  = 10,
-  Integer[0,2]         $kernel__randomize_va_space                     = 2,          # CCE-26999-3
-  Integer[0]           $kernel__sysrq                                  = 0,
-  Optional[Integer[0,3]] $kernel__yama__ptrace_scope                   = undef,       # Set to 1 for STIG RHEL-08-040282 / CCE-80953-8
-  Integer[0,1]         $net__ipv4__conf__all__accept_redirects         = 0,          # CCE-27027-2
-  Integer[0,1]         $net__ipv4__conf__all__accept_source_route      = 0,          # CCE-27037-1
-  Integer[0,1]         $net__ipv4__conf__all__log_martians             = 1,          # CCE-27066-0
-  Integer[0,2]         $net__ipv4__conf__all__rp_filter                = 1,          # CCE-26979-5
-  Integer[0,1]         $net__ipv4__conf__all__secure_redirects         = 0,          # CCE-26854-0
-  Integer[0,1]         $net__ipv4__conf__all__send_redirects           = 0,          # CCE-27004-1
-  Integer[0,1]         $net__ipv4__conf__default__accept_redirects     = 0,          # CCE-27015-7
-  Integer[0,1]         $net__ipv4__conf__default__accept_source_route  = 0,          # CCE-26983-7
-  Integer[0,1]         $net__ipv4__conf__default__log_martians         = 1,
-  Integer[0,2]         $net__ipv4__conf__default__rp_filter            = 1,          # CCE-26915-9
-  Integer[0,1]         $net__ipv4__conf__default__secure_redirects     = 0,          # CCE-26831-8
-  Integer[0,1]         $net__ipv4__conf__default__send_redirects       = 0,          # CCE-27001-7
-  Integer[0,1]         $net__ipv4__icmp_echo_ignore_broadcasts         = 1,          # CCE-26883-9
-  Integer[0,1]         $net__ipv4__icmp_ignore_bogus_error_responses   = 1,          # CCE-26993-6
-  Integer[0]           $net__ipv4__tcp_challenge_ack_limit             = 2147483647, # CVE-2016-5696 mitigation
-  Integer[1]           $net__ipv4__tcp_max_syn_backlog                 = 4096,
-  Integer[0,1]         $net__ipv4__tcp_syncookies                      = 1,          # CCE-27053-8
-  Integer[0,1]         $net__ipv6__conf__all__accept_redirects         = 0,
-  Integer[0,1]         $net__ipv6__conf__all__accept_source_route      = 0,          # CCI-000366 (STIG)
-  Integer[0,1]         $net__ipv6__conf__all__autoconf                 = 0,
-  Integer[0,1]         $net__ipv6__conf__all__forwarding               = 0,
-  Integer[0,1]         $net__ipv6__conf__all__accept_ra                = 0,          # CCE-27164-3
-  Integer[0,1]         $net__ipv6__conf__default__accept_ra            = 0,          # CCE-27164-3
-  Integer[0,1]         $net__ipv6__conf__default__accept_ra_defrtr     = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0,1]         $net__ipv6__conf__default__accept_ra_pinfo      = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0,1]         $net__ipv6__conf__default__accept_ra_rtr_pref   = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0,1]         $net__ipv6__conf__default__accept_redirects     = 0,          # CCE-27166-8
-  Integer[0,1]         $net__ipv6__conf__default__accept_source_route  = 0,
-  Integer[0,1]         $net__ipv6__conf__default__autoconf             = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0,1]         $net__ipv6__conf__default__dad_transmits        = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0]           $net__ipv6__conf__default__max_addresses        = 1,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
-  Integer[0,1]         $net__ipv6__conf__default__router_solicitations = 0,          # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__netfilter__nf_conntrack_max               = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__unix__max_dgram_qlen                      = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__neigh__default__gc_thresh3          = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__neigh__default__gc_thresh2          = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__neigh__default__gc_thresh1          = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__neigh__default__proxy_qlen          = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__neigh__default__unres_qlen          = undef,
+  Optional[Variant[Array[Integer,3,3], Enum['absent']]] $net__ipv4__tcp_rmem                            = undef,
+  Optional[Variant[Array[Integer,3,3], Enum['absent']]] $net__ipv4__tcp_wmem                            = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__tcp_fin_timeout                     = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__tcp_rfc1337                         = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__tcp_keepalive_time                  = undef,
+  Optional[Variant[Integer[0,2], Enum['absent']]]       $net__ipv4__tcp_mtu_probing                     = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__tcp_no_metrics_save                 = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__core__rmem_max                            = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__core__wmem_max                            = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__core__optmem_max                          = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__core__netdev_max_backlog                  = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__core__somaxconn                           = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__tcp_tw_reuse                        = undef,
+  Optional[Variant[Integer[8912], Enum['absent']]]      $fs__inotify__max_user_watches                  = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $fs__suid_dumpable                              = undef, # CCE-27044-7
+  Optional[Variant[String, Enum['absent']]]             $kernel__core_pattern                           = undef,
+  Optional[Variant[Integer[0], Enum['absent']]]         $kernel__core_pipe_limit                        = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $kernel__core_uses_pid                          = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $kernel__dmesg_restrict                         = undef, # CCE-27366-4
+  Optional[Integer[0,1]]                                $kernel__exec_shield                            = undef, # CCE-27007-4
+  Optional[Variant[Integer[0], Enum['absent']]]         $kernel__panic                                  = undef,
+  Optional[Variant[Integer[0,2], Enum['absent']]]       $kernel__randomize_va_space                     = undef, # CCE-26999-3
+  Optional[Variant[Integer[0], Enum['absent']]]         $kernel__sysrq                                  = undef,
+  Optional[Variant[Integer[0,3], Enum['absent']]]       $kernel__yama__ptrace_scope                     = undef, # Set to 1 for STIG RHEL-08-040282 / CCE-80953-8
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__all__accept_redirects         = undef, # CCE-27027-2
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__all__accept_source_route      = undef, # CCE-27037-1
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__all__log_martians             = undef, # CCE-27066-0
+  Optional[Variant[Integer[0,2], Enum['absent']]]       $net__ipv4__conf__all__rp_filter                = undef, # CCE-26979-5
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__all__secure_redirects         = undef, # CCE-26854-0
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__all__send_redirects           = undef, # CCE-27004-1
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__default__accept_redirects     = undef, # CCE-27015-7
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__default__accept_source_route  = undef, # CCE-26983-7
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__default__log_martians         = undef,
+  Optional[Variant[Integer[0,2], Enum['absent']]]       $net__ipv4__conf__default__rp_filter            = undef, # CCE-26915-9
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__default__secure_redirects     = undef, # CCE-26831-8
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__conf__default__send_redirects       = undef, # CCE-27001-7
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__icmp_echo_ignore_broadcasts         = undef, # CCE-26883-9
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__icmp_ignore_bogus_error_responses   = undef, # CCE-26993-6
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv4__tcp_challenge_ack_limit             = undef, # CVE-2016-5696 mitigation
+  Optional[Variant[Integer[1], Enum['absent']]]         $net__ipv4__tcp_max_syn_backlog                 = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv4__tcp_syncookies                      = undef, # CCE-27053-8
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__all__accept_redirects         = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__all__accept_source_route      = undef, # CCI-000366 (STIG)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__all__autoconf                 = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__all__forwarding               = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__all__accept_ra                = undef, # CCE-27164-3
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_ra            = undef, # CCE-27164-3
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_ra_defrtr     = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_ra_pinfo      = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_ra_rtr_pref   = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_redirects     = undef, # CCE-27166-8
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__accept_source_route  = undef,
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__autoconf             = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__dad_transmits        = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0], Enum['absent']]]         $net__ipv6__conf__default__max_addresses        = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
+  Optional[Variant[Integer[0,1], Enum['absent']]]       $net__ipv6__conf__default__router_solicitations = undef, # SSG network_ipv6_limit_requests (No CCEs available at this time)
 
-  Boolean              $core_dumps                                     = false,
-  Stdlib::AbsolutePath $core_dump_dir                                  = '/var/core',
-  Boolean              $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false }),
-  Optional[Boolean]    $ipv6                                           = undef,
-  Array[String]        $unmanaged_sysctls                              = []
+  Optional[Boolean]                                     $core_dumps                                     = undef,
+  Stdlib::AbsolutePath                                  $core_dump_dir                                  = '/var/core',
+  Boolean                                               $pam                                            = simplib::lookup('simp_options::pam', { 'default_value' => false }),
+  Optional[Variant[Boolean, Enum['absent']]]            $ipv6                                           = undef,
+  Array[String]                                         $unmanaged_sysctls                              = []
 ) {
   simplib::module_metadata::assert($module_name, { 'blacklist' => ['Windows'] })
 
-  simplib::validate_sysctl_value('kernel.core_pattern',$kernel__core_pattern)
-  simplib::validate_sysctl_value('fs.inotify.max_user_watches', $fs__inotify__max_user_watches)
+  if $kernel__exec_shield =~ NotUndef {
+    deprecation(
+      'simp::sysctl::kernel__exec_shield',
+      'simp::sysctl::kernel__exec_shield is deprecated and has no effect. Remove this parameter.',
+      false,
+    )
+  }
 
+  unless empty($unmanaged_sysctls) {
+    deprecation(
+      'simp::sysctl::unmanaged_sysctls',
+      'simp::sysctl::unmanaged_sysctls is deprecated. Leave the matching simp::sysctl parameters unset (undef) instead.',
+      false,
+    )
+  }
+
+  if $kernel__core_pattern =~ String and $kernel__core_pattern != 'absent' {
+    simplib::validate_sysctl_value('kernel.core_pattern', $kernel__core_pattern)
+  }
+  if $fs__inotify__max_user_watches =~ Integer {
+    simplib::validate_sysctl_value('fs.inotify.max_user_watches', $fs__inotify__max_user_watches)
+  }
+
+  # Multi-value keys are written as a single space-separated string
+  $_tcp_rmem = $net__ipv4__tcp_rmem ? {
+    Array   => join($net__ipv4__tcp_rmem, ' '),
+    default => $net__ipv4__tcp_rmem,
+  }
+  $_tcp_wmem = $net__ipv4__tcp_wmem ? {
+    Array   => join($net__ipv4__tcp_wmem, ' '),
+    default => $net__ipv4__tcp_wmem,
+  }
+
+  # Performance Related Settings
   $_perf_settings = {
     'net.unix.max_dgram_qlen'           => $net__unix__max_dgram_qlen,
     'net.ipv4.neigh.default.gc_thresh3' => $net__ipv4__neigh__default__gc_thresh3,
@@ -192,8 +258,8 @@ class simp::sysctl (
     'net.ipv4.neigh.default.gc_thresh1' => $net__ipv4__neigh__default__gc_thresh1,
     'net.ipv4.neigh.default.proxy_qlen' => $net__ipv4__neigh__default__proxy_qlen,
     'net.ipv4.neigh.default.unres_qlen' => $net__ipv4__neigh__default__unres_qlen,
-    'net.ipv4.tcp_rmem'                 => join($net__ipv4__tcp_rmem, ' '),
-    'net.ipv4.tcp_wmem'                 => join($net__ipv4__tcp_wmem, ' '),
+    'net.ipv4.tcp_rmem'                 => $_tcp_rmem,
+    'net.ipv4.tcp_wmem'                 => $_tcp_wmem,
     'net.ipv4.tcp_fin_timeout'          => $net__ipv4__tcp_fin_timeout,
     'net.ipv4.tcp_rfc1337'              => $net__ipv4__tcp_rfc1337,
     'net.ipv4.tcp_keepalive_time'       => $net__ipv4__tcp_keepalive_time,
@@ -208,18 +274,9 @@ class simp::sysctl (
     'fs.inotify.max_user_watches'       => $fs__inotify__max_user_watches,
   }
 
-  $_perf_settings.each |$_key, $_value| {
-    unless $_key in $unmanaged_sysctls {
-      sysctl { $_key: value => $_value }
-    }
-  }
-
   # This may not exist until additional packages are present
-  unless 'net.netfilter.nf_conntrack_max' in $unmanaged_sysctls {
-    sysctl { 'net.netfilter.nf_conntrack_max':
-      value  => $net__netfilter__nf_conntrack_max,
-      silent => true,
-    }
+  $_conntrack_settings = {
+    'net.netfilter.nf_conntrack_max' => $net__netfilter__nf_conntrack_max,
   }
 
   # Security Related Settings
@@ -253,44 +310,10 @@ class simp::sysctl (
     'net.ipv4.tcp_syncookies'                    => $net__ipv4__tcp_syncookies,
   }
 
-  $_security_settings.each |$_key, $_value| {
-    # $_value =~ Undef skips optional settings (e.g. kernel.yama.ptrace_scope)
-    # that are left unmanaged by default
-    unless $_key in $unmanaged_sysctls or $_value =~ Undef {
-      sysctl { $_key: value => $_value }
-    }
-  }
-
-  if $core_dumps {
-    $_core_before = ['kernel.core_pattern', 'kernel.core_uses_pid']
-      .filter |$_k| { !($_k in $unmanaged_sysctls) }
-      .map    |$_k| { Sysctl[$_k] }
-
-    file { $core_dump_dir:
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0640',
-      before => $_core_before,
-    }
-  }
-  if ($pam and !$core_dumps) {
-    include 'pam'
-
-    pam::limits::rule { 'prevent_core':
-      domains => ['*'],
-      type    => 'hard',
-      item    => 'core',
-      value   => 0,
-      order   => 100,
-    }
-  }
-
-  if $ipv6.is_a(Undef) {
-    $_disable_ipv6 = 1
-  }
-  else {
-    $_disable_ipv6 = $ipv6 ? { true => 0, false => 1 }
+  $_disable_ipv6 = $ipv6 ? {
+    true    => 0,
+    false   => 1,
+    default => $ipv6,
   }
 
   $_ipv6_settings = {
@@ -312,10 +335,6 @@ class simp::sysctl (
     'net.ipv6.conf.default.router_solicitations' => $net__ipv6__conf__default__router_solicitations,
   }
 
-  # The IPv6 sysctls are declared unconditionally. They used to be gated on the
-  # simplib_sysctl fact, which meant a missing or stale fact silently dropped
-  # every IPv6 setting (including `simp::sysctl::ipv6: false`) from the catalog.
-  #
   # `silent` is only enabled when the fact tells us the IPv6 stack is absent, in
   # which case these keys do not exist and augeasproviders_sysctl would fail on
   # them. Everywhere else we keep `silent => false` so that drift in the *running*
@@ -327,9 +346,57 @@ class simp::sysctl (
     default => false,
   }
 
-  $_ipv6_settings.each |$_key, $_value| {
-    unless $_key in $unmanaged_sysctls {
-      sysctl { $_key: value => $_value, silent => $_ipv6_silent }
+  # [settings, silent]
+  $_setting_groups = [
+    [$_perf_settings, false],
+    [$_conntrack_settings, true],
+    [$_security_settings, false],
+    [$_ipv6_settings, $_ipv6_silent],
+  ]
+
+  # Only keys whose parameter is set are declared; undef leaves the key alone.
+  $_managed = $_setting_groups.reduce({}) |$memo, $group| {
+    $memo + $group[0].filter |$_key, $_value| {
+      $_value =~ NotUndef and !($_key in $unmanaged_sysctls)
+    }.map |$_key, $_value| { [$_key, [$_value, $group[1]]] }.convert_to(Hash)
+  }
+
+  $_managed.each |$_key, $_setting| {
+    $_attrs = $_setting[0] ? {
+      'absent' => { 'ensure' => 'absent' },
+      default  => { 'value' => $_setting[0] },
+    }
+
+    sysctl { $_key:
+      silent => $_setting[1],
+      *      => $_attrs,
+    }
+  }
+
+  if $core_dumps =~ NotUndef {
+    if $core_dumps {
+      $_core_before = ['kernel.core_pattern', 'kernel.core_uses_pid']
+        .filter |$_k| { $_k in $_managed }
+        .map    |$_k| { Sysctl[$_k] }
+
+      file { $core_dump_dir:
+        ensure => 'directory',
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0640',
+        before => $_core_before,
+      }
+    }
+    elsif $pam {
+      include 'pam'
+
+      pam::limits::rule { 'prevent_core':
+        domains => ['*'],
+        type    => 'hard',
+        item    => 'core',
+        value   => 0,
+        order   => 100,
+      }
     }
   }
 }

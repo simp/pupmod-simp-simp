@@ -1,0 +1,4 @@
+---
+compliance_engine::enforcement:
+  - simp:defaults
+simp_options::pam: true
