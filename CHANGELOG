@@ -1,3 +1,8 @@
+* Thu Nov 05 2026 Steven Pritchard <steve@sicura.us> - 11.0.1
+- Fixed an OpenVox 9 (OpenFact 6) deprecation warning from the
+  `simp_rsync_environments` fact by using `Facter::Core::Execution.execute`
+  instead of `Facter::Core::Execution.exec`
+
 * Wed Nov 04 2026 Mike Riddle <mike@sicura.us> - 11.0.0
 - BREAKING CHANGE: Reduce the blast radius of `simp::sysctl`. A bare
   `include simp::sysctl` now manages nothing. Previously it:

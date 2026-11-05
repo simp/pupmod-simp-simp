@@ -28,7 +28,7 @@ Facter.add('simp_rsync_environments') do
 
     Dir.glob('*/rsync').each do |env_dir|
       # Using this instead of Ruby's Find for symlink support
-      share_dirs = Facter::Core::Execution.exec("find -L #{File.dirname(env_dir)} -name '.shares'").split("\n").sort
+      share_dirs = Facter::Core::Execution.execute("find -L #{File.dirname(env_dir)} -name '.shares'", on_fail: nil).split("\n").sort
 
       share_dirs.each do |share_dir|
         Dir.glob(File.join(File.dirname(share_dir), '*')).each do |share|
