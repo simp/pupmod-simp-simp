@@ -1,0 +1,9 @@
+---
+compliance_engine::enforcement:
+  - simp:defaults
+# Explicit site Hiera must beat the profile: a different value, a removal, and
+# `~` (leave the key unmanaged) over profile-supplied values.
+simp::sysctl::net__core__somaxconn: 4096
+simp::sysctl::kernel__sysrq: absent
+simp::sysctl::kernel__panic: ~
+simp::sysctl::ipv6: true

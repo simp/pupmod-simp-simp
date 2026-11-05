@@ -7,6 +7,7 @@
 #### Table of Contents
 
 1. [Overview](#overview)
+    * [Breaking changes in 11.0.0](#breaking-changes-in-1100)
     * [Breaking changes in 10.0.0](#breaking-changes-in-1000)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with simp](#setup)
@@ -22,6 +23,66 @@
 
 This module is the overarching profile of SIMP managed systems. It should be
 the entry point for all supported SIMP configurations.
+
+## Breaking changes in 11.0.0
+
+In 11.0.0 the blast radius of `simp::sysctl` was reduced: a bare
+`include simp::sysctl` now manages **nothing**. Before 11.0.0 it set about 60
+kernel parameters in `/etc/sysctl.conf` and the running kernel to hard-coded
+values (including performance tuning such as `net.core.somaxconn` and
+`net.ipv4.tcp_{r,w}mem`, which overrode `tuned` and vendor tuning), disabled
+IPv6 when `simp::sysctl::ipv6` was unset, and added a PAM limits rule that
+prevents core dumps when `simp_options::pam` was `true`. Everything is now
+opt-in:
+
+* Every sysctl parameter (`simp::sysctl::<key with . replaced by __>`) defaults
+  to `undef`, which leaves the key alone. A value sets the key in
+  `/etc/sysctl.conf` and the running kernel. `'absent'` removes the key from
+  `/etc/sysctl.conf`; the running kernel value is **not** reset and only
+  reverts at the next reboot
+* `ipv6` defaults to `undef` (leave `net.ipv6.conf.all.disable_ipv6` alone);
+  `false` disables IPv6, `true` enables it, `'absent'` removes the key
+* `core_dumps` defaults to `undef`. `true` manages `core_dump_dir`; `false`
+  adds the `prevent_core` PAM limits rule when `pam` (`simp_options::pam`) is
+  `true`. Where `pam::limits` manages `/etc/security/limits.conf` (it builds
+  the whole file from the rules in the catalog), leaving `core_dumps` unset
+  **removes** a `prevent_core` line written by an earlier run
+* `unmanaged_sysctls` is deprecated: leave the parameter unset instead (`~` in
+  Hiera leaves a key unmanaged even when a compliance profile sets it). It
+  still works but logs a deprecation warning
+* `kernel__exec_shield` is deprecated; it never had an effect
+
+Settings are still written to `/etc/sysctl.conf`, which `systemd-sysctl`
+applies as `/etc/sysctl.d/99-sysctl.conf`. A value set here therefore overrides
+`/usr/lib/sysctl.d/` and most `/etc/sysctl.d/` drop-ins; a drop-in that sorts
+after `99-sysctl.conf` still wins.
+
+The `simp`, `simp_lite`, and `one_shot` scenarios and the `simp::server` class
+list still include the class. Until a site opts in with one of the paths below,
+on those nodes:
+
+* the class stops enforcing its settings. Values already in `/etc/sysctl.conf`
+  remain and are applied at boot; drift is no longer corrected
+* the `prevent_core` line is **removed** from `/etc/security/limits.conf`,
+  because these scenarios manage that file with `pam::limits`
+  (`simp::pam_limits::max_logins`), so core dumps are no longer blocked
+
+* **Path 1 -- enforce the `simp:defaults` compliance profile** (the same
+  single Hiera key described for 10.0.0 below). It restores every pre-11.0.0
+  value, plus `ipv6: false` and `core_dumps: false`. Override individual keys
+  in your own Hiera, which always wins over the profile:
+
+  ```yaml
+  compliance_engine::enforcement:
+    - simp:defaults
+  simp::sysctl::net__core__somaxconn: 4096  # a different value
+  simp::sysctl::kernel__panic: ~            # leave it alone
+  simp::sysctl::kernel__sysrq: absent       # remove it from /etc/sysctl.conf
+  ```
+
+* **Path 2 -- set the parameters yourself** in Hiera, e.g.
+  `simp::sysctl::net__ipv4__tcp_syncookies: 1`. The pre-11.0.0 values are
+  listed in `SIMP/compliance_profiles/checks.yaml`.
 
 ## Breaking changes in 10.0.0
 

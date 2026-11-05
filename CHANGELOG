@@ -1,3 +1,34 @@
+* Wed Nov 04 2026 Mike Riddle <mike@sicura.us> - 11.0.0
+- BREAKING CHANGE: Reduce the blast radius of `simp::sysctl`. A bare
+  `include simp::sysctl` now manages nothing. Previously it:
+  - set about 60 kernel parameters in `/etc/sysctl.conf` and the running
+    kernel to hard-coded values, including performance tuning
+    (`net.core.somaxconn`, `net.ipv4.tcp_{r,w}mem`, `nf_conntrack_max`, ...),
+    `kernel.panic`, `kernel.sysrq` and `kernel.core_pattern`
+  - disabled IPv6 (`net.ipv6.conf.all.disable_ipv6 = 1`) when `ipv6` was unset
+  - added the `prevent_core` PAM limits rule when `simp_options::pam` was
+    `true`
+  The `simp`, `simp_lite` and `one_shot` scenarios and the `simp::server`
+  class list still include the class. On those nodes the class stops
+  enforcing its settings (values already in `/etc/sysctl.conf` remain), and
+  the `prevent_core` line is **removed** from `/etc/security/limits.conf`,
+  which `pam::limits` rebuilds from the rules in the catalog. Enforce the
+  `simp:defaults` compliance profile, or set `simp::sysctl::core_dumps: false`,
+  to keep it
+- Every sysctl parameter is now `undef` by default (leave the key alone) and
+  also accepts `'absent'`, which removes the key from `/etc/sysctl.conf`
+  without changing the running kernel value
+- `ipv6` also accepts `'absent'`; `undef` no longer disables IPv6
+- `core_dumps` is now `Optional[Boolean]` defaulting to `undef`, which declares
+  neither `core_dump_dir` nor the `prevent_core` PAM limits rule; `false` adds
+  the rule when `pam` is `true`
+- Deprecate `simp::sysctl::unmanaged_sysctls`; leave the parameter unset
+  instead. It still works but logs a deprecation warning
+- Deprecate `simp::sysctl::kernel__exec_shield`, which never had an effect.
+  Setting it logs a deprecation warning
+- The `simp:defaults` compliance profile now restores the pre-11.0.0
+  `simp::sysctl` values, including `ipv6: false` and `core_dumps: false`
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 10.1.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge

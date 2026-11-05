@@ -98,10 +98,11 @@ subdirectory:
 
 - **top-level `manifests/*.pp`** — each of these directly manages a concrete
   piece of system state (they are the "what a SIMP baseline touches" classes):
-  - `simp::sysctl` — sets a large set of kernel `sysctl` parameters via the
-    `sysctl` type, covering both performance tuning and security hardening
-    (values validated with `simplib::validate_sysctl_value`); can also disable
-    IPv6.
+  - `simp::sysctl` — manages kernel `sysctl` parameters (performance tuning
+    and security hardening) in `/etc/sysctl.conf` via the `sysctl` type. Since
+    11.0.0 a bare include manages nothing: each parameter is three-state
+    (`undef` leaves the key alone, a value sets it, `'absent'` removes it), and
+    the pre-11.0.0 values live in the `simp:defaults` compliance profile.
   - `simp::sudoers` — manages the global `sudoers` defaults (`default_entry`)
     and, optionally, a set of common sudoers aliases (via
     `simp::sudoers::aliases`).

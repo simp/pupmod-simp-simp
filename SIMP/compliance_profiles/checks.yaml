@@ -1,8 +1,12 @@
-# Sicura Compliance Engine checks that restore the behavior `simp::kmod_blacklist`
-# had by default *before* the 10.0.0 blast-radius refactor (where a bare
-# `include simp::kmod_blacklist` manages nothing). One `puppet-class-parameter`
-# check per restored parameter; the `simp:defaults` profile lists them directly
-# (see profile-simp_defaults.yaml).
+# Sicura Compliance Engine checks that restore the behavior this module's
+# classes had by default *before* their blast-radius refactors (where a bare
+# include manages nothing):
+#
+# * `simp::kmod_blacklist` (10.0.0)
+# * `simp::sysctl` (11.0.0)
+#
+# One `puppet-class-parameter` check per restored parameter; the
+# `simp:defaults` profile lists them directly (see profile-simp_defaults.yaml).
 #
 # Scope is intentionally limited to this module's own parameters.
 ---
@@ -41,4 +45,325 @@ checks:
     type: puppet-class-parameter
     settings:
       parameter: simp::kmod_blacklist::lock_modules
+      value: false
+  # Pre-11.0.0: every `simp::sysctl` key below had this value as its hardcoded
+  # default and was enforced on every include. The class defaults are now
+  # `undef` (key not managed).
+  simp:defaults.simp.sysctl.net__netfilter__nf_conntrack_max:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__netfilter__nf_conntrack_max
+      value: 655360
+  simp:defaults.simp.sysctl.net__unix__max_dgram_qlen:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__unix__max_dgram_qlen
+      value: 50
+  simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh3:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__neigh__default__gc_thresh3
+      value: 2048
+  simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh2:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__neigh__default__gc_thresh2
+      value: 1024
+  simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh1:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__neigh__default__gc_thresh1
+      value: 32
+  simp:defaults.simp.sysctl.net__ipv4__neigh__default__proxy_qlen:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__neigh__default__proxy_qlen
+      value: 92
+  simp:defaults.simp.sysctl.net__ipv4__neigh__default__unres_qlen:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__neigh__default__unres_qlen
+      value: 6
+  simp:defaults.simp.sysctl.net__ipv4__tcp_rmem:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_rmem
+      value: [4096, 98304, 16777216]
+  simp:defaults.simp.sysctl.net__ipv4__tcp_wmem:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_wmem
+      value: [4096, 65535, 16777216]
+  simp:defaults.simp.sysctl.net__ipv4__tcp_fin_timeout:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_fin_timeout
+      value: 30
+  simp:defaults.simp.sysctl.net__ipv4__tcp_rfc1337:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_rfc1337
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__tcp_keepalive_time:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_keepalive_time
+      value: 3600
+  simp:defaults.simp.sysctl.net__ipv4__tcp_mtu_probing:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_mtu_probing
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__tcp_no_metrics_save:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_no_metrics_save
+      value: 0
+  simp:defaults.simp.sysctl.net__core__rmem_max:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__core__rmem_max
+      value: 16777216
+  simp:defaults.simp.sysctl.net__core__wmem_max:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__core__wmem_max
+      value: 16777216
+  simp:defaults.simp.sysctl.net__core__optmem_max:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__core__optmem_max
+      value: 20480
+  simp:defaults.simp.sysctl.net__core__netdev_max_backlog:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__core__netdev_max_backlog
+      value: 2048
+  simp:defaults.simp.sysctl.net__core__somaxconn:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__core__somaxconn
+      value: 2048
+  simp:defaults.simp.sysctl.net__ipv4__tcp_tw_reuse:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_tw_reuse
+      value: 1
+  simp:defaults.simp.sysctl.fs__inotify__max_user_watches:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::fs__inotify__max_user_watches
+      value: 102400
+  simp:defaults.simp.sysctl.fs__suid_dumpable:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::fs__suid_dumpable
+      value: 0
+  simp:defaults.simp.sysctl.kernel__core_pattern:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__core_pattern
+      value: '/var/core/%u_%g_%p_%t_%h_%e.core'
+  simp:defaults.simp.sysctl.kernel__core_pipe_limit:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__core_pipe_limit
+      value: 0
+  simp:defaults.simp.sysctl.kernel__core_uses_pid:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__core_uses_pid
+      value: 1
+  simp:defaults.simp.sysctl.kernel__dmesg_restrict:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__dmesg_restrict
+      value: 1
+  simp:defaults.simp.sysctl.kernel__panic:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__panic
+      value: 10
+  simp:defaults.simp.sysctl.kernel__randomize_va_space:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__randomize_va_space
+      value: 2
+  simp:defaults.simp.sysctl.kernel__sysrq:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::kernel__sysrq
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__accept_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__accept_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__accept_source_route:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__accept_source_route
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__log_martians:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__log_martians
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__rp_filter:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__rp_filter
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__secure_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__secure_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__all__send_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__all__send_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__accept_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__accept_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__accept_source_route:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__accept_source_route
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__log_martians:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__log_martians
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__rp_filter:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__rp_filter
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__secure_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__secure_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__conf__default__send_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__conf__default__send_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv4__icmp_echo_ignore_broadcasts:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__icmp_echo_ignore_broadcasts
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__icmp_ignore_bogus_error_responses:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__icmp_ignore_bogus_error_responses
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv4__tcp_challenge_ack_limit:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_challenge_ack_limit
+      value: 2147483647
+  simp:defaults.simp.sysctl.net__ipv4__tcp_max_syn_backlog:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_max_syn_backlog
+      value: 4096
+  simp:defaults.simp.sysctl.net__ipv4__tcp_syncookies:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv4__tcp_syncookies
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__all__accept_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_source_route:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__all__accept_source_route
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__all__autoconf:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__all__autoconf
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__all__forwarding:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__all__forwarding
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_ra:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__all__accept_ra
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_ra
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_defrtr:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_ra_defrtr
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_pinfo:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_ra_pinfo
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_rtr_pref:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_ra_rtr_pref
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_redirects:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_redirects
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_source_route:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__accept_source_route
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__autoconf:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__autoconf
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__dad_transmits:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__dad_transmits
+      value: 0
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__max_addresses:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__max_addresses
+      value: 1
+  simp:defaults.simp.sysctl.net__ipv6__conf__default__router_solicitations:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::net__ipv6__conf__default__router_solicitations
+      value: 0
+  # Pre-11.0.0: `ipv6` unset disabled IPv6 (`net.ipv6.conf.all.disable_ipv6 = 1`)
+  simp:defaults.simp.sysctl.ipv6:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::ipv6
+      value: false
+  # Pre-11.0.0: `core_dumps` defaulted to `false`, which adds the
+  # `prevent_core` PAM limits rule when `simp_options::pam` is `true`
+  simp:defaults.simp.sysctl.core_dumps:
+    type: puppet-class-parameter
+    settings:
+      parameter: simp::sysctl::core_dumps
       value: false
