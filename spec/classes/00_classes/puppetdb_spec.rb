@@ -201,6 +201,23 @@ describe 'simp::puppetdb' do
               )
             }
             it { is_expected.to contain_class('puppetdb::master::puppetdb_conf').that_notifies('Class[pupmod::master::base]') }
+            it { is_expected.to contain_exec('simp_puppetdb_puppetserver_reload').with_refreshonly(true) }
+            it { is_expected.to contain_exec('simp_puppetdb_puppetserver_reload').that_subscribes_to('Class[puppetdb::master::puppetdb_conf]') }
+            it { is_expected.not_to contain_exec('puppetserver_reload') }
+          end
+
+          context 'with use_puppet_ssl_certs => false and pupmod::master::base::helper_scripts => true' do
+            let(:hieradata) { 'simp__puppetdb' }
+            let(:params) do
+              {
+                use_puppet_ssl_certs: false,
+              }
+            end
+            let(:pre_condition) { "class { 'pupmod::master::base': helper_scripts => true }" }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_exec('puppetserver_reload') }
+            it { is_expected.not_to contain_exec('simp_puppetdb_puppetserver_reload') }
           end
 
           context 'with use_puppet_ssl_certs => false and manage_puppetserver => false' do

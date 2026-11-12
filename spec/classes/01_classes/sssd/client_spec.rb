@@ -19,6 +19,16 @@ describe 'simp::sssd::client' do
             it { is_expected.not_to contain_sssd__domain('LDAP') }
           end
 
+          context 'with the sssd simp:defaults profile enforced' do
+            let(:hiera_config) { File.expand_path('../../../fixtures/hieradata/hiera_compliance_engine.yaml', __dir__) }
+            let(:facts) { os_facts.merge(custom_hiera: 'simp_defaults_enforced') }
+            let(:params) { { ldap_domain: true } }
+
+            it_behaves_like 'sssd client'
+            it { is_expected.to contain_service('sssd').with_ensure('running').with_enable(true) }
+            it { is_expected.to contain_sssd__domain('LDAP') }
+          end
+
           context 'with ldap_domain=true' do
             let(:params) do
               { ldap_domain: true }

@@ -210,6 +210,23 @@ class simp::puppetdb (
     # files are changed, so here we make sure it's in the catalog.
     include 'pupmod::master::base'
     Class['puppetdb::master::puppetdb_conf'] ~> Class['pupmod::master::base']
+
+    # pupmod::master::base only reloads puppetserver (and installs the reload
+    # helper script) when its `helper_scripts` parameter is true, which is no
+    # longer the default as of pupmod 13.0.0. Releases before 13 always did.
+    $_helper_scripts = getvar('pupmod::master::base::helper_scripts') ? {
+      false   => false,
+      default => true,
+    }
+
+    unless $_helper_scripts {
+      exec { 'simp_puppetdb_puppetserver_reload':
+        command     => '/opt/puppetlabs/bin/puppetserver reload',
+        onlyif      => "/usr/bin/systemctl is-active --quiet ${pupmod::master::service::service_name}",
+        refreshonly => true,
+        subscribe   => Class['puppetdb::master::puppetdb_conf'],
+      }
+    }
   }
 
   # We need to do this to make PuppetDB use the system puppet certificates

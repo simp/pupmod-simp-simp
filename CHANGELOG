@@ -1,3 +1,20 @@
+* Thu Nov 12 2026 Steven Pritchard <steve@sicura.us> - 11.1.0
+- Allow `simp/pupmod` 13.x, `simp/sssd` 11.x, `simp/ssh` 10.x and
+  `simp/tftpboot` 9.x. `simp::server::kickstart` only includes the `tftpboot`
+  class, which tftpboot 9.0.0 doesn't change. The test fixtures use the default
+  branches of these modules, since pupmod 13.1.0, sssd 11.0.0 and tftpboot
+  9.0.0 aren't tagged yet
+- pupmod 13 and sssd 11 no longer configure anything on a bare `include`.
+  Enforce each module's `simp:defaults` compliance profile
+  (`compliance_engine::enforcement: [simp:defaults]`), or set their
+  parameters, to keep the previous behavior of the `pupmod`, `pupmod::master`
+  and `simp::sssd::client` classes in the SIMP scenarios
+- `simp::puppetdb` reloads puppetserver itself when `puppetdb.conf` changes.
+  It previously relied on `pupmod::master::base`, which with pupmod 13 only
+  reloads puppetserver when its `helper_scripts` parameter is enabled
+- Document that `LDAP` is added to `sssd::domains_entries`, replacing the
+  deprecated `sssd::domains`, to enable the `simp::sssd::client` LDAP domain
+
 * Thu Nov 05 2026 Steven Pritchard <steve@sicura.us> - 11.0.1
 - Fixed an OpenVox 9 (OpenFact 6) deprecation warning from the
   `simp_rsync_environments` fact by using `Facter::Core::Execution.execute`

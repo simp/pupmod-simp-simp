@@ -2753,6 +2753,13 @@ Default value: `simplib::lookup('simp_options::package_ensure', { 'default_value
 This should work for most out-of-the-box installations. Otherwise, it serves
 as an example of what you can do to make it work for your environment.
 
+As of simp/sssd 11.0.0, a bare `include sssd` only installs the SSSD
+packages. This class doesn't configure the service, the responders or the
+`services` list itself. Enforce the sssd module's `simp:defaults` compliance
+profile (`compliance_engine::enforcement: ['simp:defaults']`) to restore the
+previous behavior, or set the `sssd::service::*`, `sssd::services_entries`
+and responder parameters directly.
+
 #### Parameters
 
 The following parameters are available in the `simp::sssd::client` class:
@@ -2771,7 +2778,11 @@ Data type: `Boolean`
 
 Configure the LDAP domain
 
-To Enable the LDAP domain you must include 'LDAP' sssd::domains via hiera
+To enable the LDAP domain you must add 'LDAP' to `sssd::domains_entries`
+via hiera, for example `sssd::domains_entries: { LDAP: {} }`
+
+* `sssd::domains` is deprecated and, while it is set, `sssd::domains_entries`
+  is ignored
 
 Default value: `simplib::lookup('simp_options::ldap', { 'default_value' => false })`
 
