@@ -24,6 +24,25 @@
 This module is the overarching profile of SIMP managed systems. It should be
 the entry point for all supported SIMP configurations.
 
+## Dependencies that configure nothing on a bare `include`
+
+`simp/pupmod` 13 and `simp/sssd` 11 only install packages when their classes
+are included without parameters. The SIMP scenarios in
+`simp::scenario_map` include `pupmod`, `pupmod::master` (through
+`simp::puppetdb`) and `simp::sssd::client`, so a node that doesn't enforce
+those modules' `simp:defaults` compliance profiles no longer gets the agent
+and server configuration, the `puppet` and `sssd` services or the SSSD
+responder settings it got before. To keep the previous behavior, enforce the
+profiles:
+
+```yaml
+compliance_engine::enforcement:
+  - simp:defaults
+```
+
+or set the modules' parameters directly. The `simp::sssd::client` LDAP domain
+is listed with `sssd::domains_entries` (`sssd::domains` is deprecated).
+
 ## Breaking changes in 11.0.0
 
 In 11.0.0 the blast radius of `simp::sysctl` was reduced: a bare
