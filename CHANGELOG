@@ -1,3 +1,12 @@
+* Fri Nov 13 2026 Steven Pritchard <steve@sicura.us> - 12.0.0
+- BREAKING CHANGE: `simp::admin::logged_shell` no longer accepts `sudosh`;
+  `tlog` is the only supported logged shell. Remove any
+  `simp::admin::logged_shell: sudosh` setting from Hiera
+- `simp::admin` no longer removes leftover sudosh2 profile scripts from
+  `/etc/profile.d`
+- Drop the dependencies on the archived `simp/chkrootkit`, `simp/simp_openldap`
+  and `simp/sudosh` modules
+
 * Thu Nov 05 2026 Steven Pritchard <steve@sicura.us> - 11.0.1
 - Fixed an OpenVox 9 (OpenFact 6) deprecation warning from the
   `simp_rsync_environments` fact by using `Facter::Core::Execution.execute`

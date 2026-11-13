@@ -1,33 +1,15 @@
 ---
 HOSTS:
-  server-el7.simp.beaker:
-    roles:
-    - server
-    - default
-    - ldap_server
-    - openldap
-    platform: el-7-x86_64
-    box: centos/7
-    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: centos-cloud/centos-7
-    gce_machine_type: n1-standard-2
   server-el8.simp.beaker:
     roles:
     - server
+    - default
     - ldap_server
     - ds389
     platform: el-8-x86_64
     box: generic/centos8
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     family: centos-cloud/centos-stream-8
-    gce_machine_type: n1-standard-2
-  client-el7.simp.beaker:
-    roles:
-    - client
-    platform: el-7-x86_64
-    box: centos/7
-    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: centos-cloud/centos-7
     gce_machine_type: n1-standard-2
   client-el8.simp.beaker:
     roles:

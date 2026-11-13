@@ -32,7 +32,6 @@ describe 'remote_access scenario' do
     context 'Test running on current LDAP server #{ldap_server}' do
       let(:server_fqdn) { fact_on(ldap_server, 'networking.fqdn') }
       let(:base_dn) { fact_on(ldap_server, 'networking.domain').split('.').map { |d| "dc=#{d}" }.join(',') }
-      # For now default to openldap server until test includes a 389DS server
       let(:ldap_type) do
         '389ds'
       end
@@ -49,8 +48,7 @@ describe 'remote_access scenario' do
         set_hieradata_on(ldap_server, ERB.new(hieradata).result(binding))
       end
 
-      raise('389ds is not supported on versions lower than el8') unless Integer(fact_on(ldap_server, 'os.release.major')) > 7
-      context 'on versions later than el7 install 389ds and create users' do
+      context 'install 389ds and create users' do
         it 'installs 389ds with simp_ds389' do
           apply_manifest_on(ldap_server, ds389_server_manifest, catch_failures: true)
           apply_manifest_on(ldap_server, ds389_server_manifest, acceptable_exit_codes: [0, 2])

@@ -31,7 +31,6 @@ describe 'simp::admin' do
               it { is_expected.to create_class('simp::sudoers') }
               it { is_expected.to create_sudo__alias__user('admins') }
               it { is_expected.to create_sudo__alias__user('auditors') }
-              it { is_expected.to create_file('/etc/profile.d/sudosh2.sh').with_ensure('absent') }
               it { is_expected.to create_class('tlog::rec_session') }
               it {
                 is_expected.to create_sudo__user_specification('admin global').with(
@@ -87,31 +86,11 @@ describe 'simp::admin' do
               end
 
               it { is_expected.to create_class('tlog::rec_session') }
-              it { is_expected.not_to create_class('sudosh') }
 
               it {
                 is_expected.to create_sudo__user_specification('admin global').with(
                   user_list: ['%administrators'],
                   cmnd: ['/bin/su - root'],
-                  passwd: false,
-                )
-              }
-            end
-
-            context 'when setting sudosh as the logged shell' do
-              let(:params) do
-                {
-                  logged_shell: 'sudosh',
-                }
-              end
-
-              it { is_expected.to create_class('sudosh') }
-              it { is_expected.not_to create_class('tlog::rec_session') }
-
-              it {
-                is_expected.to create_sudo__user_specification('admin global').with(
-                  user_list: ['%administrators'],
-                  cmnd: ['/usr/bin/sudosh'],
                   passwd: false,
                 )
               }

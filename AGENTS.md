@@ -206,14 +206,14 @@ This is a **meta-module: it depends on essentially the entire SIMP stack.**
 editing; treat the dependency list as "the whole SIMP ecosystem." A
 representative handful:
 
-- `simp/pupmod` `>= 10.0.0 < 11.0.0`
-- `simp/simplib` `>= 4.9.0 < 5.0.0` (provides `simplib::lookup`,
+- `simp/pupmod` `>= 10.0.0 < 13.0.0`
+- `simp/simplib` `>= 4.9.0 < 8.0.0` (provides `simplib::lookup`,
   `simplib::knockout`/`simp::knockout` support, `simplib::in_bolt`,
   `simplib::module_metadata::assert`, `runlevel`, facts)
-- `simp/ssh` `>= 6.11.0 < 7.0.0`
-- `simp/sssd` `>= 7.0.0 < 8.0.0`
-- `simp/stunnel` `>= 7.0.0 < 8.0.0`
-- `puppetlabs/stdlib` `>= 8.0.0 < 10.0.0`
+- `simp/ssh` `>= 6.11.0 < 10.0.0`
+- `simp/sssd` `>= 7.0.0 < 11.0.0`
+- `simp/stunnel` `>= 7.0.0 < 10.0.0`
+- `puppetlabs/stdlib` `>= 9.2.0 < 11.0.0`
 
 There are **no optional dependencies** — the module makes no
 `simplib::assert_optional_dependency` calls.

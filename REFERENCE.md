@@ -502,9 +502,9 @@ Default value: `true`
 
 ##### <a name="-simp--admin--logged_shell"></a>`logged_shell`
 
-Data type: `Enum['sudosh','tlog']`
+Data type: `Enum['tlog']`
 
-The name of the logged shell to use
+The name of the logged shell to use. Only `tlog` is supported.
 
 Default value: `'tlog'`
 
