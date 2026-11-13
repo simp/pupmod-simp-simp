@@ -36,7 +36,7 @@
 * [`simp::sssd::client`](#simp--sssd--client): Set up an SSSD client based on the normal SIMP parameters
 * [`simp::sudoers`](#simp--sudoers): Provide useful aliases that many people have wanted to use over
 * [`simp::sudoers::aliases`](#simp--sudoers--aliases): A set of default sudoers aliases
-* [`simp::sysctl`](#simp--sysctl): Sets sysctl settings that are useful from a general 'modern system'
+* [`simp::sysctl`](#simp--sysctl): Manage kernel parameters (sysctl) that are useful from a general
 * [`simp::version`](#simp--version): Places SIMP version related information on the filesystem
 * [`simp::yum::repo::internet_simp`](#simp--yum--repo--internet_simp): Configure yum to use the internet public repository for SIMP
 * [`simp::yum::repo::internet_simp_dependencies`](#simp--yum--repo--internet_simp_dependencies): DEPRECATED Configure yum to use the internet public repositories for SIMP dependencies
@@ -504,7 +504,7 @@ Default value: `true`
 
 Data type: `Enum['tlog']`
 
-The name of the logged shell to use
+The name of the logged shell to use. Only `tlog` is supported.
 
 Default value: `'tlog'`
 
@@ -3099,10 +3099,30 @@ Default value: `['/bin/su']`
 
 ### <a name="simp--sysctl"></a>`simp::sysctl`
 
-point of view.
+'modern system' and system security point of view.
 
-There are also items in this list that are particularly useful for
-general system security.
+A bare `include simp::sysctl` manages **nothing**. Each sysctl parameter
+below maps to one kernel key (`net__ipv4__tcp_syncookies` =>
+`net.ipv4.tcp_syncookies`) and has three states:
+
+* `undef` (default): the key is not managed; whatever is in
+  `/etc/sysctl.conf` and the running kernel stays as it is
+* a value: the key is written to `/etc/sysctl.conf` and applied to the
+  running kernel
+* `'absent'`: the key is removed from `/etc/sysctl.conf`. The running
+  kernel value is **not** reset; it reverts to the kernel default at the next
+  reboot (unless another `sysctl.d` file sets it)
+
+Settings are written to `/etc/sysctl.conf`. At boot, `systemd-sysctl` applies
+it as `/etc/sysctl.d/99-sysctl.conf` (a symlink shipped by systemd), after
+the files in `/usr/lib/sysctl.d/` and most drop-ins in `/etc/sysctl.d/`, so a
+value set here overrides package and admin drop-ins. A drop-in that sorts
+after `99-sysctl.conf` still wins. Leaving a parameter unset leaves any
+drop-in value in force.
+
+The pre-11.0.0 behavior (every key below set to a hard-coded value, IPv6
+disabled, and core dumps restricted) is restored by enforcing the
+`simp:defaults` compliance profile shipped in `SIMP/compliance_profiles/`.
 
 See the kernel documentation for the functionality of each variable.
 
@@ -3184,520 +3204,530 @@ The following parameters are available in the `simp::sysctl` class:
 
 ##### <a name="-simp--sysctl--net__netfilter__nf_conntrack_max"></a>`net__netfilter__nf_conntrack_max`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `655360`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__unix__max_dgram_qlen"></a>`net__unix__max_dgram_qlen`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `50`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh3"></a>`net__ipv4__neigh__default__gc_thresh3`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `2048`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh2"></a>`net__ipv4__neigh__default__gc_thresh2`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `1024`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__neigh__default__gc_thresh1"></a>`net__ipv4__neigh__default__gc_thresh1`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `32`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__neigh__default__proxy_qlen"></a>`net__ipv4__neigh__default__proxy_qlen`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `92`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__neigh__default__unres_qlen"></a>`net__ipv4__neigh__default__unres_qlen`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `6`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_rmem"></a>`net__ipv4__tcp_rmem`
 
-Data type: `Array[Integer,3,3]`
+Data type: `Optional[Variant[Array[Integer,3,3], Enum['absent']]]`
 
 
 
-Default value: `[4096,98304,16777216]`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_wmem"></a>`net__ipv4__tcp_wmem`
 
-Data type: `Array[Integer,3,3]`
+Data type: `Optional[Variant[Array[Integer,3,3], Enum['absent']]]`
 
 
 
-Default value: `[4096,65535,16777216]`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_fin_timeout"></a>`net__ipv4__tcp_fin_timeout`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `30`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_rfc1337"></a>`net__ipv4__tcp_rfc1337`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_keepalive_time"></a>`net__ipv4__tcp_keepalive_time`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `3600`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_mtu_probing"></a>`net__ipv4__tcp_mtu_probing`
 
-Data type: `Integer[0,2]`
+Data type: `Optional[Variant[Integer[0,2], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_no_metrics_save"></a>`net__ipv4__tcp_no_metrics_save`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__core__rmem_max"></a>`net__core__rmem_max`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `16777216`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__core__wmem_max"></a>`net__core__wmem_max`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `16777216`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__core__optmem_max"></a>`net__core__optmem_max`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `20480`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__core__netdev_max_backlog"></a>`net__core__netdev_max_backlog`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `2048`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__core__somaxconn"></a>`net__core__somaxconn`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `2048`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_tw_reuse"></a>`net__ipv4__tcp_tw_reuse`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--fs__inotify__max_user_watches"></a>`fs__inotify__max_user_watches`
 
-Data type: `Integer[8912]`
+Data type: `Optional[Variant[Integer[8912], Enum['absent']]]`
 
 Increase the number of inotify watches allowed in order to prevent
 systemctl error: "Not Enough Disk Space" caused when it reaches limit.
 
-Default value: `102400`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--fs__suid_dumpable"></a>`fs__suid_dumpable`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__core_pattern"></a>`kernel__core_pattern`
 
-Data type: `String`
+Data type: `Optional[Variant[String, Enum['absent']]]`
 
 If you change this, make sure you create the leading directories!
 
-Default value: `'/var/core/%u_%g_%p_%t_%h_%e.core'`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__core_pipe_limit"></a>`kernel__core_pipe_limit`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__core_uses_pid"></a>`kernel__core_uses_pid`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__dmesg_restrict"></a>`kernel__dmesg_restrict`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__exec_shield"></a>`kernel__exec_shield`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Integer[0,1]]`
 
-**DEPRECATED BY VENDOR WILL BE REMOVED IN NEXT RELEASE**
+**Deprecated** and has no effect: `kernel.exec_shield` does not exist on
+any supported kernel. Setting it logs a deprecation warning. It will be
+removed in the next major release.
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__panic"></a>`kernel__panic`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `10`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__randomize_va_space"></a>`kernel__randomize_va_space`
 
-Data type: `Integer[0,2]`
+Data type: `Optional[Variant[Integer[0,2], Enum['absent']]]`
 
 
 
-Default value: `2`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__sysrq"></a>`kernel__sysrq`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--kernel__yama__ptrace_scope"></a>`kernel__yama__ptrace_scope`
 
-Data type: `Optional[Integer[0,3]]`
+Data type: `Optional[Variant[Integer[0,3], Enum['absent']]]`
 
 Restricts the use of ``ptrace`` to processes with a defined relationship
-(parent/child by default).  Unmanaged by default (``undef``) so the OS
-default (``0`` on EL) is left in place; set to ``1`` to satisfy STIG/SSG
-controls that require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g.
-RHEL-08-040282 / CCE-80953-8).  Valid kernel values are ``0``-``3``.
+(parent/child by default). Set to ``1`` to satisfy STIG/SSG controls that
+require ``kernel.yama.ptrace_scope`` >= 1 on EL 8/9 (e.g. RHEL-08-040282 /
+CCE-80953-8). Valid kernel values are ``0``-``3``. Not set by the
+``simp:defaults`` profile.
 
 Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__accept_redirects"></a>`net__ipv4__conf__all__accept_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__accept_source_route"></a>`net__ipv4__conf__all__accept_source_route`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__log_martians"></a>`net__ipv4__conf__all__log_martians`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__rp_filter"></a>`net__ipv4__conf__all__rp_filter`
 
-Data type: `Integer[0,2]`
+Data type: `Optional[Variant[Integer[0,2], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__secure_redirects"></a>`net__ipv4__conf__all__secure_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__all__send_redirects"></a>`net__ipv4__conf__all__send_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__accept_redirects"></a>`net__ipv4__conf__default__accept_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__accept_source_route"></a>`net__ipv4__conf__default__accept_source_route`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__log_martians"></a>`net__ipv4__conf__default__log_martians`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__rp_filter"></a>`net__ipv4__conf__default__rp_filter`
 
-Data type: `Integer[0,2]`
+Data type: `Optional[Variant[Integer[0,2], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__secure_redirects"></a>`net__ipv4__conf__default__secure_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__conf__default__send_redirects"></a>`net__ipv4__conf__default__send_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__icmp_echo_ignore_broadcasts"></a>`net__ipv4__icmp_echo_ignore_broadcasts`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__icmp_ignore_bogus_error_responses"></a>`net__ipv4__icmp_ignore_bogus_error_responses`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_challenge_ack_limit"></a>`net__ipv4__tcp_challenge_ack_limit`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `2147483647`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_max_syn_backlog"></a>`net__ipv4__tcp_max_syn_backlog`
 
-Data type: `Integer[1]`
+Data type: `Optional[Variant[Integer[1], Enum['absent']]]`
 
 
 
-Default value: `4096`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv4__tcp_syncookies"></a>`net__ipv4__tcp_syncookies`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_redirects"></a>`net__ipv6__conf__all__accept_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_source_route"></a>`net__ipv6__conf__all__accept_source_route`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__all__autoconf"></a>`net__ipv6__conf__all__autoconf`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__all__forwarding"></a>`net__ipv6__conf__all__forwarding`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__all__accept_ra"></a>`net__ipv6__conf__all__accept_ra`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra"></a>`net__ipv6__conf__default__accept_ra`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_defrtr"></a>`net__ipv6__conf__default__accept_ra_defrtr`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_pinfo"></a>`net__ipv6__conf__default__accept_ra_pinfo`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_ra_rtr_pref"></a>`net__ipv6__conf__default__accept_ra_rtr_pref`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_redirects"></a>`net__ipv6__conf__default__accept_redirects`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__accept_source_route"></a>`net__ipv6__conf__default__accept_source_route`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__autoconf"></a>`net__ipv6__conf__default__autoconf`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__dad_transmits"></a>`net__ipv6__conf__default__dad_transmits`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__max_addresses"></a>`net__ipv6__conf__default__max_addresses`
 
-Data type: `Integer[0]`
+Data type: `Optional[Variant[Integer[0], Enum['absent']]]`
 
 
 
-Default value: `1`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--net__ipv6__conf__default__router_solicitations"></a>`net__ipv6__conf__default__router_solicitations`
 
-Data type: `Integer[0,1]`
+Data type: `Optional[Variant[Integer[0,1], Enum['absent']]]`
 
 
 
-Default value: `0`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--core_dumps"></a>`core_dumps`
 
-Data type: `Boolean`
+Data type: `Optional[Boolean]`
 
-If true, enable core dumps on the system.
+* `true`: manage `core_dump_dir` as a directory for core dumps
+* `false`: when `pam` is also `true`, add a PAM limits rule that prevents
+  core dumps (meets CCE-27033-0)
+* `undef` (default): manage neither. On nodes where `/etc/security/limits.conf`
+  is managed by `pam::limits` (e.g. the `simp`, `simp_lite` and `one_shot`
+  scenarios, through `simp::pam_limits::max_logins`), that file is built
+  from the rules in the catalog, so a `prevent_core` rule written by an
+  earlier run is **removed**. Set `false` (or enforce `simp:defaults`) to
+  keep it.
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-simp--sysctl--core_dump_dir"></a>`core_dump_dir`
 
@@ -3711,16 +3741,21 @@ Default value: `'/var/core'`
 
 Data type: `Boolean`
 
-SIMP catalyst for enabling PAM management
-As set, meets CCE-27033-0
+SIMP catalyst for enabling PAM management. Only used when `core_dumps` is
+`false`.
 
 Default value: `simplib::lookup('simp_options::pam', { 'default_value' => false })`
 
 ##### <a name="-simp--sysctl--ipv6"></a>`ipv6`
 
-Data type: `Optional[Boolean]`
+Data type: `Optional[Variant[Boolean, Enum['absent']]]`
 
-Set to ``false`` to disable IPv6 on your system via ``sysctl``
+Manage ``net.ipv6.conf.all.disable_ipv6``
+
+* ``false``: disable IPv6 (``disable_ipv6 = 1``)
+* ``true``: enable IPv6 (``disable_ipv6 = 0``)
+* ``'absent'``: remove the key from ``/etc/sysctl.conf``
+* ``undef`` (default): leave it alone
 
 @note This only affects systems where the IPv6 stack is present. If the
   ``ipv6`` kernel module is not loaded, or IPv6 was disabled on the kernel
@@ -3734,11 +3769,12 @@ Default value: `undef`
 
 Data type: `Array[String]`
 
+**Deprecated**: leave the corresponding parameter unset (``undef``)
+instead; a site can do that over a compliance profile with a Hiera ``~``.
 List of sysctl keys (e.g. ``net.core.somaxconn``) that this class should
-leave alone. Use when another tool (``tuned``, ``NetworkManager``, a
-container runtime, a vendor installer) already manages the value and SIMP
-should not fight over it. Keys must match the actual sysctl name, not the
-class parameter name.
+leave alone even when the matching parameter is set. Keys must match the
+actual sysctl name, not the class parameter name. Setting it logs a
+deprecation warning. It will be removed in the next major release.
 
 Default value: `[]`
 

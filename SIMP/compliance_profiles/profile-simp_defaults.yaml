@@ -1,9 +1,9 @@
 # The `simp:defaults` Sicura Compliance Engine profile.
 #
 # Enforcing it (Hiera `compliance_engine::enforcement: [simp:defaults]`) restores
-# the behavior `simp::kmod_blacklist` had by default before the 10.0.0
-# blast-radius refactor, without re-introducing any auto-opt-in into the
-# module's own defaults. The profile lists its checks directly (no controls/CE
+# the behavior `simp::kmod_blacklist` (10.0.0) and `simp::sysctl` (11.0.0) had
+# by default before their blast-radius refactors, without re-introducing any
+# auto-opt-in into the module's own defaults. The profile lists its checks directly (no controls/CE
 # indirection); the checks are defined in checks.yaml.
 ---
 version: 2.0.0
@@ -12,3 +12,66 @@ profiles:
     checks:
       simp:defaults.simp.kmod_blacklist.modules: true
       simp:defaults.simp.kmod_blacklist.lock_modules: true
+      simp:defaults.simp.sysctl.net__netfilter__nf_conntrack_max: true
+      simp:defaults.simp.sysctl.net__unix__max_dgram_qlen: true
+      simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh3: true
+      simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh2: true
+      simp:defaults.simp.sysctl.net__ipv4__neigh__default__gc_thresh1: true
+      simp:defaults.simp.sysctl.net__ipv4__neigh__default__proxy_qlen: true
+      simp:defaults.simp.sysctl.net__ipv4__neigh__default__unres_qlen: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_rmem: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_wmem: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_fin_timeout: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_rfc1337: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_keepalive_time: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_mtu_probing: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_no_metrics_save: true
+      simp:defaults.simp.sysctl.net__core__rmem_max: true
+      simp:defaults.simp.sysctl.net__core__wmem_max: true
+      simp:defaults.simp.sysctl.net__core__optmem_max: true
+      simp:defaults.simp.sysctl.net__core__netdev_max_backlog: true
+      simp:defaults.simp.sysctl.net__core__somaxconn: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_tw_reuse: true
+      simp:defaults.simp.sysctl.fs__inotify__max_user_watches: true
+      simp:defaults.simp.sysctl.fs__suid_dumpable: true
+      simp:defaults.simp.sysctl.kernel__core_pattern: true
+      simp:defaults.simp.sysctl.kernel__core_pipe_limit: true
+      simp:defaults.simp.sysctl.kernel__core_uses_pid: true
+      simp:defaults.simp.sysctl.kernel__dmesg_restrict: true
+      simp:defaults.simp.sysctl.kernel__panic: true
+      simp:defaults.simp.sysctl.kernel__randomize_va_space: true
+      simp:defaults.simp.sysctl.kernel__sysrq: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__accept_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__accept_source_route: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__log_martians: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__rp_filter: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__secure_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__all__send_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__accept_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__accept_source_route: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__log_martians: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__rp_filter: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__secure_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__conf__default__send_redirects: true
+      simp:defaults.simp.sysctl.net__ipv4__icmp_echo_ignore_broadcasts: true
+      simp:defaults.simp.sysctl.net__ipv4__icmp_ignore_bogus_error_responses: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_challenge_ack_limit: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_max_syn_backlog: true
+      simp:defaults.simp.sysctl.net__ipv4__tcp_syncookies: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_redirects: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_source_route: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__all__autoconf: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__all__forwarding: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__all__accept_ra: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_defrtr: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_pinfo: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_ra_rtr_pref: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_redirects: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__accept_source_route: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__autoconf: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__dad_transmits: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__max_addresses: true
+      simp:defaults.simp.sysctl.net__ipv6__conf__default__router_solicitations: true
+      simp:defaults.simp.sysctl.ipv6: true
+      simp:defaults.simp.sysctl.core_dumps: true

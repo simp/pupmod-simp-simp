@@ -35,7 +35,7 @@
 #   Only allow ``sudo`` to a shell via a logging shell
 #
 # @param logged_shell
-#   The name of the logged shell to use
+#   The name of the logged shell to use. Only `tlog` is supported.
 #
 # @param default_admin_sudo_cmnds
 #   The set of commands that ``$admin_group`` should be able to run by default
@@ -143,19 +143,15 @@ class simp::admin (
     content => [$auditor_group],
   }
 
+  $_shell_cmd = $default_admin_sudo_cmnds
+
   if $force_logged_shell {
     include 'tlog::rec_session'
-
-    $_shell_cmd = $default_admin_sudo_cmnds
-
-    file { '/etc/profile.d/sudosh2.sh': ensure => 'absent' }
   }
   else {
-    $_shell_cmd = $default_admin_sudo_cmnds
-
     tidy { 'Shell logging profile.d files':
       path    => '/etc/profile.d',
-      matches => ['00-simp-tlog.*', 'sudosh2.*'],
+      matches => ['00-simp-tlog.*'],
       recurse => 1,
     }
   }

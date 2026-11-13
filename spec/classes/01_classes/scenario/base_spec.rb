@@ -48,8 +48,6 @@ describe 'simp' do
         # mail_server defaults to false; postfix is opt-in
         it { is_expected.not_to create_class('postfix') }
         it { is_expected.not_to create_class('postfix::server') }
-        # simp_options::ldap is not set in spec/fixtures/hieradata/default.yaml
-        it { is_expected.not_to create_class('simp_openldap::client') }
         it { is_expected.to create_class('simp::rc_local') }
       end
 

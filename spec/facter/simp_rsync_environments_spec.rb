@@ -16,9 +16,10 @@ describe 'SIMP Rsync Environments' do
 
       allow(Dir).to receive(:chdir).with(rsync_env_dir).at_least(:once).and_return(true)
 
+      allow(Facter::Core::Execution).to receive(:execute).and_call_original
       allow(Dir).to receive(:glob).with('*/rsync').at_least(:once).and_return(['simp/rsync'])
 
-      allow(Facter::Core::Execution).to receive(:exec).with("find -L simp -name '.shares'").at_least(:once).and_return('simp/rsync/.shares')
+      allow(Facter::Core::Execution).to receive(:execute).with("find -L simp -name '.shares'", on_fail: nil).at_least(:once).and_return('simp/rsync/.shares')
 
       allow(Dir).to receive(:glob).with('simp/rsync/*').at_least(:once).and_return(
         [
@@ -66,9 +67,10 @@ describe 'SIMP Rsync Environments' do
       allow(File).to receive(:directory?).and_return(true)
 
       allow(Dir).to receive(:chdir).at_least(:once)
+      allow(Facter::Core::Execution).to receive(:execute).and_call_original
       allow(Dir).to receive(:glob).with('*/rsync').at_least(:once).and_return(['simp/rsync'])
 
-      allow(Facter::Core::Execution).to receive(:exec).with("find -L simp -name '.shares'").at_least(:once).and_return('')
+      allow(Facter::Core::Execution).to receive(:execute).with("find -L simp -name '.shares'", on_fail: nil).at_least(:once).and_return('')
 
       LegacyFacter.collection.load(:simp_rsync_environments)
     end

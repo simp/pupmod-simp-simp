@@ -25,20 +25,21 @@ describe 'simp::kmod_blacklist' do
   # Profile/check data integrity (no catalog compilation)
   # --------------------------------------------------------------------------
   context 'profile data' do
-    let(:checks) { YAML.safe_load_file(File.join(self.class.profile_dir, 'checks.yaml'))['checks'] }
+    let(:all_checks) { YAML.safe_load_file(File.join(self.class.profile_dir, 'checks.yaml'))['checks'] }
+    let(:checks) { all_checks.select { |id, _| id.start_with?('simp:defaults.simp.kmod_blacklist.') } }
     let(:profile) { YAML.safe_load_file(File.join(self.class.profile_dir, 'profile-simp_defaults.yaml'))['profiles']['simp:defaults'] }
 
     it 'lists exactly the defined checks (no orphans, none missing)' do
-      expect(profile['checks'].keys.sort).to eq(checks.keys.sort)
-    end
-
-    it 'only manages simp::kmod_blacklist parameters' do
-      params = checks.values.map { |c| c['settings']['parameter'] }
-      expect(params).to all(start_with('simp::kmod_blacklist::'))
+      expect(profile['checks'].keys.sort).to eq(all_checks.keys.sort)
     end
 
     it 'uses the simp:defaults check ID namespace' do
-      expect(checks.keys).to all(start_with('simp:defaults.simp.kmod_blacklist.'))
+      expect(all_checks.keys).to all(start_with('simp:defaults.simp.'))
+    end
+
+    it 'only manages simp::kmod_blacklist parameters under its check IDs' do
+      params = checks.values.map { |c| c['settings']['parameter'] }
+      expect(params).to all(start_with('simp::kmod_blacklist::'))
     end
 
     it 'carries the pre-10.0.0 SCAP Security Guide blacklist' do
